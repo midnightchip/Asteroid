@@ -61,8 +61,8 @@ static NSString *condition;
     self.blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
     self.blurView.frame = self.weatherView.frame;
     self.blurView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.2];
-    [self.weatherView addSubview: self.blurView];
-    [self.weatherView sendSubviewToBack: self.blurView];
+    [self.view addSubview: self.blurView];
+    [self.view sendSubviewToBack: self.blurView];
   }*/
 
   // Creating the label to hold the information
@@ -80,13 +80,10 @@ static NSString *condition;
       NSString *city = weather[@"kCurrentDescription"];
       NSString *temp = weather[@"kCurrentTemperatureForLocale"];
       NSLog(@"CURRENTTEMP %@", temp);
+
       self.testLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.view.frame.size.width/20), (self.view.frame.size.height/3), 300, 20)]; //Ignore the arbitrary 20, I was just messing around with it
       [self.testLabel setTextColor:[UIColor greenColor]];
-      self.tempLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.view.frame.size.width/50), (self.view.frame.size.height/3), 300, 20)]; //Ignore the arbitrary 20, I was just messing around with it
-      [self.tempLabel setTextColor:[UIColor redColor]];
-      //self.testLabel.textAlignment = UITextAlignmentCenter;
 
-      //self.testLabel.text = @"HELP";
       self.testLabel.text = city;
       self.testLabel.numberOfLines = 0;
       [self.testLabel setBackgroundColor:[UIColor clearColor]];
@@ -95,6 +92,10 @@ static NSString *condition;
       [self.weatherView addSubview:self.testLabel];
       [self.weatherView bringSubviewToFront:self.testLabel];
 
+
+      self.tempLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.view.frame.size.width/50), (self.view.frame.size.height/3), 300, 20)]; //Ignore the arbitrary 20, I was just messing around with it
+      [self.tempLabel setTextColor:[UIColor redColor]];
+
       self.tempLabel.text = temp;
       self.tempLabel.numberOfLines = 0;
       [self.tempLabel setBackgroundColor:[UIColor clearColor]];
@@ -102,6 +103,29 @@ static NSString *condition;
       [self.tempLabel sizeToFit];
       [self.view addSubview:self.tempLabel];
       [self.weatherView bringSubviewToFront:self.tempLabel];
+
+      self.greetLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.view.frame.size.width/10), (self.view.frame.size.height/25), 300, 20)]; //Ignore the arbitrary 20, I was just messing around with it
+      [self.greetLabel setTextColor:[UIColor blueColor]];
+      NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+      [dateFormat setDateFormat:@"HH"];
+      NSString *stringFromDate = [dateFormat stringFromDate:[NSDate date]];
+      NSInteger integerDate = [stringFromDate integerValue];
+      if(integerDate < 4){
+        self.greetLabel.text = @"Good Evening";
+      }else if (integerDate >= 4 && integerDate < 12){
+        self.greetLabel.text = @"Good Morning";
+      }else if (integerDate >= 12 && integerDate < 16){
+        self.greetLabel.text = @"Good AfterNoon";
+      }else if (integerDate >= 15 && integerDate <=24){
+        self.greetLabel.text = @"Good Evening";
+      }
+
+      self.greetLabel.numberOfLines = 0;
+      [self.greetLabel setBackgroundColor:[UIColor clearColor]];
+      [self.greetLabel setFont:[UIFont fontWithName: @"HelveticaNeue-Thin" size: 30.0f]]; //understandable :)
+      [self.greetLabel sizeToFit];
+      [self.view addSubview:self.greetLabel];
+      [self.weatherView bringSubviewToFront:self.greetLabel];
     }];
     //NSString *__block condition;
 
