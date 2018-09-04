@@ -30,6 +30,7 @@ static NSString *condition;
 @property (retain, nonatomic) UIView *weatherView;
 @property (retain, nonatomic) UILabel *testLabel;
 @property (retain, nonatomic) UILabel *tempLabel;
+@property (retain, nonatomic) UILabel *greetLabel;
 @property (retain, nonatomic) UIVisualEffectView *blurView;
 @property (retain, nonatomic) UIView *iconView;
 @end
@@ -38,10 +39,12 @@ static NSString *condition;
 +(id)effectWithBlurRadius:(double)arg1 ;
 @end
 
-%hook SBDashBoardViewController   // whats this?
+%hook SBDashBoardViewController   // whats this? idk something kiet put here
 %property (retain, nonatomic) UIView *weatherView;
 %property (retain, nonatomic) UIView *iconView;
 %property (retain, nonatomic) UILabel *testLabel;
+%property (retain, nonatomic) UILabel *greetLabel;
+%property (retain, nonatomic) UILabel *tempLabel;
 %property (retain, nonatomic) UIVisualEffectView *blurView;
 
 -(void)viewDidLoad {
@@ -79,6 +82,8 @@ static NSString *condition;
       NSLog(@"CURRENTTEMP %@", temp);
       self.testLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.view.frame.size.width/20), (self.view.frame.size.height/3), 300, 20)]; //Ignore the arbitrary 20, I was just messing around with it
       [self.testLabel setTextColor:[UIColor greenColor]];
+      self.tempLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.view.frame.size.width/50), (self.view.frame.size.height/3), 300, 20)]; //Ignore the arbitrary 20, I was just messing around with it
+      [self.tempLabel setTextColor:[UIColor redColor]];
       //self.testLabel.textAlignment = UITextAlignmentCenter;
 
       //self.testLabel.text = @"HELP";
@@ -89,6 +94,14 @@ static NSString *condition;
       [self.testLabel sizeToFit];
       [self.weatherView addSubview:self.testLabel];
       [self.weatherView bringSubviewToFront:self.testLabel];
+
+      self.tempLabel.text = temp;
+      self.tempLabel.numberOfLines = 0;
+      [self.tempLabel setBackgroundColor:[UIColor clearColor]];
+      [self.tempLabel setFont:[UIFont fontWithName: @"HelveticaNeue-Thin" size: 30.0f]]; //understandable :)
+      [self.tempLabel sizeToFit];
+      [self.view addSubview:self.tempLabel];
+      [self.weatherView bringSubviewToFront:self.tempLabel];
     }];
     //NSString *__block condition;
 
