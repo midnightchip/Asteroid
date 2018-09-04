@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>items</key>
+		<array>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Enabled</string>
+				<key>key</key>
+				<string>kLWPEnabled</string>
+				<key>isGroupToggle</key>
+				<true/>
+				<key>PostNotification</key>
+				<string>com.midnightchips.lockweather.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.lockweather</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSEditTextCell</string>
+				<key>detail</key>
+				<string>PSDetailController</string>
+				<key>key</key>
+				<string>kLWPText</string>
+				<key>label</key>
+				<string>text</string>
+				<key>placeholder</key>
+				<string>placeholder</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.lockweather.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.lockweather</string>
+			</dict>
+			
+			<dict>
+				<key>cell</key>
+				<string>PSLinkListCell</string>
+				<key>detail</key>
+				<string>CSListFontsController</string>
+				<key>key</key>
+				<string>kLWPFont</string>
+				<key>label</key>
+				<string>Font Family</string>
+				<key>titlesDataSource</key>
+				<string>fontNames</string>
+				<key>valuesDataSource</key>
+				<string>fontNames</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.lockweather.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.lockweather</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>footerText</key>
+				<string>MidnightChips © 2018</string>
+				<key>footerAlignment</key>
+				<integer>1</integer>
+			</dict>
+
+			<dict>
+				<key>action</key>
+				<string>pushToView:</string>
+				<key>cell</key>
+				<string>PSLinkCell</string>
+				<key>pushToPlist</key>
+				<string>Support</string>
+				<key>label</key>
+				<string>Support, Donations &amp; Contact</string>
+				<key>key</key>
+				<string>support</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSLinkCell</string>
+				<key>detail</key>
+				<string>CSPBackupListViewController</string>
+				<key>isController</key>
+				<true/>
+				<key>PostNotification</key>
+				<string>com.midnightchips.lockweather.prefschanged</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/lockweather.bundle/defaults.plist</string>
+				<key>label</key>
+				<string>Backup &amp; Restore</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSLinkCell</string>
+				<key>detail</key>
+				<string>CSPChangeLogController</string>
+				<key>isController</key>
+				<true/>
+				<key>label</key>
+				<string>ChangeLog</string>
+				<key>changes</key>
+				<array>
+					<dict>
+						<key>0.0.1</key>
+						<array>
+							<string>initial release</string>
+						</array>
+					</dict>
+				</array>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSStaticTextCell</string>
+				<key>cellClass</key>
+				<string>CSPVersionCell</string>
+				<key>bundleID</key>
+				<string>com.midnightchips.lockweather</string>
+				<key>label</key>
+				<string>Version:</string>
+			</dict>
+
+		</array>
+		<key>title</key>
+		<string>lockweather</string>
+	</dict>
+</plist>

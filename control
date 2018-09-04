@@ -1,0 +1,14 @@
+Package: com.midnightchips.lockweather
+Name: lockweather
+Depends: firmware (>= 10.0), mobilesubstrate, preferenceloader, com.creaturecoding.libcspreferences, com.creaturecoding.libcsweather
+Version: 0.1
+Conflicts:
+Replaces:
+Priority: optional
+Architecture: iphoneos-arm
+Description: An awesome MobileSubstrate tweak!
+Maintainer: midnightchips
+Author: midnightchips
+Section: Tweaks
+dev: midnightchips
+Icon:
