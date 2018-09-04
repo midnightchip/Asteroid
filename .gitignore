@@ -6,6 +6,10 @@
 build/
 DerivedData
 
+*.deb
+*.theos
+*.DS_Store
+
 ## Various settings
 *.pbxuser
 !default.pbxuser
