@@ -28,7 +28,7 @@ static NSString *condition;
 
 @interface SBDashBoardViewController : UIViewController
 @property (retain, nonatomic) UIView *weatherView;
-@property (retain, nonatomic) UILabel *testLabel;
+@property (retain, nonatomic) UILabel *currentLabel;
 @property (retain, nonatomic) UILabel *tempLabel;
 @property (retain, nonatomic) UILabel *greetLabel;
 @property (retain, nonatomic) UIVisualEffectView *blurView;
@@ -42,7 +42,7 @@ static NSString *condition;
 %hook SBDashBoardViewController   // whats this? idk something kiet put here
 %property (retain, nonatomic) UIView *weatherView;
 %property (retain, nonatomic) UIView *iconView;
-%property (retain, nonatomic) UILabel *testLabel;
+%property (retain, nonatomic) UILabel *currentLabel;
 %property (retain, nonatomic) UILabel *greetLabel;
 %property (retain, nonatomic) UILabel *tempLabel;
 %property (retain, nonatomic) UIVisualEffectView *blurView;
@@ -74,38 +74,41 @@ static NSString *condition;
 }
 -(void) viewWillLayoutSubviews{
   %orig;
-  if(!self.testLabel){
+  if(!self.currentLabel){
 
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
-      NSString *city = weather[@"kCurrentDescription"];
+      NSString *description = weather[@"kCurrentDescription"];
       NSString *temp = weather[@"kCurrentTemperatureForLocale"];
       NSLog(@"CURRENTTEMP %@", temp);
 
-      self.testLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.view.frame.size.width/20), (self.view.frame.size.height/3), 300, 20)]; //Ignore the arbitrary 20, I was just messing around with it
-      [self.testLabel setTextColor:[UIColor greenColor]];
+      self.currentLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.view.frame.size.width/20), (self.view.frame.size.height/3), 300, 20)]; //Ignore the arbitrary 20, I was just messing around with it
+      [self.currentLabel setTextColor:[UIColor whiteColor]];
 
-      self.testLabel.text = city;
-      self.testLabel.numberOfLines = 0;
-      [self.testLabel setBackgroundColor:[UIColor clearColor]];
-      [self.testLabel setFont:[UIFont fontWithName: @"HelveticaNeue-Thin" size: 30.0f]]; //understandable :)
-      [self.testLabel sizeToFit];
-      [self.weatherView addSubview:self.testLabel];
-      [self.weatherView bringSubviewToFront:self.testLabel];
+      self.currentLabel.text = description;
+      self.currentLabel.numberOfLines = 0;
+      [self.currentLabel setBackgroundColor:[UIColor clearColor]];
+      [self.currentLabel setFont:[UIFont fontWithName: @"HelveticaNeue" size: 20.0f]]; //understandable :)
+      [self.currentLabel sizeToFit];
+      [self.weatherView addSubview:self.currentLabel];
+      [self.currentLabel setCenter:CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 1.75)];
+      self.currentLabel.textAlignment = NSTextAlignmentCenter;
+      [self.weatherView bringSubviewToFront:self.currentLabel];
 
 
       self.tempLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.view.frame.size.width/50), (self.view.frame.size.height/3), 300, 20)]; //Ignore the arbitrary 20, I was just messing around with it
-      [self.tempLabel setTextColor:[UIColor redColor]];
+      [self.tempLabel setTextColor:[UIColor whiteColor]];
 
       self.tempLabel.text = temp;
       self.tempLabel.numberOfLines = 0;
       [self.tempLabel setBackgroundColor:[UIColor clearColor]];
-      [self.tempLabel setFont:[UIFont fontWithName: @"HelveticaNeue-Thin" size: 30.0f]]; //understandable :)
+      [self.tempLabel setFont:[UIFont fontWithName: @"HelveticaNeue" size: 40.0f]]; //understandable :)
       [self.tempLabel sizeToFit];
       [self.view addSubview:self.tempLabel];
+      [self.tempLabel setCenter:CGPointMake(self.view.frame.size.width / 1.8, self.view.frame.size.height / 1.5)];
       [self.weatherView bringSubviewToFront:self.tempLabel];
 
       self.greetLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.view.frame.size.width/10), (self.view.frame.size.height/25), 300, 20)]; //Ignore the arbitrary 20, I was just messing around with it
-      [self.greetLabel setTextColor:[UIColor blueColor]];
+      [self.greetLabel setTextColor:[UIColor whiteColor]];
       NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
       [dateFormat setDateFormat:@"HH"];
       NSString *stringFromDate = [dateFormat stringFromDate:[NSDate date]];
@@ -122,9 +125,11 @@ static NSString *condition;
 
       self.greetLabel.numberOfLines = 0;
       [self.greetLabel setBackgroundColor:[UIColor clearColor]];
-      [self.greetLabel setFont:[UIFont fontWithName: @"HelveticaNeue-Thin" size: 30.0f]]; //understandable :)
+      [self.greetLabel setFont:[UIFont fontWithName: @"HelveticaNeue" size: 40.0f]]; //understandable :)
       [self.greetLabel sizeToFit];
       [self.view addSubview:self.greetLabel];
+      self.greetLabel.textAlignment = NSTextAlignmentCenter;
+      [self.greetLabel setCenter:CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 2)];
       [self.weatherView bringSubviewToFront:self.greetLabel];
     }];
     //NSString *__block condition;
@@ -134,12 +139,13 @@ static NSString *condition;
 
   if(!self.iconView){
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
-      UIImage *image = weather[@"kCurrentConditionImage"];
+      UIImage *image = weather[@"kCurrentConditionImage_nc-variant"];
       NSLog(@"IMAGE %@", [image description]);
       //UIView *iconView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 20)];
       UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(40, 40, 100, 100)];
       imageView.image = image;
       imageView.contentMode = UIViewContentModeScaleAspectFit;
+      [imageView setCenter:CGPointMake(self.view.frame.size.width / 2.5, self.view.frame.size.height / 1.5)];
       //imageView.frame = iconView.bounds;
 
       [self.view addSubview:imageView];
