@@ -5,7 +5,7 @@
 %property (nonatomic, retain) UIView *weather;
 %property (nonatomic, retain) UIImageView *logo;
 %property (nonatomic, retain) UILabel *greetingLabel;
-%property (nonatomic, retain) UILabel *description;
+%property (nonatomic, retain) UITextView *description;
 %property (nonatomic, retain) UILabel *currentTemp;
 %property (retain, nonatomic) UIVisualEffectView *blurView;
 
@@ -49,8 +49,14 @@
     }else{
         self.currentTemp.text = @"Error";
     }
-    self.currentTemp.textAlignment = NSTextAlignmentCenter; //Zapfino
-    self.currentTemp.font = [UIFont systemFontOfSize: 50 weight: UIFontWeightLight];//UIFont.systemFont(ofSize: 34, weight: UIFontWeightThin);//[UIFont UIFontWeightSemibold:50];
+
+    self.currentTemp.textAlignment = NSTextAlignmentCenter; 
+    if([prefs boolForKey:@"customFont"]){
+        self.currentTemp.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"tempSize"]];
+    }else{
+        self.currentTemp.font = [UIFont systemFontOfSize: [prefs intForKey:@"tempSize"] weight: UIFontWeightLight];
+    }
+    //self.currentTemp.font = [UIFont systemFontOfSize: 50 weight: UIFontWeightLight];//UIFont.systemFont(ofSize: 34, weight: UIFontWeightThin);//[UIFont UIFontWeightSemibold:50];
     self.currentTemp.textColor = [UIColor whiteColor];
     [self addSubview: self.currentTemp];
 
@@ -82,17 +88,30 @@
     }
     
     self.greetingLabel.textAlignment = NSTextAlignmentCenter;
-    self.greetingLabel.font = [UIFont systemFontOfSize: 40 weight: UIFontWeightLight];//[UIFont boldSystemFontOfSize:40];
+    if([prefs boolForKey:@"customFont"]){
+        self.greetingLabel.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"greetingSize"]];
+    }else{
+        self.greetingLabel.font = [UIFont systemFontOfSize:[prefs intForKey:@"greetingSize"] weight: UIFontWeightLight];
+    }
+    ////[UIFont boldSystemFontOfSize:40];
     self.greetingLabel.textColor = [UIColor whiteColor];
     [self addSubview:self.greetingLabel];
 
-    self.description = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.1, self.frame.size.height/10)];
+    //[[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.1, self.frame.size.height/10)];
+
+    self.description = [[UITextView alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.1, self.frame.size.height/2)];
     self.description.text = weather[@"kCurrentDescription"];
     self.description.textAlignment = NSTextAlignmentCenter;
-    self.description.lineBreakMode = NSLineBreakByWordWrapping;
-    self.description.numberOfLines = 0;
+    //self.description.lineBreakMode = NSLineBreakByWordWrapping;
+    //self.description.numberOfLines = 0;
+    self.description.backgroundColor = [UIColor clearColor];
     self.description.textColor = [UIColor whiteColor];
-    self.description.font = [UIFont systemFontOfSize:20];
+    if([prefs boolForKey:@"customFont"]){
+        self.description.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"descriptionSize"]];
+    }else{
+        self.description.font = [UIFont systemFontOfSize:[prefs intForKey:@"descriptionSize"]];
+    }
+    //self.description.font = [UIFont systemFontOfSize:20];
     [self addSubview:self.description];
 	}];
                                            

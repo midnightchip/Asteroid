@@ -21,39 +21,148 @@
 
 			<dict>
 				<key>cell</key>
-				<string>PSEditTextCell</string>
-				<key>detail</key>
-				<string>PSDetailController</string>
-				<key>key</key>
-				<string>kLWPText</string>
+				<string>PSGroupCell</string>
 				<key>label</key>
-				<string>text</string>
-				<key>placeholder</key>
-				<string>placeholder</string>
+				<string>Custom Fonts</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Use Custom Font</string>
+				<key>key</key>
+				<string>customFont</string>
+				<key>isGroupToggle</key>
+				<true/>
 				<key>PostNotification</key>
 				<string>com.midnightchips.lockweather.prefschanged</string>
 				<key>defaults</key>
 				<string>com.midnightchips.lockweather</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/lockweather.bundle</string>
 			</dict>
-			
+
 			<dict>
 				<key>cell</key>
 				<string>PSLinkListCell</string>
 				<key>detail</key>
-				<string>CSListFontsController</string>
-				<key>key</key>
-				<string>kLWPFont</string>
+				<string>CSListItemsController</string>
 				<key>label</key>
-				<string>Font Family</string>
+				<string>Custom Font:</string>
+				<key>sublabel</key>
+				<string>Select a font</string>
+				<key>key</key>
+				<string>availableFonts</string>
 				<key>titlesDataSource</key>
-				<string>fontNames</string>
+				<string>availableFonts</string>
 				<key>valuesDataSource</key>
-				<string>fontNames</string>
+				<string>availableFonts</string>
 				<key>PostNotification</key>
 				<string>com.midnightchips.lockweather.prefschanged</string>
 				<key>defaults</key>
 				<string>com.midnightchips.lockweather</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/lockweather.bundle</string>
 			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>label</key>
+				<string>Font Sizes </string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>label</key>
+				<string>Greeting Size</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSSliderCell</string>
+				<key>key</key>
+				<string>greetingSize</string>
+				<key>showValue</key>
+				<true/>
+				<key>min</key>
+				<real>12</real>
+				<key>max</key>
+				<real>60</real>
+				<key>isSegmented</key>
+				<true/>
+				<key>segmentCount</key>
+				<real>48</real>
+				<key>PostNotification</key>
+				<string>com.midnightchips.lockweather.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.lockweather</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/lockweather.bundle</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>label</key>
+				<string>Description Size</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSSliderCell</string>
+				<key>key</key>
+				<string>descriptionSize</string>
+				<key>showValue</key>
+				<true/>
+				<key>min</key>
+				<real>12</real>
+				<key>max</key>
+				<real>60</real>
+				<key>isSegmented</key>
+				<true/>
+				<key>segmentCount</key>
+				<real>48</real>
+				<key>PostNotification</key>
+				<string>com.midnightchips.lockweather.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.lockweather</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/lockweather.bundle</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>label</key>
+				<string>Current Temperature Size</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSSliderCell</string>
+				<key>key</key>
+				<string>tempSize</string>
+				<key>showValue</key>
+				<true/>
+				<key>min</key>
+				<real>12</real>
+				<key>max</key>
+				<real>60</real>
+				<key>isSegmented</key>
+				<true/>
+				<key>segmentCount</key>
+				<real>48</real>
+				<key>PostNotification</key>
+				<string>com.midnightchips.lockweather.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.lockweather</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/lockweather.bundle</string>
+			</dict>
+			
 
 			<dict>
 				<key>cell</key>
