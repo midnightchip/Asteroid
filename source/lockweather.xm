@@ -36,20 +36,20 @@
         [self.currentTemp removeFromSuperview];
     }
 
-	self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2, 100, 225)];
+	self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225)];
     self.logo.image = icon;
     self.logo.contentMode = UIViewContentModeScaleAspectFit;
     [self addSubview:self.logo];
 	NSLog(@"YEET %@", self.logo);
     
     //Current Temperature Localized
-    self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2, 100, 225)];
+    self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225)];
     if(weather[@"kCurrentTemperatureFahrenheit"] != nil){
-        self.currentTemp.text = weather[@"kCurrentTemperatureFahrenheit"];
+        self.currentTemp.text = weather[@"kCurrentTemperatureForLocale"];
     }else{
         self.currentTemp.text = @"Error";
     }
-    self.currentTemp.textAlignment = NSTextAlignmentCenter;
+    self.currentTemp.textAlignment = NSTextAlignmentCenter; //Zapfino
     self.currentTemp.font = [UIFont systemFontOfSize: 50 weight: UIFontWeightLight];//UIFont.systemFont(ofSize: 34, weight: UIFontWeightThin);//[UIFont UIFontWeightSemibold:50];
     self.currentTemp.textColor = [UIColor whiteColor];
     [self addSubview: self.currentTemp];
@@ -61,7 +61,7 @@
     currentTime = [NSDate date];
     //[dateFormat stringFromDate:currentTime];
 
-    self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, 115)];
+    self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6)];
 
     switch ([[dateFormat stringFromDate:currentTime] intValue]){
         case 0 ... 4:
@@ -86,7 +86,7 @@
     self.greetingLabel.textColor = [UIColor whiteColor];
     [self addSubview:self.greetingLabel];
 
-    self.description = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.1, 100)];
+    self.description = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.1, self.frame.size.height/10)];
     self.description.text = weather[@"kCurrentDescription"];
     self.description.textAlignment = NSTextAlignmentCenter;
     self.description.lineBreakMode = NSLineBreakByWordWrapping;
@@ -106,7 +106,7 @@
 
 -(void)loadView{
     %orig;
-    UIBlurEffect *blurEffect = [UIBlurEffect effectWithBlurRadius:20];
+    UIBlurEffect *blurEffect = [UIBlurEffect effectWithBlurRadius:5];
     UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
     //always fill the view
     blurEffectView.frame = self.view.bounds;
