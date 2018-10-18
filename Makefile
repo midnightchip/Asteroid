@@ -11,7 +11,7 @@ include $(THEOS)/makefiles/common.mk
 TWEAK_NAME = lockweather
 $(TWEAK_NAME)_FILES = $(wildcard source/*.m source/*.xm)
 $(TWEAK_NAME)_FRAMEWORKS =
-$(TWEAK_NAME)_PRIVATE_FRAMEWORKS = Weather
+$(TWEAK_NAME)_PRIVATE_FRAMEWORKS = 
 $(TWEAK_NAME)_CFLAGS += -fobjc-arc -I$(THEOS_PROJECT_DIR)/source
 $(TWEAK_NAME)_LDFLAGS += -lCSPreferencesProvider -lCSWeather
 
@@ -19,7 +19,8 @@ include $(THEOS_MAKE_PATH)/tweak.mk
 
 SUBPROJECTS += preferences
 
+SUBPROJECTS += weatherlockhelper
 include $(THEOS_MAKE_PATH)/aggregate.mk
 
 after-install::
-	install.exec "killall -9 backboardd"
+	install.exec "killall -9 SpringBoard"
