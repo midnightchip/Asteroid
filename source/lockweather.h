@@ -44,3 +44,18 @@
 @interface UIBlurEffect (lockweather)
 +(id)effectWithBlurRadius:(double)arg1 ;
 @end
+
+
+@interface SBLockScreenManager
++(id)sharedInstance;
+@property (readonly) BOOL isLockScreenActive;
+@property (readonly) BOOL isLockScreenVisible;
+@property (readonly) BOOL isUILocked;
+-(BOOL)isUIUnlocking;
+-(BOOL)hasUIEverBeenLocked;
+@end
+
+@interface SBCoverSheetSlidingViewController
+- (long long)dismissalSlidingMode;
+//@property (nonatomic, retain) SBCoverSheetPanelBackgroundContainerView *panelBackgroundContainerView;
+@end
