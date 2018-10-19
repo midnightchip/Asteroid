@@ -168,7 +168,7 @@ static BOOL numberOfNotifcations;
         
         //[[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.1, self.frame.size.height/10)];
         
-        self.description = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.1, self.frame.size.height/2)];
+        self.description = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.12, self.frame.size.height/2)];
         self.description.text = weather[@"kCurrentDescription"];
         self.description.textAlignment = NSTextAlignmentCenter;
         self.description.lineBreakMode = NSLineBreakByWordWrapping;
@@ -235,3 +235,9 @@ static BOOL numberOfNotifcations;
     [((SBDashBoardView *)self.view).backgroundView addSubview: blurEffectView];
 }
 %end 
+
+%ctor{
+    if([prefs boolForKey:@"kLWPEnabled"]){
+        %init(_ungrouped);
+    }
+}
