@@ -16,15 +16,6 @@
         }
 
     [fontNames sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-  /*for(NSString *file in files) {
-    NSString *path = [@"/Library/Springy/" stringByAppendingPathComponent:file];
-    BOOL isDir = NO;
-    [fm fileExistsAtPath:path isDirectory:(&isDir)];
-    if(isDir) {
-      [fontList addObject:file];
-    }
-  }*/
-
   return fontNames;
 }
 

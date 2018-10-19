@@ -106,6 +106,7 @@
     //self.description.numberOfLines = 0;
     self.description.backgroundColor = [UIColor clearColor];
     self.description.textColor = [UIColor whiteColor];
+    self.description.editable = NO;
     if([prefs boolForKey:@"customFont"]){
         self.description.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"descriptionSize"]];
     }else{
