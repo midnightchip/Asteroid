@@ -240,8 +240,8 @@ static BOOL hasRun = NO;
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	NSString *pathForFile = @"/usr/lib/libCSWeather.dylib";
 	if ([[[UIDevice currentDevice] systemVersion] floatValue] < 11.2){
-		NSString *string = [CSPUProcessManager stringFromProcessAtPath:@"/bin/bash" handle:nil arguments:@[@"-c", @"dpkg -s com.creaturecoding.libcsweather | grep '^Version: 0.5.5b'"]];
-		if([string rangeOfString:@"0.5.5b"].location == NSNotFound) {
+		NSString *string = [CSPUProcessManager stringFromProcessAtPath:@"/bin/bash" handle:nil arguments:@[@"-c", @"dpkg -s com.creaturecoding.libcsweather | grep '^Version: 0.5.1b'"]];
+		if([string rangeOfString:@"0.5.1b"].location == NSNotFound) {
 			%init(lower11);
 			}
 		}
