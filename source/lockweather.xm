@@ -71,7 +71,7 @@ static BOOL numberOfNotifcations;
 
 - (void)layoutSubviews {
     %orig;
-    if(isOnLockscreen){
+    if(isOnLockscreen()){
         [[NSNotificationCenter defaultCenter] 
         postNotificationName:@"addBlur" 
         object:self];
