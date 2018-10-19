@@ -1,7 +1,7 @@
 #include <CSWeather/CSWeatherInformationProvider.h>
 #include "lockweather.h"
 
-// Make sure the
+// Make sure to add the camera fix from nine to this tweak. Seems to block notification scrolling, will look into. 
 
 
  // Data required for the isOnLockscreen() function
