@@ -58,7 +58,7 @@
  %end
  // end of data required for the isOnLockscreen() function
  
-
+static BOOL numberOfNotifcations;
 
 %hook SBDashBoardMainPageView
 %property (nonatomic, retain) UIView *weather;
@@ -181,6 +181,23 @@
     
 }
 
+%end
+
+
+// Checking content
+%hook NCNotificationCombinedListViewController
+-(BOOL)hasContent{
+    BOOL content = %orig;
+    if(content != numberOfNotifcations){
+        // send a notification. Dont forget that to check ((!isOnLockscreen()) ? YES : self.isShowingNotificationsHistory)
+        
+    }
+    // Sending values to the background controller
+    //[[TCBackgroundViewController sharedInstance] updateSceenShot: content isRevealed: ((!isOnLockscreen()) ? YES : self.isShowingNotificationsHistory)]; // NC is never set to lock
+    numberOfNotifcations = content;
+    return content;
+    
+}
 %end
 
 //Blur 
