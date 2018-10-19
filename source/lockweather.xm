@@ -82,7 +82,7 @@ static BOOL numberOfNotifcations;
     }
     NSLog(@"lock_TWEAK | testing it before");
     //UIImage *icon;
-    if(!self.weather()){
+    if(!self.weather){
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         [self.weather setBackgroundColor:[UIColor clearColor]];
         [self addSubview:self.weather];
