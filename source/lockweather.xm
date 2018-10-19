@@ -77,6 +77,7 @@ static BOOL numberOfNotifcations;
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         [self.weather setBackgroundColor:[UIColor clearColor]];
         [self addSubview:self.weather];
+        [self.weather setUserInteractionEnabled:NO];
     }
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
          NSLog(@"lock_TWEAK | on completion");
@@ -173,6 +174,7 @@ static BOOL numberOfNotifcations;
         self.description.lineBreakMode = NSLineBreakByWordWrapping;
         self.description.numberOfLines = 0;
         self.description.textColor = [UIColor whiteColor];
+        self.description.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self.description setUserInteractionEnabled:NO];
 
 
@@ -185,9 +187,9 @@ static BOOL numberOfNotifcations;
         self.description.preferredMaxLayoutWidth = self.frame.size.width;
         [self.description sizeToFit];
 
-        CGPoint center = self.weather.center;
-        center.y = self.weather.frame.size.height / 1.85;
-        [self.description setCenter:center];
+        //CGPoint center = self.weather.center;
+        //center.y = self.weather.frame.size.height / 1.85;
+        //[self.description setCenter:center];
 
 
         [self.weather addSubview:self.description];
