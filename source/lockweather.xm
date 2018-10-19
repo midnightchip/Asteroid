@@ -1,6 +1,7 @@
 #include <CSWeather/CSWeatherInformationProvider.h>
 #include "lockweather.h"
 
+
 // Make sure to add the camera fix from nine to this tweak. Seems to block notification scrolling, will look into. 
 
 
@@ -64,7 +65,7 @@ static BOOL numberOfNotifcations;
 %property (nonatomic, retain) UIView *weather;
 %property (nonatomic, retain) UIImageView *logo;
 %property (nonatomic, retain) UILabel *greetingLabel;
-%property (nonatomic, retain) UITextView *description;
+%property (nonatomic, retain) UILabel *description;
 %property (nonatomic, retain) UILabel *currentTemp;
 %property (retain, nonatomic) UIVisualEffectView *blurView;
 
@@ -166,21 +167,29 @@ static BOOL numberOfNotifcations;
         
         //[[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.1, self.frame.size.height/10)];
         
-        self.description = [[UITextView alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.1, self.frame.size.height/2)];
+        self.description = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.1, self.frame.size.height/2)];
         self.description.text = weather[@"kCurrentDescription"];
         self.description.textAlignment = NSTextAlignmentCenter;
-        //self.description.lineBreakMode = NSLineBreakByWordWrapping;
-        //self.description.numberOfLines = 0;
-        self.description.backgroundColor = [UIColor clearColor];
+        self.description.lineBreakMode = NSLineBreakByWordWrapping;
+        self.description.numberOfLines = 0;
         self.description.textColor = [UIColor whiteColor];
         [self.description setUserInteractionEnabled:NO];
-        self.description.scrollEnabled = NO;
+
+
         if([prefs boolForKey:@"customFont"]){
             self.description.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"descriptionSize"]];
         }else{
             self.description.font = [UIFont systemFontOfSize:[prefs intForKey:@"descriptionSize"]];
         }
         //self.description.font = [UIFont systemFontOfSize:20];
+        self.description.preferredMaxLayoutWidth = self.frame.size.width;
+        [self.description sizeToFit];
+
+        CGPoint center = self.weather.center;
+        center.y = self.weather.frame.size.height / 1.85;
+        [self.description setCenter:center];
+
+
         [self.weather addSubview:self.description];
     }];
     
