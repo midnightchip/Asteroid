@@ -71,9 +71,18 @@ static BOOL numberOfNotifcations;
 
 - (void)layoutSubviews {
     %orig;
+    if(isOnLockscreen){
+        [[NSNotificationCenter defaultCenter] 
+        postNotificationName:@"addBlur" 
+        object:self];
+    }else{
+        [[NSNotificationCenter defaultCenter] 
+        postNotificationName:@"removeBlur" 
+        object:self];
+    }
     NSLog(@"lock_TWEAK | testing it before");
     //UIImage *icon;
-    if(!self.weather){
+    if(!self.weather()){
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         [self.weather setBackgroundColor:[UIColor clearColor]];
         [self addSubview:self.weather];
@@ -249,11 +258,15 @@ static BOOL numberOfNotifcations;
 %new 
 -(void)enableOrDisableBlur:(NSNotification *) notification{
     if ([[notification name] isEqualToString:@"removeBlur"]){
-        [self.blurEffectView removeFromSuperview];
+        if(self.blurEffectView){
+            [self.blurEffectView removeFromSuperview];
+        } 
     }
 
     if ([[notification name] isEqualToString:@"addBlur"]){
-        [((SBDashBoardView *)self.view).backgroundView addSubview: self.blurEffectView];
+        if(!self.blurEffectView){
+            [((SBDashBoardView *)self.view).backgroundView addSubview: self.blurEffectView];
+        }
     }
         
 }
