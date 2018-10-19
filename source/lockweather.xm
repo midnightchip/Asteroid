@@ -1,7 +1,7 @@
 #include <CSWeather/CSWeatherInformationProvider.h>
 #include "lockweather.h"
 
-
+/*
 // Data required for the isOnLockscreen() function
 BOOL isUILocked() {
     long count = [[[%c(SBFPasscodeLockTrackerForPreventLockAssertions) sharedInstance] valueForKey:@"_assertions"] count];
@@ -56,7 +56,7 @@ static id _instance;
 %end
 // end of data required for the isOnLockscreen() function
 
-
+*/
 
 %hook SBDashBoardMainPageView
 %property (nonatomic, retain) UIView *weather;
