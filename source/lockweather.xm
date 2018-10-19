@@ -224,7 +224,7 @@ static BOOL numberOfNotifcations;
     %orig;
     
     NSLog(@"lock_TWEAK | blur");
-    UIBlurEffect *blurEffect = [UIBlurEffect effectWithBlurRadius:5];
+    UIBlurEffect *blurEffect = [UIBlurEffect effectWithBlurRadius:[prefs intForKey:@"blurAmount"]];
     UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
     //always fill the view
     blurEffectView.frame = self.view.bounds;

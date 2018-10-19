@@ -12,5 +12,7 @@
 		<real>20</real>
 		<key>tempSize</key>
 		<real>50</real>
+		<key>blurAmount</key>
+		<real>5</real>
 	</dict>
 </plist>
