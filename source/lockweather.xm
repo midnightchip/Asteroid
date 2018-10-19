@@ -264,9 +264,9 @@ static BOOL numberOfNotifcations;
     }
 
     if ([[notification name] isEqualToString:@"addBlur"]){
-        if(!self.blurEffectView){
+        //if(!self.blurEffectView){
             [((SBDashBoardView *)self.view).backgroundView addSubview: self.blurEffectView];
-        }
+        //}
     }
         
 }
