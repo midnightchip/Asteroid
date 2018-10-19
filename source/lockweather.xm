@@ -72,6 +72,11 @@ static BOOL numberOfNotifcations;
     %orig;
     NSLog(@"lock_TWEAK | testing it before");
     //UIImage *icon;
+    if(!self.weather){
+        self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+        [self.weather setBackgroundColor:[UIColor clearColor]];
+        [self addSubview:self.weather];
+    }
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
          NSLog(@"lock_TWEAK | on completion");
         //NSString *condition = weather[@"kCurrentFeelsLikefahrenheit"];
@@ -101,7 +106,7 @@ static BOOL numberOfNotifcations;
         self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225)];
         self.logo.image = icon;
         self.logo.contentMode = UIViewContentModeScaleAspectFit;
-        [self addSubview:self.logo];
+        [self.weather addSubview:self.logo];
         NSLog(@"YEET %@", self.logo);
         
         //Current Temperature Localized
@@ -120,7 +125,7 @@ static BOOL numberOfNotifcations;
         }
         //self.currentTemp.font = [UIFont systemFontOfSize: 50 weight: UIFontWeightLight];//UIFont.systemFont(ofSize: 34, weight: UIFontWeightThin);//[UIFont UIFontWeightSemibold:50];
         self.currentTemp.textColor = [UIColor whiteColor];
-        [self addSubview: self.currentTemp];
+        [self.weather addSubview: self.currentTemp];
         
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"HH"];
@@ -157,7 +162,7 @@ static BOOL numberOfNotifcations;
         }
         ////[UIFont boldSystemFontOfSize:40];
         self.greetingLabel.textColor = [UIColor whiteColor];
-        [self addSubview:self.greetingLabel];
+        [self.weather addSubview:self.greetingLabel];
         
         //[[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.1, self.frame.size.height/10)];
         
@@ -176,7 +181,7 @@ static BOOL numberOfNotifcations;
             self.description.font = [UIFont systemFontOfSize:[prefs intForKey:@"descriptionSize"]];
         }
         //self.description.font = [UIFont systemFontOfSize:20];
-        [self addSubview:self.description];
+        [self.weather addSubview:self.description];
     }];
     
 }
