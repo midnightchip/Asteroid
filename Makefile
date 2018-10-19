@@ -14,7 +14,7 @@ $(wildcard *.xm *.mm CustomWorks/*/*.m)
 $(TWEAK_NAME)_FRAMEWORKS =
 $(TWEAK_NAME)_PRIVATE_FRAMEWORKS = 
 $(TWEAK_NAME)_CFLAGS += -fobjc-arc -I$(THEOS_PROJECT_DIR)/source
-$(TWEAK_NAME)_LDFLAGS += -lCSPreferencesProvider 
+$(TWEAK_NAME)_LDFLAGS += -lCSPreferencesProvider -lCSWeather
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 

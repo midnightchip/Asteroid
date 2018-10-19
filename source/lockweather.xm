@@ -72,7 +72,7 @@
     %orig;
     NSLog(@"lock_TWEAK | testing it before");
     //UIImage *icon;
-    [[%c(CSWeatherInformationProvider) sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
+    [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
          NSLog(@"lock_TWEAK | on completion");
         //NSString *condition = weather[@"kCurrentFeelsLikefahrenheit"];
         //NSString *temp = weather[@"kCurrentTemperatureForLocale"];
