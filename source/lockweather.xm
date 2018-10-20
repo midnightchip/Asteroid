@@ -1,6 +1,15 @@
 #include <CSWeather/CSWeatherInformationProvider.h>
 #include "lockweather.h"
 
+//TODO Fix Blur on lockscreen vs just pulling down notification center
+//TODO Try to mimic apples way of dynamically changing text depending on time and weather conditions
+//TODO Customization, move portion of view around
+//TODO Scroll with notifications, hide during notifications etc
+//TODO add dismiss button
+//TODO make only appear during set times
+
+NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/Application Support/lockWeather.bundle"];
+//NSString *alertTitle = [tweakBundle localizedStringForKey:@"ALERT_TITLE" value:@"" table:nil];
 
 // Make sure to add the camera fix from nine to this tweak. Seems to block notification scrolling, will look into. 
 
@@ -133,6 +142,7 @@ static BOOL numberOfNotifcations;
         //self.currentTemp.font = [UIFont systemFontOfSize: 50 weight: UIFontWeightLight];//UIFont.systemFont(ofSize: 34, weight: UIFontWeightThin);//[UIFont UIFontWeightSemibold:50];
         self.currentTemp.textColor = [UIColor whiteColor];
         [self.weather addSubview: self.currentTemp];
+        //[self.currentTemp sizeToFit];
     }
     self.currentTemp.text = [NSString stringWithFormat:@"Today is %@ with a high of %i°", todayCondition(), todayHigh()];
     
@@ -201,19 +211,19 @@ static BOOL numberOfNotifcations;
         
         switch ([[dateFormat stringFromDate:currentTime] intValue]){
             case 0 ... 4:
-                self.greetingLabel.text = @"Good Evening";
+                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent"); //@"Good Evening";
                 break;
                 
             case 5 ... 11:
-                self.greetingLabel.text = @"Good Morning";
+                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Morning" value:@"" table:nil];
                 break;
                 
             case 12 ... 17:
-                self.greetingLabel.text = @"Good Afternoon";
+                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Afternoon" value:@"" table:nil];
                 break;
                 
             case 18 ... 24:
-                self.greetingLabel.text = @"Good Evening";
+                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent");//@"Good Evening";
                 break;
         }
         
