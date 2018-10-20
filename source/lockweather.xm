@@ -68,6 +68,7 @@ static BOOL numberOfNotifcations;
 %property (nonatomic, retain) UILabel *description;
 %property (nonatomic, retain) UILabel *currentTemp;
 %property (retain, nonatomic) UIVisualEffectView *blurView;
+%property (retain, nonatomic) WALockscreenWidgetViewController *weatherCont;
 
 - (void)layoutSubviews {
     %orig;
@@ -78,7 +79,47 @@ static BOOL numberOfNotifcations;
         [self.weather setBackgroundColor:[UIColor clearColor]];
         [self addSubview:self.weather];
         [self.weather setUserInteractionEnabled:NO];
+        
+        
+        
+        
     }
+    
+    if([%c(WALockscreenWidgetViewController) sharedInstanceIfExists]){
+        self.weatherCont = [%c(WALockscreenWidgetViewController) sharedInstanceIfExists];
+        [self.weatherCont updateWeather];
+        [self.weather addSubview: self.weatherCont.view];
+        self.weatherCont.view.center = self.weather.center;
+    } else {
+        self.weatherCont = [[%c(WALockscreenWidgetViewController) alloc] init];
+        [self.weatherCont updateWeather];
+        [self.weather addSubview: self.weatherCont.view];
+        self.weatherCont.view.center = self.weather.center;
+        
+    }
+    if(!self.currentTemp){
+        CGRect screenRect = [[UIScreen mainScreen] bounds];
+        //CGFloat screenWidth = screenRect.size.width;
+        CGFloat screenHeight = screenRect.size.height;
+        
+        self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(0, screenHeight/2.1, 400, 400)];
+        
+        self.currentTemp.textAlignment = NSTextAlignmentCenter;
+        if([prefs boolForKey:@"customFont"]){
+            self.currentTemp.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"tempSize"]];
+        }else{
+            self.currentTemp.font = [UIFont systemFontOfSize: [prefs intForKey:@"tempSize"] weight: UIFontWeightLight];
+        }
+        //self.currentTemp.font = [UIFont systemFontOfSize: 50 weight: UIFontWeightLight];//UIFont.systemFont(ofSize: 34, weight: UIFontWeightThin);//[UIFont UIFontWeightSemibold:50];
+        self.currentTemp.textColor = [UIColor whiteColor];
+        [self.weather addSubview: self.currentTemp];
+    }
+    self.currentTemp.text = [NSString stringWithFormat:@"Today is %@ with a high of %i°", self.weatherCont.todayView.conditionsLine, ((int)[((WADayForecast *)self.weatherCont.currentForecastModel.dailyForecasts[0]).high temperatureForUnit:1])];
+    
+    
+    
+    /*
+    // old weather
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
          //NSLog(@"lock_TWEAK | on completion");
         //NSString *condition = weather[@"kCurrentFeelsLikefahrenheit"];
@@ -194,11 +235,10 @@ static BOOL numberOfNotifcations;
 
         [self.weather addSubview:self.description];
     }];
-    
+    */
 }
 
 %end
-
 
 // Checking content
 %hook NCNotificationCombinedListViewController

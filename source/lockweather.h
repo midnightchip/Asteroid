@@ -20,12 +20,35 @@
 //Other Interfaces 
 @interface WATodayPadView : UIView
 - (id)initWithFrame:(CGRect)frame;
-@property (nonatomic,retain) UIView * locationLabel;   
-//@property (nonatomic,retain) UIView * conditionsLabel;  
+@property (nonatomic,retain) NSString * locationName;
 @property (nonatomic,retain) UILabel * conditionsLabel;
+@property (nonatomic,retain) UILabel * locationLabel;
+@property (nonatomic,retain) NSString * conditionsLine;
+@property (nonatomic,retain) NSString * temperature;
+@end
+
+@interface WFTemperature
+-(CGFloat)temperatureForUnit:(int)arg1;
+@end
+
+@interface WADayForecast
+@property (nonatomic, retain) WFTemperature *high;
+@property (nonatomic, retain) WFTemperature *low;
+@end
+
+@interface WAForecastModel
+@property (nonatomic, retain) NSArray *dailyForecasts;
 @end
 
 @interface WALockscreenWidgetViewController : UIViewController
++(id) sharedInstanceIfExists;
+-(void) updateWeather;
+@property (nonatomic, retain) WAForecastModel *currentForecastModel;
+@property (nonatomic, retain) WATodayPadView *todayView;
+@end
+
+@interface WAWeatherCityView
+@property(retain, nonatomic) UILabel *naturalLanguageDescriptionLabel;
 @end
 
 @interface WAWeatherPlatterViewController : UIViewController
@@ -39,6 +62,7 @@
 @property (nonatomic, retain) UILabel *description;
 @property (nonatomic, retain) UILabel *currentTemp;
 @property (retain, nonatomic) UIVisualEffectView *blurView;
+@property (retain, nonatomic) WALockscreenWidgetViewController *weatherCont;
 @end
 
 @interface UIBlurEffect (lockweather)
