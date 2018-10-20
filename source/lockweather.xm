@@ -189,7 +189,7 @@ static BOOL numberOfNotifcations;
 -(BOOL)hasContent{
     BOOL content = %orig;
     if(content != numberOfNotifcations){
-        // send a notification. Dont forget that to check ((!isOnLockscreen()) ? YES : self.isShowingNotificationsHistory)
+        // send a notification with user info for content. Dont forget to check ((!isOnLockscreen()) ? YES : self.isShowingNotificationsHistory)
         
     }
     // Sending values to the background controller
