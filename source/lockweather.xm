@@ -201,7 +201,7 @@ static BOOL isDismissed;
     }
     /*
     // old weather
-    [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
+    /*[[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
          //NSLog(@"lock_TWEAK | on completion");
         //NSString *condition = weather[@"kCurrentFeelsLikefahrenheit"];
         //NSString *temp = weather[@"kCurrentTemperatureForLocale"];
