@@ -22,7 +22,7 @@
 - (id)initWithFrame:(CGRect)frame;
 @property (nonatomic,retain) NSString * locationName;
 @property (nonatomic,retain) UILabel * conditionsLabel;
-@property (nonatomic,retain) UILabel * locationLabel;
+@property (nonatomic,retain) UILabel * locationNCNotificationCombinedListViewControllerLabel;
 @property (nonatomic,retain) NSString * conditionsLine;
 @property (nonatomic,retain) NSString * temperature;
 @end
@@ -62,11 +62,16 @@
 @property (nonatomic, retain) UILabel *description;
 @property (nonatomic, retain) UILabel *currentTemp;
 @property (retain, nonatomic) UIVisualEffectView *blurView;
+@property (retain, nonatomic) UIButton *dismissButton;
 @property (retain, nonatomic) WALockscreenWidgetViewController *weatherCont;
 @end
 
 @interface UIBlurEffect (lockweather)
 +(id)effectWithBlurRadius:(double)arg1 ;
+@end
+
+
+@interface NCNotificationCombinedListViewController : UIViewController
 @end
 
 

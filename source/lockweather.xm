@@ -103,6 +103,7 @@ static BOOL numberOfNotifcations;
 %property (nonatomic, retain) UILabel *description;
 %property (nonatomic, retain) UILabel *currentTemp;
 %property (retain, nonatomic) UIVisualEffectView *blurView;
+%property (retain, nonatomic) UIButton *dismissButton;
 %property (retain, nonatomic) WALockscreenWidgetViewController *weatherCont;
 
 - (void)layoutSubviews {
@@ -127,6 +128,16 @@ static BOOL numberOfNotifcations;
             [self.weather addSubview: self.weatherCont.view];
             self.weatherCont.view.frame = CGRectMake(0, self.frame.size.height/2.7, self.frame.size.width, self.frame.size.height/8.6);
             
+        }
+        
+        if(!self.dismissButton){
+            self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            [self.dismissButton addTarget:self
+                       action:@selector(buttonPressed:)
+             forControlEvents:UIControlEventTouchUpInside];
+            [self.dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
+            self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
+            [self.weather addSubview:self.dismissButton];
         }
     }
     
@@ -187,7 +198,7 @@ static BOOL numberOfNotifcations;
     }else{
         self.greetingLabel.font = [UIFont systemFontOfSize:[prefs intForKey:@"greetingSize"] weight: UIFontWeightLight];
     }
-    
+    /*
     // old weather
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
          //NSLog(@"lock_TWEAK | on completion");
@@ -304,7 +315,14 @@ static BOOL numberOfNotifcations;
 
         [self.weather addSubview:self.description];
     }];
-    
+    */
+}
+
+%new
+- (void) buttonPressed: (UIButton*)sender{
+    //lit
+    NSLog(@"lock_TWEAK | button pressed ");
+    self.weather.hidden = YES;
 }
 
 %end
@@ -315,13 +333,12 @@ static BOOL numberOfNotifcations;
     BOOL content = %orig;
     if(content != numberOfNotifcations){
         // send a notification with user info for content. Dont forget to check ((!isOnLockscreen()) ? YES : self.isShowingNotificationsHistory)
-        
+        //self.view.hidden = YES;
     }
     // Sending values to the background controller
     //[[TCBackgroundViewController sharedInstance] updateSceenShot: content isRevealed: ((!isOnLockscreen()) ? YES : self.isShowingNotificationsHistory)]; // NC is never set to lock
     numberOfNotifcations = content;
     return content;
-    
 }
 %end
 
@@ -345,18 +362,11 @@ static BOOL numberOfNotifcations;
     [((SBDashBoardView *)self.view).backgroundView addSubview: self.blurEffectView];
     
     // Notification called when the lockscreen / nc is revealed (this is posted by the system)
-    [[NSNotificationCenter defaultCenter] addObserver:self
-        selector:@selector(enableOrDisableBlur:) 
-        name:@"WALockscreenWidgetWillAppearNotification"
-        object:nil];
+    [[NSNotificationCenter defaultCenter] addObserverForName: @"SBCoverSheetWillPresentNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+        self.blurEffectView.hidden = isOnLockscreen() ? NO : YES;
+    }];
 }
 
-%new 
--(void)enableOrDisableBlur:(NSNotification *) notification{
-    if ([[notification name] isEqualToString:@"WALockscreenWidgetWillAppearNotification"]){
-        self.blurEffectView.hidden = isOnLockscreen() ? NO : YES;
-    }
-}
 %end 
 
 %ctor{
