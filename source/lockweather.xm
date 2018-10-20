@@ -58,7 +58,31 @@ BOOL isOnLockscreen() {
     }
  %end
  // end of data required for the isOnLockscreen() function
- 
+
+
+// weather data
+WALockscreenWidgetViewController * weatherController(){
+    WALockscreenWidgetViewController *weatherCont;
+    weatherCont = [%c(WALockscreenWidgetViewController) sharedInstanceIfExists] ? [%c(WALockscreenWidgetViewController) sharedInstanceIfExists] : [[%c(WALockscreenWidgetViewController) alloc] init];
+    [weatherCont updateWeather];
+    return weatherCont;
+}
+
+int todayHigh(){
+    return ((int)[((WADayForecast *)weatherController().currentForecastModel.dailyForecasts[0]).high temperatureForUnit:1]);
+}
+
+// This works, just not needed
+/*
+int todayLow(){
+    return ((int)[((WADayForecast *)weatherController().currentForecastModel.dailyForecasts[0]).low temperatureForUnit:1]);
+}
+*/
+NSString * todayCondition(){
+    return weatherController().todayView.conditionsLine;
+}
+// end of weather data
+
 static BOOL numberOfNotifcations;
 
 %hook SBDashBoardMainPageView
@@ -79,10 +103,6 @@ static BOOL numberOfNotifcations;
         [self.weather setBackgroundColor:[UIColor clearColor]];
         [self addSubview:self.weather];
         [self.weather setUserInteractionEnabled:NO];
-        
-        
-        
-        
     }
     
     if([%c(WALockscreenWidgetViewController) sharedInstanceIfExists]){
@@ -114,7 +134,7 @@ static BOOL numberOfNotifcations;
         self.currentTemp.textColor = [UIColor whiteColor];
         [self.weather addSubview: self.currentTemp];
     }
-    self.currentTemp.text = [NSString stringWithFormat:@"Today is %@ with a high of %i°", self.weatherCont.todayView.conditionsLine, ((int)[((WADayForecast *)self.weatherCont.currentForecastModel.dailyForecasts[0]).high temperatureForUnit:1])];
+    self.currentTemp.text = [NSString stringWithFormat:@"Today is %@ with a high of %i°", todayCondition(), todayHigh()];
     
     
     
