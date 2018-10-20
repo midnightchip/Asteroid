@@ -95,6 +95,7 @@ NSString * todayCondition(){
 
 
 static BOOL numberOfNotifcations;
+static BOOL isDismissed;
 
 %hook SBDashBoardMainPageView
 %property (nonatomic, retain) UIView *weather;
@@ -114,7 +115,7 @@ static BOOL numberOfNotifcations;
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         [self.weather setBackgroundColor:[UIColor clearColor]];
         [self addSubview:self.weather];
-        [self.weather setUserInteractionEnabled:NO];
+      //  [self.weather setUserInteractionEnabled:NO];
         
         // setting up weatherCont
         if([%c(WALockscreenWidgetViewController) sharedInstanceIfExists]){
@@ -320,9 +321,18 @@ static BOOL numberOfNotifcations;
 
 %new
 - (void) buttonPressed: (UIButton*)sender{
-    //lit
-    NSLog(@"lock_TWEAK | button pressed ");
-    self.weather.hidden = YES;
+    [UIView animateWithDuration:.5
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{self.weather.alpha = 0;}
+                     completion:^(BOOL finished){
+                         self.weather.hidden = YES;
+                         self.weather.alpha = 1;
+                     }];
+    isDismissed = YES;
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"weatherDismissButtonPressed"
+     object:self];
 }
 
 %end
@@ -362,8 +372,18 @@ static BOOL numberOfNotifcations;
     [((SBDashBoardView *)self.view).backgroundView addSubview: self.blurEffectView];
     
     // Notification called when the lockscreen / nc is revealed (this is posted by the system)
+    [[NSNotificationCenter defaultCenter] addObserverForName: @"weatherDismissButtonPressed" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+        [UIView animateWithDuration:.5
+                              delay:0
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{self.blurEffectView.alpha = 0;}
+                         completion:^(BOOL finished){
+                             self.blurEffectView.hidden = YES;
+                             self.blurEffectView.alpha = 1;
+                         }];
+    }];
     [[NSNotificationCenter defaultCenter] addObserverForName: @"SBCoverSheetWillPresentNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
-        self.blurEffectView.hidden = isOnLockscreen() ? NO : YES;
+        if(!isDismissed) self.blurEffectView.hidden = isOnLockscreen() ? NO : YES;
     }];
 }
 
