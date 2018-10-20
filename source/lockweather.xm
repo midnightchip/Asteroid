@@ -1,6 +1,8 @@
 #include <CSWeather/CSWeatherInformationProvider.h>
 #include "lockweather.h"
 
+NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/Application Support/lockWeather.bundle"];
+//NSString *alertTitle = [tweakBundle localizedStringForKey:@"ALERT_TITLE" value:@"" table:nil];
 
 // Make sure to add the camera fix from nine to this tweak. Seems to block notification scrolling, will look into. 
 
@@ -181,19 +183,19 @@ static BOOL numberOfNotifcations;
         
         switch ([[dateFormat stringFromDate:currentTime] intValue]){
             case 0 ... 4:
-                self.greetingLabel.text = @"Good Evening";
+                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent"); //@"Good Evening";
                 break;
                 
             case 5 ... 11:
-                self.greetingLabel.text = @"Good Morning";
+                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Morning" value:@"" table:nil];
                 break;
                 
             case 12 ... 17:
-                self.greetingLabel.text = @"Good Afternoon";
+                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Afternoon" value:@"" table:nil];
                 break;
                 
             case 18 ... 24:
-                self.greetingLabel.text = @"Good Evening";
+                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent");//@"Good Evening";
                 break;
         }
         

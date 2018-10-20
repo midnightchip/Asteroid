@@ -8,7 +8,7 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Enabled</string>
+				<string>Enable_Tweak</string>
 				<key>key</key>
 				<string>kLWPEnabled</string>
 				<key>isGroupToggle</key>
@@ -23,14 +23,14 @@
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>label</key>
-				<string>Custom Fonts</string>
+				<string>Custom_Fonts</string>
 			</dict>
 
 			<dict>
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Use Custom Font</string>
+				<string>Use_Custom_Font</string>
 				<key>key</key>
 				<string>customFont</string>
 				<key>isGroupToggle</key>
@@ -49,9 +49,7 @@
 				<key>detail</key>
 				<string>CSListItemsController</string>
 				<key>label</key>
-				<string>Custom Font:</string>
-				<key>sublabel</key>
-				<string>Select a font</string>
+				<string>Custom_Font</string>
 				<key>key</key>
 				<string>availableFonts</string>
 				<key>titlesDataSource</key>
@@ -70,14 +68,14 @@
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>label</key>
-				<string>Font Sizes </string>
+				<string>Font_Sizes</string>
 			</dict>
 
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>label</key>
-				<string>Greeting Size</string>
+				<string>Greeting_Size</string>
 			</dict>
 
 			<dict>
@@ -107,7 +105,7 @@
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>label</key>
-				<string>Description Size</string>
+				<string>Description_Size</string>
 			</dict>
 
 			<dict>
@@ -137,7 +135,7 @@
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>label</key>
-				<string>Current Temperature Size</string>
+				<string>Current_Temperature_Size</string>
 			</dict>
 
 			<dict>
@@ -167,7 +165,7 @@
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>label</key>
-				<string>Blur Amount</string>
+				<string>Blur_Amount</string>
 			</dict>
 
 			<dict>
@@ -212,7 +210,7 @@
 				<key>pushToPlist</key>
 				<string>Support</string>
 				<key>label</key>
-				<string>Support, Donations &amp; Contact</string>
+				<string>Support</string>
 				<key>key</key>
 				<string>support</string>
 			</dict>
@@ -229,7 +227,7 @@
 				<key>defaultsPath</key>
 				<string>/Library/PreferenceBundles/lockweather.bundle/defaults.plist</string>
 				<key>label</key>
-				<string>Backup &amp; Restore</string>
+				<string>Backup</string>
 			</dict>
 
 			<dict>
@@ -260,11 +258,11 @@
 				<key>bundleID</key>
 				<string>com.midnightchips.lockweather</string>
 				<key>label</key>
-				<string>Version:</string>
+				<string>Version</string>
 			</dict>
 
 		</array>
 		<key>title</key>
-		<string>lockweather</string>
+		<string>LockWeather</string>
 	</dict>
 </plist>
