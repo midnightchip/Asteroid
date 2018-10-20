@@ -1,20 +1,21 @@
 #include <CSWeather/CSWeatherInformationProvider.h>
 #include "lockweather.h"
 
+//TODO Change today to use the cases in descriptions
 //TODO Fix Blur on lockscreen vs just pulling down notification center
 //TODO Try to mimic apples way of dynamically changing text depending on time and weather conditions
 //TODO Customization, move portion of view around
 //TODO Scroll with notifications, hide during notifications etc
 //TODO add dismiss button
 //TODO make only appear during set times
+//TODO Make sure to add the camera fix from nine to this tweak (thats casle problem)
+
 
 NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/Application Support/lockWeather.bundle"];
 //NSString *alertTitle = [tweakBundle localizedStringForKey:@"ALERT_TITLE" value:@"" table:nil];
 
-// Make sure to add the camera fix from nine to this tweak. Seems to block notification scrolling, will look into. 
 
-
- // Data required for the isOnLockscreen() function
+// Data required for the isOnLockscreen() function --------------------------------------------------------------------------------------
 BOOL isUILocked() {
     long count = [[[%c(SBFPasscodeLockTrackerForPreventLockAssertions) sharedInstance] valueForKey:@"_assertions"] count];
     if (count == 0) return YES; // array is empty
@@ -66,10 +67,10 @@ BOOL isOnLockscreen() {
              %orig;
     }
  %end
- // end of data required for the isOnLockscreen() function
+ // end of data required for the isOnLockscreen() function --------------------------------------------------------------------------------------
 
 
-// weather data
+// weather data ------------------------------------------------------------------------------------------
 WALockscreenWidgetViewController * weatherController(){
     WALockscreenWidgetViewController *weatherCont;
     weatherCont = [%c(WALockscreenWidgetViewController) sharedInstanceIfExists] ? [%c(WALockscreenWidgetViewController) sharedInstanceIfExists] : [[%c(WALockscreenWidgetViewController) alloc] init];
@@ -90,7 +91,8 @@ int todayLow(){
 NSString * todayCondition(){
     return weatherController().todayView.conditionsLine;
 }
-// end of weather data
+// end of weather data -------------------------------------------------------------------------
+
 
 static BOOL numberOfNotifcations;
 
@@ -112,43 +114,85 @@ static BOOL numberOfNotifcations;
         [self.weather setBackgroundColor:[UIColor clearColor]];
         [self addSubview:self.weather];
         [self.weather setUserInteractionEnabled:NO];
+        
+        // setting up weatherCont
+        if([%c(WALockscreenWidgetViewController) sharedInstanceIfExists]){
+            self.weatherCont = [%c(WALockscreenWidgetViewController) sharedInstanceIfExists];
+            [self.weatherCont updateWeather];
+            [self.weather addSubview: self.weatherCont.view];
+            self.weatherCont.view.frame = CGRectMake(0, self.frame.size.height/2.7, self.frame.size.width, self.frame.size.height/8.6);
+        } else {
+            self.weatherCont = [[%c(WALockscreenWidgetViewController) alloc] init];
+            [self.weatherCont updateWeather];
+            [self.weather addSubview: self.weatherCont.view];
+            self.weatherCont.view.frame = CGRectMake(0, self.frame.size.height/2.7, self.frame.size.width, self.frame.size.height/8.6);
+            
+        }
     }
     
-    if([%c(WALockscreenWidgetViewController) sharedInstanceIfExists]){
-        self.weatherCont = [%c(WALockscreenWidgetViewController) sharedInstanceIfExists];
-        [self.weatherCont updateWeather];
-        [self.weather addSubview: self.weatherCont.view];
-        self.weatherCont.view.center = self.weather.center;
-    } else {
-        self.weatherCont = [[%c(WALockscreenWidgetViewController) alloc] init];
-        [self.weatherCont updateWeather];
-        [self.weather addSubview: self.weatherCont.view];
-        self.weatherCont.view.center = self.weather.center;
-        
-    }
-    if(!self.currentTemp){
-        CGRect screenRect = [[UIScreen mainScreen] bounds];
+    
+    if(!self.description){
+        //CGRect screenRect = [[UIScreen mainScreen] bounds];
         //CGFloat screenWidth = screenRect.size.width;
-        CGFloat screenHeight = screenRect.size.height;
+        //CGFloat screenHeight = screenRect.size.height;
         
-        self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(0, screenHeight/2.1, 400, 400)];
+        self.description = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.frame.size.width, self.frame.size.height/8.6)];
         
-        self.currentTemp.textAlignment = NSTextAlignmentCenter;
+        self.description.textAlignment = NSTextAlignmentCenter;
         if([prefs boolForKey:@"customFont"]){
-            self.currentTemp.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"tempSize"]];
+            self.description.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"tempSize"]];
         }else{
-            self.currentTemp.font = [UIFont systemFontOfSize: [prefs intForKey:@"tempSize"] weight: UIFontWeightLight];
+            self.description.font = [UIFont systemFontOfSize: [prefs intForKey:@"tempSize"] weight: UIFontWeightLight];
         }
         //self.currentTemp.font = [UIFont systemFontOfSize: 50 weight: UIFontWeightLight];//UIFont.systemFont(ofSize: 34, weight: UIFontWeightThin);//[UIFont UIFontWeightSemibold:50];
-        self.currentTemp.textColor = [UIColor whiteColor];
-        [self.weather addSubview: self.currentTemp];
+        self.description.textColor = [UIColor whiteColor];
+        [self.weather addSubview: self.description];
         //[self.currentTemp sizeToFit];
     }
-    self.currentTemp.text = [NSString stringWithFormat:@"Today is %@ with a high of %i°", todayCondition(), todayHigh()];
+    self.description.text = [NSString stringWithFormat:@"Today is %@ with a high of %i°", todayCondition(), todayHigh()];
     
     
+    if(!self.greetingLabel){
+        
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setDateFormat:@"HH"];
+        dateFormat.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        NSDate *currentTime;
+        currentTime = [NSDate date];
+        //[dateFormat stringFromDate:currentTime];
+        
+        
+        self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6)];
+        
+        switch ([[dateFormat stringFromDate:currentTime] intValue]){
+            case 0 ... 4:
+                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent"); //@"Good Evening";
+                break;
+                
+            case 5 ... 11:
+                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Morning" value:@"" table:nil];
+                break;
+                
+            case 12 ... 17:
+                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Afternoon" value:@"" table:nil];
+                break;
+                
+            case 18 ... 24:
+                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent");//@"Good Evening";
+                break;
+        }
+        
+        self.greetingLabel.textAlignment = NSTextAlignmentCenter;
+        if([prefs boolForKey:@"customFont"]){
+            self.greetingLabel.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"greetingSize"]];
+        }else{
+            self.greetingLabel.font = [UIFont systemFontOfSize:[prefs intForKey:@"greetingSize"] weight: UIFontWeightLight];
+        }
+        ////[UIFont boldSystemFontOfSize:40];
+        self.greetingLabel.textColor = [UIColor whiteColor];
+        [self.weather addSubview:self.greetingLabel];
+    }
     
-    /*
     // old weather
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
          //NSLog(@"lock_TWEAK | on completion");
@@ -265,7 +309,7 @@ static BOOL numberOfNotifcations;
 
         [self.weather addSubview:self.description];
     }];
-    */
+    
 }
 
 %end
