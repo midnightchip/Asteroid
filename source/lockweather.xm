@@ -71,16 +71,7 @@ static BOOL numberOfNotifcations;
 
 - (void)layoutSubviews {
     %orig;
-    if(isOnLockscreen()){
-        [[NSNotificationCenter defaultCenter] 
-        postNotificationName:@"addBlur" 
-        object:self];
-    }else{
-        [[NSNotificationCenter defaultCenter] 
-        postNotificationName:@"removeBlur" 
-        object:self];
-    }
-    NSLog(@"lock_TWEAK | testing it before");
+    //NSLog(@"lock_TWEAK | testing it before");
     //UIImage *icon;
     if(!self.weather){
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
@@ -89,7 +80,7 @@ static BOOL numberOfNotifcations;
         [self.weather setUserInteractionEnabled:NO];
     }
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
-         NSLog(@"lock_TWEAK | on completion");
+         //NSLog(@"lock_TWEAK | on completion");
         //NSString *condition = weather[@"kCurrentFeelsLikefahrenheit"];
         //NSString *temp = weather[@"kCurrentTemperatureForLocale"];
         UIImage *icon = weather[@"kCurrentConditionImage_nc-variant"];
@@ -98,7 +89,7 @@ static BOOL numberOfNotifcations;
         CGFloat screenWidth = screenRect.size.width;
         CGFloat screenHeight = screenRect.size.height;
         
-        NSLog(@"lock_TWEAK | testing it run");
+        //NSLog(@"lock_TWEAK | testing it run");
         
         //CleanUp
         if(self.logo){
@@ -118,7 +109,7 @@ static BOOL numberOfNotifcations;
         self.logo.image = icon;
         self.logo.contentMode = UIViewContentModeScaleAspectFit;
         [self.weather addSubview:self.logo];
-        NSLog(@"YEET %@", self.logo);
+        //NSLog(@"YEET %@", self.logo);
         
         //Current Temperature Localized
         self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225)];
@@ -233,7 +224,7 @@ static BOOL numberOfNotifcations;
 -(void)loadView{
     %orig;
     
-    NSLog(@"lock_TWEAK | blur");
+    //NSLog(@"lock_TWEAK | blur");
     UIBlurEffect *blurEffect = [UIBlurEffect effectWithBlurRadius:[prefs intForKey:@"blurAmount"]];
     self.blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
     //always fill the view
@@ -243,32 +234,19 @@ static BOOL numberOfNotifcations;
     //[self.view addSubview:blurEffectView];
     //[self.view sendSubviewToBack: blurEffectView];
     [((SBDashBoardView *)self.view).backgroundView addSubview: self.blurEffectView];
-
+    
+    // Notification called when the lockscreen / nc is revealed (this is posted by the system)
     [[NSNotificationCenter defaultCenter] addObserver:self
         selector:@selector(enableOrDisableBlur:) 
-        name:@"removeBlur"
-        object:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-        selector:@selector(enableOrDisableBlur:) 
-        name:@"addBlur"
+        name:@"WALockscreenWidgetWillAppearNotification"
         object:nil];
 }
 
 %new 
 -(void)enableOrDisableBlur:(NSNotification *) notification{
-    if ([[notification name] isEqualToString:@"removeBlur"]){
-        if(self.blurEffectView){
-            [self.blurEffectView removeFromSuperview];
-        } 
+    if ([[notification name] isEqualToString:@"WALockscreenWidgetWillAppearNotification"]){
+        self.blurEffectView.hidden = isOnLockscreen() ? NO : YES;
     }
-
-    if ([[notification name] isEqualToString:@"addBlur"]){
-        //if(!self.blurEffectView){
-            [((SBDashBoardView *)self.view).backgroundView addSubview: self.blurEffectView];
-        //}
-    }
-        
 }
 %end 
 
