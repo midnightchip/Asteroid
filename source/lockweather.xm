@@ -139,58 +139,53 @@ static BOOL numberOfNotifcations;
         self.description = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.frame.size.width, self.frame.size.height/8.6)];
         
         self.description.textAlignment = NSTextAlignmentCenter;
-        if([prefs boolForKey:@"customFont"]){
-            self.description.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"tempSize"]];
-        }else{
-            self.description.font = [UIFont systemFontOfSize: [prefs intForKey:@"tempSize"] weight: UIFontWeightLight];
-        }
+        
         //self.currentTemp.font = [UIFont systemFontOfSize: 50 weight: UIFontWeightLight];//UIFont.systemFont(ofSize: 34, weight: UIFontWeightThin);//[UIFont UIFontWeightSemibold:50];
         self.description.textColor = [UIColor whiteColor];
         [self.weather addSubview: self.description];
         //[self.currentTemp sizeToFit];
     }
+    if([prefs boolForKey:@"customFont"]){
+        self.description.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"descriptionSize"]];
+    }else{
+        self.description.font = [UIFont systemFontOfSize: [prefs intForKey:@"descriptionSize"] weight: UIFontWeightLight];
+    }
     self.description.text = [NSString stringWithFormat:@"Today is %@ with a high of %i°", todayCondition(), todayHigh()];
     
-    
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"HH"];
+    dateFormat.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    NSDate *currentTime;
+    currentTime = [NSDate date];
+    //[dateFormat stringFromDate:currentTime];
     if(!self.greetingLabel){
-        
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"HH"];
-        dateFormat.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-        NSDate *currentTime;
-        currentTime = [NSDate date];
-        //[dateFormat stringFromDate:currentTime];
-        
-        
         self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6)];
-        
-        switch ([[dateFormat stringFromDate:currentTime] intValue]){
-            case 0 ... 4:
-                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent"); //@"Good Evening";
-                break;
-                
-            case 5 ... 11:
-                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Morning" value:@"" table:nil];
-                break;
-                
-            case 12 ... 17:
-                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Afternoon" value:@"" table:nil];
-                break;
-                
-            case 18 ... 24:
-                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent");//@"Good Evening";
-                break;
-        }
-        
         self.greetingLabel.textAlignment = NSTextAlignmentCenter;
-        if([prefs boolForKey:@"customFont"]){
-            self.greetingLabel.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"greetingSize"]];
-        }else{
-            self.greetingLabel.font = [UIFont systemFontOfSize:[prefs intForKey:@"greetingSize"] weight: UIFontWeightLight];
-        }
-        ////[UIFont boldSystemFontOfSize:40];
         self.greetingLabel.textColor = [UIColor whiteColor];
         [self.weather addSubview:self.greetingLabel];
+    }
+    
+    switch ([[dateFormat stringFromDate:currentTime] intValue]){
+        case 0 ... 4:
+            self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent"); //@"Good Evening";
+            break;
+            
+        case 5 ... 11:
+            self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Morning" value:@"" table:nil];
+            break;
+            
+        case 12 ... 17:
+            self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Afternoon" value:@"" table:nil];
+            break;
+            
+        case 18 ... 24:
+            self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent");//@"Good Evening";
+            break;
+    }
+    if([prefs boolForKey:@"customFont"]){
+        self.greetingLabel.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"greetingSize"]];
+    }else{
+        self.greetingLabel.font = [UIFont systemFontOfSize:[prefs intForKey:@"greetingSize"] weight: UIFontWeightLight];
     }
     
     // old weather
