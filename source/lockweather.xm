@@ -1,6 +1,13 @@
 #include <CSWeather/CSWeatherInformationProvider.h>
 #include "lockweather.h"
 
+//TODO Fix Blur on lockscreen vs just pulling down notification center
+//TODO Try to mimic apples way of dynamically changing text depending on time and weather conditions
+//TODO Customization, move portion of view around
+//TODO Scroll with notifications, hide during notifications etc
+//TODO add dismiss button
+//TODO make only appear during set times
+
 NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/Application Support/lockWeather.bundle"];
 //NSString *alertTitle = [tweakBundle localizedStringForKey:@"ALERT_TITLE" value:@"" table:nil];
 
@@ -115,6 +122,7 @@ static BOOL numberOfNotifcations;
         //self.currentTemp.font = [UIFont systemFontOfSize: 50 weight: UIFontWeightLight];//UIFont.systemFont(ofSize: 34, weight: UIFontWeightThin);//[UIFont UIFontWeightSemibold:50];
         self.currentTemp.textColor = [UIColor whiteColor];
         [self.weather addSubview: self.currentTemp];
+        //[self.currentTemp sizeToFit];
     }
     self.currentTemp.text = [NSString stringWithFormat:@"Today is %@ with a high of %i°", self.weatherCont.todayView.conditionsLine, ((int)[((WADayForecast *)self.weatherCont.currentForecastModel.dailyForecasts[0]).high temperatureForUnit:1])];
     
