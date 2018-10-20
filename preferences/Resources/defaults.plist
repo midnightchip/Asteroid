@@ -4,9 +4,15 @@
 	<dict>
 		<key>kLWPEnabled</key>
 		<true/>
-		<key>kLWPText</key>
-		<string>test</string>
-		<key>kLWPFont</key>
-		<real>.SFUIDisplay-Regular</real>
+		<key>customFont</key>
+		<false/>
+		<key>greetingSize</key>
+		<real>40</real>
+		<key>descriptionSize</key>
+		<real>20</real>
+		<key>tempSize</key>
+		<real>50</real>
+		<key>blurAmount</key>
+		<real>5</real>
 	</dict>
 </plist>

@@ -36,7 +36,7 @@
 @property (nonatomic, retain) UIView *weather;
 @property (nonatomic, retain) UIImageView *logo;
 @property (nonatomic, retain) UILabel *greetingLabel;
-@property (nonatomic, retain) UITextView *description;
+@property (nonatomic, retain) UILabel *description;
 @property (nonatomic, retain) UILabel *currentTemp;
 @property (retain, nonatomic) UIVisualEffectView *blurView;
 @end

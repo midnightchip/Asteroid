@@ -162,6 +162,37 @@
 				<key>defaultsPath</key>
 				<string>/Library/PreferenceBundles/lockweather.bundle</string>
 			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>label</key>
+				<string>Blur Amount</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSSliderCell</string>
+				<key>key</key>
+				<string>blurAmount</string>
+				<key>showValue</key>
+				<true/>
+				<key>min</key>
+				<real>0</real>
+				<key>max</key>
+				<real>30</real>
+				<key>isSegmented</key>
+				<true/>
+				<key>segmentCount</key>
+				<real>30</real>
+				<key>PostNotification</key>
+				<string>com.midnightchips.lockweather.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.lockweather</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/lockweather.bundle</string>
+			</dict>
+
 			
 
 			<dict>
