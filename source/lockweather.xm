@@ -1,4 +1,4 @@
-#include <CSWeather/CSWeatherInformationProvider.h>
+
 #include "lockweather.h"
 
 //TODO Change today to use the cases in descriptions
@@ -70,30 +70,6 @@ BOOL isOnLockscreen() {
  // end of data required for the isOnLockscreen() function --------------------------------------------------------------------------------------
 
 
-// weather data ------------------------------------------------------------------------------------------
-WALockscreenWidgetViewController * weatherController(){
-    WALockscreenWidgetViewController *weatherCont;
-    weatherCont = [%c(WALockscreenWidgetViewController) sharedInstanceIfExists] ? [%c(WALockscreenWidgetViewController) sharedInstanceIfExists] : [[%c(WALockscreenWidgetViewController) alloc] init];
-    [weatherCont updateWeather];
-    return weatherCont;
-}
-
-int todayHigh(){
-    return ((int)[((WADayForecast *)weatherController().currentForecastModel.dailyForecasts[0]).high temperatureForUnit:1]);
-}
-
-// This works, just not needed
-/*
-int todayLow(){
-    return ((int)[((WADayForecast *)weatherController().currentForecastModel.dailyForecasts[0]).low temperatureForUnit:1]);
-}
-*/
-NSString * todayCondition(){
-    return weatherController().todayView.conditionsLine;
-}
-// end of weather data -------------------------------------------------------------------------
-
-
 static BOOL numberOfNotifcations;
 static BOOL isDismissed;
 
@@ -109,104 +85,17 @@ static BOOL isDismissed;
 
 - (void)layoutSubviews {
     %orig;
-    //NSLog(@"lock_TWEAK | testing it before");
-    //UIImage *icon;
     if(!self.weather){
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         [self.weather setBackgroundColor:[UIColor clearColor]];
         [self addSubview:self.weather];
-      //  [self.weather setUserInteractionEnabled:NO];
-        
-        // setting up weatherCont
-        if([%c(WALockscreenWidgetViewController) sharedInstanceIfExists]){
-            self.weatherCont = [%c(WALockscreenWidgetViewController) sharedInstanceIfExists];
-            [self.weatherCont updateWeather];
-            [self.weather addSubview: self.weatherCont.view];
-            self.weatherCont.view.frame = CGRectMake(0, self.frame.size.height/2.7, self.frame.size.width, self.frame.size.height/8.6);
-        } else {
-            self.weatherCont = [[%c(WALockscreenWidgetViewController) alloc] init];
-            [self.weatherCont updateWeather];
-            [self.weather addSubview: self.weatherCont.view];
-            self.weatherCont.view.frame = CGRectMake(0, self.frame.size.height/2.7, self.frame.size.width, self.frame.size.height/8.6);
-            
-        }
-        
-        if(!self.dismissButton){
-            self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
-            [self.dismissButton addTarget:self
-                       action:@selector(buttonPressed:)
-             forControlEvents:UIControlEventTouchUpInside];
-            [self.dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
-            self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
-            [self.weather addSubview:self.dismissButton];
-        }
     }
-    
-    
-    if(!self.description){
-        //CGRect screenRect = [[UIScreen mainScreen] bounds];
-        //CGFloat screenWidth = screenRect.size.width;
-        //CGFloat screenHeight = screenRect.size.height;
-        
-        self.description = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.frame.size.width, self.frame.size.height/8.6)];
-        
-        self.description.textAlignment = NSTextAlignmentCenter;
-        
-        //self.currentTemp.font = [UIFont systemFontOfSize: 50 weight: UIFontWeightLight];//UIFont.systemFont(ofSize: 34, weight: UIFontWeightThin);//[UIFont UIFontWeightSemibold:50];
-        self.description.textColor = [UIColor whiteColor];
-        [self.weather addSubview: self.description];
-        //[self.currentTemp sizeToFit];
-    }
-    if([prefs boolForKey:@"customFont"]){
-        self.description.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"descriptionSize"]];
-    }else{
-        self.description.font = [UIFont systemFontOfSize: [prefs intForKey:@"descriptionSize"] weight: UIFontWeightLight];
-    }
-    self.description.text = [NSString stringWithFormat:@"Today is %@ with a high of %i°", todayCondition(), todayHigh()];
-    
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"HH"];
-    dateFormat.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-    NSDate *currentTime;
-    currentTime = [NSDate date];
-    //[dateFormat stringFromDate:currentTime];
-    if(!self.greetingLabel){
-        self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6)];
-        self.greetingLabel.textAlignment = NSTextAlignmentCenter;
-        self.greetingLabel.textColor = [UIColor whiteColor];
-        [self.weather addSubview:self.greetingLabel];
-    }
-    
-    switch ([[dateFormat stringFromDate:currentTime] intValue]){
-        case 0 ... 4:
-            self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent"); //@"Good Evening";
-            break;
-            
-        case 5 ... 11:
-            self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Morning" value:@"" table:nil];
-            break;
-            
-        case 12 ... 17:
-            self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Afternoon" value:@"" table:nil];
-            break;
-            
-        case 18 ... 24:
-            self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent");//@"Good Evening";
-            break;
-    }
-    if([prefs boolForKey:@"customFont"]){
-        self.greetingLabel.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"greetingSize"]];
-    }else{
-        self.greetingLabel.font = [UIFont systemFontOfSize:[prefs intForKey:@"greetingSize"] weight: UIFontWeightLight];
-    }
-    /*
-    // old weather
-    /*[[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
+    [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
          //NSLog(@"lock_TWEAK | on completion");
         //NSString *condition = weather[@"kCurrentFeelsLikefahrenheit"];
         //NSString *temp = weather[@"kCurrentTemperatureForLocale"];
         UIImage *icon = weather[@"kCurrentConditionImage_nc-variant"];
-        
+        //NSLog(@"BIGAEIS %@", weather[@"kCurrentTemperatureForLocale"]);
         CGRect screenRect = [[UIScreen mainScreen] bounds];
         CGFloat screenWidth = screenRect.size.width;
         CGFloat screenHeight = screenRect.size.height;
@@ -226,7 +115,6 @@ static BOOL isDismissed;
         if(self.currentTemp){
             [self.currentTemp removeFromSuperview];
         }
-        
         self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225)];
         self.logo.image = icon;
         self.logo.contentMode = UIViewContentModeScaleAspectFit;
@@ -290,7 +178,7 @@ static BOOL isDismissed;
         
         //[[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.1, self.frame.size.height/10)];
         
-        self.description = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.12, self.frame.size.height/2)];
+        self.description = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.frame.size.width, self.frame.size.height/8.6)];
         self.description.text = weather[@"kCurrentDescription"];
         self.description.textAlignment = NSTextAlignmentCenter;
         self.description.lineBreakMode = NSLineBreakByWordWrapping;
@@ -316,7 +204,7 @@ static BOOL isDismissed;
 
         [self.weather addSubview:self.description];
     }];
-    */
+    
 }
 
 %new

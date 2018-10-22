@@ -43,19 +43,20 @@
 				<string>/Library/PreferenceBundles/lockweather.bundle</string>
 			</dict>
 
+
 			<dict>
 				<key>cell</key>
 				<string>PSLinkListCell</string>
 				<key>detail</key>
-				<string>CSListItemsController</string>
-				<key>label</key>
-				<string>Custom_Font</string>
+				<string>CSListFontsController</string>
 				<key>key</key>
 				<string>availableFonts</string>
+				<key>label</key>
+				<string>Custom_Font</string>
 				<key>titlesDataSource</key>
-				<string>availableFonts</string>
+				<string>fontNames</string>
 				<key>valuesDataSource</key>
-				<string>availableFonts</string>
+				<string>fontNames</string>
 				<key>PostNotification</key>
 				<string>com.midnightchips.lockweather.prefschanged</string>
 				<key>defaults</key>

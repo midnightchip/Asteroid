@@ -20,7 +20,7 @@ include $(THEOS_MAKE_PATH)/tweak.mk
 
 SUBPROJECTS += preferences
 
-SUBPROJECTS += weatherlockhelper
+
 include $(THEOS_MAKE_PATH)/aggregate.mk
 
 after-install::
