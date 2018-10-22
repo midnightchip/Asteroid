@@ -129,6 +129,7 @@ static BOOL isDismissed;
             self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225)];
             self.currentTemp.textAlignment = NSTextAlignmentCenter;
             self.currentTemp.textColor = [UIColor whiteColor];
+            [self.currentTemp setUserInteractionEnabled:NO];
             [self.weather addSubview: self.currentTemp];
         }
         
@@ -157,6 +158,7 @@ static BOOL isDismissed;
             self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6)];
             self.greetingLabel.textAlignment = NSTextAlignmentCenter;
             self.greetingLabel.textColor = [UIColor whiteColor];
+            [self.greetingLabel setUserInteractionEnabled:NO];
             [self.weather addSubview:self.greetingLabel];
         }
         
@@ -206,6 +208,16 @@ static BOOL isDismissed;
             self.description.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"descriptionSize"]];
         }else{
             self.description.font = [UIFont systemFontOfSize:[prefs intForKey:@"descriptionSize"]];
+        }
+        
+        if(!self.dismissButton){
+            self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            [self.dismissButton addTarget:self
+                                   action:@selector(buttonPressed:)
+                         forControlEvents:UIControlEventTouchUpInside];
+            [self.dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
+            self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
+            [self.weather addSubview:self.dismissButton];
         }
     }];
     
