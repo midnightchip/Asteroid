@@ -91,7 +91,6 @@ static BOOL isDismissed;
         [self addSubview:self.weather];
     }
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
-         //NSLog(@"lock_TWEAK | on completion");
         //NSString *condition = weather[@"kCurrentFeelsLikefahrenheit"];
         //NSString *temp = weather[@"kCurrentTemperatureForLocale"];
         UIImage *icon = weather[@"kCurrentConditionImage_nc-variant"];
@@ -100,8 +99,7 @@ static BOOL isDismissed;
         CGFloat screenWidth = screenRect.size.width;
         CGFloat screenHeight = screenRect.size.height;
         
-        //NSLog(@"lock_TWEAK | testing it run");
-        
+        /*
         //CleanUp
         if(self.logo){
             [self.logo removeFromSuperview];
@@ -115,39 +113,54 @@ static BOOL isDismissed;
         if(self.currentTemp){
             [self.currentTemp removeFromSuperview];
         }
-        self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225)];
+         */
+        if(!self.logo){
+            self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225)];
+            self.logo.image = icon;
+            self.logo.contentMode = UIViewContentModeScaleAspectFit;
+            [self.weather addSubview:self.logo];
+        }
+        
+        // Updating the image icon
         self.logo.image = icon;
-        self.logo.contentMode = UIViewContentModeScaleAspectFit;
-        [self.weather addSubview:self.logo];
-        //NSLog(@"YEET %@", self.logo);
         
         //Current Temperature Localized
-        self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225)];
+        if(!self.currentTemp){
+            self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225)];
+            self.currentTemp.textAlignment = NSTextAlignmentCenter;
+            self.currentTemp.textColor = [UIColor whiteColor];
+            [self.weather addSubview: self.currentTemp];
+        }
+        
+        // Setting the current temperature text
         if(weather[@"kCurrentTemperatureFahrenheit"] != nil){
             self.currentTemp.text = weather[@"kCurrentTemperatureForLocale"];
         }else{
             self.currentTemp.text = @"Error";
         }
         
-        self.currentTemp.textAlignment = NSTextAlignmentCenter;
+        // Updating the font
         if([prefs boolForKey:@"customFont"]){
             self.currentTemp.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"tempSize"]];
         }else{
             self.currentTemp.font = [UIFont systemFontOfSize: [prefs intForKey:@"tempSize"] weight: UIFontWeightLight];
         }
-        //self.currentTemp.font = [UIFont systemFontOfSize: 50 weight: UIFontWeightLight];//UIFont.systemFont(ofSize: 34, weight: UIFontWeightThin);//[UIFont UIFontWeightSemibold:50];
-        self.currentTemp.textColor = [UIColor whiteColor];
-        [self.weather addSubview: self.currentTemp];
-        
+
+        // Getting the time
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"HH"];
         dateFormat.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
         NSDate *currentTime;
         currentTime = [NSDate date];
-        //[dateFormat stringFromDate:currentTime];
         
-        self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6)];
+        if(!self.greetingLabel){
+            self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6)];
+            self.greetingLabel.textAlignment = NSTextAlignmentCenter;
+            self.greetingLabel.textColor = [UIColor whiteColor];
+            [self.weather addSubview:self.greetingLabel];
+        }
         
+        // Updating the Greeting Label
         switch ([[dateFormat stringFromDate:currentTime] intValue]){
             case 0 ... 4:
                 self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent"); //@"Good Evening";
@@ -166,44 +179,34 @@ static BOOL isDismissed;
                 break;
         }
         
-        self.greetingLabel.textAlignment = NSTextAlignmentCenter;
+        // Setting Greeting Label Font
         if([prefs boolForKey:@"customFont"]){
             self.greetingLabel.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"greetingSize"]];
         }else{
             self.greetingLabel.font = [UIFont systemFontOfSize:[prefs intForKey:@"greetingSize"] weight: UIFontWeightLight];
         }
-        ////[UIFont boldSystemFontOfSize:40];
-        self.greetingLabel.textColor = [UIColor whiteColor];
-        [self.weather addSubview:self.greetingLabel];
+
+        if(!self.description){
+            self.description = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.weather.frame.size.width, self.frame.size.height/8.6)];
+            self.description.textAlignment = NSTextAlignmentCenter;
+            self.description.lineBreakMode = NSLineBreakByWordWrapping;
+            self.description.numberOfLines = 0;
+            self.description.textColor = [UIColor whiteColor];
+            self.description.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            [self.description setUserInteractionEnabled:NO];
+            self.description.preferredMaxLayoutWidth = self.weather.frame.size.width;
+            [self.weather addSubview:self.description];
+        }
         
-        //[[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.1, self.frame.size.height/10)];
-        
-        self.description = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.weather.frame.size.width, self.frame.size.height/8.6)];
+        // Updating the the text of the description
         self.description.text = weather[@"kCurrentDescription"];
-        self.description.textAlignment = NSTextAlignmentCenter;
-        self.description.lineBreakMode = NSLineBreakByWordWrapping;
-        self.description.numberOfLines = 0;
-        self.description.textColor = [UIColor whiteColor];
-        self.description.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [self.description setUserInteractionEnabled:NO];
 
-
+        // Setting the font for the description
         if([prefs boolForKey:@"customFont"]){
             self.description.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"descriptionSize"]];
         }else{
             self.description.font = [UIFont systemFontOfSize:[prefs intForKey:@"descriptionSize"]];
         }
-        //self.description.font = [UIFont systemFontOfSize:20];
-        self.description.preferredMaxLayoutWidth = self.weather.frame.size.width;
-        
-        //[self.description sizeToFit]; This makes it off center by the way
-
-        //CGPoint center = self.weather.center;
-        //center.y = self.weather.frame.size.height / 1.85;
-        //[self.description setCenter:center];
-
-
-        [self.weather addSubview:self.description];
     }];
     
 }
