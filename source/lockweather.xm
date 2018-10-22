@@ -82,6 +82,7 @@ static BOOL isDismissed;
 %property (retain, nonatomic) UIVisualEffectView *blurView;
 %property (retain, nonatomic) UIButton *dismissButton;
 %property (retain, nonatomic) WALockscreenWidgetViewController *weatherCont;
+%property (retain, nonatomic) NSTimer *refreshTimer;
 
 - (void)layoutSubviews {
     %orig;
@@ -90,48 +91,117 @@ static BOOL isDismissed;
         [self.weather setBackgroundColor:[UIColor clearColor]];
         [self addSubview:self.weather];
     }
-    [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
-        //NSString *condition = weather[@"kCurrentFeelsLikefahrenheit"];
-        //NSString *temp = weather[@"kCurrentTemperatureForLocale"];
-        UIImage *icon = weather[@"kCurrentConditionImage_nc-variant"];
-        //NSLog(@"BIGAEIS %@", weather[@"kCurrentTemperatureForLocale"]);
-        CGRect screenRect = [[UIScreen mainScreen] bounds];
-        CGFloat screenWidth = screenRect.size.width;
-        CGFloat screenHeight = screenRect.size.height;
+    
+    // Just some rect stuff
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    CGFloat screenHeight = screenRect.size.height;
+    
+    if(!self.logo){
+        self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225)];
+        [self.weather addSubview:self.logo];
+    }
+    
+    //Current Temperature Localized
+    if(!self.currentTemp){
+        self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225)];
+        self.currentTemp.textAlignment = NSTextAlignmentCenter;
+        self.currentTemp.textColor = [UIColor whiteColor];
+        [self.currentTemp setUserInteractionEnabled:NO];
+        [self.weather addSubview: self.currentTemp];
+    }
+    
+    // Updating the font
+    if([prefs boolForKey:@"customFont"]){
+        self.currentTemp.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"tempSize"]];
+    }else{
+        self.currentTemp.font = [UIFont systemFontOfSize: [prefs intForKey:@"tempSize"] weight: UIFontWeightLight];
+    }
+    
+    if(!self.greetingLabel){
+        self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6)];
+        self.greetingLabel.textAlignment = NSTextAlignmentCenter;
+        self.greetingLabel.textColor = [UIColor whiteColor];
+        [self.greetingLabel setUserInteractionEnabled:NO];
+        [self.weather addSubview:self.greetingLabel];
+    }
+    
+    // Setting Greeting Label Font
+    if([prefs boolForKey:@"customFont"]){
+        self.greetingLabel.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"greetingSize"]];
+    }else{
+        self.greetingLabel.font = [UIFont systemFontOfSize:[prefs intForKey:@"greetingSize"] weight: UIFontWeightLight];
+    }
+    
+    if(!self.description){
+        self.description = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.weather.frame.size.width, self.frame.size.height/8.6)];
+        self.description.textAlignment = NSTextAlignmentCenter;
+        self.description.lineBreakMode = NSLineBreakByWordWrapping;
+        self.description.numberOfLines = 0;
+        self.description.textColor = [UIColor whiteColor];
+        self.description.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [self.description setUserInteractionEnabled:NO];
+        self.description.preferredMaxLayoutWidth = self.weather.frame.size.width;
+        [self.weather addSubview:self.description];
+    }
+    
+    // Setting the font for the description
+    if([prefs boolForKey:@"customFont"]){
+        self.description.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"descriptionSize"]];
+    }else{
+        self.description.font = [UIFont systemFontOfSize:[prefs intForKey:@"descriptionSize"]];
+    }
+    
+    if(!self.dismissButton){
+        self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.dismissButton addTarget:self
+                               action:@selector(buttonPressed:)
+                     forControlEvents:UIControlEventTouchUpInside];
+        [self.dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
+        self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
+        [self.weather addSubview:self.dismissButton];
+    }
+    // Creating a refresh timer
+    if(!self.refreshTimer){
+        self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:300.0
+                                                             target:self
+                                                           selector:@selector(updateWeather:)
+                                                           userInfo:nil
+                                                            repeats:NO];
         
-        /*
-        //CleanUp
-        if(self.logo){
-            [self.logo removeFromSuperview];
-        }
-        if(self.greetingLabel){
-            [self.greetingLabel removeFromSuperview];
-        }
-        if(self.description){
-            [self.description removeFromSuperview];
-        }
-        if(self.currentTemp){
-            [self.currentTemp removeFromSuperview];
-        }
-         */
-        if(!self.logo){
-            self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225)];
-            self.logo.image = icon;
-            self.logo.contentMode = UIViewContentModeScaleAspectFit;
-            [self.weather addSubview:self.logo];
-        }
+        // making sure the weather is updated once
+        [self.refreshTimer fire];
+    }
+}
+
+-(void) dealloc {
+    [self.refreshTimer invalidate];
+    %orig;
+}
+%new
+- (void) buttonPressed: (UIButton*)sender{
+    [UIView animateWithDuration:.5
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{self.weather.alpha = 0;}
+                     completion:^(BOOL finished){
+                         self.weather.hidden = YES;
+                         self.weather.alpha = 1;
+                     }];
+    isDismissed = YES;
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"weatherDismissButtonPressed"
+     object:self];
+}
+
+%new
+- (void) updateWeather: (NSTimer *) sender{
+    [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
         
         // Updating the image icon
+        UIImage *icon = weather[@"kCurrentConditionImage_nc-variant"];
         self.logo.image = icon;
-        
-        //Current Temperature Localized
-        if(!self.currentTemp){
-            self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225)];
-            self.currentTemp.textAlignment = NSTextAlignmentCenter;
-            self.currentTemp.textColor = [UIColor whiteColor];
-            [self.currentTemp setUserInteractionEnabled:NO];
-            [self.weather addSubview: self.currentTemp];
-        }
+        self.logo.contentMode = UIViewContentModeScaleAspectFit;
         
         // Setting the current temperature text
         if(weather[@"kCurrentTemperatureFahrenheit"] != nil){
@@ -140,29 +210,13 @@ static BOOL isDismissed;
             self.currentTemp.text = @"Error";
         }
         
-        // Updating the font
-        if([prefs boolForKey:@"customFont"]){
-            self.currentTemp.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"tempSize"]];
-        }else{
-            self.currentTemp.font = [UIFont systemFontOfSize: [prefs intForKey:@"tempSize"] weight: UIFontWeightLight];
-        }
-
-        // Getting the time
+        // Updating the Greeting Label
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"HH"];
         dateFormat.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
         NSDate *currentTime;
         currentTime = [NSDate date];
         
-        if(!self.greetingLabel){
-            self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6)];
-            self.greetingLabel.textAlignment = NSTextAlignmentCenter;
-            self.greetingLabel.textColor = [UIColor whiteColor];
-            [self.greetingLabel setUserInteractionEnabled:NO];
-            [self.weather addSubview:self.greetingLabel];
-        }
-        
-        // Updating the Greeting Label
         switch ([[dateFormat stringFromDate:currentTime] intValue]){
             case 0 ... 4:
                 self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent"); //@"Good Evening";
@@ -181,64 +235,11 @@ static BOOL isDismissed;
                 break;
         }
         
-        // Setting Greeting Label Font
-        if([prefs boolForKey:@"customFont"]){
-            self.greetingLabel.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"greetingSize"]];
-        }else{
-            self.greetingLabel.font = [UIFont systemFontOfSize:[prefs intForKey:@"greetingSize"] weight: UIFontWeightLight];
-        }
-
-        if(!self.description){
-            self.description = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.weather.frame.size.width, self.frame.size.height/8.6)];
-            self.description.textAlignment = NSTextAlignmentCenter;
-            self.description.lineBreakMode = NSLineBreakByWordWrapping;
-            self.description.numberOfLines = 0;
-            self.description.textColor = [UIColor whiteColor];
-            self.description.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            [self.description setUserInteractionEnabled:NO];
-            self.description.preferredMaxLayoutWidth = self.weather.frame.size.width;
-            [self.weather addSubview:self.description];
-        }
-        
         // Updating the the text of the description
         self.description.text = weather[@"kCurrentDescription"];
-
-        // Setting the font for the description
-        if([prefs boolForKey:@"customFont"]){
-            self.description.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"descriptionSize"]];
-        }else{
-            self.description.font = [UIFont systemFontOfSize:[prefs intForKey:@"descriptionSize"]];
-        }
         
-        if(!self.dismissButton){
-            self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
-            [self.dismissButton addTarget:self
-                                   action:@selector(buttonPressed:)
-                         forControlEvents:UIControlEventTouchUpInside];
-            [self.dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
-            self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
-            [self.weather addSubview:self.dismissButton];
-        }
     }];
-    
 }
-
-%new
-- (void) buttonPressed: (UIButton*)sender{
-    [UIView animateWithDuration:.5
-                          delay:0
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{self.weather.alpha = 0;}
-                     completion:^(BOOL finished){
-                         self.weather.hidden = YES;
-                         self.weather.alpha = 1;
-                     }];
-    isDismissed = YES;
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"weatherDismissButtonPressed"
-     object:self];
-}
-
 %end
 
 // Checking content

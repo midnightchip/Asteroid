@@ -64,6 +64,7 @@
 @property (retain, nonatomic) UIVisualEffectView *blurView;
 @property (retain, nonatomic) UIButton *dismissButton;
 @property (retain, nonatomic) WALockscreenWidgetViewController *weatherCont;
+@property (retain, nonatomic) NSTimer *refreshTimer;
 @end
 
 @interface UIBlurEffect (lockweather)
