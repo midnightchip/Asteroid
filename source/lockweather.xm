@@ -178,7 +178,7 @@ static BOOL isDismissed;
         
         //[[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.1, self.frame.size.height/10)];
         
-        self.description = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.frame.size.width, self.frame.size.height/8.6)];
+        self.description = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.weather.frame.size.width, self.frame.size.height/8.6)];
         self.description.text = weather[@"kCurrentDescription"];
         self.description.textAlignment = NSTextAlignmentCenter;
         self.description.lineBreakMode = NSLineBreakByWordWrapping;
@@ -194,8 +194,9 @@ static BOOL isDismissed;
             self.description.font = [UIFont systemFontOfSize:[prefs intForKey:@"descriptionSize"]];
         }
         //self.description.font = [UIFont systemFontOfSize:20];
-        self.description.preferredMaxLayoutWidth = self.frame.size.width;
-        [self.description sizeToFit];
+        self.description.preferredMaxLayoutWidth = self.weather.frame.size.width;
+        
+        //[self.description sizeToFit]; This makes it off center by the way
 
         //CGPoint center = self.weather.center;
         //center.y = self.weather.frame.size.height / 1.85;
