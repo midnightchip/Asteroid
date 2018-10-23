@@ -70,8 +70,7 @@ BOOL isOnLockscreen() {
  // end of data required for the isOnLockscreen() function --------------------------------------------------------------------------------------
 
 
-static BOOL numberOfNotifcations;
-static BOOL isDismissed;
+static BOOL isDismissed = NO;
 
 %hook SBDashBoardMainPageView
 %property (nonatomic, retain) UIView *weather;
@@ -86,9 +85,12 @@ static BOOL isDismissed;
 
 - (void)layoutSubviews {
     %orig;
+    
+    // Making the view to hold all the stuff
     if(!self.weather){
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         [self.weather setBackgroundColor:[UIColor clearColor]];
+        [self.currentTemp setUserInteractionEnabled:NO]; // This is supposed to be no btw
         [self addSubview:self.weather];
     }
     
@@ -97,6 +99,7 @@ static BOOL isDismissed;
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;
     
+    // Creating the logo (icon)
     if(!self.logo){
         self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225)];
         [self.weather addSubview:self.logo];
@@ -107,7 +110,6 @@ static BOOL isDismissed;
         self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225)];
         self.currentTemp.textAlignment = NSTextAlignmentCenter;
         self.currentTemp.textColor = [UIColor whiteColor];
-        [self.currentTemp setUserInteractionEnabled:NO];
         [self.weather addSubview: self.currentTemp];
     }
     
@@ -118,11 +120,11 @@ static BOOL isDismissed;
         self.currentTemp.font = [UIFont systemFontOfSize: [prefs intForKey:@"tempSize"] weight: UIFontWeightLight];
     }
     
+    // Creating the greeting label
     if(!self.greetingLabel){
         self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6)];
         self.greetingLabel.textAlignment = NSTextAlignmentCenter;
         self.greetingLabel.textColor = [UIColor whiteColor];
-        [self.greetingLabel setUserInteractionEnabled:NO];
         [self.weather addSubview:self.greetingLabel];
     }
     
@@ -133,6 +135,7 @@ static BOOL isDismissed;
         self.greetingLabel.font = [UIFont systemFontOfSize:[prefs intForKey:@"greetingSize"] weight: UIFontWeightLight];
     }
     
+    // Creating the description
     if(!self.description){
         self.description = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.weather.frame.size.width, self.frame.size.height/8.6)];
         self.description.textAlignment = NSTextAlignmentCenter;
@@ -140,7 +143,6 @@ static BOOL isDismissed;
         self.description.numberOfLines = 0;
         self.description.textColor = [UIColor whiteColor];
         self.description.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [self.description setUserInteractionEnabled:NO];
         self.description.preferredMaxLayoutWidth = self.weather.frame.size.width;
         [self.weather addSubview:self.description];
     }
@@ -152,6 +154,7 @@ static BOOL isDismissed;
         self.description.font = [UIFont systemFontOfSize:[prefs intForKey:@"descriptionSize"]];
     }
     
+    // Creating the dismiss button
     if(!self.dismissButton){
         self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.dismissButton addTarget:self
@@ -159,8 +162,9 @@ static BOOL isDismissed;
                      forControlEvents:UIControlEventTouchUpInside];
         [self.dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
         self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
-        [self.weather addSubview:self.dismissButton];
+        [self addSubview:self.dismissButton];
     }
+    
     // Creating a refresh timer
     if(!self.refreshTimer){
         self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:300.0
@@ -175,25 +179,39 @@ static BOOL isDismissed;
 }
 
 -(void) dealloc {
+    // Making sure the timer goes away
     [self.refreshTimer invalidate];
     %orig;
 }
 %new
 - (void) buttonPressed: (UIButton*)sender{
-    [UIView animateWithDuration:.5
-                          delay:0
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{self.weather.alpha = 0;}
-                     completion:^(BOOL finished){
-                         self.weather.hidden = YES;
-                         self.weather.alpha = 1;
-                     }];
-    isDismissed = YES;
+    if(!self.weather.hidden){
+        [UIView animateWithDuration:.5
+                              delay:0
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{self.weather.alpha = 0;}
+                         completion:^(BOOL finished){
+                             self.weather.hidden = YES;
+                             self.weather.alpha = 1;
+                         }];
+        isDismissed = YES;
+        
+    } else{
+        self.weather.alpha = 0;
+        self.weather.hidden = NO;
+        [UIView animateWithDuration:.5
+                              delay:0
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{self.weather.alpha = 1;}
+                         completion:nil];
+        isDismissed = NO;
+    }
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"weatherDismissButtonPressed"
      object:self];
 }
 
+// Handling a timer fire (refresh weather info)
 %new
 - (void) updateWeather: (NSTimer *) sender{
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
@@ -237,35 +255,88 @@ static BOOL isDismissed;
         
         // Updating the the text of the description
         self.description.text = weather[@"kCurrentDescription"];
-        
     }];
 }
 %end
 
 // Checking content
 %hook NCNotificationCombinedListViewController
--(BOOL)hasContent{
-    BOOL content = %orig;
-    if(content != numberOfNotifcations){
-        // send a notification with user info for content. Dont forget to check ((!isOnLockscreen()) ? YES : self.isShowingNotificationsHistory)
-        //self.view.hidden = YES;
+-(id) init{
+    if((self = %orig)){
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateViewCollectionWhenDismissed:) name:@"weatherDismissButtonPressed" object:nil];
     }
-    // Sending values to the background controller
-    //[[TCBackgroundViewController sharedInstance] updateSceenShot: content isRevealed: ((!isOnLockscreen()) ? YES : self.isShowingNotificationsHistory)]; // NC is never set to lock
-    numberOfNotifcations = content;
-    return content;
+    return self;
+}
+
+%new
+-(void) updateViewCollectionWhenDismissed:(NSNotification *)sender{
+    if(!isDismissed){
+        [UIView animateWithDuration:.2
+                              delay:0
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{self.view.alpha = 0;}
+                         completion:^(BOOL finished){
+                             self.view.hidden = YES;
+                             self.view.alpha = 1;
+                         }];
+        
+    } else{
+        self.view.alpha = 0;
+        self.view.hidden = NO;
+        [UIView animateWithDuration:.5
+                              delay:0
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{self.view.alpha = 1;}
+                         completion:nil];
+    }
+}
+-(BOOL)hasContent{
+    if(!isDismissed){
+        [UIView animateWithDuration:.2
+                              delay:0
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{self.view.alpha = 0;}
+                         completion:^(BOOL finished){
+                             self.view.hidden = YES;
+                             self.view.alpha = 1;
+                         }];
+        
+    } else{
+        self.view.alpha = 0;
+        self.view.hidden = NO;
+        [UIView animateWithDuration:.5
+                              delay:0
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{self.view.alpha = 1;}
+                         completion:nil];
+    }
+}
+%end
+
+
+// This still needs work
+%hook SBDashBoardWallpaperEffectView
+// removes the wallpaper view when opening camera
+// checks if the blur is visible when applying the new animation
+-(void)layoutSubviews {
+    %orig;
+    if (((SBDashBoardViewController *)((UIView *)self).superview/* some touch thingy */.superview/* SBDashBoardView */._viewDelegate/* SBDashBoardViewController */).blurEffectView.hidden == NO){
+        ((UIView*)self).hidden = YES;
+    } else{
+        ((UIView*)self).hidden = NO;
+    }
+    ((UIView*)self).hidden = YES;
 }
 %end
 
 //Blur 
 %hook SBDashBoardViewController
-%property (nonatomic, retain) UIVisualEffectView *notifEffectView;
+//%property (nonatomic, retain) UIVisualEffectView *notifEffectView; <-- Whats this supposed to do
 %property (nonatomic, retain) UIVisualEffectView *blurEffectView;
 
 -(void)loadView{
     %orig;
-    
-    //NSLog(@"lock_TWEAK | blur");
+
     UIBlurEffect *blurEffect = [UIBlurEffect effectWithBlurRadius:[prefs intForKey:@"blurAmount"]];
     self.blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
     //always fill the view

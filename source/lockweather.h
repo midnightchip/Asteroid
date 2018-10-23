@@ -1,6 +1,10 @@
 #import <LWPProvider.h>
 #import <CSWeather/CSWeatherInformationProvider.h>
 
+@interface UIView (tweak_cat)
+-(id) _viewDelegate;
+@end
+
 //help from the_casle on the blur
 @interface SBUIBackgroundView : UIView
 @property (nonatomic, retain) UIVisualEffectView *blurEffectView;
