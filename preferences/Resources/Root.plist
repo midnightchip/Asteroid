@@ -224,6 +224,8 @@
 				<string>com.midnightchips.lockweather</string>
 				<key>defaultsPath</key>
 				<string>/Library/PreferenceBundles/lockweather.bundle</string>
+				<key>callbackAction</key>
+				<string>refreshImage</string>
 			</dict>
 
 			<dict>
@@ -245,6 +247,8 @@
 				<string>com.midnightchips.lockweather</string>
 				<key>defaultsPath</key>
 				<string>/Library/PreferenceBundles/lockweather.bundle</string>
+				<key>callbackAction</key>
+				<string>refreshImage</string>
 			</dict>
 
 <!--
