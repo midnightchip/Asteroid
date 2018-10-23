@@ -6,11 +6,11 @@
 
 @implementation CSPListController (lockscreen)
 -(NSArray *)getImageType{
-	return [[NSArray alloc] initWithObjects: @"Standard", @"Filled Solid Color", @"Outline Image", nil];
+	return [[NSArray alloc] initWithObjects: @"Filled Solid Color", @"Outline Image", nil];
 }
 
-
 @end 
+
 @implementation LWPPreferenceController
 
 @end

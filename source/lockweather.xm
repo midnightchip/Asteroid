@@ -107,7 +107,7 @@ static BOOL isDismissed;
         UIImage *icon;
         // Updating the image icon
         BOOL setColor = FALSE;
-        if([[prefs stringForKey:@"setImageType"] isEqualToString:@"Standard"]){
+        if(![prefs boolForKey:@"customImage"]){
             icon = weather[@"kCurrentConditionImage_nc-variant"];
         }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
             icon = weather[@"kCurrentConditionImage_white-variant"];
@@ -256,7 +256,7 @@ static BOOL isDismissed;
         UIImage *icon;
         // Updating the image icon
         BOOL setColor = FALSE;
-        if([[prefs stringForKey:@"setImageType"] isEqualToString:@"Standard"]){
+        if(![prefs boolForKey:@"customImage"]){
             icon = weather[@"kCurrentConditionImage_nc-variant"];
         }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
             icon = weather[@"kCurrentConditionImage_white-variant"];
