@@ -65,6 +65,7 @@
 @property (retain, nonatomic) UIButton *dismissButton;
 @property (retain, nonatomic) WALockscreenWidgetViewController *weatherCont;
 @property (retain, nonatomic) NSTimer *refreshTimer;
+-(void)updateImage:(NSNotification *) notification;
 @end
 
 @interface UIBlurEffect (lockweather)

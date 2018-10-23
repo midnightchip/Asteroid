@@ -1,4 +1,3 @@
-
 #include "lockweather.h"
 
 //TODO Change today to use the cases in descriptions
@@ -83,8 +82,10 @@ static BOOL isDismissed;
 %property (retain, nonatomic) WALockscreenWidgetViewController *weatherCont;
 %property (retain, nonatomic) NSTimer *refreshTimer;
 
+
 - (void)layoutSubviews {
     %orig;
+
     if(!self.weather){
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         [self.weather setBackgroundColor:[UIColor clearColor]];
@@ -100,7 +101,31 @@ static BOOL isDismissed;
     if(!self.logo){
         self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225)];
         [self.weather addSubview:self.logo];
-    }
+    }   
+
+    [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
+        UIImage *icon;
+        // Updating the image icon
+        BOOL setColor = FALSE;
+        if([[prefs stringForKey:@"setImageType"] isEqualToString:@"Standard"]){
+            icon = weather[@"kCurrentConditionImage_nc-variant"];
+        }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
+            icon = weather[@"kCurrentConditionImage_white-variant"];
+            setColor = TRUE;
+        }else{
+            icon = weather[@"kCurrentConditionImage_black-variant"];
+            setColor = TRUE;
+        }
+        
+        self.logo.image = icon;
+        if(setColor){
+            self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            [self.logo setTintColor:[prefs colorForKey:@"glyphColor"]];
+        }
+        
+
+        self.logo.contentMode = UIViewContentModeScaleAspectFit;
+    }];
     
     //Current Temperature Localized
     if(!self.currentTemp){
@@ -134,6 +159,8 @@ static BOOL isDismissed;
         self.greetingLabel.font = [UIFont systemFontOfSize:[prefs intForKey:@"greetingSize"] weight: UIFontWeightLight];
     }
     self.greetingLabel.textColor = [prefs colorForKey:@"textColor"];
+
+    
     
     if(!self.description){
         self.description = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.weather.frame.size.width, self.frame.size.height/8.6)];
@@ -175,7 +202,33 @@ static BOOL isDismissed;
         // making sure the weather is updated once
         [self.refreshTimer fire];
     }
+
+    
+
 }
+/*%new
+-(void)updateImage:(NSNotification *) notification{
+    NSLog(@"IMRUNNINGOK");
+    [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
+        UIImage *icon;    
+        if([[notification name] isEqualToString:@"setStandard"]){
+            icon = weather[@"kCurrentConditionImage_nc-variant"];
+        }
+        if([[notification name] isEqualToString:@"setFilled"]){
+            icon = weather[@"kCurrentConditionImage_white-variant"];
+        }
+        if([[notification name] isEqualToString:@"setOutline"]){
+            icon = weather[@"kCurrentConditionImage_black-variant"];
+        }
+
+        self.logo.image = icon;
+        self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [self.logo setTintColor:[prefs colorForKey:@"glyphColor"]];
+
+        self.logo.contentMode = UIViewContentModeScaleAspectFit;
+
+    }];
+}*/
 
 -(void) dealloc {
     [self.refreshTimer invalidate];
@@ -200,10 +253,26 @@ static BOOL isDismissed;
 %new
 - (void) updateWeather: (NSTimer *) sender{
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
-        
+        UIImage *icon;
         // Updating the image icon
-        UIImage *icon = weather[@"kCurrentConditionImage_nc-variant"];
+        BOOL setColor = FALSE;
+        if([[prefs stringForKey:@"setImageType"] isEqualToString:@"Standard"]){
+            icon = weather[@"kCurrentConditionImage_nc-variant"];
+        }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
+            icon = weather[@"kCurrentConditionImage_white-variant"];
+            setColor = TRUE;
+        }else{
+            icon = weather[@"kCurrentConditionImage_black-variant"];
+            setColor = TRUE;
+        }
+        
         self.logo.image = icon;
+        if(setColor){
+            self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            [self.logo setTintColor:[prefs colorForKey:@"glyphColor"]];
+        }
+        
+
         self.logo.contentMode = UIViewContentModeScaleAspectFit;
         
         // Setting the current temperature text

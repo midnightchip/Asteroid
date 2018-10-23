@@ -185,6 +185,50 @@
 
 			<dict>
 				<key>cell</key>
+				<string>PSLinkListCell</string>
+				<key>detail</key>
+				<string>CSListItemsController</string>
+				<key>label</key>
+				<string>Select Weather Image Type</string>
+				<key>key</key>
+				<string>setImageType</string>
+				<key>titlesDataSource</key>
+				<string>getImageType</string>
+				<key>valuesDataSource</key>
+				<string>getImageType</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.lockweather.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.lockweather</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/lockweather.bundle</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSLinkCell</string>
+				<key>cellClass</key>
+				<string>CSColorDisplayCell</string>
+				<key>key</key>
+				<string>glyphColor</string>
+				<key>label</key>
+				<string>Set Glyph Color</string>
+				<key>fallback</key>
+				<string>FFFFFF</string>
+				<key>alpha</key>
+				<false/>
+				<key>PostNotification</key>
+				<string>com.midnightchips.lockweather.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.lockweather</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/lockweather.bundle</string>
+			</dict>
+
+
+
+			<dict>
+				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>label</key>
 				<string>Blur_Amount</string>
