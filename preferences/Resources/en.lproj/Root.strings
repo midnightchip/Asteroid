@@ -13,4 +13,8 @@
     "ChangeLog" = "ChangeLog";
     "Version" = "Version:";
     "LockWeather" = "LockWeather";
+    "Set_Text_Color" = "Set Text Color";
+    "Use_Custom_Image" = "Use Custom Image";
+    "Select_Weather_Image" = "Select Weather Image";
+    "Set_Glyph_Color" = "Set Glyph Color";
 }
