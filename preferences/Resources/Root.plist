@@ -247,7 +247,30 @@
 				<string>/Library/PreferenceBundles/lockweather.bundle</string>
 			</dict>
 
-
+<!--
+			<dict>
+				<key>detail</key>
+				<string>PSDetailController</string>
+				<key>placeholder</key>
+				<string>7:30</string>
+				<key>datePickerMode</key>
+				<string>timer</string>
+				<key>defaults</key>
+				<string>com.midnightchips.lockweather</string>
+				<key>cell</key>
+				<string>PSEditTextCell</string>
+				<key>cellClass</key>
+				<string>CSPDatePickerCell</string>
+				<key>dateFormat</key>
+				<string>HH:mm</string>
+				<key>label</key>
+				<string>date picker</string>
+				<key>key</key>
+				<string>dateTest</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.lockweather.prefschanged</string>
+			</dict>
+			-->
 
 			<dict>
 				<key>cell</key>
@@ -354,3 +377,5 @@
 		<string>LockWeather</string>
 	</dict>
 </plist>
+
+
