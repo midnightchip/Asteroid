@@ -219,21 +219,19 @@ static BOOL isDismissed = NO;
                              self.weather.hidden = YES;
                              self.weather.alpha = 1;
                          }];
-        isDismissed = YES;
-        
-    } else{
-        self.weather.alpha = 0;
-        self.weather.hidden = NO;
         [UIView animateWithDuration:.5
                               delay:0
                             options:UIViewAnimationOptionCurveEaseOut
-                         animations:^{self.weather.alpha = 1;}
-                         completion:nil];
-        isDismissed = NO;
+                         animations:^{self.dismissButton.alpha = 0;}
+                         completion:^(BOOL finished){
+                             self.dismissButton.hidden = YES;
+                             self.dismissButton.alpha = 1;
+                         }];
+        isDismissed = YES;
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"weatherDismissButtonPressed"
+         object:self];
     }
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"weatherDismissButtonPressed"
-     object:self];
 }
 
 // Handling a timer fire (refresh weather info)
@@ -305,61 +303,20 @@ static BOOL isDismissed = NO;
 -(id) init{
     if((self = %orig)){
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateViewCollectionWhenDismissed:) name:@"weatherDismissButtonPressed" object:nil];
+        self.view.hidden = YES;
     }
     return self;
 }
 
 %new
 -(void) updateViewCollectionWhenDismissed:(NSNotification *)sender{
-    if(!isDismissed){
-        [UIView animateWithDuration:.2
-                              delay:0
-                            options:UIViewAnimationOptionCurveEaseOut
-                         animations:^{self.view.alpha = 0;}
-                         completion:^(BOOL finished){
-                             self.view.hidden = YES;
-                             self.view.alpha = 1;
-                         }];
-        
-    } else{
-        self.view.alpha = 0;
-        self.view.hidden = NO;
-        [UIView animateWithDuration:.5
-                              delay:0
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{self.view.alpha = 1;}
-                         completion:nil];
-    }
-}
--(BOOL)hasContent{
-    if(!isDismissed){
-        [UIView animateWithDuration:.2
-                              delay:0
-                            options:UIViewAnimationOptionCurveEaseOut
-                         animations:^{self.view.alpha = 0;}
-                         completion:^(BOOL finished){
-                             self.view.hidden = YES;
-                             self.view.alpha = 1;
-                         }];
-        
-    }
-    return %orig;
-}
-%end
-
-
-// This still needs work
-%hook SBDashBoardWallpaperEffectView
-// removes the wallpaper view when opening camera
-// checks if the blur is visible when applying the new animation
--(void)layoutSubviews {
-    %orig;
-    if (((SBDashBoardViewController *)((UIView *)self).superview/* some touch thingy */.superview/* SBDashBoardView */._viewDelegate/* SBDashBoardViewController */).blurEffectView.hidden == NO){
-        ((UIView*)self).hidden = YES;
-    } else{
-        ((UIView*)self).hidden = NO;
-    }
-    ((UIView*)self).hidden = YES;
+    self.view.alpha = 0;
+    self.view.hidden = NO;
+    [UIView animateWithDuration:.5
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{self.view.alpha = 1;}
+                     completion:nil];
 }
 %end
 
