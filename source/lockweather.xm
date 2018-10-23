@@ -240,8 +240,9 @@ static BOOL isDismissed = NO;
 %new
 - (void) updateWeather: (NSTimer *) sender{
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
-        UIImage *icon;
+        
         // Updating the image icon
+        UIImage *icon;
         BOOL setColor = FALSE;
         if(![prefs boolForKey:@"customImage"]){
             icon = weather[@"kCurrentConditionImage_nc-variant"];
@@ -258,8 +259,6 @@ static BOOL isDismissed = NO;
             self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             [self.logo setTintColor:[prefs colorForKey:@"glyphColor"]];
         }
-        
-
         self.logo.contentMode = UIViewContentModeScaleAspectFit;
         
         // Setting the current temperature text
@@ -343,14 +342,6 @@ static BOOL isDismissed = NO;
                              self.view.alpha = 1;
                          }];
         
-    } else{
-        self.view.alpha = 0;
-        self.view.hidden = NO;
-        [UIView animateWithDuration:.5
-                              delay:0
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{self.view.alpha = 1;}
-                         completion:nil];
     }
     return %orig;
 }
