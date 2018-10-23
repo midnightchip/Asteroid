@@ -99,31 +99,7 @@ static BOOL isDismissed = NO;
     if(!self.logo){
         self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225)];
         [self.weather addSubview:self.logo];
-    }   
-
-    [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
-        UIImage *icon;
-        // Updating the image icon
-        BOOL setColor = FALSE;
-        if(![prefs boolForKey:@"customImage"]){
-            icon = weather[@"kCurrentConditionImage_nc-variant"];
-        }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
-            icon = weather[@"kCurrentConditionImage_white-variant"];
-            setColor = TRUE;
-        }else{
-            icon = weather[@"kCurrentConditionImage_black-variant"];
-            setColor = TRUE;
-        }
-        
-        self.logo.image = icon;
-        if(setColor){
-            self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            [self.logo setTintColor:[prefs colorForKey:@"glyphColor"]];
-        }
-        
-
-        self.logo.contentMode = UIViewContentModeScaleAspectFit;
-    }];
+    }
     
     //Current Temperature Localized
     if(!self.currentTemp){
@@ -156,7 +132,6 @@ static BOOL isDismissed = NO;
     }
     self.greetingLabel.textColor = [prefs colorForKey:@"textColor"];
 
-    
     
     // Creating the description
     if(!self.description){
