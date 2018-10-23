@@ -84,20 +84,9 @@ static BOOL isDismissed = NO;
 
 - (void)layoutSubviews {
     %orig;
-<<<<<<< HEAD
-    
-    // Making the view to hold all the stuff
     if(!self.weather){
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-        [self.weather setBackgroundColor:[UIColor clearColor]];
-        [self.currentTemp setUserInteractionEnabled:NO]; // This is supposed to be no btw
-=======
-
-    if(!self.weather){
-        self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-        [self.weather setBackgroundColor:[UIColor clearColor]];
         [self.weather setUserInteractionEnabled:NO];
->>>>>>> 4e6e5aa6743ddbc2df8c4ee5772986e2b0ad03a9
         [self addSubview:self.weather];
     }
     
@@ -140,12 +129,7 @@ static BOOL isDismissed = NO;
     if(!self.currentTemp){
         self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225)];
         self.currentTemp.textAlignment = NSTextAlignmentCenter;
-<<<<<<< HEAD
-        self.currentTemp.textColor = [UIColor whiteColor];
-=======
-        self.currentTemp.textColor = [prefs colorForKey:@"textColor"];//[prefs colorForKey:@"textColor"];];
         [self.currentTemp setUserInteractionEnabled:NO];
->>>>>>> 4e6e5aa6743ddbc2df8c4ee5772986e2b0ad03a9
         [self.weather addSubview: self.currentTemp];
     }
     
@@ -161,12 +145,6 @@ static BOOL isDismissed = NO;
     if(!self.greetingLabel){
         self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6)];
         self.greetingLabel.textAlignment = NSTextAlignmentCenter;
-<<<<<<< HEAD
-        self.greetingLabel.textColor = [UIColor whiteColor];
-=======
-        self.greetingLabel.textColor = [prefs colorForKey:@"textColor"];
-        [self.greetingLabel setUserInteractionEnabled:NO];
->>>>>>> 4e6e5aa6743ddbc2df8c4ee5772986e2b0ad03a9
         [self.weather addSubview:self.greetingLabel];
     }
     
@@ -341,48 +319,9 @@ static BOOL isDismissed = NO;
                 break;
         }
         
-<<<<<<< HEAD
         // Updating the the text of the description
         self.description.text = weather[@"kCurrentDescription"];
-=======
         self.greetingLabel.textAlignment = NSTextAlignmentCenter;
-        if([prefs boolForKey:@"customFont"]){
-            self.greetingLabel.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"greetingSize"]];
-        }else{
-            self.greetingLabel.font = [UIFont systemFontOfSize:[prefs intForKey:@"greetingSize"] weight: UIFontWeightLight];
-        }
-        ////[UIFont boldSystemFontOfSize:40];
-        self.greetingLabel.textColor = [prefs colorForKey:@"textColor"];
-        [self.weather addSubview:self.greetingLabel];
-        
-        //[[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/21, self.frame.size.height/2, self.frame.size.width/1.1, self.frame.size.height/10)];
-        
-        self.description = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.frame.size.width, self.frame.size.height/8.6)];
-        self.description.text = weather[@"kCurrentDescription"];
-        self.description.textAlignment = NSTextAlignmentCenter;
-        self.description.lineBreakMode = NSLineBreakByWordWrapping;
-        self.description.numberOfLines = 0;
-        self.description.textColor = [prefs colorForKey:@"textColor"];
-        self.description.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [self.description setUserInteractionEnabled:NO];
-
-
-        if([prefs boolForKey:@"customFont"]){
-            self.description.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"descriptionSize"]];
-        }else{
-            self.description.font = [UIFont systemFontOfSize:[prefs intForKey:@"descriptionSize"]];
-        }
-        //self.description.font = [UIFont systemFontOfSize:20];
-        self.description.preferredMaxLayoutWidth = self.frame.size.width;
-        //[self.description sizeToFit];
-
-        //CGPoint center = self.weather.center;
-        //center.y = self.weather.frame.size.height / 1.85;
-        //[self.description setCenter:center];
-
-
-        [self.weather addSubview:self.description];
->>>>>>> 4e6e5aa6743ddbc2df8c4ee5772986e2b0ad03a9
     }];
 }
 %end
@@ -438,6 +377,7 @@ static BOOL isDismissed = NO;
                          animations:^{self.view.alpha = 1;}
                          completion:nil];
     }
+    return %orig;
 }
 %end
 
