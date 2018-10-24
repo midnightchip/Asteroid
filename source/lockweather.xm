@@ -121,7 +121,7 @@ static BOOL isDismissed = NO;
     if(!self.logo){
         self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225)];
         [self.weather addSubview:self.logo];
-        
+        //self.logo.center = [self.centerDict[@"logo"] CGPointValue];
         setGesturesForView(self, self.logo);
     }
     
@@ -282,7 +282,8 @@ static BOOL isDismissed = NO;
 }*/
 
 -(void) dealloc {
-    NSDictionary *dict = @{ @"logo" : self.logo.center, @"dismiss" : self.dismissButton.center};
+    NSLog(@"lock_TWEAK | dealloc");
+    NSDictionary *dict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"dismiss" : [NSValue valueWithCGPoint:self.dismissButton.center]};
     [NSKeyedArchiver archiveRootObject:dict toFile:@"/Library/PreferenceBundles/lockweather.bundle/centerData.plist"];
     
     // Making sure the timer goes away
