@@ -1,5 +1,4 @@
 #include "lockweather.h"
-#import "TCGestureDelegate.h"
 
 //TODO Change today to use the cases in descriptions
 //TODO Fix Blur on lockscreen vs just pulling down notification center
@@ -70,7 +69,6 @@ BOOL isOnLockscreen() {
 
 
 static BOOL isDismissed = NO;
-static TCGestureDelegate *gestureDelegate = [[TCGestureDelegate alloc] init];
 
 %hook SBDashBoardMainPageView
 %property (nonatomic, retain) UIView *weather;
@@ -145,20 +143,6 @@ static TCGestureDelegate *gestureDelegate = [[TCGestureDelegate alloc] init];
         self.description.preferredMaxLayoutWidth = self.weather.frame.size.width;
         [self.weather addSubview:self.description];
         
-        
-        UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tc_movingFilter:)];
-        panGestureRecognizer.enabled = NO;
-        panGestureRecognizer.delegate = gestureDelegate;
-        [self.description addGestureRecognizer: panGestureRecognizer];
-        
-        UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(tc_zoomingFilter:)];
-        pinchGestureRecognizer.enabled = NO;
-        pinchGestureRecognizer.delegate = gestureDelegate;
-        [self.description addGestureRecognizer: pinchGestureRecognizer];
-        
-        UILongPressGestureRecognizer *tapGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(tc_toggleEditMode:)];
-        tapGestureRecognizer.delegate = gestureDelegate;
-        [self.description addGestureRecognizer: tapGestureRecognizer];
     }
     
     // Setting the font for the description
@@ -178,6 +162,17 @@ static TCGestureDelegate *gestureDelegate = [[TCGestureDelegate alloc] init];
         [self.dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
         self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
         [self addSubview:self.dismissButton];
+        
+        UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tc_movingFilter:)];
+        panGestureRecognizer.enabled = NO;
+        [self.dismissButton addGestureRecognizer: panGestureRecognizer];
+        
+        UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(tc_zoomingFilter:)];
+        pinchGestureRecognizer.enabled = NO;
+        [self.dismissButton addGestureRecognizer: pinchGestureRecognizer];
+        
+        UILongPressGestureRecognizer *tapGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(tc_toggleEditMode:)];
+        [self.dismissButton addGestureRecognizer: tapGestureRecognizer];
     }
     
     // Creating a refresh timer
@@ -195,6 +190,49 @@ static TCGestureDelegate *gestureDelegate = [[TCGestureDelegate alloc] init];
     
 
 }
+%new
+- (void)tc_movingFilter:(UIPanGestureRecognizer *)sender{
+    UIView *view = (UIView *)sender.view;
+    NSLog(@"lock_TWEAK | pan gesture");
+    
+    CGPoint translation = [sender translationInView:view];
+    translation.x = view.center.x + translation.x;
+    translation.y = view.center.y + translation.y;
+    view.center = translation;
+    
+    [sender setTranslation:CGPointZero inView:view];
+}
+%new
+- (void)tc_zoomingFilter:(UIPinchGestureRecognizer *)sender{
+    UIView *view = (UIView *)sender.view;
+    NSLog(@"lock_TWEAK | zoom gesture");
+    
+    CGFloat scale = sender.scale;
+    [view layer].anchorPoint = CGPointMake(0.5, 0.5);
+    view.transform = CGAffineTransformScale(view.transform, scale, scale);
+    sender.scale = 1.0;
+}
+
+%new
+- (void)tc_toggleEditMode:(UILongPressGestureRecognizer *)sender{
+    if(sender.state == UIGestureRecognizerStateBegan) {
+        NSLog(@"lock_TWEAK | long press gesture");
+        
+        [[[UIImpactFeedbackGenerator alloc] initWithStyle: UIImpactFeedbackStyleMedium] impactOccurred];
+        //UIView *view = (UIView *)sender.view;
+        /*if(self.tc_editing) {
+            view.alpha = 1.0;
+            self.tc_editing = NO;
+        }
+        else {
+            view.alpha = .5;
+            self.tc_editing = YES;
+        }*/
+    }
+}
+
+
+
 /*%new
 -(void)updateImage:(NSNotification *) notification{
     NSLog(@"IMRUNNINGOK");
