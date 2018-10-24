@@ -1,4 +1,5 @@
 #include "lockweather.h"
+#import "TCGestureDelegate.h"
 
 //TODO Change today to use the cases in descriptions
 //TODO Fix Blur on lockscreen vs just pulling down notification center
@@ -69,6 +70,7 @@ BOOL isOnLockscreen() {
 
 
 static BOOL isDismissed = NO;
+static TCGestureDelegate *gestureDelegate;
 
 %hook SBDashBoardMainPageView
 %property (nonatomic, retain) UIView *weather;
@@ -86,7 +88,7 @@ static BOOL isDismissed = NO;
     %orig;
     if(!self.weather){
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-        [self.weather setUserInteractionEnabled:NO];
+        [self.weather setUserInteractionEnabled:YES];
         [self addSubview:self.weather];
     }
     
@@ -105,7 +107,6 @@ static BOOL isDismissed = NO;
     if(!self.currentTemp){
         self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225)];
         self.currentTemp.textAlignment = NSTextAlignmentCenter;
-        [self.currentTemp setUserInteractionEnabled:NO];
         [self.weather addSubview: self.currentTemp];
     }
     
@@ -143,6 +144,21 @@ static BOOL isDismissed = NO;
         self.description.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.description.preferredMaxLayoutWidth = self.weather.frame.size.width;
         [self.weather addSubview:self.description];
+        
+        
+        UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tc_movingFilter:)];
+        panGestureRecognizer.enabled = NO;
+        panGestureRecognizer.delegate = gestureDelegate;
+        [self.description addGestureRecognizer: panGestureRecognizer];
+        
+        UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(tc_zoomingFilter:)];
+        pinchGestureRecognizer.enabled = NO;
+        pinchGestureRecognizer.delegate = gestureDelegate;
+        [self.description addGestureRecognizer: pinchGestureRecognizer];
+        
+        UILongPressGestureRecognizer *tapGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(tc_toggleEditMode:)];
+        tapGestureRecognizer.delegate = gestureDelegate;
+        [self.description addGestureRecognizer: tapGestureRecognizer];
     }
     
     // Setting the font for the description
@@ -360,4 +376,5 @@ static BOOL isDismissed = NO;
     if([prefs boolForKey:@"kLWPEnabled"]){
         %init(_ungrouped);
     }
+    
 }

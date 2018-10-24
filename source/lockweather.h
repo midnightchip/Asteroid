@@ -80,6 +80,10 @@
 @interface NCNotificationCombinedListViewController : UIViewController
 @end
 
+@interface UILabel (lockTweak)
+-(BOOL) checkForGesture;
+@end
+
 
 @interface SBLockScreenManager
 +(id)sharedInstance;
