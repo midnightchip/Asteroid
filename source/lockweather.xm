@@ -70,7 +70,7 @@ BOOL isOnLockscreen() {
 
 
 static BOOL isDismissed = NO;
-static TCGestureDelegate *gestureDelegate;
+static TCGestureDelegate *gestureDelegate = [[TCGestureDelegate alloc] init];
 
 %hook SBDashBoardMainPageView
 %property (nonatomic, retain) UIView *weather;
