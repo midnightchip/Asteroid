@@ -67,9 +67,10 @@ BOOL isOnLockscreen() {
  %end
  // end of data required for the isOnLockscreen() function --------------------------------------------------------------------------------------
 
-
+// Setting the gestures function
 void setGesturesForView(UIView *superview, UIView *view){
     [view setUserInteractionEnabled:YES];
+    
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:superview action:@selector(tc_movingFilter:)];
     panGestureRecognizer.enabled = YES;
     [view addGestureRecognizer: panGestureRecognizer];
@@ -94,8 +95,15 @@ static BOOL isDismissed = NO;
 %property (retain, nonatomic) UIButton *dismissButton;
 %property (retain, nonatomic) WALockscreenWidgetViewController *weatherCont;
 %property (retain, nonatomic) NSTimer *refreshTimer;
+%property (nonatomic, retain) NSDictionary *centerDict;
 
 
+-(id) init{
+    if((self = %orig)){
+        self.centerDict = [NSKeyedUnarchiver unarchiveObjectWithFile:@"/Library/PreferenceBundles/lockweather.bundle/centerData.plist"];
+    }
+    return self;
+}
 - (void)layoutSubviews {
     %orig;
     if(!self.weather){
@@ -119,6 +127,7 @@ static BOOL isDismissed = NO;
     
     //Current Temperature Localized
     if(!self.currentTemp){
+        
         self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225)];
         self.currentTemp.textAlignment = NSTextAlignmentCenter;
         [self.weather addSubview: self.currentTemp];
@@ -273,6 +282,9 @@ static BOOL isDismissed = NO;
 }*/
 
 -(void) dealloc {
+    NSDictionary *dict = @{ @"logo" : self.logo.center, @"dismiss" : self.dismissButton.center};
+    [NSKeyedArchiver archiveRootObject:dict toFile:@"/Library/PreferenceBundles/lockweather.bundle/centerData.plist"];
+    
     // Making sure the timer goes away
     [self.refreshTimer invalidate];
     %orig;
