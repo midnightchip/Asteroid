@@ -68,6 +68,20 @@ BOOL isOnLockscreen() {
  // end of data required for the isOnLockscreen() function --------------------------------------------------------------------------------------
 
 
+void setGesturesForView(UIView *superview, UIView *view){
+    [view setUserInteractionEnabled:YES];
+    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:superview action:@selector(tc_movingFilter:)];
+    panGestureRecognizer.enabled = YES;
+    [view addGestureRecognizer: panGestureRecognizer];
+    
+    UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:superview action:@selector(tc_zoomingFilter:)];
+    pinchGestureRecognizer.enabled = YES;
+    [view addGestureRecognizer: pinchGestureRecognizer];
+    
+    UILongPressGestureRecognizer *tapGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:superview action:@selector(tc_toggleEditMode:)];
+    [view addGestureRecognizer: tapGestureRecognizer];
+}
+
 static BOOL isDismissed = NO;
 
 %hook SBDashBoardMainPageView
@@ -99,6 +113,8 @@ static BOOL isDismissed = NO;
     if(!self.logo){
         self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225)];
         [self.weather addSubview:self.logo];
+        
+        setGesturesForView(self, self.logo);
     }
     
     //Current Temperature Localized
@@ -106,6 +122,8 @@ static BOOL isDismissed = NO;
         self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225)];
         self.currentTemp.textAlignment = NSTextAlignmentCenter;
         [self.weather addSubview: self.currentTemp];
+        
+        setGesturesForView(self, self.currentTemp);
     }
     
     // Updating the font
@@ -121,6 +139,8 @@ static BOOL isDismissed = NO;
         self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6)];
         self.greetingLabel.textAlignment = NSTextAlignmentCenter;
         [self.weather addSubview:self.greetingLabel];
+        
+        setGesturesForView(self, self.greetingLabel);
     }
     
     // Setting Greeting Label Font
@@ -141,19 +161,11 @@ static BOOL isDismissed = NO;
         self.description.textColor = [prefs colorForKey:@"textColor"];
         self.description.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.description.preferredMaxLayoutWidth = self.weather.frame.size.width;
-        [self setUserInteractionEnabled:YES];
-        [self addSubview:self.description];
         
-        UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tc_movingFilter:)];
-        panGestureRecognizer.enabled = YES;
-        [self.description addGestureRecognizer: panGestureRecognizer];
+        [self.weather addSubview:self.description];
         
-        UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(tc_zoomingFilter:)];
-        pinchGestureRecognizer.enabled = YES;
-        [self.description addGestureRecognizer: pinchGestureRecognizer];
         
-        UILongPressGestureRecognizer *tapGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(tc_toggleEditMode:)];
-        [self.description addGestureRecognizer: tapGestureRecognizer];
+        setGesturesForView(self, self.description);
         
     }
     
@@ -175,16 +187,7 @@ static BOOL isDismissed = NO;
         self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
         [self addSubview:self.dismissButton];
         
-        UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tc_movingFilter:)];
-        panGestureRecognizer.enabled = YES;
-        [self.dismissButton addGestureRecognizer: panGestureRecognizer];
-        
-        UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(tc_zoomingFilter:)];
-        pinchGestureRecognizer.enabled = YES;
-        [self.dismissButton addGestureRecognizer: pinchGestureRecognizer];
-        
-        UILongPressGestureRecognizer *tapGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(tc_toggleEditMode:)];
-        [self.dismissButton addGestureRecognizer: tapGestureRecognizer];
+        setGesturesForView(self, self.dismissButton);
     }
     
     // Creating a refresh timer
