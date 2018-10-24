@@ -164,11 +164,11 @@ static BOOL isDismissed = NO;
         [self addSubview:self.dismissButton];
         
         UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tc_movingFilter:)];
-        panGestureRecognizer.enabled = NO;
+        panGestureRecognizer.enabled = YES;
         [self.dismissButton addGestureRecognizer: panGestureRecognizer];
         
         UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(tc_zoomingFilter:)];
-        pinchGestureRecognizer.enabled = NO;
+        pinchGestureRecognizer.enabled = YES;
         [self.dismissButton addGestureRecognizer: pinchGestureRecognizer];
         
         UILongPressGestureRecognizer *tapGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(tc_toggleEditMode:)];
