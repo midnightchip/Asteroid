@@ -141,7 +141,19 @@ static BOOL isDismissed = NO;
         self.description.textColor = [prefs colorForKey:@"textColor"];
         self.description.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.description.preferredMaxLayoutWidth = self.weather.frame.size.width;
-        [self.weather addSubview:self.description];
+        [self setUserInteractionEnabled:YES];
+        [self addSubview:self.description];
+        
+        UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tc_movingFilter:)];
+        panGestureRecognizer.enabled = YES;
+        [self.description addGestureRecognizer: panGestureRecognizer];
+        
+        UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(tc_zoomingFilter:)];
+        pinchGestureRecognizer.enabled = YES;
+        [self.description addGestureRecognizer: pinchGestureRecognizer];
+        
+        UILongPressGestureRecognizer *tapGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(tc_toggleEditMode:)];
+        [self.description addGestureRecognizer: tapGestureRecognizer];
         
     }
     
