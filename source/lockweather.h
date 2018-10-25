@@ -85,6 +85,13 @@
 -(BOOL) checkForGesture;
 @end
 
+@interface UIFont (lock)
+@property (nonatomic, readonly) double pointSizeForScaling;
+@property (nonatomic, readonly) double pointSize;
+- (double)_scaledValueForValue:(double)arg1;
+-(id) _fontScaledByScaleFactor:(double)arg1;
+@end
+
 
 @interface SBLockScreenManager
 +(id)sharedInstance;

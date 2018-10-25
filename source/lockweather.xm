@@ -214,10 +214,10 @@ static BOOL isDismissed = NO;
     
 
 }
+extern "C" NSString * NSStringFromCGAffineTransform(CGAffineTransform transform);
 %new
 - (void)tc_movingFilter:(UIPanGestureRecognizer *)sender{
     UIView *view = (UIView *)sender.view;
-    NSLog(@"lock_TWEAK | pan gesture");
     
     CGPoint translation = [sender translationInView:view];
     translation.x = view.center.x + translation.x;
@@ -227,20 +227,33 @@ static BOOL isDismissed = NO;
     [sender setTranslation:CGPointZero inView:view];
 }
 %new
+
+static double change = nil;
 - (void)tc_zoomingFilter:(UIPinchGestureRecognizer *)sender{
-    UIView *view = (UIView *)sender.view;
-    NSLog(@"lock_TWEAK | zoom gesture");
     
     CGFloat scale = sender.scale;
-    [view layer].anchorPoint = CGPointMake(0.5, 0.5);
-    view.transform = CGAffineTransformScale(view.transform, scale, scale);
-    sender.scale = 1.0;
+    
+    if([sender.view isKindOfClass: %c(UILabel)]){
+        UILabel *label = (UILabel *)sender.view;
+        NSLog(@"lock_TWEAK | %f", [label.font _scaledValueForValue: (CGAffineTransformScale(label.transform, scale, scale)).a]);
+        if((CGAffineTransformScale(label.transform, scale, scale)).a > 1.0 && ((CGAffineTransformScale(label.transform, scale, scale)).a - change) < 0) change = (CGAffineTransformScale(label.transform, scale, scale)).a;
+        if((CGAffineTransformScale(label.transform, scale, scale)).a < 1.0 && ((CGAffineTransformScale(label.transform, scale, scale)).a - change) > 0) change = (CGAffineTransformScale(label.transform, scale, scale)).a;
+        label.font = [UIFont fontWithName:@"AppleSDGothicNeo-Regular" size: 20 * ((CGAffineTransformScale(label.transform, scale, scale)).a - change) + label.font.pointSize];
+        
+        change = (CGAffineTransformScale(label.transform, scale, scale)).a;
+    } else {
+        UIView *view = (UIView *)sender.view;
+        
+        [view layer].anchorPoint = CGPointMake(0.5, 0.5);
+        view.transform = CGAffineTransformScale(view.transform, scale, scale);
+        sender.scale = 1.0;
+    }
+    
 }
 
 %new
 - (void)tc_toggleEditMode:(UILongPressGestureRecognizer *)sender{
     if(sender.state == UIGestureRecognizerStateBegan) {
-        NSLog(@"lock_TWEAK | long press gesture");
         
         [[[UIImpactFeedbackGenerator alloc] initWithStyle: UIImpactFeedbackStyleMedium] impactOccurred];
         //UIView *view = (UIView *)sender.view;
