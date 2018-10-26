@@ -1,5 +1,6 @@
 #import <LWPProvider.h>
 #import <CSWeather/CSWeatherInformationProvider.h>
+#import <AudioToolbox/AudioToolbox.h>
 
 @interface UIView (tweak_cat)
 -(id) _viewDelegate;
