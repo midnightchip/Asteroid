@@ -67,6 +67,32 @@ static id _instance;
 %end
 // end of data required for the isOnLockscreen() function --------------------------------------------------------------------------------------
 
+
+// thanks mr squid
+extern "C" void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID, id unknown, NSDictionary *options);
+
+ static void hapticFeedbackSoft(){
+ NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+ NSMutableArray* arr = [NSMutableArray array];
+ [arr addObject:[NSNumber numberWithBool:YES]];
+ [arr addObject:[NSNumber numberWithInt:30]];
+ [dict setObject:arr forKey:@"VibePattern"];
+ [dict setObject:[NSNumber numberWithInt:1] forKey:@"Intensity"];
+ AudioServicesPlaySystemSoundWithVibration(4095,nil,dict);
+ }
+ /*
+static void hapticFeedbackHard(){
+    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+    NSMutableArray* arr = [NSMutableArray array];
+    [arr addObject:[NSNumber numberWithBool:YES]];
+    [arr addObject:[NSNumber numberWithInt:30]];
+    [dict setObject:arr forKey:@"VibePattern"];
+    [dict setObject:[NSNumber numberWithInt:2] forKey:@"Intensity"];
+    AudioServicesPlaySystemSoundWithVibration(4095,nil,dict);
+}
+*/
+
+
 // Setting the gestures function
 void setGesturesForView(UIView *superview, UIView *view){
     [view setUserInteractionEnabled:YES];
@@ -112,6 +138,8 @@ static BOOL isDismissed = NO;
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         [self.weather setUserInteractionEnabled:YES];
         [self addSubview:self.weather];
+        
+        // Find a better trigger
         [[NSNotificationCenter defaultCenter] addObserverForName: @"SBCoverSheetDidDismissNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
             [self.inactiveTimer invalidate];
             NSLog(@"lock_TWEAK | Timer set");
@@ -267,8 +295,7 @@ static double change = nil;
 %new
 - (void)tc_toggleEditMode:(UILongPressGestureRecognizer *)sender{
     if(sender.state == UIGestureRecognizerStateBegan) {
-        
-        [[[UIImpactFeedbackGenerator alloc] initWithStyle: UIImpactFeedbackStyleMedium] impactOccurred];
+        hapticFeedbackSoft();
         if(self.tc_editing) {
             for(UIView *view in @[self.logo, self.greetingLabel, self.description, self.currentTemp, self.dismissButton]){
                 view.alpha=1;
