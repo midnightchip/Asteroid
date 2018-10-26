@@ -3,10 +3,10 @@
 //TODO Change today to use the cases in descriptions
 //TODO Fix Blur on lockscreen vs just pulling down notification center
 //TODO Customization, move portion of view around
-//TODO Scroll with notifications, hide during notifications etc
+
 //TODO add dismiss button
 //TODO make only appear during set times
-//TODO Make sure to add the camera fix from nine to this tweak (thats casle problem)
+//TODO Prob switch the notification for the inactive timer
 
 
 NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/Application Support/lockWeather.bundle"];
@@ -23,60 +23,60 @@ BOOL isUILocked() {
     }
     else return NO;
 }
- 
+
 static BOOL isOnCoverSheet; // the data that needs to be analyzed
- 
+
 BOOL isOnLockscreen() {
     //NSLog(@"nine_TWEAK | %d", isOnCoverSheet);
     if(isUILocked()){
         isOnCoverSheet = YES; // This is used to catch an exception where it was locked, but the isOnCoverSheet didnt update to reflect.
         return YES;
-        }
-        else if(!isUILocked() && isOnCoverSheet == YES) return YES;
-        else if(!isUILocked() && isOnCoverSheet == NO) return NO;
-        else return NO;
+    }
+    else if(!isUILocked() && isOnCoverSheet == YES) return YES;
+    else if(!isUILocked() && isOnCoverSheet == NO) return NO;
+    else return NO;
 }
- 
- static id _instance;
- 
+
+static id _instance;
+
 %hook SBFPasscodeLockTrackerForPreventLockAssertions
 - (id) init {
     if (_instance == nil) _instance = %orig;
-    else %orig; // just in case it needs more than one instance
+        else %orig; // just in case it needs more than one instance
     return _instance;
 }
 %new
- // add a shared instance so we can use it later
+// add a shared instance so we can use it later
 + (id) sharedInstance {
     if (!_instance) return [[%c(SBFPasscodeLockTrackerForPreventLockAssertions) alloc] init];
     return _instance;
 }
 %end
- 
- // Setting isOnCoverSheet properly, actually works perfectly
- %hook SBCoverSheetSlidingViewController
- - (void)_finishTransitionToPresented:(_Bool)arg1 animated:(_Bool)arg2 withCompletion:(id)arg3 {
-     if((arg1 == 0) && ([self dismissalSlidingMode] == 1)){
-         if(!isUILocked()) isOnCoverSheet = NO;
-         } 
-         else if ((arg1 == 1) && ([self dismissalSlidingMode] == 1)){
-             if(isUILocked()) isOnCoverSheet = YES;
-             }
-             %orig;
+
+// Setting isOnCoverSheet properly, actually works perfectly
+%hook SBCoverSheetSlidingViewController
+- (void)_finishTransitionToPresented:(_Bool)arg1 animated:(_Bool)arg2 withCompletion:(id)arg3 {
+    if((arg1 == 0) && ([self dismissalSlidingMode] == 1)){
+        if(!isUILocked()) isOnCoverSheet = NO;
     }
- %end
- // end of data required for the isOnLockscreen() function --------------------------------------------------------------------------------------
+    else if ((arg1 == 1) && ([self dismissalSlidingMode] == 1)){
+        if(isUILocked()) isOnCoverSheet = YES;
+    }
+    %orig;
+}
+%end
+// end of data required for the isOnLockscreen() function --------------------------------------------------------------------------------------
 
 // Setting the gestures function
 void setGesturesForView(UIView *superview, UIView *view){
     [view setUserInteractionEnabled:YES];
     
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:superview action:@selector(tc_movingFilter:)];
-    panGestureRecognizer.enabled = YES;
+    panGestureRecognizer.enabled = NO;
     [view addGestureRecognizer: panGestureRecognizer];
     
     UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:superview action:@selector(tc_zoomingFilter:)];
-    pinchGestureRecognizer.enabled = YES;
+    pinchGestureRecognizer.enabled = NO;
     [view addGestureRecognizer: pinchGestureRecognizer];
     
     UILongPressGestureRecognizer *tapGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:superview action:@selector(tc_toggleEditMode:)];
@@ -95,8 +95,10 @@ static BOOL isDismissed = NO;
 %property (retain, nonatomic) UIButton *dismissButton;
 %property (retain, nonatomic) WALockscreenWidgetViewController *weatherCont;
 %property (retain, nonatomic) NSTimer *refreshTimer;
+%property (retain, nonatomic) NSTimer *inactiveTimer;
 %property (nonatomic, retain) NSDictionary *centerDict;
 
+%property (nonatomic, retain) BOOL tc_editing;
 
 -(id) init{
     if((self = %orig)){
@@ -110,6 +112,16 @@ static BOOL isDismissed = NO;
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         [self.weather setUserInteractionEnabled:YES];
         [self addSubview:self.weather];
+        [[NSNotificationCenter defaultCenter] addObserverForName: @"SBCoverSheetDidDismissNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+            [self.inactiveTimer invalidate];
+            NSLog(@"lock_TWEAK | Timer set");
+            self.inactiveTimer = [NSTimer scheduledTimerWithTimeInterval:600.0
+                                                                  target:self
+                                                                selector:@selector(revealWeather:)
+                                                                userInfo:nil
+                                                                 repeats:NO];
+            
+        }];
     }
     
     // Just some rect stuff
@@ -194,7 +206,7 @@ static BOOL isDismissed = NO;
                      forControlEvents:UIControlEventTouchUpInside];
         [self.dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
         self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
-        [self addSubview:self.dismissButton];
+        [self.weather addSubview:self.dismissButton];
         
         setGesturesForView(self, self.dismissButton);
     }
@@ -205,13 +217,13 @@ static BOOL isDismissed = NO;
                                                              target:self
                                                            selector:@selector(updateWeather:)
                                                            userInfo:nil
-                                                            repeats:NO];
+                                                            repeats:YES];
         
         // making sure the weather is updated once
         [self.refreshTimer fire];
     }
-
     
+    //[self.inactiveTimer invalidate]; // Its no longer inactive;
 
 }
 extern "C" NSString * NSStringFromCGAffineTransform(CGAffineTransform transform);
@@ -236,9 +248,10 @@ static double change = nil;
     if([sender.view isKindOfClass: %c(UILabel)]){
         UILabel *label = (UILabel *)sender.view;
         NSLog(@"lock_TWEAK | %f", [label.font _scaledValueForValue: (CGAffineTransformScale(label.transform, scale, scale)).a]);
+       if((CGAffineTransformScale(label.transform, scale, scale)).a < 1.0 && ((CGAffineTransformScale(label.transform, scale, scale)).a - change) > 0) change = (CGAffineTransformScale(label.transform, scale, scale)).a;
         if((CGAffineTransformScale(label.transform, scale, scale)).a > 1.0 && ((CGAffineTransformScale(label.transform, scale, scale)).a - change) < 0) change = (CGAffineTransformScale(label.transform, scale, scale)).a;
-        if((CGAffineTransformScale(label.transform, scale, scale)).a < 1.0 && ((CGAffineTransformScale(label.transform, scale, scale)).a - change) > 0) change = (CGAffineTransformScale(label.transform, scale, scale)).a;
-        label.font = [UIFont fontWithName:@"AppleSDGothicNeo-Regular" size: 20 * ((CGAffineTransformScale(label.transform, scale, scale)).a - change) + label.font.pointSize];
+        
+        label.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size: 20 * ((CGAffineTransformScale(label.transform, scale, scale)).a - change) + label.font.pointSize];
         
         change = (CGAffineTransformScale(label.transform, scale, scale)).a;
     } else {
@@ -256,25 +269,57 @@ static double change = nil;
     if(sender.state == UIGestureRecognizerStateBegan) {
         
         [[[UIImpactFeedbackGenerator alloc] initWithStyle: UIImpactFeedbackStyleMedium] impactOccurred];
-        //UIView *view = (UIView *)sender.view;
-        /*if(self.tc_editing) {
-            view.alpha = 1.0;
+        if(self.tc_editing) {
+            for(UIView *view in @[self.logo, self.greetingLabel, self.description, self.currentTemp, self.dismissButton]){
+                view.alpha=1;
+                [view.layer removeAllAnimations];
+                ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[0]).enabled = NO; // Pan
+                ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[1]).enabled = NO; // Zoom
+            }
             self.tc_editing = NO;
         }
         else {
-            view.alpha = .5;
+            for(UIView *view in @[self.logo, self.greetingLabel, self.description, self.currentTemp, self.dismissButton]){
+                ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[0]).enabled = YES; // Pan
+                ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[1]).enabled = YES; // Zoom
+                [self tc_animateFilter:view];
+                
+            }
             self.tc_editing = YES;
-        }*/
+        }
     }
 }
 
-
+%new
+- (void)tc_animateFilter: (UIView *)view {
+    [UIView animateWithDuration:0.5
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
+                     animations:^{
+                         view.alpha = 0.5;
+                     }
+                     completion:^(BOOL finished) {
+                         if (finished) {
+                             [UIView animateWithDuration:0.5
+                                                   delay:0.0
+                                                 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
+                                              animations:^{
+                                                  view.alpha = 1.0;
+                                              }
+                                              completion:^(BOOL finished) {
+                                                  if (finished) {
+                                                      [self tc_animateFilter:view];
+                                                  }
+                                              }];
+                         }
+                     }];
+}
 
 /*%new
 -(void)updateImage:(NSNotification *) notification{
     NSLog(@"IMRUNNINGOK");
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
-        UIImage *icon;    
+        UIImage *icon;
         if([[notification name] isEqualToString:@"setStandard"]){
             icon = weather[@"kCurrentConditionImage_nc-variant"];
         }
@@ -314,19 +359,21 @@ static double change = nil;
                              self.weather.hidden = YES;
                              self.weather.alpha = 1;
                          }];
-        [UIView animateWithDuration:.5
-                              delay:0
-                            options:UIViewAnimationOptionCurveEaseOut
-                         animations:^{self.dismissButton.alpha = 0;}
-                         completion:^(BOOL finished){
-                             self.dismissButton.hidden = YES;
-                             self.dismissButton.alpha = 1;
-                         }];
         isDismissed = YES;
         [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"weatherDismissButtonPressed"
+         postNotificationName:@"weatherStateChanged"
          object:self];
     }
+}
+// Handles reveal
+%new
+- (void) revealWeather: (NSTimer *) sender{
+    NSLog(@"lock_TWEAK | Timer fired");
+    self.weather.hidden = NO;
+    isDismissed = NO;
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"weatherStateChanged"
+     object:self];
 }
 
 // Handling a timer fire (refresh weather info)
@@ -397,7 +444,7 @@ static double change = nil;
 %hook NCNotificationCombinedListViewController
 -(id) init{
     if((self = %orig)){
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateViewCollectionWhenDismissed:) name:@"weatherDismissButtonPressed" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateViewCollectionWhenDismissed:) name:@"weatherStateChanged" object:nil];
         self.view.hidden = YES;
     }
     return self;
@@ -405,13 +452,25 @@ static double change = nil;
 
 %new
 -(void) updateViewCollectionWhenDismissed:(NSNotification *)sender{
-    self.view.alpha = 0;
-    self.view.hidden = NO;
-    [UIView animateWithDuration:.5
-                          delay:0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{self.view.alpha = 1;}
-                     completion:nil];
+    if(isDismissed){
+        self.view.alpha = 0;
+        self.view.hidden = NO;
+        [UIView animateWithDuration:.5
+                              delay:0
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{self.view.alpha = 1;}
+                         completion:nil];
+    } else {
+        [UIView animateWithDuration:.5
+                              delay:0
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{self.view.alpha = 1;}
+                         completion:^(BOOL finished){
+                             self.view.hidden = YES;
+                             self.view.alpha = 1;
+                         }];
+    }
+    
 }
 %end
 
@@ -434,17 +493,28 @@ static double change = nil;
     [((SBDashBoardView *)self.view).backgroundView addSubview: self.blurEffectView];
     
     // Notification called when the lockscreen / nc is revealed (this is posted by the system)
-    [[NSNotificationCenter defaultCenter] addObserverForName: @"weatherDismissButtonPressed" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
-        [UIView animateWithDuration:.5
-                              delay:0
-                            options:UIViewAnimationOptionCurveEaseOut
-                         animations:^{self.blurEffectView.alpha = 0;}
-                         completion:^(BOOL finished){
-                             self.blurEffectView.hidden = YES;
-                             self.blurEffectView.alpha = 1;
-                         }];
+    [[NSNotificationCenter defaultCenter] addObserverForName: @"weatherStateChanged" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+        if(isDismissed){
+            [UIView animateWithDuration:.5
+                                  delay:0
+                                options:UIViewAnimationOptionCurveEaseOut
+                             animations:^{self.blurEffectView.alpha = 0;}
+                             completion:^(BOOL finished){
+                                 self.blurEffectView.hidden = YES;
+                                 self.blurEffectView.alpha = 1;
+                             }];
+        } else {
+            self.blurEffectView.alpha = 0;
+            self.blurEffectView.hidden = NO;
+            [UIView animateWithDuration:.5
+                                  delay:0
+                                options:UIViewAnimationOptionCurveEaseInOut
+                             animations:^{self.blurEffectView.alpha = 1;}
+                             completion:nil];
+        }
+        
     }];
-    [[NSNotificationCenter defaultCenter] addObserverForName: @"SBCoverSheetWillPresentNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+    [[NSNotificationCenter defaultCenter] addObserverForName: @"weatherStateChanged" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
         if(!isDismissed) self.blurEffectView.hidden = isOnLockscreen() ? NO : YES;
     }];
 }
@@ -455,5 +525,11 @@ static double change = nil;
     if([prefs boolForKey:@"kLWPEnabled"]){
         %init(_ungrouped);
     }
+    [[NSNotificationCenter defaultCenter] addObserverForName:NULL object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+        if ([note.name containsString:@"UIViewAnimationDidCommitNotification"] || [note.name containsString:@"UIViewAnimationDidStopNotification"] || [note.name containsString:@"UIScreenBrightnessDidChangeNotification"]){
+        } else {
+            NSLog(@"UNIQUE: %@", note.name);
+        }
+    }];
     
 }

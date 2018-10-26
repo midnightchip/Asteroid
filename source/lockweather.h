@@ -3,6 +3,7 @@
 
 @interface UIView (tweak_cat)
 -(id) _viewDelegate;
+-(id) _gestureRecognizers;
 @end
 
 //help from the_casle on the blur
@@ -69,8 +70,11 @@
 @property (retain, nonatomic) UIButton *dismissButton;
 @property (retain, nonatomic) WALockscreenWidgetViewController *weatherCont;
 @property (retain, nonatomic) NSTimer *refreshTimer;
+@property (retain, nonatomic) NSTimer *inactiveTimer;
 -(void)updateImage:(NSNotification *) notification;
 @property (nonatomic, retain) NSDictionary *centerDict;
+@property (nonatomic) BOOL tc_editing;
+- (void)tc_animateFilter: (UIView *)view;
 @end
 
 @interface UIBlurEffect (lockweather)
