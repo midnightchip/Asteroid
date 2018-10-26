@@ -21,6 +21,7 @@ include $(THEOS_MAKE_PATH)/tweak.mk
 SUBPROJECTS += preferences
 
 
+SUBPROJECTS += asteroidicon
 include $(THEOS_MAKE_PATH)/aggregate.mk
 
 after-install::
