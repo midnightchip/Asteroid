@@ -139,8 +139,7 @@ static BOOL isDismissed = NO;
         [self.weather setUserInteractionEnabled:YES];
         [self addSubview:self.weather];
         
-        // Find a better trigger
-        [[NSNotificationCenter defaultCenter] addObserverForName: @"SBCoverSheetDidDismissNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+        [[NSNotificationCenter defaultCenter] addObserverForName: @"SBBacklightFadeFinishedNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
             [self.inactiveTimer invalidate];
             NSLog(@"lock_TWEAK | Timer set");
             self.inactiveTimer = [NSTimer scheduledTimerWithTimeInterval:600.0
@@ -150,6 +149,15 @@ static BOOL isDismissed = NO;
                                                                  repeats:NO];
             
         }];
+        
+        // Add an if notification content ignore cancel timer. Also change dismiss button so it can be used to cancel edit
+        [[NSNotificationCenter defaultCenter] addObserverForName: @"SBBacklightWillTurnOnWhileUILockedNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+            [self.inactiveTimer invalidate];
+            NSLog(@"lock_TWEAK | Cancel Timer");
+            [self.inactiveTimer invalidate];
+            
+        }];
+        
     }
     
     // Just some rect stuff
@@ -250,8 +258,6 @@ static BOOL isDismissed = NO;
         // making sure the weather is updated once
         [self.refreshTimer fire];
     }
-    
-    //[self.inactiveTimer invalidate]; // Its no longer inactive;
 
 }
 extern "C" NSString * NSStringFromCGAffineTransform(CGAffineTransform transform);
