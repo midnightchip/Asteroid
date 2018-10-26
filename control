@@ -1,5 +1,5 @@
-Package: com.midnightchips.lockweather
-Name: lockweather
+Package: com.midnightchips.asteroid
+Name: Asteroid
 Depends: firmware (>= 10.0), mobilesubstrate, preferenceloader, com.creaturecoding.libcspreferences
 Version: 0.1
 Conflicts:
