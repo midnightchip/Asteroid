@@ -8,9 +8,14 @@
 //TODO make only appear during set times
 //TODO Prob switch the notification for the inactive timer
 
+#define DIRECTORY_PATH @"/var/mobile/Library/Astroid"
+#define FILE_PATH @"/var/mobile/Library/Astroid/centerData.plist"
 
 NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/Application Support/lockWeather.bundle"];
 //NSString *alertTitle = [tweakBundle localizedStringForKey:@"ALERT_TITLE" value:@"" table:nil];
+
+static NSDictionary *savedCenterData = [NSKeyedUnarchiver unarchiveObjectWithData: [NSData dataWithContentsOfFile:
+                                                                                    FILE_PATH]];
 
 
 // Data required for the isOnLockscreen() function --------------------------------------------------------------------------------------
@@ -110,6 +115,7 @@ void setGesturesForView(UIView *superview, UIView *view){
 }
 
 static BOOL isDismissed = NO;
+static NSDictionary *viewDict;
 
 %hook SBDashBoardMainPageView
 %property (nonatomic, retain) UIView *weather;
@@ -125,13 +131,6 @@ static BOOL isDismissed = NO;
 %property (nonatomic, retain) NSDictionary *centerDict;
 
 %property (nonatomic, retain) BOOL tc_editing;
-
--(id) init{
-    if((self = %orig)){
-        self.centerDict = [NSKeyedUnarchiver unarchiveObjectWithFile:@"/Library/PreferenceBundles/lockweather.bundle/centerData.plist"];
-    }
-    return self;
-}
 - (void)layoutSubviews {
     %orig;
     if(!self.weather){
@@ -142,7 +141,7 @@ static BOOL isDismissed = NO;
         [[NSNotificationCenter defaultCenter] addObserverForName: @"SBBacklightFadeFinishedNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
             [self.inactiveTimer invalidate];
             NSLog(@"lock_TWEAK | Timer set");
-            self.inactiveTimer = [NSTimer scheduledTimerWithTimeInterval:600.0
+            self.inactiveTimer = [NSTimer scheduledTimerWithTimeInterval:10.0
                                                                   target:self
                                                                 selector:@selector(revealWeather:)
                                                                 userInfo:nil
@@ -150,14 +149,14 @@ static BOOL isDismissed = NO;
             
         }];
         
-        // Add an if notification content ignore cancel timer. Also change dismiss button so it can be used to cancel edit
-        [[NSNotificationCenter defaultCenter] addObserverForName: @"SBBacklightWillTurnOnWhileUILockedNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+        [[NSNotificationCenter defaultCenter] addObserverForName: @"SBCoverSheetWillDismissNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
             [self.inactiveTimer invalidate];
             NSLog(@"lock_TWEAK | Cancel Timer");
-            [self.inactiveTimer invalidate];
             
         }];
         
+        
+       
     }
     
     // Just some rect stuff
@@ -171,6 +170,10 @@ static BOOL isDismissed = NO;
         [self.weather addSubview:self.logo];
         //self.logo.center = [self.centerDict[@"logo"] CGPointValue];
         setGesturesForView(self, self.logo);
+        
+        if(savedCenterData[@"logo"]){
+            self.logo.center = ((NSValue*)savedCenterData[@"logo"]).CGPointValue;
+        }
     }
     
     //Current Temperature Localized
@@ -181,6 +184,10 @@ static BOOL isDismissed = NO;
         [self.weather addSubview: self.currentTemp];
         
         setGesturesForView(self, self.currentTemp);
+        
+        if(savedCenterData[@"currentTemp"]){
+            self.currentTemp.center = ((NSValue*)savedCenterData[@"currentTemp"]).CGPointValue;
+        }
     }
     
     // Updating the font
@@ -198,6 +205,10 @@ static BOOL isDismissed = NO;
         [self.weather addSubview:self.greetingLabel];
         
         setGesturesForView(self, self.greetingLabel);
+        
+        if(savedCenterData[@"greetingLabel"]){
+            self.greetingLabel.center = ((NSValue*)savedCenterData[@"greetingLabel"]).CGPointValue;
+        }
     }
     
     // Setting Greeting Label Font
@@ -224,6 +235,10 @@ static BOOL isDismissed = NO;
         
         setGesturesForView(self, self.description);
         
+        if(savedCenterData[@"description"]){
+            self.description.center = ((NSValue*)savedCenterData[@"description"]).CGPointValue;
+        }
+        
     }
     
     // Setting the font for the description
@@ -245,6 +260,11 @@ static BOOL isDismissed = NO;
         [self.weather addSubview:self.dismissButton];
         
         setGesturesForView(self, self.dismissButton);
+        
+        if(savedCenterData[@"dismissButton"]){
+            self.dismissButton.center = ((NSValue*)savedCenterData[@"dismissButton"]).CGPointValue;
+        }
+        
     }
     
     // Creating a refresh timer
@@ -310,6 +330,19 @@ static double change = nil;
                 ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[1]).enabled = NO; // Zoom
             }
             self.tc_editing = NO;
+            
+            // Saving values
+            viewDict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"greetingLabel" : [NSValue valueWithCGPoint:self.greetingLabel.center], @"description" : [NSValue valueWithCGPoint:self.description.center], @"currentTemp" : [NSValue valueWithCGPoint:self.currentTemp.center], @"dismissButton" : [NSValue valueWithCGPoint:self.dismissButton.center]};
+            
+            BOOL isDir;
+            NSFileManager *fileManager= [NSFileManager defaultManager];
+            if(![fileManager fileExistsAtPath:DIRECTORY_PATH isDirectory:&isDir]){
+                [fileManager createDirectoryAtPath:DIRECTORY_PATH withIntermediateDirectories:YES attributes:nil error:NULL];
+            }
+            if(![fileManager fileExistsAtPath:FILE_PATH isDirectory:&isDir]){
+                [fileManager createFileAtPath:FILE_PATH contents:nil attributes:nil];
+            }
+            [[NSKeyedArchiver archivedDataWithRootObject:viewDict] writeToFile:FILE_PATH atomically:YES];
         }
         else {
             for(UIView *view in @[self.logo, self.greetingLabel, self.description, self.currentTemp, self.dismissButton]){
@@ -373,10 +406,6 @@ static double change = nil;
 }*/
 
 -(void) dealloc {
-    NSLog(@"lock_TWEAK | dealloc");
-    NSDictionary *dict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"dismiss" : [NSValue valueWithCGPoint:self.dismissButton.center]};
-    [NSKeyedArchiver archiveRootObject:dict toFile:@"/Library/PreferenceBundles/lockweather.bundle/centerData.plist"];
-    
     // Making sure the timer goes away
     [self.refreshTimer invalidate];
     %orig;
