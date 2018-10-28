@@ -39,7 +39,7 @@ static WUIWeatherCondition* condition = nil;
 			self.liveWeatherView.tag = 55668;
 			self.liveWeatherView.translatesAutoresizingMaskIntoConstraints = NO;
 			[self addSubview:self.liveWeatherView];
-
+			self.liveWeatherView.clipsToBounds = YES;
 			[self.liveWeatherView.leftAnchor constraintEqualToAnchor:self.leftAnchor].active = YES;
     		[self.liveWeatherView.rightAnchor constraintEqualToAnchor:self.rightAnchor].active = YES;
     		[self.liveWeatherView.topAnchor constraintEqualToAnchor:self.topAnchor].active = YES;
