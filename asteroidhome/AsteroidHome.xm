@@ -26,8 +26,8 @@
                     [self addSubview:self.referenceView];
                     [self sendSubviewToBack:self.referenceView];
                 }
-}
+            }
 
-    }
+}
         
 %end 
