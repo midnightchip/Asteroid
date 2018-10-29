@@ -1,4 +1,4 @@
-#import <../../source/LWPProvider.h>
+#import "../../source/LWPProvider.h"
 
 /* weather background */
 @interface WUIWeatherCondition : NSObject
@@ -12,9 +12,9 @@
 @end
 
 @interface WUIWeatherConditionBackgroundView : UIView
-  -(id)initWithFrame:(CGRect)arg1 ;
-  -(WUIDynamicWeatherBackground *)background;
-  -(void)prepareToSuspend;
+-(id)initWithFrame:(CGRect)arg1 ;
+-(WUIDynamicWeatherBackground *)background;
+-(void)prepareToSuspend;
 -(void)prepareToResume;
 @end;
 

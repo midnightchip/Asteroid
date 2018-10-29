@@ -8,7 +8,7 @@
 static void updateWeatherForIconView(SBIconView *iconView) {
 	if ([[iconView.icon leafIdentifier] isEqualToString:@"com.apple.weather"]) {
 		SBLiveWeatherIconImageView * img = [iconView valueForKey:@"_iconImageView"];
-
+		img.layer.contents = nil;
 		if([img isKindOfClass:NSClassFromString(@"SBLiveWeatherIconImageView")]) {
 			[img updateWeatherForPresentation];
 
@@ -24,31 +24,29 @@ static WUIWeatherCondition* condition = nil;
 
 %property (nonatomic, retain) LiveWeatherView *liveWeatherView;
 
--(id)initWithFrame:(CGRect)frame {
-	id orig = %orig;
+- (id)initWithFrame:(CGRect)frame {
+    if ((self = %orig)) {
+        if([self viewWithTag:55668] == nil) {
 
-	if (orig != nil) {
-		if([self viewWithTag:55668] == nil) {
+            //overrideUsageStrings = YES;
+            if(self.liveWeatherView){
+                [self.liveWeatherView removeFromSuperview];
+            }
 
-			//overrideUsageStrings = YES;
-			if(self.liveWeatherView){
-				[self.liveWeatherView removeFromSuperview];
-			}
+            self.liveWeatherView = [[NSClassFromString(@"LiveWeatherView") alloc]initWithFrame:CGRectZero];
+            self.liveWeatherView.tag = 55668;
+            self.liveWeatherView.translatesAutoresizingMaskIntoConstraints = NO;
+            [self addSubview:self.liveWeatherView];
+            self.liveWeatherView.clipsToBounds = YES;
+            [self.liveWeatherView.leftAnchor constraintEqualToAnchor:self.leftAnchor].active = YES;
+            [self.liveWeatherView.rightAnchor constraintEqualToAnchor:self.rightAnchor].active = YES;
+            [self.liveWeatherView.topAnchor constraintEqualToAnchor:self.topAnchor].active = YES;
+            [self.liveWeatherView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor].active = YES;
 
-			self.liveWeatherView = [[NSClassFromString(@"LiveWeatherView") alloc]initWithFrame:CGRectZero];
-			self.liveWeatherView.tag = 55668;
-			self.liveWeatherView.translatesAutoresizingMaskIntoConstraints = NO;
-			[self addSubview:self.liveWeatherView];
-			self.liveWeatherView.clipsToBounds = YES;
-			[self.liveWeatherView.leftAnchor constraintEqualToAnchor:self.leftAnchor].active = YES;
-    		[self.liveWeatherView.rightAnchor constraintEqualToAnchor:self.rightAnchor].active = YES;
-    		[self.liveWeatherView.topAnchor constraintEqualToAnchor:self.topAnchor].active = YES;
-    		[self.liveWeatherView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor].active = YES;
-
-    		[self updateMask];
-		}
-	}
-	return orig;
+            [self updateMask];
+        }
+    }
+    return self;
 }
 
 %new
@@ -102,14 +100,43 @@ static WUIWeatherCondition* condition = nil;
 %hook SBIconView
 
 -(void)_setIcon:(id)icon animated:(BOOL)animated {
-	%orig;
 	/*
 	 * This happens during icon recycling so update rings to keep them fresh
 	 */
-	updateWeatherForIconView(self);
+	if([[icon leafIdentifier] isEqualToString:@"com.apple.weather"]){
+		%orig;
+		updateWeatherForIconView(self);
+	}else{
+		%orig;
+	}
 }
 
 %end
+
+%hook SBLockScreenManager
+
+-(void)lockScreenViewControllerWillDismiss {
+	%orig;
+
+	/*
+	 * After lockscreen is dismissed, update the rings in case their on first page
+	 */
+	SBIconController *iconController = [NSClassFromString(@"SBIconController") sharedInstance];
+
+	SBIconViewMap *iconViewMap = nil;
+	if([iconController respondsToSelector:@selector(homescreenIconViewMap)]) {
+		iconViewMap = [iconController homescreenIconViewMap];
+	} else if([NSClassFromString(@"SBIconViewMap") respondsToSelector:@selector(homescreenMap)]){
+		iconViewMap = [NSClassFromString(@"SBIconViewMap") homescreenMap];
+	}
+
+	SBIcon *icon = [[iconController model] expectedIconForDisplayIdentifier:@"com.apple.weather"];
+	SBIconView *iconView = [iconViewMap mappedIconViewForIcon:icon];
+	updateWeatherForIconView(iconView);
+}
+
+%end
+
 
 %ctor {
 

@@ -12,7 +12,7 @@ include $(THEOS)/makefiles/common.mk
 TWEAK_NAME = Asteroid
 $(TWEAK_NAME)_FILES = $(wildcard source/*.m source/*.xm source/*.x)
 $(TWEAK_NAME)_FRAMEWORKS = 
-$(TWEAK_NAME)_PRIVATE_FRAMEWORKS = 
+$(TWEAK_NAME)_PRIVATE_FRAMEWORKS = Weather WeatherUI
 $(TWEAK_NAME)_LIBRARIES = CSPreferencesProvider CSWeather
 $(TWEAK_NAME)_CFLAGS += -fobjc-arc -I$(THEOS_PROJECT_DIR)/source
 #$(TWEAK_NAME)_LDFLAGS += -lCSPreferencesProvider -lCSWeather
