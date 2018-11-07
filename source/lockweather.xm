@@ -115,6 +115,7 @@ void setGesturesForView(UIView *superview, UIView *view){
 
 static BOOL isDismissed = NO;
 static NSDictionary *viewDict;
+static BOOL tc_editing;
 
 
 
@@ -165,7 +166,6 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 %property (retain, nonatomic) NSTimer *inactiveTimer;
 %property (nonatomic, retain) NSDictionary *centerDict;
 
-%property (nonatomic, retain) BOOL tc_editing;
 - (void)layoutSubviews {
     %orig;
     if(!self.weather){
@@ -366,7 +366,7 @@ static double change = nil;
 - (void)tc_toggleEditMode:(UILongPressGestureRecognizer *)sender{
     if(sender.state == UIGestureRecognizerStateBegan) {
         hapticFeedbackSoft();
-        if(self.tc_editing) {
+        if(tc_editing) {
             for(UIView *view in @[self.logo, self.greetingLabel, self.wDescription, self.currentTemp, self.dismissButton]){
                 view.alpha=1;
                 [view.layer removeAllAnimations];
@@ -375,7 +375,7 @@ static double change = nil;
             }
             ((UIGestureRecognizer *)((NSArray *)[self.weather _gestureRecognizers])[0]).enabled = YES; // Swipe
             
-            self.tc_editing = NO;
+            tc_editing = NO;
             
             // Saving values
             viewDict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"greetingLabel" : [NSValue valueWithCGPoint:self.greetingLabel.center], @"wDescription" : [NSValue valueWithCGPoint:self.wDescription.center], @"currentTemp" : [NSValue valueWithCGPoint:self.currentTemp.center], @"dismissButton" : [NSValue valueWithCGPoint:self.dismissButton.center]};
@@ -404,7 +404,7 @@ static double change = nil;
             }
             ((UIGestureRecognizer *)((NSArray *)[self.weather _gestureRecognizers])[0]).enabled = NO; // Swipe
             
-            self.tc_editing = YES;
+            tc_editing = YES;
         }
     }
 }
@@ -583,6 +583,16 @@ static double change = nil;
     
 }
 %end
+
+
+// Make sure doesnt dim when editing
+%hook SBDashBoardIdleTimerProvider
+-(BOOL)isIdleTimerEnabled{
+    if(tc_editing) return NO;
+    else return %orig;
+}
+%end
+
 
 //Blur 
 %hook SBDashBoardViewController
