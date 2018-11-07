@@ -65,7 +65,7 @@
 @property (nonatomic, retain) UIView *weather;
 @property (nonatomic, retain) UIImageView *logo;
 @property (nonatomic, retain) UILabel *greetingLabel;
-@property (nonatomic, retain) UILabel *description;
+@property (nonatomic, retain) UILabel *wDescription;
 @property (nonatomic, retain) UILabel *currentTemp;
 @property (retain, nonatomic) UIVisualEffectView *blurView;
 @property (retain, nonatomic) UIButton *dismissButton;
@@ -82,8 +82,17 @@
 +(id)effectWithBlurRadius:(double)arg1 ;
 @end
 
+@interface SBDashBoardCombinedListViewController
+
+@end
+
+@interface SBDashBoardMainPageContentViewController
+@property (nonatomic,readonly) SBDashBoardCombinedListViewController * combinedListViewController;
+@end
+
 
 @interface NCNotificationCombinedListViewController : UIViewController
+-(BOOL) hasContent;
 @end
 
 @interface UILabel (lockTweak)

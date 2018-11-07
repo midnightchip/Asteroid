@@ -120,7 +120,7 @@ static NSDictionary *viewDict;
 %property (nonatomic, retain) UIView *weather;
 %property (nonatomic, retain) UIImageView *logo;
 %property (nonatomic, retain) UILabel *greetingLabel;
-%property (nonatomic, retain) UILabel *description;
+%property (nonatomic, retain) UILabel *wDescription;
 %property (nonatomic, retain) UILabel *currentTemp;
 %property (retain, nonatomic) UIVisualEffectView *blurView;
 %property (retain, nonatomic) UIButton *dismissButton;
@@ -145,11 +145,16 @@ static NSDictionary *viewDict;
         [[NSNotificationCenter defaultCenter] addObserverForName: @"SBBacklightFadeFinishedNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
             [self.inactiveTimer invalidate];
             NSLog(@"lock_TWEAK | Timer set");
-            self.inactiveTimer = [NSTimer scheduledTimerWithTimeInterval:10.0
+            self.inactiveTimer = [NSTimer scheduledTimerWithTimeInterval:300.0
                                                                   target:self
                                                                 selector:@selector(revealWeather:)
                                                                 userInfo:nil
                                                                  repeats:NO];
+            
+            if(![MSHookIvar<NCNotificationCombinedListViewController *>(((SBDashBoardMainPageContentViewController *)((UIView *)self)._viewDelegate).combinedListViewController, "_listViewController") hasContent]){
+                [self.inactiveTimer fire];
+            }
+                
         }];
         
         [[NSNotificationCenter defaultCenter] addObserverForName: @"SBCoverSheetWillDismissNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
@@ -220,34 +225,34 @@ static NSDictionary *viewDict;
     self.greetingLabel.textColor = [prefs colorForKey:@"textColor"];
 
     
-    // Creating the description
-    if(!self.description){
-        self.description = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.weather.frame.size.width, self.frame.size.height/8.6)];
-        self.description.textAlignment = NSTextAlignmentCenter;
-        self.description.lineBreakMode = NSLineBreakByWordWrapping;
-        self.description.numberOfLines = 0;
-        self.description.textColor = [prefs colorForKey:@"textColor"];
-        self.description.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        self.description.preferredMaxLayoutWidth = self.weather.frame.size.width;
+    // Creating the wDescription
+    if(!self.wDescription){
+        self.wDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.weather.frame.size.width, self.frame.size.height/8.6)];
+        self.wDescription.textAlignment = NSTextAlignmentCenter;
+        self.wDescription.lineBreakMode = NSLineBreakByWordWrapping;
+        self.wDescription.numberOfLines = 0;
+        self.wDescription.textColor = [prefs colorForKey:@"textColor"];
+        self.wDescription.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.wDescription.preferredMaxLayoutWidth = self.weather.frame.size.width;
         
-        [self.weather addSubview:self.description];
+        [self.weather addSubview:self.wDescription];
         
         
-        setGesturesForView(self, self.description);
+        setGesturesForView(self, self.wDescription);
         
-        if(savedCenterData[@"description"]){
-            self.description.center = ((NSValue*)savedCenterData[@"description"]).CGPointValue;
+        if(savedCenterData[@"wDescription"]){
+            self.wDescription.center = ((NSValue*)savedCenterData[@"wDescription"]).CGPointValue;
         }
         
     }
     
-    // Setting the font for the description
+    // Setting the font for the wDescription
     if([prefs boolForKey:@"customFont"]){
-        self.description.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"descriptionSize"]];
+        self.wDescription.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"wDescriptionSize"]];
     }else{
-        self.description.font = [UIFont systemFontOfSize:[prefs intForKey:@"descriptionSize"]];
+        self.wDescription.font = [UIFont systemFontOfSize:[prefs intForKey:@"wDescriptionSize"]];
     }
-    self.description.textColor = [prefs colorForKey:@"textColor"];
+    self.wDescription.textColor = [prefs colorForKey:@"textColor"];
     
     // Creating the dismiss button
     if(!self.dismissButton){
@@ -279,6 +284,11 @@ static NSDictionary *viewDict;
         [self.refreshTimer fire];
     }
 
+}
+
+- (void) updateForPresentation:(id) arg1 {
+    %orig;
+    NSLog(@"lock_TWEAK | Updating");
 }
 
 %new
@@ -335,7 +345,7 @@ static double change = nil;
     if(sender.state == UIGestureRecognizerStateBegan) {
         hapticFeedbackSoft();
         if(self.tc_editing) {
-            for(UIView *view in @[self.logo, self.greetingLabel, self.description, self.currentTemp, self.dismissButton]){
+            for(UIView *view in @[self.logo, self.greetingLabel, self.wDescription, self.currentTemp, self.dismissButton]){
                 view.alpha=1;
                 [view.layer removeAllAnimations];
                 ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[0]).enabled = NO; // Pan
@@ -346,7 +356,7 @@ static double change = nil;
             self.tc_editing = NO;
             
             // Saving values
-            viewDict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"greetingLabel" : [NSValue valueWithCGPoint:self.greetingLabel.center], @"description" : [NSValue valueWithCGPoint:self.description.center], @"currentTemp" : [NSValue valueWithCGPoint:self.currentTemp.center], @"dismissButton" : [NSValue valueWithCGPoint:self.dismissButton.center]};
+            viewDict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"greetingLabel" : [NSValue valueWithCGPoint:self.greetingLabel.center], @"wDescription" : [NSValue valueWithCGPoint:self.wDescription.center], @"currentTemp" : [NSValue valueWithCGPoint:self.currentTemp.center], @"dismissButton" : [NSValue valueWithCGPoint:self.dismissButton.center]};
             
             BOOL isDir;
             NSFileManager *fileManager= [NSFileManager defaultManager];
@@ -360,11 +370,11 @@ static double change = nil;
    
             [prefs setObject: @(self.currentTemp.font.pointSize) forKey:@"tempSize"];
             [prefs setObject: @(self.greetingLabel.font.pointSize) forKey:@"greetingSize"];
-            [prefs setObject: @(self.description.font.pointSize) forKey:@"descriptionSize"];
+            [prefs setObject: @(self.wDescription.font.pointSize) forKey:@"wDescriptionSize"];
             [prefs saveAndPostNotification];
         }
         else {
-            for(UIView *view in @[self.logo, self.greetingLabel, self.description, self.currentTemp, self.dismissButton]){
+            for(UIView *view in @[self.logo, self.greetingLabel, self.wDescription, self.currentTemp, self.dismissButton]){
                 ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[0]).enabled = YES; // Pan
                 ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[1]).enabled = YES; // Zoom
                 [self tc_animateFilter:view];
@@ -426,11 +436,6 @@ static double change = nil;
     }];
 }*/
 
--(void) dealloc {
-    // Making sure the timer goes away
-    [self.refreshTimer invalidate];
-    %orig;
-}
 %new
 - (void) buttonPressed: (UIButton*)sender{
     if(!self.weather.hidden){
@@ -516,8 +521,8 @@ static double change = nil;
                 break;
         }
         
-        // Updating the the text of the description
-        self.description.text = weather[@"kCurrentDescription"];
+        // Updating the the text of the wDescription
+        self.wDescription.text = weather[@"kCurrentDescription"];
         self.greetingLabel.textAlignment = NSTextAlignmentCenter;
     }];
 }
