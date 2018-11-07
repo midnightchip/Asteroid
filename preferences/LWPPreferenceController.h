@@ -2,5 +2,4 @@
 #import <CSPreferences/libCSPUtilities.h>
 
 @interface LWPPreferenceController : CSPListController
-
 @end

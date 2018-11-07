@@ -19,6 +19,10 @@
 	[alert addAction:defaultAction];
 	[self presentViewController:alert animated:YES completion:nil];
 }
+-(void) resetLoc{
+    //[self setObject: @(YES) forKey:@"resetXY"];
+}
+
 @end 
 
 @implementation LWPPreferenceController

@@ -305,8 +305,22 @@
 				<key>defaultsPath</key>
 				<string>/Library/PreferenceBundles/lockweather.bundle</string>
 			</dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSGroupCell</string>
+            </dict>
 
-			
+            <dict>
+                <key>action</key>
+                <string>resetLoc</string>
+                <key>alignment</key>
+                <string>center</string>
+                <key>cell</key>
+                <string>PSButtonCell</string>
+                <key>label</key>
+                <string>Reset Locations</string>
+            </dict>
 
 			<dict>
 				<key>cell</key>
