@@ -121,7 +121,34 @@ static NSDictionary *viewDict;
 // Master update notification
 static void updatePreferenceValues(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
     SBDashBoardMainPageView *self = (__bridge SBDashBoardMainPageView *)observer;
-    NSLog(@"lock_TWEAK | %@", self);
+    
+    // Updating currentTemp font
+    if([prefs boolForKey:@"customFont"]){
+        self.currentTemp.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"tempSize"]];
+    }else{
+        self.currentTemp.font = [UIFont systemFontOfSize: [prefs intForKey:@"tempSize"] weight: UIFontWeightLight];
+    }
+    self.currentTemp.textColor = [prefs colorForKey:@"textColor"];
+    
+    // Setting Greeting Label Font
+    if([prefs boolForKey:@"customFont"]){
+        self.greetingLabel.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"greetingSize"]];
+    }else{
+        self.greetingLabel.font = [UIFont systemFontOfSize:[prefs intForKey:@"greetingSize"] weight: UIFontWeightLight];
+    }
+    self.greetingLabel.textColor = [prefs colorForKey:@"textColor"];
+    
+    // Setting the font for the wDescription
+    if([prefs boolForKey:@"customFont"]){
+        self.wDescription.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"wDescriptionSize"]];
+    }else{
+        self.wDescription.font = [UIFont systemFontOfSize:[prefs intForKey:@"wDescriptionSize"]];
+    }
+    self.wDescription.textColor = [prefs colorForKey:@"textColor"];
+    
+    
+    // Update weather stuff
+    [self.refreshTimer fire];
 }
 
 
@@ -179,6 +206,10 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                                         CFSTR("com.midnightchips.lockweather.prefschanged"),
                                         NULL,
                                         CFNotificationSuspensionBehaviorDeliverImmediately);
+        
+        // Making sure the preference values set once
+        [prefs postNotification];
+
     }
     
     // Just some rect stuff
@@ -212,14 +243,6 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         }
     }
     
-    // Updating the font
-    if([prefs boolForKey:@"customFont"]){
-        self.currentTemp.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"tempSize"]];
-    }else{
-        self.currentTemp.font = [UIFont systemFontOfSize: [prefs intForKey:@"tempSize"] weight: UIFontWeightLight];
-    }
-    self.currentTemp.textColor = [prefs colorForKey:@"textColor"];
-    
     // Creating the greeting label
     if(!self.greetingLabel){
         self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6)];
@@ -233,22 +256,12 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         }
     }
     
-    // Setting Greeting Label Font
-    if([prefs boolForKey:@"customFont"]){
-        self.greetingLabel.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"greetingSize"]];
-    }else{
-        self.greetingLabel.font = [UIFont systemFontOfSize:[prefs intForKey:@"greetingSize"] weight: UIFontWeightLight];
-    }
-    self.greetingLabel.textColor = [prefs colorForKey:@"textColor"];
-
-    
     // Creating the wDescription
     if(!self.wDescription){
         self.wDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.weather.frame.size.width, self.frame.size.height/8.6)];
         self.wDescription.textAlignment = NSTextAlignmentCenter;
         self.wDescription.lineBreakMode = NSLineBreakByWordWrapping;
         self.wDescription.numberOfLines = 0;
-        self.wDescription.textColor = [prefs colorForKey:@"textColor"];
         self.wDescription.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.wDescription.preferredMaxLayoutWidth = self.weather.frame.size.width;
         
@@ -262,14 +275,6 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         }
         
     }
-    
-    // Setting the font for the wDescription
-    if([prefs boolForKey:@"customFont"]){
-        self.wDescription.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"wDescriptionSize"]];
-    }else{
-        self.wDescription.font = [UIFont systemFontOfSize:[prefs intForKey:@"wDescriptionSize"]];
-    }
-    self.wDescription.textColor = [prefs colorForKey:@"textColor"];
     
     // Creating the dismiss button
     if(!self.dismissButton){
