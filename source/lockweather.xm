@@ -2,11 +2,9 @@
 
 //TODO Change today to use the cases in descriptions
 //TODO Fix Blur on lockscreen vs just pulling down notification center
-//TODO Customization, move portion of view around
-
-//TODO add dismiss button
 //TODO make only appear during set times
-//TODO Prob switch the notification for the inactive timer
+//TODO Ajust height of uilabel on text size.
+//TODO Add option for right alignment or left alignment
 
 #define DIRECTORY_PATH @"/var/mobile/Library/Astroid"
 #define FILE_PATH @"/var/mobile/Library/Astroid/centerData.plist"
@@ -16,6 +14,7 @@ NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/Application Support/
 
 static NSDictionary *savedCenterData = [NSKeyedUnarchiver unarchiveObjectWithData: [NSData dataWithContentsOfFile:
                                                                                     FILE_PATH]];
+extern "C" NSString * NSStringFromCGAffineTransform(CGAffineTransform transform);
 
 
 // Data required for the isOnLockscreen() function --------------------------------------------------------------------------------------
@@ -138,6 +137,11 @@ static NSDictionary *viewDict;
         [self.weather setUserInteractionEnabled:YES];
         [self addSubview:self.weather];
         
+        // Swipe Up to dismiss
+        UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(buttonPressed:)];
+        swipeUp.direction = UISwipeGestureRecognizerDirectionUp;
+        [self.weather addGestureRecognizer: swipeUp];
+        
         [[NSNotificationCenter defaultCenter] addObserverForName: @"SBBacklightFadeFinishedNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
             [self.inactiveTimer invalidate];
             NSLog(@"lock_TWEAK | Timer set");
@@ -146,7 +150,6 @@ static NSDictionary *viewDict;
                                                                 selector:@selector(revealWeather:)
                                                                 userInfo:nil
                                                                  repeats:NO];
-            
         }];
         
         [[NSNotificationCenter defaultCenter] addObserverForName: @"SBCoverSheetWillDismissNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
@@ -154,9 +157,6 @@ static NSDictionary *viewDict;
             NSLog(@"lock_TWEAK | Cancel Timer");
             
         }];
-        
-        
-       
     }
     
     // Just some rect stuff
@@ -280,7 +280,7 @@ static NSDictionary *viewDict;
     }
 
 }
-extern "C" NSString * NSStringFromCGAffineTransform(CGAffineTransform transform);
+
 %new
 - (void)tc_movingFilter:(UIPanGestureRecognizer *)sender{
     UIView *view = (UIView *)sender.view;
@@ -306,8 +306,20 @@ static double change = nil;
         if((CGAffineTransformScale(label.transform, scale, scale)).a > 1.0 && ((CGAffineTransformScale(label.transform, scale, scale)).a - change) < 0) change = (CGAffineTransformScale(label.transform, scale, scale)).a;
         
         label.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size: 20 * ((CGAffineTransformScale(label.transform, scale, scale)).a - change) + label.font.pointSize];
-        
         change = (CGAffineTransformScale(label.transform, scale, scale)).a;
+        
+        /*
+        CGSize maximumLabelSize = CGSizeMake(self.weather.frame.size.width, self.frame.size.height/8.6);
+        CGRect expectedLabelSize = [label.text boundingRectWithSize:maximumLabelSize
+                                                            options:nil
+                                                         attributes:nil
+                                                            context:nil];
+        
+        //adjust the label the the new height.
+        CGRect newFrame = label.frame;
+        newFrame.size.height = expectedLabelSize.size.height;
+        label.frame = newFrame;
+         */
     } else {
         UIView *view = (UIView *)sender.view;
         
@@ -329,6 +341,8 @@ static double change = nil;
                 ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[0]).enabled = NO; // Pan
                 ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[1]).enabled = NO; // Zoom
             }
+            ((UIGestureRecognizer *)((NSArray *)[self.weather _gestureRecognizers])[0]).enabled = YES; // Swipe
+            
             self.tc_editing = NO;
             
             // Saving values
@@ -343,6 +357,11 @@ static double change = nil;
                 [fileManager createFileAtPath:FILE_PATH contents:nil attributes:nil];
             }
             [[NSKeyedArchiver archivedDataWithRootObject:viewDict] writeToFile:FILE_PATH atomically:YES];
+   
+            [prefs setObject: @(self.currentTemp.font.pointSize) forKey:@"tempSize"];
+            [prefs setObject: @(self.greetingLabel.font.pointSize) forKey:@"greetingSize"];
+            [prefs setObject: @(self.description.font.pointSize) forKey:@"descriptionSize"];
+            [prefs saveAndPostNotification];
         }
         else {
             for(UIView *view in @[self.logo, self.greetingLabel, self.description, self.currentTemp, self.dismissButton]){
@@ -351,6 +370,8 @@ static double change = nil;
                 [self tc_animateFilter:view];
                 
             }
+            ((UIGestureRecognizer *)((NSArray *)[self.weather _gestureRecognizers])[0]).enabled = NO; // Swipe
+            
             self.tc_editing = YES;
         }
     }
