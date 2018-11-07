@@ -326,7 +326,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 }
 %new
 
-static double change = nil;
+static double change = 0;
 - (void)tc_zoomingFilter:(UIPinchGestureRecognizer *)sender{
     
     CGFloat scale = sender.scale;
