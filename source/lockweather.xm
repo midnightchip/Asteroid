@@ -116,6 +116,15 @@ void setGesturesForView(UIView *superview, UIView *view){
 static BOOL isDismissed = NO;
 static NSDictionary *viewDict;
 
+
+
+// Master update notification
+static void updatePreferenceValues(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    SBDashBoardMainPageView *self = (__bridge SBDashBoardMainPageView *)observer;
+    NSLog(@"lock_TWEAK | %@", self);
+}
+
+
 %hook SBDashBoardMainPageView
 %property (nonatomic, retain) UIView *weather;
 %property (nonatomic, retain) UIImageView *logo;
@@ -145,7 +154,7 @@ static NSDictionary *viewDict;
         [[NSNotificationCenter defaultCenter] addObserverForName: @"SBBacklightFadeFinishedNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
             [self.inactiveTimer invalidate];
             NSLog(@"lock_TWEAK | Timer set");
-            self.inactiveTimer = [NSTimer scheduledTimerWithTimeInterval:300.0
+            self.inactiveTimer = [NSTimer scheduledTimerWithTimeInterval:600.0
                                                                   target:self
                                                                 selector:@selector(revealWeather:)
                                                                 userInfo:nil
@@ -162,6 +171,14 @@ static NSDictionary *viewDict;
             NSLog(@"lock_TWEAK | Cancel Timer");
             
         }];
+        
+        
+        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
+                                        (const void*)self,
+                                        updatePreferenceValues,
+                                        CFSTR("com.midnightchips.lockweather.prefschanged"),
+                                        NULL,
+                                        CFNotificationSuspensionBehaviorDeliverImmediately);
     }
     
     // Just some rect stuff
@@ -591,7 +608,7 @@ static double change = nil;
                                  self.blurEffectView.hidden = YES;
                                  self.blurEffectView.alpha = 1;
                              }];
-        } else {
+        } else if(isOnLockscreen()) {
             self.blurEffectView.alpha = 0;
             self.blurEffectView.hidden = NO;
             [UIView animateWithDuration:.5
@@ -602,9 +619,6 @@ static double change = nil;
         }
         
     }];
-    [[NSNotificationCenter defaultCenter] addObserverForName: @"weatherStateChanged" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
-        if(!isDismissed) self.blurEffectView.hidden = isOnLockscreen() ? NO : YES;
-    }];
 }
 
 %end 
@@ -613,11 +627,4 @@ static double change = nil;
     if([prefs boolForKey:@"kLWPEnabled"]){
         %init(_ungrouped);
     }
-    [[NSNotificationCenter defaultCenter] addObserverForName:NULL object:NULL queue:NULL usingBlock:^(NSNotification *note) {
-        if ([note.name containsString:@"UIViewAnimationDidCommitNotification"] || [note.name containsString:@"UIViewAnimationDidStopNotification"] || [note.name containsString:@"UIScreenBrightnessDidChangeNotification"]){
-        } else {
-            NSLog(@"UNIQUE: %@", note.name);
-        }
-    }];
-    
 }
