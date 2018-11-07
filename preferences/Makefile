@@ -4,12 +4,12 @@ TARGET = iphone:clang:11.2:10.0
 include $(THEOS)/makefiles/common.mk
 
 BUNDLE_NAME = lockweather
-$(BUNDLE_NAME)_FILES = LWPPreferenceController.m
+$(BUNDLE_NAME)_FILES = LWPPreferenceController.m ../source/LWPProvider.m
 $(BUNDLE_NAME)_INSTALL_PATH = /Library/PreferenceBundles
 $(BUNDLE_NAME)_FRAMEWORKS = UIKit
 $(BUNDLE_NAME)_PRIVATE_FRAMEWORKS = Preferences
 $(BUNDLE_NAME)_CFLAGS += -fobjc-arc
-$(BUNDLE_NAME)_LDFLAGS += -lCSPreferences -lCSColorPicker
+$(BUNDLE_NAME)_LDFLAGS += -lCSPreferences -lCSColorPicker -lCSPreferencesProvider
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 

@@ -20,7 +20,7 @@
 	[self presentViewController:alert animated:YES completion:nil];
 }
 -(void) resetLoc{
-    //[self setObject: @(YES) forKey:@"resetXY"];
+    [prefs setObject: @(YES) forKey:@"resetXY"];
 }
 
 @end 
