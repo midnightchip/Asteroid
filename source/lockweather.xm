@@ -9,92 +9,22 @@
 #define DIRECTORY_PATH @"/var/mobile/Library/Astroid"
 #define FILE_PATH @"/var/mobile/Library/Astroid/centerData.plist"
 
+extern "C" NSString * NSStringFromCGAffineTransform(CGAffineTransform transform);
+
+// external functions
+extern BOOL isOnLockscreen();
+extern void hapticFeedbackSoft();
+
 NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/Application Support/lockWeather.bundle"];
 //NSString *alertTitle = [tweakBundle localizedStringForKey:@"ALERT_TITLE" value:@"" table:nil];
 
+// Statics
 static NSDictionary *savedCenterData = [NSKeyedUnarchiver unarchiveObjectWithData: [NSData dataWithContentsOfFile:
                                                                                     FILE_PATH]];
-extern "C" NSString * NSStringFromCGAffineTransform(CGAffineTransform transform);
-
-
-// Data required for the isOnLockscreen() function --------------------------------------------------------------------------------------
-BOOL isUILocked() {
-    long count = [[[%c(SBFPasscodeLockTrackerForPreventLockAssertions) sharedInstance] valueForKey:@"_assertions"] count];
-    if (count == 0) return YES; // array is empty
-    if (count == 1) {
-        if ([[[[[[%c(SBFPasscodeLockTrackerForPreventLockAssertions) sharedInstance] valueForKey:@"_assertions"] allObjects] objectAtIndex:0] identifier] isEqualToString:@"UI unlocked"]) return NO; // either device is unlocked or an app is opened (from the ones allowed on lockscreen). Luckily system gives us enough info so we can tell what happened
-        else return YES; // if there are more than one should be safe enough to assume device is unlocked
-    }
-    else return NO;
-}
-
-static BOOL isOnCoverSheet; // the data that needs to be analyzed
-
-BOOL isOnLockscreen() {
-    //NSLog(@"nine_TWEAK | %d", isOnCoverSheet);
-    if(isUILocked()){
-        isOnCoverSheet = YES; // This is used to catch an exception where it was locked, but the isOnCoverSheet didnt update to reflect.
-        return YES;
-    }
-    else if(!isUILocked() && isOnCoverSheet == YES) return YES;
-    else if(!isUILocked() && isOnCoverSheet == NO) return NO;
-    else return NO;
-}
-
-static id _instance;
-
-%hook SBFPasscodeLockTrackerForPreventLockAssertions
-- (id) init {
-    if (_instance == nil) _instance = %orig;
-        else %orig; // just in case it needs more than one instance
-    return _instance;
-}
-%new
-// add a shared instance so we can use it later
-+ (id) sharedInstance {
-    if (!_instance) return [[%c(SBFPasscodeLockTrackerForPreventLockAssertions) alloc] init];
-    return _instance;
-}
-%end
-
-// Setting isOnCoverSheet properly, actually works perfectly
-%hook SBCoverSheetSlidingViewController
-- (void)_finishTransitionToPresented:(_Bool)arg1 animated:(_Bool)arg2 withCompletion:(id)arg3 {
-    if((arg1 == 0) && ([self dismissalSlidingMode] == 1)){
-        if(!isUILocked()) isOnCoverSheet = NO;
-    }
-    else if ((arg1 == 1) && ([self dismissalSlidingMode] == 1)){
-        if(isUILocked()) isOnCoverSheet = YES;
-    }
-    %orig;
-}
-%end
-// end of data required for the isOnLockscreen() function --------------------------------------------------------------------------------------
-
-
-// thanks mr squid
-extern "C" void AudioServicesPlaySystemSoundWithVibration(SystemSoundID inSystemSoundID, id unknown, NSDictionary *options);
-
- static void hapticFeedbackSoft(){
- NSMutableDictionary* dict = [NSMutableDictionary dictionary];
- NSMutableArray* arr = [NSMutableArray array];
- [arr addObject:[NSNumber numberWithBool:YES]];
- [arr addObject:[NSNumber numberWithInt:30]];
- [dict setObject:arr forKey:@"VibePattern"];
- [dict setObject:[NSNumber numberWithInt:1] forKey:@"Intensity"];
- AudioServicesPlaySystemSoundWithVibration(4095,nil,dict);
- }
- /*
-static void hapticFeedbackHard(){
-    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    NSMutableArray* arr = [NSMutableArray array];
-    [arr addObject:[NSNumber numberWithBool:YES]];
-    [arr addObject:[NSNumber numberWithInt:30]];
-    [dict setObject:arr forKey:@"VibePattern"];
-    [dict setObject:[NSNumber numberWithInt:2] forKey:@"Intensity"];
-    AudioServicesPlaySystemSoundWithVibration(4095,nil,dict);
-}
-*/
+static BOOL isDismissed = NO;
+static NSDictionary *viewDict;
+static BOOL tc_editing;
+static double lastZoomValue = 0;
 
 
 // Setting the gestures function
@@ -112,12 +42,6 @@ void setGesturesForView(UIView *superview, UIView *view){
     UILongPressGestureRecognizer *tapGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:superview action:@selector(tc_toggleEditMode:)];
     [view addGestureRecognizer: tapGestureRecognizer];
 }
-
-static BOOL isDismissed = NO;
-static NSDictionary *viewDict;
-static BOOL tc_editing;
-
-
 
 // Master update notification
 static void updatePreferenceValues(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
@@ -147,6 +71,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     }
     self.wDescription.textColor = [prefs colorForKey:@"textColor"];
     
+    // Reseting location
     if([prefs boolForKey:@"resetXY"]){
         savedCenterData = nil;
         
@@ -181,7 +106,6 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     // Update weather stuff
     [self.refreshTimer fire];
 }
-
 
 %hook SBDashBoardMainPageView
 %property (nonatomic, retain) UIView *weather;
@@ -343,6 +267,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     NSLog(@"lock_TWEAK | Updating");
 }
 
+// Begin of gesture methods -------------------
 %new
 - (void)tc_movingFilter:(UIPanGestureRecognizer *)sender{
     UIView *view = (UIView *)sender.view;
@@ -356,7 +281,6 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 }
 %new
 
-static double change = 0;
 - (void)tc_zoomingFilter:(UIPinchGestureRecognizer *)sender{
     
     CGFloat scale = sender.scale;
@@ -364,11 +288,11 @@ static double change = 0;
     if([sender.view isKindOfClass: %c(UILabel)]){
         UILabel *label = (UILabel *)sender.view;
         NSLog(@"lock_TWEAK | %f", [label.font _scaledValueForValue: (CGAffineTransformScale(label.transform, scale, scale)).a]);
-       if((CGAffineTransformScale(label.transform, scale, scale)).a < 1.0 && ((CGAffineTransformScale(label.transform, scale, scale)).a - change) > 0) change = (CGAffineTransformScale(label.transform, scale, scale)).a;
-        if((CGAffineTransformScale(label.transform, scale, scale)).a > 1.0 && ((CGAffineTransformScale(label.transform, scale, scale)).a - change) < 0) change = (CGAffineTransformScale(label.transform, scale, scale)).a;
+       if((CGAffineTransformScale(label.transform, scale, scale)).a < 1.0 && ((CGAffineTransformScale(label.transform, scale, scale)).a - lastZoomValue) > 0) lastZoomValue = (CGAffineTransformScale(label.transform, scale, scale)).a;
+        if((CGAffineTransformScale(label.transform, scale, scale)).a > 1.0 && ((CGAffineTransformScale(label.transform, scale, scale)).a - lastZoomValue) < 0) lastZoomValue = (CGAffineTransformScale(label.transform, scale, scale)).a;
         
-        label.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size: 20 * ((CGAffineTransformScale(label.transform, scale, scale)).a - change) + label.font.pointSize];
-        change = (CGAffineTransformScale(label.transform, scale, scale)).a;
+        label.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size: 20 * ((CGAffineTransformScale(label.transform, scale, scale)).a - lastZoomValue) + label.font.pointSize];
+        lastZoomValue = (CGAffineTransformScale(label.transform, scale, scale)).a;
         
         /*
         CGSize maximumLabelSize = CGSizeMake(self.weather.frame.size.width, self.frame.size.height/8.6);
@@ -464,30 +388,9 @@ static double change = 0;
                      }];
 }
 
-/*%new
--(void)updateImage:(NSNotification *) notification{
-    NSLog(@"IMRUNNINGOK");
-    [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
-        UIImage *icon;
-        if([[notification name] isEqualToString:@"setStandard"]){
-            icon = weather[@"kCurrentConditionImage_nc-variant"];
-        }
-        if([[notification name] isEqualToString:@"setFilled"]){
-            icon = weather[@"kCurrentConditionImage_white-variant"];
-        }
-        if([[notification name] isEqualToString:@"setOutline"]){
-            icon = weather[@"kCurrentConditionImage_black-variant"];
-        }
+// End of gesture methods ----------------------
 
-        self.logo.image = icon;
-        self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [self.logo setTintColor:[prefs colorForKey:@"glyphColor"]];
-
-        self.logo.contentMode = UIViewContentModeScaleAspectFit;
-
-    }];
-}*/
-
+// Dismiss button pressed
 %new
 - (void) buttonPressed: (UIButton*)sender{
     if(!self.weather.hidden){
@@ -505,6 +408,7 @@ static double change = 0;
          object:self];
     }
 }
+
 // Handles reveal
 %new
 - (void) revealWeather: (NSTimer *) sender{
@@ -626,7 +530,6 @@ static double change = 0;
 
 //Blur 
 %hook SBDashBoardViewController
-//%property (nonatomic, retain) UIVisualEffectView *notifEffectView; <-- Whats this supposed to do
 %property (nonatomic, retain) UIVisualEffectView *blurEffectView;
 
 -(void)loadView{
@@ -638,8 +541,6 @@ static double change = 0;
     self.blurEffectView.frame = self.view.bounds;
     self.blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    //[self.view addSubview:blurEffectView];
-    //[self.view sendSubviewToBack: blurEffectView];
     [((SBDashBoardView *)self.view).backgroundView addSubview: self.blurEffectView];
     
     // Notification called when the lockscreen / nc is revealed (this is posted by the system)

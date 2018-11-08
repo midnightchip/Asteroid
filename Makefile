@@ -10,7 +10,6 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = lockweather
 $(TWEAK_NAME)_FILES = $(wildcard source/*.m source/*.xm)
-$(wildcard *.xm *.mm CustomWorks/*/*.m)
 $(TWEAK_NAME)_FRAMEWORKS =
 $(TWEAK_NAME)_PRIVATE_FRAMEWORKS = 
 $(TWEAK_NAME)_CFLAGS += -fobjc-arc -I$(THEOS_PROJECT_DIR)/source
