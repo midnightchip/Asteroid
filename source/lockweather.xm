@@ -19,8 +19,7 @@ NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/Application Support/
 //NSString *alertTitle = [tweakBundle localizedStringForKey:@"ALERT_TITLE" value:@"" table:nil];
 
 // Statics
-static NSDictionary *savedCenterData = [NSKeyedUnarchiver unarchiveObjectWithData: [NSData dataWithContentsOfFile:
-                                                                                    FILE_PATH]];
+static NSDictionary *savedCenterData = [NSKeyedUnarchiver unarchiveObjectWithData: [NSData dataWithContentsOfFile: FILE_PATH]];
 static BOOL isDismissed = NO;
 static NSDictionary *viewDict;
 static BOOL tc_editing;
@@ -41,6 +40,21 @@ void setGesturesForView(UIView *superview, UIView *view){
     
     UILongPressGestureRecognizer *tapGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:superview action:@selector(tc_toggleEditMode:)];
     [view addGestureRecognizer: tapGestureRecognizer];
+}
+
+static void savingValuesToFile(SBDashBoardMainPageView *sender){
+    SBDashBoardMainPageView *self = sender;
+    viewDict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"greetingLabel" : [NSValue valueWithCGPoint:self.greetingLabel.center], @"wDescription" : [NSValue valueWithCGPoint:self.wDescription.center], @"currentTemp" : [NSValue valueWithCGPoint:self.currentTemp.center], @"dismissButton" : [NSValue valueWithCGPoint:self.dismissButton.center]};
+    
+    BOOL isDir;
+    NSFileManager *fileManager= [NSFileManager defaultManager];
+    if(![fileManager fileExistsAtPath:DIRECTORY_PATH isDirectory:&isDir]){
+        [fileManager createDirectoryAtPath:DIRECTORY_PATH withIntermediateDirectories:YES attributes:nil error:NULL];
+    }
+    if(![fileManager fileExistsAtPath:FILE_PATH isDirectory:&isDir]){
+        [fileManager createFileAtPath:FILE_PATH contents:nil attributes:nil];
+    }
+    [[NSKeyedArchiver archivedDataWithRootObject:viewDict] writeToFile:FILE_PATH atomically:YES];
 }
 
 // Master update notification
@@ -87,17 +101,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
         
         //Saving Values
-        viewDict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"greetingLabel" : [NSValue valueWithCGPoint:self.greetingLabel.center], @"wDescription" : [NSValue valueWithCGPoint:self.wDescription.center], @"currentTemp" : [NSValue valueWithCGPoint:self.currentTemp.center], @"dismissButton" : [NSValue valueWithCGPoint:self.dismissButton.center]};
-        
-        BOOL isDir;
-        NSFileManager *fileManager= [NSFileManager defaultManager];
-        if(![fileManager fileExistsAtPath:DIRECTORY_PATH isDirectory:&isDir]){
-            [fileManager createDirectoryAtPath:DIRECTORY_PATH withIntermediateDirectories:YES attributes:nil error:NULL];
-        }
-        if(![fileManager fileExistsAtPath:FILE_PATH isDirectory:&isDir]){
-            [fileManager createFileAtPath:FILE_PATH contents:nil attributes:nil];
-        }
-        [[NSKeyedArchiver archivedDataWithRootObject:viewDict] writeToFile:FILE_PATH atomically:YES];
+        savingValuesToFile(self);
         
         
         [prefs setObject: @(NO) forKey:@"resetXY"];
@@ -332,17 +336,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             tc_editing = NO;
             
             // Saving values
-            viewDict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"greetingLabel" : [NSValue valueWithCGPoint:self.greetingLabel.center], @"wDescription" : [NSValue valueWithCGPoint:self.wDescription.center], @"currentTemp" : [NSValue valueWithCGPoint:self.currentTemp.center], @"dismissButton" : [NSValue valueWithCGPoint:self.dismissButton.center]};
-            
-            BOOL isDir;
-            NSFileManager *fileManager= [NSFileManager defaultManager];
-            if(![fileManager fileExistsAtPath:DIRECTORY_PATH isDirectory:&isDir]){
-                [fileManager createDirectoryAtPath:DIRECTORY_PATH withIntermediateDirectories:YES attributes:nil error:NULL];
-            }
-            if(![fileManager fileExistsAtPath:FILE_PATH isDirectory:&isDir]){
-                [fileManager createFileAtPath:FILE_PATH contents:nil attributes:nil];
-            }
-            [[NSKeyedArchiver archivedDataWithRootObject:viewDict] writeToFile:FILE_PATH atomically:YES];
+            savingValuesToFile(self);
    
             [prefs setObject: @(self.currentTemp.font.pointSize) forKey:@"tempSize"];
             [prefs setObject: @(self.greetingLabel.font.pointSize) forKey:@"greetingSize"];
