@@ -24,6 +24,7 @@ static BOOL isDismissed = NO;
 static NSDictionary *viewDict;
 static BOOL tc_editing;
 static double lastZoomValue = 0;
+static SBDashBoardMainPageView *mainPageView;
 
 
 // Setting the gestures function
@@ -44,7 +45,7 @@ void setGesturesForView(UIView *superview, UIView *view){
 
 static void savingValuesToFile(SBDashBoardMainPageView *sender){
     SBDashBoardMainPageView *self = sender;
-    viewDict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"greetingLabel" : [NSValue valueWithCGPoint:self.greetingLabel.center], @"wDescription" : [NSValue valueWithCGPoint:self.wDescription.center], @"currentTemp" : [NSValue valueWithCGPoint:self.currentTemp.center], @"dismissButton" : [NSValue valueWithCGPoint:self.dismissButton.center]};
+    viewDict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"greetingLabel" : [NSValue valueWithCGPoint:self.greetingLabel.center], @"wDescription" : [NSValue valueWithCGPoint:self.wDescription.center], @"currentTemp" : [NSValue valueWithCGPoint:self.currentTemp.center], @"dismissButton" : [NSValue valueWithCGPoint:self.dismissButton.center], @"notificationLabel" : [NSValue valueWithCGPoint:self.notifcationLabel.center]};
     
     BOOL isDir;
     NSFileManager *fileManager= [NSFileManager defaultManager];
@@ -99,6 +100,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.greetingLabel.frame = CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6);
         self.wDescription.frame = CGRectMake(0, self.frame.size.height/2.1, self.weather.frame.size.width, self.frame.size.height/8.6);
         self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
+        self.notifcationLabel.frame = CGRectMake(self.weather.frame.size.width - 75, self.frame.size.height/3.5, 25, 25);
         
         //Saving Values
         savingValuesToFile(self);
@@ -124,6 +126,8 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 %property (retain, nonatomic) NSTimer *inactiveTimer;
 %property (nonatomic, retain) NSDictionary *centerDict;
 
+%property (nonatomic, retain) UILabel *notifcationLabel;
+
 - (void)layoutSubviews {
     %orig;
     if(!self.weather){
@@ -148,7 +152,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             if(![MSHookIvar<NCNotificationCombinedListViewController *>(((SBDashBoardMainPageContentViewController *)((UIView *)self)._viewDelegate).combinedListViewController, "_listViewController") hasContent]){
                 [self.inactiveTimer fire];
             }
-                
+            
         }];
         
         [[NSNotificationCenter defaultCenter] addObserverForName: @"SBCoverSheetWillDismissNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
@@ -167,8 +171,11 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         
         // Making sure the preference values set once
         [prefs postNotification];
-
+        
     }
+    
+    // setting a static
+    mainPageView = self;
     
     // Just some rect stuff
     CGRect screenRect = [[UIScreen mainScreen] bounds];
@@ -252,6 +259,29 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         
     }
     
+    // Creating the notification label
+    if(!self.notifcationLabel){
+        self.notifcationLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.weather.frame.size.width - 75, self.frame.size.height/3.5, 25, 25)];
+        self.notifcationLabel.textAlignment = NSTextAlignmentCenter;
+        self.notifcationLabel.textColor = [UIColor whiteColor];
+        self.notifcationLabel.backgroundColor = [UIColor redColor];
+        self.notifcationLabel.layer.masksToBounds = YES;
+        self.notifcationLabel.adjustsFontSizeToFitWidth = YES;
+        self.notifcationLabel.layer.cornerRadius = 12.5;
+        
+        self.notifcationLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        
+        [self.weather addSubview:self.notifcationLabel];
+        
+        setGesturesForView(self, self.notifcationLabel);
+        
+        if(savedCenterData[@"notificationLabel"]){
+            self.notifcationLabel.center = ((NSValue*)savedCenterData[@"notificationLabel"]).CGPointValue;
+        }
+        
+        
+    }
+    
     // Creating a refresh timer
     if(!self.refreshTimer){
         self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:300.0
@@ -263,7 +293,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         // making sure the weather is updated once
         [self.refreshTimer fire];
     }
-
+    
 }
 
 - (void) updateForPresentation:(id) arg1 {
@@ -292,23 +322,23 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     if([sender.view isKindOfClass: %c(UILabel)]){
         UILabel *label = (UILabel *)sender.view;
         NSLog(@"lock_TWEAK | %f", [label.font _scaledValueForValue: (CGAffineTransformScale(label.transform, scale, scale)).a]);
-       if((CGAffineTransformScale(label.transform, scale, scale)).a < 1.0 && ((CGAffineTransformScale(label.transform, scale, scale)).a - lastZoomValue) > 0) lastZoomValue = (CGAffineTransformScale(label.transform, scale, scale)).a;
+        if((CGAffineTransformScale(label.transform, scale, scale)).a < 1.0 && ((CGAffineTransformScale(label.transform, scale, scale)).a - lastZoomValue) > 0) lastZoomValue = (CGAffineTransformScale(label.transform, scale, scale)).a;
         if((CGAffineTransformScale(label.transform, scale, scale)).a > 1.0 && ((CGAffineTransformScale(label.transform, scale, scale)).a - lastZoomValue) < 0) lastZoomValue = (CGAffineTransformScale(label.transform, scale, scale)).a;
         
         label.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size: 20 * ((CGAffineTransformScale(label.transform, scale, scale)).a - lastZoomValue) + label.font.pointSize];
         lastZoomValue = (CGAffineTransformScale(label.transform, scale, scale)).a;
         
         /*
-        CGSize maximumLabelSize = CGSizeMake(self.weather.frame.size.width, self.frame.size.height/8.6);
-        CGRect expectedLabelSize = [label.text boundingRectWithSize:maximumLabelSize
-                                                            options:nil
-                                                         attributes:nil
-                                                            context:nil];
-        
-        //adjust the label the the new height.
-        CGRect newFrame = label.frame;
-        newFrame.size.height = expectedLabelSize.size.height;
-        label.frame = newFrame;
+         CGSize maximumLabelSize = CGSizeMake(self.weather.frame.size.width, self.frame.size.height/8.6);
+         CGRect expectedLabelSize = [label.text boundingRectWithSize:maximumLabelSize
+         options:nil
+         attributes:nil
+         context:nil];
+         
+         //adjust the label the the new height.
+         CGRect newFrame = label.frame;
+         newFrame.size.height = expectedLabelSize.size.height;
+         label.frame = newFrame;
          */
     } else {
         UIView *view = (UIView *)sender.view;
@@ -325,7 +355,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     if(sender.state == UIGestureRecognizerStateBegan) {
         hapticFeedbackSoft();
         if(tc_editing) {
-            for(UIView *view in @[self.logo, self.greetingLabel, self.wDescription, self.currentTemp, self.dismissButton]){
+            for(UIView *view in @[self.logo, self.greetingLabel, self.wDescription, self.currentTemp, self.dismissButton, self.notifcationLabel]){
                 view.alpha=1;
                 [view.layer removeAllAnimations];
                 ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[0]).enabled = NO; // Pan
@@ -337,14 +367,14 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             
             // Saving values
             savingValuesToFile(self);
-   
+            
             [prefs setObject: @(self.currentTemp.font.pointSize) forKey:@"tempSize"];
             [prefs setObject: @(self.greetingLabel.font.pointSize) forKey:@"greetingSize"];
             [prefs setObject: @(self.wDescription.font.pointSize) forKey:@"wDescriptionSize"];
             [prefs saveAndPostNotification];
         }
         else {
-            for(UIView *view in @[self.logo, self.greetingLabel, self.wDescription, self.currentTemp, self.dismissButton]){
+            for(UIView *view in @[self.logo, self.greetingLabel, self.wDescription, self.currentTemp, self.dismissButton, self.notifcationLabel]){
                 ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[0]).enabled = YES; // Pan
                 ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[1]).enabled = YES; // Zoom
                 [self tc_animateFilter:view];
@@ -478,6 +508,13 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 }
 %end
 
+%hook NCNotificationPriorityList
+-(NSUInteger) count {
+    mainPageView.notifcationLabel.text = [NSString stringWithFormat:@"%i", (int)%orig];
+    return %orig;
+}
+%end
+
 // Checking content
 %hook NCNotificationCombinedListViewController
 -(id) init{
@@ -528,7 +565,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 
 -(void)loadView{
     %orig;
-
+    
     UIBlurEffect *blurEffect = [UIBlurEffect effectWithBlurRadius:[prefs intForKey:@"blurAmount"]];
     self.blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
     //always fill the view
@@ -548,7 +585,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                                  self.blurEffectView.hidden = YES;
                                  self.blurEffectView.alpha = 1;
                              }];
-        } else if(isOnLockscreen()) {
+        } else {
             self.blurEffectView.alpha = 0;
             self.blurEffectView.hidden = NO;
             [UIView animateWithDuration:.5

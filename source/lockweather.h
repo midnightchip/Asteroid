@@ -5,6 +5,7 @@
 @interface UIView (tweak_cat)
 -(id) _viewDelegate;
 -(id) _gestureRecognizers;
+
 @end
 
 //help from the_casle on the blur
@@ -75,6 +76,8 @@
 -(void)updateImage:(NSNotification *) notification;
 @property (nonatomic, retain) NSDictionary *centerDict;
 - (void)tc_animateFilter: (UIView *)view;
+
+@property (nonatomic, retain) UILabel *notifcationLabel;
 @end
 
 @interface UIBlurEffect (lockweather)
