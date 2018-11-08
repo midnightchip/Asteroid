@@ -21,6 +21,7 @@
 }
 -(void) resetLoc{
     [prefs setObject: @(YES) forKey:@"resetXY"];
+    [prefs saveAndPostNotification];
 }
 
 @end 

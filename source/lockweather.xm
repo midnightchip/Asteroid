@@ -147,6 +147,36 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     }
     self.wDescription.textColor = [prefs colorForKey:@"textColor"];
     
+    if([prefs boolForKey:@"resetXY"]){
+        savedCenterData = nil;
+        
+        // Just some rect stuff
+        CGRect screenRect = [[UIScreen mainScreen] bounds];
+        CGFloat screenWidth = screenRect.size.width;
+        CGFloat screenHeight = screenRect.size.height;
+        
+        self.logo.frame = CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225);
+        self.currentTemp.frame = CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225);
+        self.greetingLabel.frame = CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6);
+        self.wDescription.frame = CGRectMake(0, self.frame.size.height/2.1, self.weather.frame.size.width, self.frame.size.height/8.6);
+        self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
+        
+        //Saving Values
+        viewDict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"greetingLabel" : [NSValue valueWithCGPoint:self.greetingLabel.center], @"wDescription" : [NSValue valueWithCGPoint:self.wDescription.center], @"currentTemp" : [NSValue valueWithCGPoint:self.currentTemp.center], @"dismissButton" : [NSValue valueWithCGPoint:self.dismissButton.center]};
+        
+        BOOL isDir;
+        NSFileManager *fileManager= [NSFileManager defaultManager];
+        if(![fileManager fileExistsAtPath:DIRECTORY_PATH isDirectory:&isDir]){
+            [fileManager createDirectoryAtPath:DIRECTORY_PATH withIntermediateDirectories:YES attributes:nil error:NULL];
+        }
+        if(![fileManager fileExistsAtPath:FILE_PATH isDirectory:&isDir]){
+            [fileManager createFileAtPath:FILE_PATH contents:nil attributes:nil];
+        }
+        [[NSKeyedArchiver archivedDataWithRootObject:viewDict] writeToFile:FILE_PATH atomically:YES];
+        
+        
+        [prefs setObject: @(NO) forKey:@"resetXY"];
+    }
     
     // Update weather stuff
     [self.refreshTimer fire];
