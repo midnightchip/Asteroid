@@ -5,6 +5,8 @@
 //TODO make only appear during set times
 //TODO Ajust height of uilabel on text size.
 //TODO Add option for right alignment or left alignment
+//TODO Add reset font sizes
+
 
 #define DIRECTORY_PATH @"/var/mobile/Library/Astroid"
 #define FILE_PATH @"/var/mobile/Library/Astroid/centerData.plist"
@@ -25,6 +27,7 @@ static NSDictionary *viewDict;
 static BOOL tc_editing;
 static double lastZoomValue = 0;
 static SBDashBoardMainPageView *mainPageView;
+static NSNumber *initialIconFrame;
 
 
 // Setting the gestures function
@@ -192,6 +195,16 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         if(savedCenterData[@"logo"]){
             self.logo.center = ((NSValue*)savedCenterData[@"logo"]).CGPointValue;
         }
+        
+        initialIconFrame = @(self.logo.frame.size.width);
+        
+        if([prefs doubleForKey:@"iconSize"]){
+            [self.logo layer].anchorPoint = CGPointMake(0.5, 0.5);
+            
+            NSLog(@"lock_TWEAK | %f", [prefs doubleForKey:@"iconSize"]);
+            
+            self.logo.transform = CGAffineTransformScale(self.logo.transform, [prefs doubleForKey:@"iconSize"], [prefs doubleForKey:@"iconSize"]);
+        }
     }
     
     //Current Temperature Localized
@@ -321,7 +334,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     
     if([sender.view isKindOfClass: %c(UILabel)]){
         UILabel *label = (UILabel *)sender.view;
-        NSLog(@"lock_TWEAK | %f", [label.font _scaledValueForValue: (CGAffineTransformScale(label.transform, scale, scale)).a]);
+        //NSLog(@"lock_TWEAK | %f", [label.font _scaledValueForValue: (CGAffineTransformScale(label.transform, scale, scale)).a]);
         if((CGAffineTransformScale(label.transform, scale, scale)).a < 1.0 && ((CGAffineTransformScale(label.transform, scale, scale)).a - lastZoomValue) > 0) lastZoomValue = (CGAffineTransformScale(label.transform, scale, scale)).a;
         if((CGAffineTransformScale(label.transform, scale, scale)).a > 1.0 && ((CGAffineTransformScale(label.transform, scale, scale)).a - lastZoomValue) < 0) lastZoomValue = (CGAffineTransformScale(label.transform, scale, scale)).a;
         
@@ -342,7 +355,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
          */
     } else {
         UIView *view = (UIView *)sender.view;
-        
+
         [view layer].anchorPoint = CGPointMake(0.5, 0.5);
         view.transform = CGAffineTransformScale(view.transform, scale, scale);
         sender.scale = 1.0;
@@ -364,6 +377,9 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             ((UIGestureRecognizer *)((NSArray *)[self.weather _gestureRecognizers])[0]).enabled = YES; // Swipe
             
             tc_editing = NO;
+            
+            // Saving icon ratio
+            [prefs setObject: @(@(self.logo.frame.size.width).doubleValue / initialIconFrame.doubleValue) forKey:@"iconSize"];
             
             // Saving values
             savingValuesToFile(self);
