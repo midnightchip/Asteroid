@@ -299,7 +299,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     if(!self.refreshTimer){
         self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:300.0
                                                              target:self
-                                                           selector:@selector(updateWeatherTimer:)
+                                                           selector:@selector(updateLockView:)
                                                            userInfo:nil
                                                             repeats:YES];
         
@@ -405,6 +405,22 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 
 %new
 - (void)tc_animateFilter: (UIView *)view {
+    
+    CAKeyframeAnimation* animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+    
+    CGFloat wobbleAngle = 0.02f;
+    
+    NSValue* valLeft = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(wobbleAngle, 0.0f, 0.0f, 1.0f)];
+    NSValue* valRight = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(-wobbleAngle, 0.0f, 0.0f, 1.0f)];
+    animation.values = [NSArray arrayWithObjects:valLeft, valRight, nil];
+    
+    animation.autoreverses = YES;
+    animation.duration = 0.125;
+    animation.repeatCount = HUGE_VALF;
+    
+    [view.layer addAnimation: animation forKey:@"wobbleAnimation"];
+    
+    /*
     [UIView animateWithDuration:0.5
                           delay:0.0
                         options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
@@ -426,6 +442,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                                               }];
                          }
                      }];
+     */
 }
 
 // End of gesture methods ----------------------
@@ -460,11 +477,6 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 }
 
 // Handling a timer fire (refresh weather info)
-%new
-- (void) updateWeatherTimer: (NSTimer *) sender{
-    [self updateLockView];
-}
-
 %new
 -(void) updateLockView {
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
