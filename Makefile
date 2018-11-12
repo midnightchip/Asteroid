@@ -22,7 +22,7 @@ SUBPROJECTS += preferences
 
 SUBPROJECTS += asteroidicon
 SUBPROJECTS += asteroidhome
-SUBPROJECTS += asteroidcc
+
 include $(THEOS_MAKE_PATH)/aggregate.mk
 
 after-install::
