@@ -113,7 +113,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     }
     
     // Update weather stuff
-    [self.refreshTimer fire];
+    [self updateLockView];
 }
 
 %hook SBDashBoardMainPageView
@@ -150,7 +150,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                                                                   target:self
                                                                 selector:@selector(revealWeather:)
                                                                 userInfo:nil
-                                                                 repeats:NO];
+                                                                 repeats:YES];
             
             if(![MSHookIvar<NCNotificationCombinedListViewController *>(((SBDashBoardMainPageContentViewController *)((UIView *)self)._viewDelegate).combinedListViewController, "_listViewController") hasContent]){
                 [self.inactiveTimer fire];
@@ -201,7 +201,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         if([prefs doubleForKey:@"iconSize"]){
             [self.logo layer].anchorPoint = CGPointMake(0.5, 0.5);
             
-            NSLog(@"lock_TWEAK | %f", [prefs doubleForKey:@"iconSize"]);
+            //NSLog(@"lock_TWEAK | %f", [prefs doubleForKey:@"iconSize"]);
             
             self.logo.transform = CGAffineTransformScale(self.logo.transform, [prefs doubleForKey:@"iconSize"], [prefs doubleForKey:@"iconSize"]);
         }
@@ -299,12 +299,12 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     if(!self.refreshTimer){
         self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:300.0
                                                              target:self
-                                                           selector:@selector(updateWeather:)
+                                                           selector:@selector(updateWeatherTimer:)
                                                            userInfo:nil
                                                             repeats:YES];
         
         // making sure the weather is updated once
-        [self.refreshTimer fire];
+        [self updateLockView];
     }
     
 }
@@ -452,7 +452,6 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 // Handles reveal
 %new
 - (void) revealWeather: (NSTimer *) sender{
-    NSLog(@"lock_TWEAK | Timer fired");
     self.weather.hidden = NO;
     isDismissed = NO;
     [[NSNotificationCenter defaultCenter]
@@ -462,7 +461,12 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 
 // Handling a timer fire (refresh weather info)
 %new
-- (void) updateWeather: (NSTimer *) sender{
+- (void) updateWeatherTimer: (NSTimer *) sender{
+    [self updateLockView];
+}
+
+%new
+-(void) updateLockView {
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
         
         // Updating the image icon
@@ -574,6 +578,12 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 }
 %end
 
+%hook WeatherPreferences
+-(int) loadActiveCity {
+    NSLog(@"lock_TWEAK | update weather");
+    return %orig;
+}
+%end
 
 //Blur 
 %hook SBDashBoardViewController
@@ -614,10 +624,40 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     }];
 }
 
-%end 
+%end
+
+// Debugging
+/*
+%hookf(uint32_t, notify_post, const char *name) {
+    uint32_t r = %orig;
+    //if (strstr(name, "notification")) {
+    NSLog(@"NOTI_MON: %s", name);
+    //}
+    return r;
+}
+
+%hookf(void, CFNotificationCenterPostNotification, CFNotificationCenterRef center, CFNotificationName name, const void *object, CFDictionaryRef userInfo, Boolean deliverImmediately) {
+    %orig;
+    NSString *notiName = (__bridge NSString *)name;
+    //if ([notiName containsString:@"notification"]) {
+    NSLog(@"NOTI_MON: %@", notiName);
+    //}
+}
+*/
+
 
 %ctor{
     if([prefs boolForKey:@"kLWPEnabled"]){
         %init(_ungrouped);
     }
+    
+    // Debugging
+    /*
+    [[NSNotificationCenter defaultCenter] addObserverForName:NULL object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+        if ([note.name containsString:@"UIViewAnimationDidCommitNotification"] || [note.name containsString:@"UIViewAnimationDidStopNotification"] || [note.name containsString:@"UIScreenBrightnessDidChangeNotification"]){
+        } else {
+            NSLog(@"UNIQUE: %@", note.name);
+        }
+    }];
+     */
 }

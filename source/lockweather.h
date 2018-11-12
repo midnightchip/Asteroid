@@ -1,6 +1,7 @@
 #import <LWPProvider.h>
 #import <CSWeather/CSWeatherInformationProvider.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import <notify.h>
 
 @interface UIView (tweak_cat)
 -(id) _viewDelegate;
@@ -76,7 +77,7 @@
 -(void)updateImage:(NSNotification *) notification;
 @property (nonatomic, retain) NSDictionary *centerDict;
 - (void)tc_animateFilter: (UIView *)view;
-
+-(void) updateLockView;
 @property (nonatomic, retain) UILabel *notifcationLabel;
 @end
 
