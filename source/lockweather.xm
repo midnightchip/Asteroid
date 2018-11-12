@@ -103,7 +103,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.greetingLabel.frame = CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6);
         self.wDescription.frame = CGRectMake(0, self.frame.size.height/2.1, self.weather.frame.size.width, self.frame.size.height/8.6);
         self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
-        self.notifcationLabel.frame = CGRectMake(self.weather.frame.size.width - 75, self.frame.size.height/3.5, 25, 25);
+        self.notifcationLabel.frame = CGRectMake(self.weather.frame.size.width - 60, self.frame.size.height/2.5, 25, 25);
         
         //Saving Values
         savingValuesToFile(self);
@@ -274,7 +274,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     
     // Creating the notification label
     if(!self.notifcationLabel){
-        self.notifcationLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.weather.frame.size.width - 75, self.frame.size.height/3.5, 25, 25)];
+        self.notifcationLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.weather.frame.size.width - 60, self.frame.size.height/2.5, 25, 25)];
         self.notifcationLabel.textAlignment = NSTextAlignmentCenter;
         self.notifcationLabel.textColor = [UIColor whiteColor];
         self.notifcationLabel.backgroundColor = [UIColor redColor];
@@ -299,7 +299,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     if(!self.refreshTimer){
         self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:300.0
                                                              target:self
-                                                           selector:@selector(updateLockView:)
+                                                           selector:@selector(updateWeather:)
                                                            userInfo:nil
                                                             repeats:YES];
         
@@ -393,7 +393,10 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             for(UIView *view in @[self.logo, self.greetingLabel, self.wDescription, self.currentTemp, self.dismissButton, self.notifcationLabel]){
                 ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[0]).enabled = YES; // Pan
                 ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[1]).enabled = YES; // Zoom
-                [self tc_animateFilter:view];
+                if([view isKindOfClass: %c(UILabel)]){
+                    [self tc_animateFilter:view];
+                }
+                
                 
             }
             ((UIGestureRecognizer *)((NSArray *)[self.weather _gestureRecognizers])[0]).enabled = NO; // Swipe
@@ -477,6 +480,11 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 }
 
 // Handling a timer fire (refresh weather info)
+%new
+-(void) updateWeather: (NSTimer *) sender {
+    [self updateLockView];
+}
+
 %new
 -(void) updateLockView {
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
