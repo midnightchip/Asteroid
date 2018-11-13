@@ -128,6 +128,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 %property (retain, nonatomic) NSTimer *refreshTimer;
 %property (retain, nonatomic) NSTimer *inactiveTimer;
 %property (nonatomic, retain) NSDictionary *centerDict;
+%property (nonatomic, retain) WAWeatherPlatterViewController *weatherController;
 
 %property (nonatomic, retain) UILabel *notifcationLabel;
 
@@ -294,7 +295,15 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         
         
     }
-    
+    /*
+    if(!self.weatherController){
+        WATodayAutoUpdatingLocationModel *locModel = [[%c(WATodayAutoUpdatingLocationModel) alloc] initWithPreferences: [%c(WeatherPreferences) sharedPreferences] effectiveBundleIdentifier: @"com.apple.weather"];
+        self.weatherController = [[%c(WAWeatherPlatterViewController) alloc] initWithLocation: locModel];
+        [self.weatherController _buildModelForLocation: locModel];
+        [self addSubview: self.weatherController.view];
+        
+    }
+    */
     // Creating a refresh timer
     if(!self.refreshTimer){
         self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:300.0

@@ -59,7 +59,18 @@
 @property(retain, nonatomic) UILabel *naturalLanguageDescriptionLabel;
 @end
 
+@interface WeatherPreferences
++(id) sharedPreferences;
+@end
+
+@interface WATodayAutoupdatingLocationModel
+-(id)initWithPreferences:(id)arg1 effectiveBundleIdentifier:(id)arg2 ;
+
+@end
+
 @interface WAWeatherPlatterViewController : UIViewController
+-(id)initWithLocation:(id)arg1 ;
+-(void)_buildModelForLocation:(id)arg1 ;
 @end
 
 
@@ -76,6 +87,7 @@
 @property (retain, nonatomic) NSTimer *inactiveTimer;
 -(void)updateImage:(NSNotification *) notification;
 @property (nonatomic, retain) NSDictionary *centerDict;
+@property (nonatomic, retain) WAWeatherPlatterViewController *weatherController;
 - (void)tc_animateFilter: (UIView *)view;
 -(void) updateLockView;
 @property (nonatomic, retain) UILabel *notifcationLabel;
@@ -108,7 +120,6 @@
 - (double)_scaledValueForValue:(double)arg1;
 -(id) _fontScaledByScaleFactor:(double)arg1;
 @end
-
 
 @interface SBLockScreenManager
 +(id)sharedInstance;
