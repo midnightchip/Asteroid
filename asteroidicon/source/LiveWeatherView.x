@@ -29,17 +29,18 @@ static WUIWeatherCondition* condition = nil;
                 self.temp.text = weather[@"kCurrentTemperatureForLocale"];
                 self.temp.textColor = [UIColor whiteColor];
                 self.temp.textAlignment = NSTextAlignmentCenter;
-                [self.temp setCenter:CGPointMake(self.frame.size.width / 2, self.frame.size.height / 1.2)];
+                [self.temp setCenter:CGPointMake(self.frame.size.width / 1.9, self.frame.size.height / 1.2)];
                 [self addSubview: self.temp];
 
                 //Icon
                 self.logo = [[UIImageView alloc] init];//WithFrame:self.frame];
-                self.logo.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height/2);
+                self.logo.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
                 UIImage *icon;
                 icon = weather[@"kCurrentConditionImage_black-variant"];
                 self.logo.image = icon;
                 self.logo.contentMode = UIViewContentModeScaleAspectFit;
-                self.logo.center = self.center;
+                [self.logo setCenter:CGPointMake(self.frame.size.width / 2, self.frame.size.height / 3)];
+                //self.logo.center = self.center;
                 
                 self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 //TODO enable changing this color
