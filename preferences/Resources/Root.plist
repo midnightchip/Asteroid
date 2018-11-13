@@ -113,7 +113,7 @@
 				<key>cell</key>
 				<string>PSSliderCell</string>
 				<key>key</key>
-				<string>descriptionSize</string>
+				<string>wDescriptionSize</string>
 				<key>showValue</key>
 				<true/>
 				<key>min</key>
