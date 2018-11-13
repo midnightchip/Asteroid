@@ -14,5 +14,9 @@
 		<real>50</real>
 		<key>blurAmount</key>
 		<real>5</real>
+		<key>textColor</key>
+		<string>FFFFFF</string>
+		<key>glyphColor</key>
+		<string>FFFFFF</string>
 	</dict>
 </plist>
