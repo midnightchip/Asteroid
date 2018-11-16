@@ -31,6 +31,7 @@
                     [self sendSubviewToBack:self.referenceView];
                 }
             }
+        
         [NSTimer scheduledTimerWithTimeInterval:900.0f
             target:self
         selector:@selector(updateView)

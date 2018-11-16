@@ -103,7 +103,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.greetingLabel.frame = CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6);
         self.wDescription.frame = CGRectMake(0, self.frame.size.height/2.1, self.weather.frame.size.width, self.frame.size.height/8.6);
         self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
-        self.notifcationLabel.frame = CGRectMake(self.weather.frame.size.width - 60, self.frame.size.height/2.5, 25, 25);
+        self.notifcationLabel.frame = CGRectMake(self.weather.frame.size.width - 75, self.frame.size.height/3.5, 25, 25);
         
         //Saving Values
         savingValuesToFile(self);
@@ -113,7 +113,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     }
     
     // Update weather stuff
-    [self updateLockView];
+    [self.refreshTimer fire];
 }
 
 %hook SBDashBoardMainPageView
@@ -130,10 +130,16 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 %property (nonatomic, retain) NSDictionary *centerDict;
 %property (nonatomic, retain) WAWeatherPlatterViewController *weatherController;
 
+
 %property (nonatomic, retain) UILabel *notifcationLabel;
 
 - (void)layoutSubviews {
     %orig;
+    /*if(!self.weatherController){
+    self.weatherController = [[NSClassFromString(@"WAWeatherPlatterViewController") alloc] init];
+    [self addSubview: self.weatherController.view];
+
+    }*/
     if(!self.weather){
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         [self.weather setUserInteractionEnabled:YES];
@@ -151,7 +157,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                                                                   target:self
                                                                 selector:@selector(revealWeather:)
                                                                 userInfo:nil
-                                                                 repeats:YES];
+                                                                 repeats:NO];
             
             if(![MSHookIvar<NCNotificationCombinedListViewController *>(((SBDashBoardMainPageContentViewController *)((UIView *)self)._viewDelegate).combinedListViewController, "_listViewController") hasContent]){
                 [self.inactiveTimer fire];
@@ -202,7 +208,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         if([prefs doubleForKey:@"iconSize"]){
             [self.logo layer].anchorPoint = CGPointMake(0.5, 0.5);
             
-            //NSLog(@"lock_TWEAK | %f", [prefs doubleForKey:@"iconSize"]);
+            NSLog(@"lock_TWEAK | %f", [prefs doubleForKey:@"iconSize"]);
             
             self.logo.transform = CGAffineTransformScale(self.logo.transform, [prefs doubleForKey:@"iconSize"], [prefs doubleForKey:@"iconSize"]);
         }
@@ -275,7 +281,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     
     // Creating the notification label
     if(!self.notifcationLabel){
-        self.notifcationLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.weather.frame.size.width - 60, self.frame.size.height/2.5, 25, 25)];
+        self.notifcationLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.weather.frame.size.width - 75, self.frame.size.height/3.5, 25, 25)];
         self.notifcationLabel.textAlignment = NSTextAlignmentCenter;
         self.notifcationLabel.textColor = [UIColor whiteColor];
         self.notifcationLabel.backgroundColor = [UIColor redColor];
@@ -313,7 +319,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                                                             repeats:YES];
         
         // making sure the weather is updated once
-        [self updateLockView];
+        [self.refreshTimer fire];
     }
     
 }
@@ -402,10 +408,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             for(UIView *view in @[self.logo, self.greetingLabel, self.wDescription, self.currentTemp, self.dismissButton, self.notifcationLabel]){
                 ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[0]).enabled = YES; // Pan
                 ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[1]).enabled = YES; // Zoom
-                if([view isKindOfClass: %c(UILabel)]){
-                    [self tc_animateFilter:view];
-                }
-                
+                [self tc_animateFilter:view];
                 
             }
             ((UIGestureRecognizer *)((NSArray *)[self.weather _gestureRecognizers])[0]).enabled = NO; // Swipe
@@ -417,22 +420,6 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 
 %new
 - (void)tc_animateFilter: (UIView *)view {
-    
-    CAKeyframeAnimation* animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-    
-    CGFloat wobbleAngle = 0.02f;
-    
-    NSValue* valLeft = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(wobbleAngle, 0.0f, 0.0f, 1.0f)];
-    NSValue* valRight = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(-wobbleAngle, 0.0f, 0.0f, 1.0f)];
-    animation.values = [NSArray arrayWithObjects:valLeft, valRight, nil];
-    
-    animation.autoreverses = YES;
-    animation.duration = 0.125;
-    animation.repeatCount = HUGE_VALF;
-    
-    [view.layer addAnimation: animation forKey:@"wobbleAnimation"];
-    
-    /*
     [UIView animateWithDuration:0.5
                           delay:0.0
                         options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
@@ -454,7 +441,6 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                                               }];
                          }
                      }];
-     */
 }
 
 // End of gesture methods ----------------------
@@ -481,6 +467,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 // Handles reveal
 %new
 - (void) revealWeather: (NSTimer *) sender{
+    NSLog(@"lock_TWEAK | Timer fired");
     self.weather.hidden = NO;
     isDismissed = NO;
     [[NSNotificationCenter defaultCenter]
@@ -490,12 +477,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 
 // Handling a timer fire (refresh weather info)
 %new
--(void) updateWeather: (NSTimer *) sender {
-    [self updateLockView];
-}
-
-%new
--(void) updateLockView {
+- (void) updateWeather: (NSTimer *) sender{
     [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
         
         // Updating the image icon
@@ -607,12 +589,6 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 }
 %end
 
-%hook WeatherPreferences
--(int) loadActiveCity {
-    NSLog(@"lock_TWEAK | update weather");
-    return %orig;
-}
-%end
 
 //Blur 
 %hook SBDashBoardViewController
@@ -653,40 +629,10 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     }];
 }
 
-%end
-
-// Debugging
-/*
-%hookf(uint32_t, notify_post, const char *name) {
-    uint32_t r = %orig;
-    //if (strstr(name, "notification")) {
-    NSLog(@"NOTI_MON: %s", name);
-    //}
-    return r;
-}
-
-%hookf(void, CFNotificationCenterPostNotification, CFNotificationCenterRef center, CFNotificationName name, const void *object, CFDictionaryRef userInfo, Boolean deliverImmediately) {
-    %orig;
-    NSString *notiName = (__bridge NSString *)name;
-    //if ([notiName containsString:@"notification"]) {
-    NSLog(@"NOTI_MON: %@", notiName);
-    //}
-}
-*/
-
+%end 
 
 %ctor{
     if([prefs boolForKey:@"kLWPEnabled"]){
         %init(_ungrouped);
     }
-    
-    // Debugging
-    /*
-    [[NSNotificationCenter defaultCenter] addObserverForName:NULL object:NULL queue:NULL usingBlock:^(NSNotification *note) {
-        if ([note.name containsString:@"UIViewAnimationDidCommitNotification"] || [note.name containsString:@"UIViewAnimationDidStopNotification"] || [note.name containsString:@"UIScreenBrightnessDidChangeNotification"]){
-        } else {
-            NSLog(@"UNIQUE: %@", note.name);
-        }
-    }];
-     */
 }
