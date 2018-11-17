@@ -85,6 +85,8 @@
 @property (retain, nonatomic) WALockscreenWidgetViewController *weatherCont;
 @property (retain, nonatomic) NSTimer *refreshTimer;
 @property (retain, nonatomic) NSTimer *inactiveTimer;
+
+
 -(void)updateImage:(NSNotification *) notification;
 @property (nonatomic, retain) NSDictionary *centerDict;
 @property (nonatomic, retain) WAWeatherPlatterViewController *weatherController;
