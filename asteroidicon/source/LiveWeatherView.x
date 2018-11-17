@@ -29,7 +29,7 @@ static WUIWeatherCondition* condition = nil;
                 self.temp.text = weather[@"kCurrentTemperatureForLocale"];
                 self.temp.textColor = [UIColor whiteColor];
                 self.temp.textAlignment = NSTextAlignmentCenter;
-                [self.temp setCenter:CGPointMake(self.frame.size.width / 1.9, self.frame.size.height / 1.2)];
+                [self.temp setCenter:CGPointMake(self.frame.size.width / 1.9, self.frame.size.height / 1.3)];
                 [self addSubview: self.temp];
 
                 //Icon
