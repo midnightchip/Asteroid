@@ -57,3 +57,40 @@
 }
         
 %end 
+
+@interface SBIconBlurryBackgroundView : UIView
+@end 
+
+@interface SBFolderIconBackgroundView : SBIconBlurryBackgroundView
+@end 
+
+%hook SBFolderIconBackgroundView
+-(void)layoutSubviews{
+    %orig;
+    self.hidden = TRUE;
+}
+%end 
+
+@interface SBDockView : UIView 
+@end 
+
+@interface SBWallpaperEffectView : UIView
+@end 
+
+%hook SBDockView
+-(void)layoutSubviews{
+    %orig;
+    MSHookIvar<SBWallpaperEffectView*>(self, "_backgroundView").hidden = YES;
+    MSHookIvar<UIImageView*>(self, "_backgroundImageView").hidden = YES;
+}
+%end 
+
+@interface SBHighlightView : UIView
+@end 
+
+%hook SBHighlightView
+-(void)layoutSubviews{
+    %orig;
+    self.hidden = YES;
+}
+%end 

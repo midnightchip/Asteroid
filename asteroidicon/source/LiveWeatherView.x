@@ -34,18 +34,18 @@ static WUIWeatherCondition* condition = nil;
 
                 //Icon
                 self.logo = [[UIImageView alloc] init];//WithFrame:self.frame];
-                self.logo.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+                self.logo.frame = CGRectMake(0, 0, self.frame.size.width /1.5 , self.frame.size.height /1.5 );
                 UIImage *icon;
-                icon = weather[@"kCurrentConditionImage_black-variant"];
+                icon = weather[@"kCurrentConditionImage"];
                 self.logo.image = icon;
                 self.logo.contentMode = UIViewContentModeScaleAspectFit;
-                [self.logo setCenter:CGPointMake(self.frame.size.width / 2, self.frame.size.height / 3)];
+                [self.logo setCenter:CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2.5)];
                 //self.logo.center = self.center;
                 
-                self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                /*self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 //TODO enable changing this color
                 [self.logo setTintColor:[UIColor whiteColor]];
-                self.logo.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+                self.logo.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;*/
                 [self addSubview: self.logo];
 
                 [self.logo.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:4].active = YES;
@@ -87,12 +87,12 @@ static WUIWeatherCondition* condition = nil;
             //[self sendSubviewToBack:self.referenceView];
         [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
           UIImage *icon;
-          icon = weather[@"kCurrentConditionImage_black-variant"];
+          icon = weather[@"kCurrentConditionImage"];
           self.logo.image = icon;
           self.logo.contentMode = UIViewContentModeScaleAspectFit;
           self.logo.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-          self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-          [self.logo setTintColor:[UIColor whiteColor]];
+          /*self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+          [self.logo setTintColor:[UIColor whiteColor]];*/
 
           self.temp.textColor = [UIColor whiteColor];
 
