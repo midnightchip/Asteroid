@@ -1,6 +1,7 @@
 #import "../asteroidicon/source/Asteroid.h"
 @interface SBHomeScreenView : UIView
 @property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
+@property (nonatomic,retain) NSTimer *refreshTimer;
 @end 
 
 @interface SBHomeScreenView (Weather)
@@ -11,6 +12,7 @@
 
 %hook SBHomeScreenView
 %property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
+%property (nonatomic,retain) NSTimer *refreshTimer;
 
 - (void)insertSubview:(UIView*)view atIndex:(int)index {
     %orig;
