@@ -491,6 +491,9 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 // Handling a timer fire (refresh weather info)
 %new
 -(void) updateWeather: (NSTimer *) sender {
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"weatherTimerUpdate"
+     object:self];
     [self updateLockView];
 }
 
@@ -628,7 +631,6 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     self.blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     [((SBDashBoardView *)self.view).backgroundView addSubview: self.blurEffectView];
-    
     // Notification called when the lockscreen / nc is revealed (this is posted by the system)
     [[NSNotificationCenter defaultCenter] addObserverForName: @"weatherStateChanged" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
         if(isDismissed){

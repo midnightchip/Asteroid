@@ -36,6 +36,10 @@
                                    selector:@selector(updateView)
                                    userInfo:nil
                                     repeats:YES];
+    
+    /*
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateViewCollectionWhenDismissed:) name:@"weatherTimerUpdate" object:nil];
+     */
 
 }
 %new 
