@@ -14,40 +14,33 @@
 %property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
 %property (nonatomic,retain) NSTimer *refreshTimer;
 
-- (void)insertSubview:(UIView*)view atIndex:(int)index {
+- (void)layoutSubviews{
     %orig;
     
-    if(!self.referenceView){
-        WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
-        City* city = [wPrefs localWeatherCity];
-        if (city){
-            self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
-            [self.referenceView.background setCity:city];
-            [[self.referenceView.background condition] resume];
-            
-            self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            self.referenceView.clipsToBounds = YES;
-            [self addSubview:self.referenceView];
-            [self sendSubviewToBack:self.referenceView];
-        }
+    [self updateView];
     }
+    /*
     [NSTimer scheduledTimerWithTimeInterval:300.0f
                                      target:self
                                    selector:@selector(updateView)
                                    userInfo:nil
                                     repeats:YES];
-    
-    /*
-     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateViewCollectionWhenDismissed:) name:@"weatherTimerUpdate" object:nil];
-     */
+    */
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(weatherTimer:) name:@"weatherTimerUpdate" object:nil];
 
 }
+%new
+- (void) weatherTimer: (NSNotification *)notification{
+    [self updateView];
+}
+
 %new 
 -(void)updateView{
-    
+    NSLog(@"lock_TWEAK | updateView");
     WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
     City* city = [wPrefs localWeatherCity];
         if (city){
+            NSLog(@"lock_TWEAK | adding to superview");
             [self.referenceView removeFromSuperview];
     
             self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];

@@ -311,18 +311,17 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                                                            selector:@selector(updateWeather:)
                                                            userInfo:nil
                                                             repeats:YES];
-        
         // making sure the weather is updated once
         [self updateLockView];
     }
     
 }
-
+/*
 - (void) updateForPresentation:(id) arg1 {
     %orig;
     NSLog(@"lock_TWEAK | Updating");
 }
-
+*/
 // Begin of gesture methods -------------------
 %new
 - (void)tc_movingFilter:(UIPanGestureRecognizer *)sender{
@@ -609,14 +608,14 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     else return %orig;
 }
 %end
-
+/*
 %hook WeatherPreferences
 -(int) loadActiveCity {
     NSLog(@"lock_TWEAK | update weather");
     return %orig;
 }
 %end
-
+*/
 //Blur
 %hook SBDashBoardViewController
 %property (nonatomic, retain) UIVisualEffectView *blurEffectView;
