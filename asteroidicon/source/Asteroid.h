@@ -16,12 +16,26 @@
 -(WUIDynamicWeatherBackground *)background;
 -(void)prepareToSuspend;
 -(void)prepareToResume;
-@end;
+@end
 
 @interface WeatherPreferences
 + (id)sharedPreferences;
 - (id)localWeatherCity;
+-(int)loadActiveCity;
+-(NSArray *)loadSavedCities;
 @end
 
 @interface City : NSObject
 @end
+
+
+@interface WAForecastModel
+@property (nonatomic,retain) City * city;
+@end
+
+@interface WATodayAutoupdatingLocationModel
+-(void)setPreferences:(WeatherPreferences *)arg1;
+-(WAForecastModel *)forecastModel;
+@end
+
+

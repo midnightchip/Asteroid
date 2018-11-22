@@ -14,10 +14,11 @@
 %property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
 %property (nonatomic,retain) NSTimer *refreshTimer;
 
-- (void)layoutSubviews{
+- (void)layoutSubviews {
     %orig;
-    
-    [self updateView];
+    if(!self.referenceView){
+        [self updateView];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(weatherTimer:) name:@"weatherTimerUpdate" object:nil];
     }
     /*
     [NSTimer scheduledTimerWithTimeInterval:300.0f
@@ -26,7 +27,7 @@
                                    userInfo:nil
                                     repeats:YES];
     */
-     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(weatherTimer:) name:@"weatherTimerUpdate" object:nil];
+    
 
 }
 %new
@@ -37,8 +38,17 @@
 %new 
 -(void)updateView{
     NSLog(@"lock_TWEAK | updateView");
+    //WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
+    
+    //City* city = [wPrefs localWeatherCity];
+    
     WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
-    City* city = [wPrefs localWeatherCity];
+    WATodayAutoupdatingLocationModel *todayModel = [[%c(WATodayAutoupdatingLocationModel) alloc] init];
+    [todayModel setPreferences:wPrefs];
+    City *city = todayModel.forecastModel.city;
+    
+    NSLog(@"lock_TWEAK | city: %@",city);
+    
         if (city){
             NSLog(@"lock_TWEAK | adding to superview");
             [self.referenceView removeFromSuperview];
@@ -51,7 +61,7 @@
             self.referenceView.clipsToBounds = YES;
             [self addSubview:self.referenceView];
             [self sendSubviewToBack:self.referenceView];
-    }
+        }
 }
         
 %end 
