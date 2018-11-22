@@ -685,7 +685,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 
 
 %ctor{
-    if([prefs boolForKey:@"kLWPEnabled"]){
+    if([prefs boolForKey:@"greetView"]){
         %init(_ungrouped);
     }
     

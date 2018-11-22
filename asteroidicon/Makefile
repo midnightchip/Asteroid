@@ -10,7 +10,7 @@ PACKAGE_VERSION = $(THEOS_PACKAGE_BASE_VERSION)-$(VERSION.INC_BUILD_NUMBER)
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Asteroid
-$(TWEAK_NAME)_FILES = $(wildcard source/*.m source/*.xm source/*.x)
+$(TWEAK_NAME)_FILES = $(wildcard source/*.m source/*.xm source/*.x) ../source/LWPProvider.m
 $(TWEAK_NAME)_FRAMEWORKS = 
 $(TWEAK_NAME)_PRIVATE_FRAMEWORKS = Weather WeatherUI
 $(TWEAK_NAME)_LIBRARIES = CSPreferencesProvider CSWeather

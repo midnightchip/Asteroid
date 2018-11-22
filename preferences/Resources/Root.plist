@@ -14,319 +14,61 @@
 				<key>isGroupToggle</key>
 				<true/>
 				<key>PostNotification</key>
-				<string>com.midnightchips.lockweather.prefschanged</string>
+				<string>com.midnightchips.asteroid.prefschanged</string>
 				<key>defaults</key>
-				<string>com.midnightchips.lockweather</string>
+				<string>com.midnightchips.asteroid</string>
 			</dict>
 
 			<dict>
-				<key>cell</key>
-				<string>PSGroupCell</string>
-				<key>label</key>
-				<string>Custom_Fonts</string>
-			</dict>
-
-			<dict>
-				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>label</key>
-				<string>Use_Custom_Font</string>
-				<key>key</key>
-				<string>customFont</string>
-				<key>isGroupToggle</key>
-				<true/>
-				<key>PostNotification</key>
-				<string>com.midnightchips.lockweather.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.lockweather</string>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/lockweather.bundle</string>
-			</dict>
-
-
-			<dict>
-				<key>cell</key>
-				<string>PSLinkListCell</string>
-				<key>detail</key>
-				<string>CSListFontsController</string>
-				<key>key</key>
-				<string>availableFonts</string>
-				<key>label</key>
-				<string>Custom_Font</string>
-				<key>titlesDataSource</key>
-				<string>fontNames</string>
-				<key>valuesDataSource</key>
-				<string>fontNames</string>
-				<key>PostNotification</key>
-				<string>com.midnightchips.lockweather.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.lockweather</string>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/lockweather.bundle</string>
-			</dict>
-
-			<dict>
-				<key>cell</key>
-				<string>PSGroupCell</string>
-				<key>label</key>
-				<string>Font_Sizes</string>
-			</dict>
-
-			<dict>
-				<key>cell</key>
-				<string>PSGroupCell</string>
-				<key>label</key>
-				<string>Greeting_Size</string>
-			</dict>
-
-			<dict>
-				<key>cell</key>
-				<string>PSSliderCell</string>
-				<key>key</key>
-				<string>greetingSize</string>
-				<key>showValue</key>
-				<true/>
-				<key>min</key>
-				<real>12</real>
-				<key>max</key>
-				<real>60</real>
-				<key>isSegmented</key>
-				<true/>
-				<key>segmentCount</key>
-				<real>48</real>
-				<key>PostNotification</key>
-				<string>com.midnightchips.lockweather.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.lockweather</string>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/lockweather.bundle</string>
-			</dict>
-
-			<dict>
-				<key>cell</key>
-				<string>PSGroupCell</string>
-				<key>label</key>
-				<string>Description_Size</string>
-			</dict>
-
-			<dict>
-				<key>cell</key>
-				<string>PSSliderCell</string>
-				<key>key</key>
-				<string>wDescriptionSize</string>
-				<key>showValue</key>
-				<true/>
-				<key>min</key>
-				<real>12</real>
-				<key>max</key>
-				<real>60</real>
-				<key>isSegmented</key>
-				<true/>
-				<key>segmentCount</key>
-				<real>48</real>
-				<key>PostNotification</key>
-				<string>com.midnightchips.lockweather.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.lockweather</string>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/lockweather.bundle</string>
-			</dict>
-
-			<dict>
-				<key>cell</key>
-				<string>PSGroupCell</string>
-				<key>label</key>
-				<string>Current_Temperature_Size</string>
-			</dict>
-
-			<dict>
-				<key>cell</key>
-				<string>PSSliderCell</string>
-				<key>key</key>
-				<string>tempSize</string>
-				<key>showValue</key>
-				<true/>
-				<key>min</key>
-				<real>12</real>
-				<key>max</key>
-				<real>60</real>
-				<key>isSegmented</key>
-				<true/>
-				<key>segmentCount</key>
-				<real>48</real>
-				<key>PostNotification</key>
-				<string>com.midnightchips.lockweather.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.lockweather</string>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/lockweather.bundle</string>
-			</dict>
-
-			<dict>
-				<key>PostNotification</key>
-				<string>com.midnightchips.lockweather.prefschanged</string>
+				<key>action</key>
+				<string>pushToView:</string>
 				<key>cell</key>
 				<string>PSLinkCell</string>
-				<key>cellClass</key>
-				<string>CSColorDisplayCell</string>
-				<key>defaults</key>
-				<string>com.midnightchips.lockweather</string>
-				<key>key</key>
-				<string>textColor</string>
+				<key>pushToPlist</key>
+				<string>lockScreen</string>
 				<key>label</key>
-				<string>Set_Text_Color</string>
-				<key>fallback</key>
-				<string>FFFFFF</string>
-				<key>alpha</key>
-				<false/>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/lockweather.bundle</string>
-			</dict>
-
-			<dict>
-				<key>cell</key>
-				<string>PSGroupCell</string>
-			</dict>
-
-			<dict>
-				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>label</key>
-				<string>Use_Custom_Image</string>
+				<string>Lock Screen</string>
+				<key>sublabel</key>
+				<string>Configure Greeting View and Glyphs</string>
 				<key>key</key>
-				<string>customImage</string>
-				<key>isGroupToggle</key>
-				<true/>
-				<key>PostNotification</key>
-				<string>com.midnightchips.lockweather.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.lockweather</string>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/lockweather.bundle</string>
-			</dict>
+				<string>lockScreen</string>
+			</dict>	
 
 			<dict>
-				<key>cell</key>
-				<string>PSLinkListCell</string>
-				<key>detail</key>
-				<string>CSListItemsController</string>
-				<key>label</key>
-				<string>Select_Weather_Image</string>
-				<key>key</key>
-				<string>setImageType</string>
-				<key>titlesDataSource</key>
-				<string>getImageType</string>
-				<key>valuesDataSource</key>
-				<string>getImageType</string>
-				<key>PostNotification</key>
-				<string>com.midnightchips.lockweather.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.lockweather</string>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/lockweather.bundle</string>
-				<key>callbackAction</key>
-				<string>refreshImage</string>
-			</dict>
-
-			<dict>
+				<key>action</key>
+				<string>pushToView:</string>
 				<key>cell</key>
 				<string>PSLinkCell</string>
-				<key>cellClass</key>
-				<string>CSColorDisplayCell</string>
-				<key>key</key>
-				<string>glyphColor</string>
+				<key>pushToPlist</key>
+				<string>homeScreen</string>
 				<key>label</key>
-				<string>Set_Glyph_Color</string>
-				<key>fallback</key>
-				<string>FFFFFF</string>
-				<key>alpha</key>
-				<false/>
-				<key>PostNotification</key>
-				<string>com.midnightchips.lockweather.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.lockweather</string>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/lockweather.bundle</string>
-				<key>callbackAction</key>
-				<string>refreshImage</string>
-			</dict>
-
-<!--
-			<dict>
-				<key>detail</key>
-				<string>PSDetailController</string>
-				<key>placeholder</key>
-				<string>7:30</string>
-				<key>datePickerMode</key>
-				<string>timer</string>
-				<key>defaults</key>
-				<string>com.midnightchips.lockweather</string>
-				<key>cell</key>
-				<string>PSEditTextCell</string>
-				<key>cellClass</key>
-				<string>CSPDatePickerCell</string>
-				<key>dateFormat</key>
-				<string>HH:mm</string>
-				<key>label</key>
-				<string>date picker</string>
+				<string>Home Screen</string>
+				<key>sublabel</key>
+				<string>Hide Dock and Folder Icons</string>
 				<key>key</key>
-				<string>dateTest</string>
-				<key>PostNotification</key>
-				<string>com.midnightchips.lockweather.prefschanged</string>
-			</dict>
-			-->
+				<string>homeScreen</string>
+			</dict>	
 
 			<dict>
+				<key>action</key>
+				<string>pushToView:</string>
 				<key>cell</key>
-				<string>PSGroupCell</string>
+				<string>PSLinkCell</string>
+				<key>pushToPlist</key>
+				<string>liveWeather</string>
 				<key>label</key>
-				<string>Blur_Amount</string>
-			</dict>
-
-			<dict>
-				<key>cell</key>
-				<string>PSSliderCell</string>
+				<string>Live Weather</string>
+				<key>sublabel</key>
+				<string>Configure Live Weather Background Settings</string>
 				<key>key</key>
-				<string>blurAmount</string>
-				<key>showValue</key>
-				<true/>
-				<key>min</key>
-				<real>0</real>
-				<key>max</key>
-				<real>30</real>
-				<key>isSegmented</key>
-				<true/>
-				<key>segmentCount</key>
-				<real>30</real>
-				<key>PostNotification</key>
-				<string>com.midnightchips.lockweather.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.lockweather</string>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/lockweather.bundle</string>
-			</dict>
-            
-            <dict>
-                <key>cell</key>
-                <string>PSGroupCell</string>
-            </dict>
-
-            <dict>
-                <key>action</key>
-                <string>resetLoc</string>
-                <key>alignment</key>
-                <string>center</string>
-                <key>cell</key>
-                <string>PSButtonCell</string>
-                <key>label</key>
-                <string>Reset Locations</string>
-            </dict>
+				<string>liveWeather</string>
+			</dict>	
 
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>footerText</key>
-				<string>MidnightChips © 2018</string>
+				<string>MidnightChips &amp; the casle © 2018</string>
 				<key>footerAlignment</key>
 				<integer>1</integer>
 			</dict>
@@ -352,9 +94,9 @@
 				<key>isController</key>
 				<true/>
 				<key>PostNotification</key>
-				<string>com.midnightchips.lockweather.prefschanged</string>
+				<string>com.midnightchips.asteroid.prefschanged</string>
 				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/lockweather.bundle/defaults.plist</string>
+				<string>/Library/PreferenceBundles/Asteroid.bundle/defaults.plist</string>
 				<key>label</key>
 				<string>Backup</string>
 			</dict>
@@ -385,14 +127,14 @@
 				<key>cellClass</key>
 				<string>CSPVersionCell</string>
 				<key>bundleID</key>
-				<string>com.midnightchips.lockweather</string>
+				<string>com.midnightchips.asteroid</string>
 				<key>label</key>
 				<string>Version</string>
 			</dict>
 
 		</array>
 		<key>title</key>
-		<string>LockWeather</string>
+		<string>Asteroid</string>
 	</dict>
 </plist>
 

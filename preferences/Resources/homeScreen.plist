@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+
+		<key>items</key>
+		<array>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Hide Dock</string>
+				<key>sublabel</key>
+				<string>Makes Home Screen Dock Transparent</string>
+				<key>key</key>
+				<string>noDock</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Hide Dock</string>
+				<key>sublabel</key>
+				<string>Makes Home Screen Folders Transparent</string>
+				<key>key</key>
+				<string>noFolders</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>footerText</key>
+				<string>MidnightChips &amp; the casle © 2018</string>
+				<key>footerAlignment</key>
+				<integer>1</integer>
+			</dict>
+
+
+		</array>
+
+		<key>title</key>
+		<string>Lock Screen</string>
+	</dict>
+</plist>

@@ -8,7 +8,7 @@
 		<false/>
 		<key>greetingSize</key>
 		<real>40</real>
-		<key>descriptionSize</key>
+		<key>wDescriptionSize</key>
 		<real>20</real>
 		<key>tempSize</key>
 		<real>50</real>

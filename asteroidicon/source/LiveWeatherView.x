@@ -54,26 +54,29 @@ static WUIWeatherCondition* condition = nil;
                 [self.logo.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4].active = YES;
                 
                 //Live background
-                WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
-                WATodayAutoupdatingLocationModel *todayModel = [[%c(WATodayAutoupdatingLocationModel) alloc] init];
+                if([prefs boolForKey:@"appScreenWeather"]){
+                    WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
+                    WATodayAutoupdatingLocationModel *todayModel = [[%c(WATodayAutoupdatingLocationModel) alloc] init];
                 
-                [todayModel setPreferences:wPrefs];
-                City *city = todayModel.forecastModel.city;
+                    [todayModel setPreferences:wPrefs];
+                    City *city = todayModel.forecastModel.city;
                 
                 
-                self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
-                [self.referenceView.background setCity:city];
-                [[self.referenceView.background condition] resume];
+                    self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
+                    [self.referenceView.background setCity:city];
+                    [[self.referenceView.background condition] resume];
                 
-                self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-                self.referenceView.clipsToBounds = YES;
-                [self addSubview:self.referenceView];
-                [self sendSubviewToBack:self.referenceView];
+                    self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+                    self.referenceView.clipsToBounds = YES;
+                    [self addSubview:self.referenceView];
+                    [self sendSubviewToBack:self.referenceView];
                 
-                [self.referenceView.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:4].active = YES;
-                [self.referenceView.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:-4].active = YES;
-                [self.referenceView.topAnchor constraintEqualToAnchor:self.topAnchor constant:4].active = YES;
-                [self.referenceView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4].active = YES;
+                    [self.referenceView.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:4].active = YES;
+                    [self.referenceView.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:-4].active = YES;
+                    [self.referenceView.topAnchor constraintEqualToAnchor:self.topAnchor constant:4].active = YES;
+                    [self.referenceView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4].active = YES;
+                }
+                
                 
             }];
         });
@@ -90,9 +93,11 @@ static WUIWeatherCondition* condition = nil;
         City *city = todayModel.forecastModel.city;
         
         //self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.bounds];
-        [self.referenceView.background setCity:city];
-        [[self.referenceView.background condition] resume];
-        self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        if([prefs boolForKey:@"appScreenWeather"]){
+            [self.referenceView.background setCity:city];
+            [[self.referenceView.background condition] resume];
+            self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        }
         //[self addSubview:self.referenceView];
         //[self sendSubviewToBack:self.referenceView];
         if(city){

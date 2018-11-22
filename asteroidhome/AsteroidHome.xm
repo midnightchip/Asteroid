@@ -8,8 +8,9 @@
 -(void)updateView;
 @end 
 
+static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
 
-
+%group LiveWeather
 %hook SBHomeScreenView
 %property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
 %property (nonatomic,retain) NSTimer *refreshTimer;
@@ -55,6 +56,7 @@
     
             self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
             [self.referenceView.background setCity:city];
+            [self.referenceView.background setTag:123];
             [[self.referenceView.background condition] resume];
 
             self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -64,6 +66,7 @@
         }
 }
         
+%end 
 %end 
 
 @interface SBIconBlurryBackgroundView : UIView
@@ -75,10 +78,13 @@
 %hook SBFolderIconBackgroundView
 -(void)layoutSubviews{
     %orig;
-    self.hidden = TRUE;
+    if([prefs boolForKey:@"noFolders"]){
+        self.hidden = TRUE;
+    }
 }
 %end 
 
+//Dock 
 @interface SBDockView : UIView 
 @end 
 
@@ -88,8 +94,10 @@
 %hook SBDockView
 -(void)layoutSubviews{
     %orig;
-    MSHookIvar<SBWallpaperEffectView*>(self, "_backgroundView").hidden = YES;
-    MSHookIvar<UIImageView*>(self, "_backgroundImageView").hidden = YES;
+    if([prefs boolForKey:@"noDock"]){
+        MSHookIvar<SBWallpaperEffectView*>(self, "_backgroundView").hidden = YES;
+        MSHookIvar<UIImageView*>(self, "_backgroundImageView").hidden = YES;
+    }
 }
 %end 
 
@@ -99,6 +107,54 @@
 %hook SBHighlightView
 -(void)layoutSubviews{
     %orig;
-    self.hidden = YES;
+    if([prefs boolForKey:@"noDock"]){
+        self.hidden = YES;
+    } 
 }
 %end 
+
+//Hide background accross views
+//Thanks June
+%group WeatherBackground
+%hook WUIDynamicWeatherBackground
+	-(id)gradientLayer{
+		return nil;
+		return %orig;
+	}
+	-(void)setCurrentBackground:(CALayer *)arg1{
+
+	}
+	-(void)setBackgroundCache:(NSCache *)arg1{
+	
+	}
+	/* 11.1.2 Still nees improving */ 
+	-(void)addSublayer:(id)arg1{
+		%orig;
+			if(deviceVersion < 11.3){
+				CALayer* layer = arg1;
+				for(CALayer* firstLayers in layer.sublayers){
+					if(firstLayers.backgroundColor){
+						firstLayers.backgroundColor = [UIColor clearColor].CGColor;
+					}
+					for(CALayer* secLayers in firstLayers.sublayers){
+						for(CALayer* thrLayers in secLayers.sublayers){
+							if([thrLayers isKindOfClass:[CAGradientLayer class]]){
+								thrLayers.hidden = YES;
+							}
+						}
+					}
+				}
+			}
+	}
+%end
+%end 
+
+%ctor{
+    if([prefs boolForKey:@"homeScreenWeather"]){
+        %init(LiveWeather);
+	}
+    if([prefs boolForKey:@"hideWeatherBackground"]){
+        %init(WeatherBackground);
+    }
+    %init(_ungrouped);
+}

@@ -1,7 +1,8 @@
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = AsteroidHome
-AsteroidHome_FILES = AsteroidHome.xm
+AsteroidHome_FILES = AsteroidHome.xm ../source/LWPProvider.m
+AsteroidHome_LDFLAGS += -lCSPreferencesProvider
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 

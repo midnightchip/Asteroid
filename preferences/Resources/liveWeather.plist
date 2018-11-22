@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+
+		<key>items</key>
+		<array>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Enable Lock Screen</string>
+				<key>sublabel</key>
+				<string>Enable/Disable Live Weather on LockScreen</string>
+				<key>key</key>
+				<string>lockScreenWeather</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Enable Home Screen</string>
+				<key>sublabel</key>
+				<string>Enable/Disable Live Weather on HomeScreen</string>
+				<key>key</key>
+				<string>homeScreenWeather</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Enable Live Weather</string>
+				<key>sublabel</key>
+				<string>Enable/Disable Live Weather info on Weather App icon</string>
+				<key>key</key>
+				<string>appIcon</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+				<key>enableSpecifiers</key>
+				<array>
+					<string>appScreenWeather</string>
+				</array>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Enable Weather App Icon Background </string>
+				<key>sublabel</key>
+				<string>Enable/Disable Live Weather Background on Weather App Screen</string>
+				<key>key</key>
+				<string>appScreenWeather</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Hide Live Weather Background</string>
+				<key>sublabel</key>
+				<string>Hides Background of Live Weather, Keeps the Animation</string>
+				<key>key</key>
+				<string>hideWeatherBackground</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+			</dict>
+
+
+			
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>footerText</key>
+				<string>MidnightChips &amp; the casle © 2018</string>
+				<key>footerAlignment</key>
+				<integer>1</integer>
+			</dict>
+
+		</array>
+
+		<key>title</key>
+		<string>Live Weather</string>
+	</dict>
+</plist>

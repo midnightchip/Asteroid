@@ -88,3 +88,9 @@ void pauseAnimation(){
     loadWeatherAnimation();
 }
 %end
+
+%ctor{
+    if([prefs boolForKey:@"lockScreenWeather"]){
+        %init();
+	}
+}

@@ -140,13 +140,8 @@ static WUIWeatherCondition* condition = nil;
 
 %ctor {
 
-	if ([[NSBundle mainBundle].bundleIdentifier isEqualToString:@"com.apple.springboard"]) {
+	if ([[NSBundle mainBundle].bundleIdentifier isEqualToString:@"com.apple.springboard"] && [prefs boolForKey:@"appIcon"]){
 		%init();
-
-		/*int token = 0;
-		notify_register_dispatch("com.cpdigitaldarkroom.liverings.override.remove", &token, dispatch_get_main_queue(), ^(int token) {
-			overrideUsageStrings = NO;
-		});*/
 	}
 
 }
