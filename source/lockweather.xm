@@ -498,64 +498,73 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 
 %new
 -(void) updateLockView {
-    [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
-        
-        // Updating the image icon
-        UIImage *icon;
-        BOOL setColor = FALSE;
-        if(![prefs boolForKey:@"customImage"]){
-            icon = weather[@"kCurrentConditionImage_nc-variant"];
-        }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
-            icon = weather[@"kCurrentConditionImage_white-variant"];
-            setColor = TRUE;
-        }else{
-            icon = weather[@"kCurrentConditionImage_black-variant"];
-            setColor = TRUE;
-        }
-        
-        self.logo.image = icon;
-        if(setColor){
-            self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            [self.logo setTintColor:[prefs colorForKey:@"glyphColor"]];
-        }
-        self.logo.contentMode = UIViewContentModeScaleAspectFit;
-        
-        // Setting the current temperature text
-        if(weather[@"kCurrentTemperatureFahrenheit"] != nil){
-            self.currentTemp.text = weather[@"kCurrentTemperatureForLocale"];
-        }else{
-            self.currentTemp.text = @"Error";
-        }
-        
-        // Updating the Greeting Label
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"HH"];
-        dateFormat.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-        NSDate *currentTime;
-        currentTime = [NSDate date];
-        
-        switch ([[dateFormat stringFromDate:currentTime] intValue]){
-            case 0 ... 4:
-                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent"); //@"Good Evening";
-                break;
-                
-            case 5 ... 11:
-                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Morning" value:@"" table:nil];
-                break;
-                
-            case 12 ... 17:
-                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Afternoon" value:@"" table:nil];
-                break;
-                
-            case 18 ... 24:
-                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent");//@"Good Evening";
-                break;
-        }
-        
-        // Updating the the text of the wDescription
-        self.wDescription.text = weather[@"kCurrentDescription"];
-        self.greetingLabel.textAlignment = NSTextAlignmentCenter;
-    }];
+    
+    WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
+    WATodayAutoupdatingLocationModel *todayModel = [[%c(WATodayAutoupdatingLocationModel) alloc] init];
+    [todayModel setPreferences:wPrefs];
+    City *city = todayModel.forecastModel.city;
+    
+    if(city){
+        [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
+            
+            // Updating the image icon
+            UIImage *icon;
+            BOOL setColor = FALSE;
+            if(![prefs boolForKey:@"customImage"]){
+                icon = weather[@"kCurrentConditionImage_nc-variant"];
+            }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
+                icon = weather[@"kCurrentConditionImage_white-variant"];
+                setColor = TRUE;
+            }else{
+                icon = weather[@"kCurrentConditionImage_black-variant"];
+                setColor = TRUE;
+            }
+            
+            self.logo.image = icon;
+            if(setColor){
+                self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                [self.logo setTintColor:[prefs colorForKey:@"glyphColor"]];
+            }
+            self.logo.contentMode = UIViewContentModeScaleAspectFit;
+            
+            // Setting the current temperature text
+            if(weather[@"kCurrentTemperatureFahrenheit"] != nil){
+                self.currentTemp.text = weather[@"kCurrentTemperatureForLocale"];
+            }else{
+                self.currentTemp.text = @"Error";
+            }
+            
+            // Updating the Greeting Label
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+            [dateFormat setDateFormat:@"HH"];
+            dateFormat.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+            NSDate *currentTime;
+            currentTime = [NSDate date];
+            
+            switch ([[dateFormat stringFromDate:currentTime] intValue]){
+                case 0 ... 4:
+                    self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent"); //@"Good Evening";
+                    break;
+                    
+                case 5 ... 11:
+                    self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Morning" value:@"" table:nil];
+                    break;
+                    
+                case 12 ... 17:
+                    self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Afternoon" value:@"" table:nil];
+                    break;
+                    
+                case 18 ... 24:
+                    self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent");//@"Good Evening";
+                    break;
+            }
+            
+            // Updating the the text of the wDescription
+            self.wDescription.text = weather[@"kCurrentDescription"];
+            self.greetingLabel.textAlignment = NSTextAlignmentCenter;
+        }];
+    }
+    city = nil;
 }
 %end
 

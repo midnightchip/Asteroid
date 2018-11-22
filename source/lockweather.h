@@ -44,28 +44,39 @@
 @property (nonatomic, retain) WFTemperature *low;
 @end
 
+
+@interface WAWeatherCityView
+@property(retain, nonatomic) UILabel *naturalLanguageDescriptionLabel;
+@end
+
+
+@interface WeatherPreferences
++ (id)sharedPreferences;
+- (id)localWeatherCity;
+-(int)loadActiveCity;
+-(NSArray *)loadSavedCities;
+@end
+
+@interface City : NSObject
+@end
+
+
 @interface WAForecastModel
+@property (nonatomic,retain) City * city;
 @property (nonatomic, retain) NSArray *dailyForecasts;
 @end
+
+@interface WATodayAutoupdatingLocationModel
+-(void)setPreferences:(WeatherPreferences *)arg1;
+-(WAForecastModel *)forecastModel;
+@end
+
 
 @interface WALockscreenWidgetViewController : UIViewController
 +(id) sharedInstanceIfExists;
 -(void) updateWeather;
 @property (nonatomic, retain) WAForecastModel *currentForecastModel;
 @property (nonatomic, retain) WATodayPadView *todayView;
-@end
-
-@interface WAWeatherCityView
-@property(retain, nonatomic) UILabel *naturalLanguageDescriptionLabel;
-@end
-
-@interface WeatherPreferences
-+(id) sharedPreferences;
-@end
-
-@interface WATodayAutoupdatingLocationModel
--(id)initWithPreferences:(id)arg1 effectiveBundleIdentifier:(id)arg2 ;
-
 @end
 
 @interface WAWeatherPlatterViewController : UIViewController

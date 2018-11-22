@@ -95,19 +95,22 @@ static WUIWeatherCondition* condition = nil;
         self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         //[self addSubview:self.referenceView];
         //[self sendSubviewToBack:self.referenceView];
-        [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
-            UIImage *icon;
-            icon = weather[@"kCurrentConditionImage"];
-            self.logo.image = icon;
-            self.logo.contentMode = UIViewContentModeScaleAspectFit;
-            self.logo.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            /*self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-             [self.logo setTintColor:[UIColor whiteColor]];*/
-            
-            self.temp.text = weather[@"kCurrentTemperatureForLocale"];
-            self.temp.textColor = [UIColor whiteColor];
-            
-        }];
+        if(city){
+            [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
+                UIImage *icon;
+                icon = weather[@"kCurrentConditionImage"];
+                self.logo.image = icon;
+                self.logo.contentMode = UIViewContentModeScaleAspectFit;
+                self.logo.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+                /*self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                 [self.logo setTintColor:[UIColor whiteColor]];*/
+                
+                self.temp.text = weather[@"kCurrentTemperatureForLocale"];
+                self.temp.textColor = [UIColor whiteColor];
+                
+            }];
+        }
+        city = nil;
     });
     
 }
