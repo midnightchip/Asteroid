@@ -169,7 +169,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
                                         (const void*)self,
                                         updatePreferenceValues,
-                                        CFSTR("com.midnightchips.lockweather.prefschanged"),
+                                        CFSTR("com.midnightchips.asteroid.prefschanged"),
                                         NULL,
                                         CFNotificationSuspensionBehaviorDeliverImmediately);
         
