@@ -490,9 +490,11 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 // Handling a timer fire (refresh weather info)
 %new
 -(void) updateWeather: (NSTimer *) sender {
+    dispatch_async(dispatch_get_main_queue(), ^{
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"weatherTimerUpdate"
-     object:self];
+     object:nil];
+    });
     [self updateLockView];
 }
 

@@ -18,6 +18,7 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
 - (void)layoutSubviews {
     %orig;
     if(!self.referenceView){
+        
         [self updateView];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(weatherTimer:) name:@"weatherTimerUpdate" object:nil];
     }
