@@ -29,8 +29,8 @@ static bool Loaded = NO;
 
 void loadWeatherAnimation(){
 
-	WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
-    City* city = [wPrefs localWeatherCity];
+	
+    City *city = ([prefs boolForKey:@"isLocal"] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
 
 	if(!Loaded){
 	    if(city){

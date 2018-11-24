@@ -2,6 +2,8 @@
 #import <CSWeather/CSWeatherInformationProvider.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <notify.h>
+#import <CoreLocation/CoreLocation.h>
+
 
 @interface UIView (tweak_cat)
 -(id) _viewDelegate;
@@ -45,20 +47,43 @@
 @end
 
 
+
 @interface WAWeatherCityView
 @property(retain, nonatomic) UILabel *naturalLanguageDescriptionLabel;
 @end
 
+@interface City : NSObject
+-(NSMutableArray*)hourlyForecasts;
+-(NSMutableArray*)dayForecasts;
+-(unsigned long long)conditionCode;
+-(NSString *)temperature;
+-(unsigned long long)sunriseTime;
+-(unsigned long long)sunsetTime;
+-(BOOL)isDay;
+-(NSDate*) updateTime;
+@end
+
+@interface WeatherLocationManager : NSObject
++(id)sharedWeatherLocationManager;
+-(BOOL)locationTrackingIsReady;
+-(void)setLocationTrackingReady:(BOOL)arg1 activelyTracking:(BOOL)arg2 watchKitExtension:(id)arg3;
+-(void)setLocationTrackingActive:(BOOL)arg1;
+-(CLLocation*)location;
+-(void)setDelegate:(id)arg1;
+@end
 
 @interface WeatherPreferences
 + (id)sharedPreferences;
 - (id)localWeatherCity;
 -(int)loadActiveCity;
 -(NSArray *)loadSavedCities;
++(id)userDefaultsPersistence;
+-(NSDictionary*)userDefaults;
+-(void)setLocalWeatherEnabled:(BOOL)arg1;
+-(City*)cityFromPreferencesDictionary:(id)arg1;
+-(BOOL)isCelsius;
 @end
 
-@interface City : NSObject
-@end
 
 
 @interface WAForecastModel

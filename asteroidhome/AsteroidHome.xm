@@ -18,7 +18,7 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
 - (void)layoutSubviews {
     %orig;
     if(!self.referenceView){
-        
+
         [self updateView];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(weatherTimer:) name:@"weatherTimerUpdate" object:nil];
     }
@@ -47,7 +47,7 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
     WATodayAutoupdatingLocationModel *todayModel = [[%c(WATodayAutoupdatingLocationModel) alloc] init];
     [todayModel setPreferences:wPrefs];
-    City *city = todayModel.forecastModel.city;
+    City *city = ([prefs boolForKey:@"isLocal"] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
     
     NSLog(@"lock_TWEAK | city: %@",city);
     

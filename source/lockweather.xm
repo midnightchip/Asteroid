@@ -1,5 +1,6 @@
 #include "lockweather.h"
 
+
 //TODO Change today to use the cases in descriptions
 //TODO Fix Blur on lockscreen vs just pulling down notification center
 //TODO make only appear during set times
@@ -504,7 +505,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
     WATodayAutoupdatingLocationModel *todayModel = [[%c(WATodayAutoupdatingLocationModel) alloc] init];
     [todayModel setPreferences:wPrefs];
-    City *city = todayModel.forecastModel.city;
+    City *city = ([prefs boolForKey:@"isLocal"] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
     
     if(city){
         [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
