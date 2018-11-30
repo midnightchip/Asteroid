@@ -47,6 +47,8 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
     WATodayAutoupdatingLocationModel *todayModel = [[%c(WATodayAutoupdatingLocationModel) alloc] init];
     [todayModel setPreferences:wPrefs];
+    City *city = ([prefs boolForKey:@"isLocal"] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
+    /*
     City *city = nil;
     if ([prefs boolForKey:@"isLocal"]){
         
@@ -72,7 +74,7 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
         //city = [[%c(WeatherPreferences) sharedPreferences] localWeatherCity];
     } else {
         city = [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
-    }
+    }*/
     
     NSLog(@"lock_TWEAK | city: %@",city);
     
