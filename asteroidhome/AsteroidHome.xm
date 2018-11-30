@@ -30,7 +30,7 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
                                     repeats:YES];
     */
     
-
+    //[self updateView];
 }
 %new
 - (void) weatherTimer: (NSNotification *)notification{
@@ -47,7 +47,32 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
     WATodayAutoupdatingLocationModel *todayModel = [[%c(WATodayAutoupdatingLocationModel) alloc] init];
     [todayModel setPreferences:wPrefs];
-    City *city = ([prefs boolForKey:@"isLocal"] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
+    City *city = nil;
+    if ([prefs boolForKey:@"isLocal"]){
+        
+        //city = [[%c(WeatherPreferences) sharedPreferences] localWeatherCity];
+        
+        //if([[NSDate date] compare:[[city updateTime] dateByAddingTimeInterval:(.5)*3600]] == NSOrderedDescending) {
+            WeatherLocationManager *weatherLocationManager = [%c(WeatherLocationManager) sharedWeatherLocationManager];
+            
+            CLLocationManager *locationManager = [[CLLocationManager alloc]init];
+            [weatherLocationManager setDelegate:locationManager];
+            
+            if(![weatherLocationManager locationTrackingIsReady]) {
+                [weatherLocationManager setLocationTrackingReady:YES activelyTracking:NO watchKitExtension:nil];
+            }
+            
+            [[%c(WeatherPreferences) sharedPreferences] setLocalWeatherEnabled:YES];
+            [weatherLocationManager setLocationTrackingActive:YES];
+            [[%c(TWCLocationUpdater) sharedLocationUpdater] updateWeatherForLocation:[weatherLocationManager location] city:city];
+            [weatherLocationManager setLocationTrackingActive:NO];
+        city = todayModel.forecastModel.city;
+        //}
+        
+        //city = [[%c(WeatherPreferences) sharedPreferences] localWeatherCity];
+    } else {
+        city = [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
+    }
     
     NSLog(@"lock_TWEAK | city: %@",city);
     

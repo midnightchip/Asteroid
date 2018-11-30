@@ -51,6 +51,10 @@
 -(BOOL)isCelsius;
 @end
 
+@interface TWCLocationUpdater
++(id)sharedLocationUpdater;
+-(void)updateWeatherForLocation:(id)arg1 city:(id)arg2 ;
+@end
 
 @interface WAForecastModel
 @property (nonatomic,retain) City * city;
