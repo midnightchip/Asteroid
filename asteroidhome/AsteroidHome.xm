@@ -46,6 +46,8 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     
     //City* city = [wPrefs localWeatherCity];
     
+    
+    //This sets up local weather
     WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
     self.todayModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: wPrefs effectiveBundleIdentifier:@"com.apple.weather"];
     
