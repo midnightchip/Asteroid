@@ -47,7 +47,7 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     //City* city = [wPrefs localWeatherCity];
     
     WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
-    self.todayModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: wPrefs effectiveBundleIdentifier:@"com.apple.springboard"];
+    self.todayModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: wPrefs effectiveBundleIdentifier:@"com.apple.weather"];
     
     self.todayModel.isLocationTrackingEnabled = YES;
     [self.todayModel.locationManager forceLocationUpdate];
