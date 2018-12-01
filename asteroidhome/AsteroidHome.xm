@@ -63,43 +63,15 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     
     //[[%c(WATodayAutoupdatingLocationModel) alloc] init];
     //[todayModel setPreferences:wPrefs];
-    City *city = ([prefs boolForKey:@"isLocal"] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
+    City *city = ([prefs boolForKey:@"isLocal"] ? self.todayModel.forecastModel.city : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
     
     //City *city = todayModel.forecastModel.city;
     
    // WALockscreenWidgetViewController *weatherCont = [[NSClassFromString(@"WALockscreenWidgetViewController") alloc] init];
     
-    [city update];
+    //[city update];
     
-    NSLog(@"lock_TWEAK | city: %@ and %@ request: %@",city, self.todayModel.forecastModel.city, self.todayModel.geocodeRequest);
-    /*
-    City *city = nil;
-    if ([prefs boolForKey:@"isLocal"]){
-        
-        //city = [[%c(WeatherPreferences) sharedPreferences] localWeatherCity];
-        
-        //if([[NSDate date] compare:[[city updateTime] dateByAddingTimeInterval:(.5)*3600]] == NSOrderedDescending) {
-            WeatherLocationManager *weatherLocationManager = [%c(WeatherLocationManager) sharedWeatherLocationManager];
-            
-            CLLocationManager *locationManager = [[CLLocationManager alloc]init];
-            [weatherLocationManager setDelegate:locationManager];
-            
-            if(![weatherLocationManager locationTrackingIsReady]) {
-                [weatherLocationManager setLocationTrackingReady:YES activelyTracking:NO watchKitExtension:nil];
-            }
-            
-            [[%c(WeatherPreferences) sharedPreferences] setLocalWeatherEnabled:YES];
-            [weatherLocationManager setLocationTrackingActive:YES];
-            [[%c(TWCLocationUpdater) sharedLocationUpdater] updateWeatherForLocation:[weatherLocationManager location] city:city];
-            [weatherLocationManager setLocationTrackingActive:NO];
-        city = todayModel.forecastModel.city;
-        //}
-        
-        //city = [[%c(WeatherPreferences) sharedPreferences] localWeatherCity];
-    } else {
-        city = [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
-    }*/
-
+    NSLog(@"lock_TWEAK | city: %@ request: %@",city, self.todayModel.geocodeRequest);
     
         //if (city){
             NSLog(@"lock_TWEAK | adding to superview");
@@ -114,7 +86,7 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
             self.referenceView.clipsToBounds = YES;
             [self addSubview:self.referenceView];
             [self sendSubviewToBack:self.referenceView];
-       // }
+       //}
 }
         
 %end 
