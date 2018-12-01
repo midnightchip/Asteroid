@@ -49,8 +49,10 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
     self.todayModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: wPrefs effectiveBundleIdentifier:@"com.apple.weather"];
     
-    self.todayModel.isLocationTrackingEnabled = YES;
     [self.todayModel.locationManager forceLocationUpdate];
+    [self.todayModel _executeLocationUpdateForLocalWeatherCityWithCompletion:^{nil;}];
+
+    
     
     //[[%c(WATodayAutoupdatingLocationModel) alloc] init];
     //[todayModel setPreferences:wPrefs];
@@ -62,7 +64,7 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     
     [city update];
     
-    NSLog(@"lock_TWEAK | city: %@ and %@ date: %@",city, self.todayModel.forecastModel.city, self.todayModel.lastUpdateDate);
+    NSLog(@"lock_TWEAK | city: %@ and %@ request: %@",city, self.todayModel.forecastModel.city, self.todayModel.geocodeRequest);
     /*
     City *city = nil;
     if ([prefs boolForKey:@"isLocal"]){

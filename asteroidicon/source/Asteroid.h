@@ -69,12 +69,22 @@
 
 @end
 
+@interface WFLocation
+
+@end
+
+@interface WFGeocodeRequest
+@property (retain) WFLocation * geocodedResult;
+@end
+
 @interface WATodayAutoupdatingLocationModel : WATodayModel
 -(void)setPreferences:(WeatherPreferences *)arg1;
 -(WAForecastModel *)forecastModel;
 @property (assign,nonatomic) unsigned long long citySource;
 @property (nonatomic,retain) WeatherLocationManager * locationManager;
-@property (assign,nonatomic) BOOL isLocationTrackingEnabled;    
+@property (assign,nonatomic) BOOL isLocationTrackingEnabled;
+-(void)_executeLocationUpdateForLocalWeatherCityWithCompletion:(/*^block*/id)arg1 ;
+@property (nonatomic,retain) WFGeocodeRequest * geocodeRequest;
 @end
 @interface WALockscreenWidgetViewController : UIViewController
 @property (nonatomic,retain) WATodayModel * todayModel;
