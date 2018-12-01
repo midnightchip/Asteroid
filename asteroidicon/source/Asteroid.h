@@ -26,6 +26,7 @@
 -(NSString *)temperature;
 -(unsigned long long)sunriseTime;
 -(unsigned long long)sunsetTime;
+@property (assign,nonatomic) BOOL isLocalWeatherCity;
 -(BOOL)isDay;
 -(void) update;
 -(NSDate*) updateTime;
@@ -60,13 +61,20 @@
 
 @interface WAForecastModel
 @property (nonatomic,retain) City * city;
+-(BOOL)isPopulated;
+
 @end
 
 @interface WATodayModel
 +(id)autoupdatingLocationModelWithPreferences:(id)arg1 effectiveBundleIdentifier:(id)arg2 ;
 -(void)_fireTodayModelWantsUpdate;
 -(BOOL)executeModelUpdateWithCompletion:(/*^block*/id)arg1 ;
-@property (nonatomic,retain) NSDate * lastUpdateDate;  
+@property (nonatomic,retain) NSDate * lastUpdateDate;
++(id)modelWithLocation:(id)arg1;
+@property (nonatomic,retain) WAForecastModel * forecastModel;
+-(id)location;
+-(void)_executeForecastRetrievalForLocation:(id)arg1 completion:(/*^block*/id)arg2 ;
+
 
 @end
 
@@ -86,8 +94,12 @@
 @property (nonatomic,retain) WeatherLocationManager * locationManager;
 @property (assign,nonatomic) BOOL isLocationTrackingEnabled;
 -(void)_executeLocationUpdateForLocalWeatherCityWithCompletion:(/*^block*/id)arg1 ;
+-(void)_executeLocationUpdateWithCompletion:(/*^block*/id)arg1;
 @property (nonatomic,retain) WFGeocodeRequest * geocodeRequest;
+-(void)_willDeliverForecastModel:(id)arg1 ;
 @end
+
+
 @interface WALockscreenWidgetViewController : UIViewController
 @property (nonatomic,retain) WATodayModel * todayModel;
 @end

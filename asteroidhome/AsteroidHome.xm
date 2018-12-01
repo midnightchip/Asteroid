@@ -1,8 +1,10 @@
 #import "../asteroidicon/source/Asteroid.h"
+#import <objc/message.h>
 @interface SBHomeScreenView : UIView
 @property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
 @property (nonatomic,retain) NSTimer *refreshTimer;
 @property (nonatomic, retain) WATodayAutoupdatingLocationModel *todayModel;
+-(void) updateView2: (WAForecastModel *) forecast;
 @end 
 
 @interface SBHomeScreenView (Weather)
@@ -39,54 +41,64 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     [self updateView];
 }
 
+%new
+-(void) updateView2: (WAForecastModel *) forecast{
+    
+    [self.referenceView removeFromSuperview];
+    
+    self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
+    [self.referenceView.background setCity:forecast.city];
+    [self.referenceView.background setTag:123];
+    [[self.referenceView.background condition] resume];
+    
+    self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.referenceView.clipsToBounds = YES;
+    [self addSubview:self.referenceView];
+    [self sendSubviewToBack:self.referenceView];
+    
+    NSLog(@"lock_TWEAK | %@", forecast.city);
+}
+
 %new 
 -(void)updateView{
+    
     NSLog(@"lock_TWEAK | updateView");
-    //WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
-    
-    //City* city = [wPrefs localWeatherCity];
-    
     
     //This sets up local weather
+    
     WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
     self.todayModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: wPrefs effectiveBundleIdentifier:@"com.apple.weather"];
     
     [self.todayModel.locationManager forceLocationUpdate];
-    [self.todayModel _executeLocationUpdateForLocalWeatherCityWithCompletion:^{[self.todayModel executeModelUpdateWithCompletion:^{nil;}];
+    [self.todayModel _executeLocationUpdateForLocalWeatherCityWithCompletion:^{
+        [self.todayModel _executeLocationUpdateWithCompletion:^{
+            if(self.todayModel.geocodeRequest.geocodedResult){
+                WATodayModel *modelFromLocation = [%c(WATodayModel) modelWithLocation:self.todayModel.geocodeRequest.geocodedResult];
+                [modelFromLocation executeModelUpdateWithCompletion:^{
+                    [modelFromLocation _executeForecastRetrievalForLocation:self.todayModel.geocodeRequest.geocodedResult completion:^{
+                        [self.todayModel _willDeliverForecastModel:modelFromLocation.forecastModel];
+                        self.todayModel.forecastModel = modelFromLocation.forecastModel;
+                        [self updateView2:modelFromLocation.forecastModel];
+                    }];
+                }];
+            } else NSLog(@"lock_TWEAK | didnt work");
+        }];
         
     }];
     
-    
-    
-
-    
-    
-    //[[%c(WATodayAutoupdatingLocationModel) alloc] init];
-    //[todayModel setPreferences:wPrefs];
-    City *city = ([prefs boolForKey:@"isLocal"] ? self.todayModel.forecastModel.city : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
-    
-    //City *city = todayModel.forecastModel.city;
+    //City *city = ([prefs boolForKey:@"isLocal"] ? self.todayModel.forecastModel.city : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
     
    // WALockscreenWidgetViewController *weatherCont = [[NSClassFromString(@"WALockscreenWidgetViewController") alloc] init];
     
     //[city update];
     
-    NSLog(@"lock_TWEAK | city: %@ request: %@",city, self.todayModel.geocodeRequest);
+    //NSLog(@"lock_TWEAK | city: %@ request: %@",city, [wPrefs localWeatherCity]);
     
         //if (city){
             NSLog(@"lock_TWEAK | adding to superview");
-            [self.referenceView removeFromSuperview];
     
-            self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
-            [self.referenceView.background setCity:city];
-            [self.referenceView.background setTag:123];
-            [[self.referenceView.background condition] resume];
-
-            self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            self.referenceView.clipsToBounds = YES;
-            [self addSubview:self.referenceView];
-            [self sendSubviewToBack:self.referenceView];
        //}
+    
 }
         
 %end 
@@ -172,6 +184,123 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
 %end
 %end 
 
+%hook WATodayAutoupdatingLocationModel
+-(id)initWithPreferences:(id)arg1 effectiveBundleIdentifier:(id)arg2 {
+    NSLog(@"methodHook | 1 %@",self);
+    return %orig;
+}
+-(void)setLocationServicesActive:(BOOL)arg1 {
+    %orig;
+    NSLog(@"methodHook | 2 %@",self);
+}
+-(id)forecastModel{
+    NSLog(@"methodHook | 3 %@ , %@",self, %orig);
+    return %orig;
+}
+-(void)_executeLocationUpdateWithCompletion:(/*^block*/id)arg1 {
+    %orig;
+    NSLog(@"methodHook | 4 %@",self);
+}
+-(void)_willDeliverForecastModel:(id)arg1 {
+    %orig;
+    NSLog(@"methodHook | 5 %@, %@", self, arg1);
+}
+-(void)_persistStateWithModel:(id)arg1 {
+    %orig;
+    NSLog(@"methodHook | 6 %@",self);
+}
+-(void)setCitySource:(unsigned long long)arg1 fireNotification:(BOOL)arg2 {
+    %orig;
+    NSLog(@"methodHook | 7 %@",self);
+}
+-(void)_weatherPreferencesWereSynchronized:(id)arg1 {
+    %orig;
+    NSLog(@"methodHook | 8 %@",self);
+}
+-(void)_teardownLocationManager{
+    %orig;
+    NSLog(@"methodHook | 9 %@",self);
+}
+-(BOOL)_reloadForecastData:(BOOL)arg1 {
+    NSLog(@"methodHook | 10 %@",self);
+    return %orig;
+}
+-(void)_kickstartLocationManager{
+    %orig;
+    NSLog(@"methodHook | 11 %@",self);
+}
+-(void)setIsLocationTrackingEnabled:(BOOL)arg1 {
+    %orig;
+    NSLog(@"methodHook | 12 %@",self);
+}
+-(id)WeatherLocationManagerGenerator{
+    NSLog(@"methodHook | 13 %@",self);
+    return %orig;
+}
+-(unsigned long long)citySource{
+    NSLog(@"methodHook | 14 %@",self);
+    return %orig;
+}
+-(void)_executeLocationUpdateForLocalWeatherCityWithCompletion:(/*^block*/id)arg1 {
+    %orig;
+    NSLog(@"methodHook | 15 %@",self);
+}
+-(void)_executeLocationUpdateForFirstWeatherCityWithCompletion:(/*^block*/id)arg1 {
+    %orig;
+    NSLog(@"methodHook | 16 %@",self);
+}
+-(void)ubiquitousDefaultsDidChange:(id)arg1 {
+    %orig;
+    NSLog(@"methodHook | 17 %@",self);
+}
+-(BOOL)isLocationTrackingEnabled{
+    NSLog(@"methodHook | 18 %@",self);
+    return %orig;
+}
+-(BOOL)locationServicesActive{
+    NSLog(@"methodHook | 19 %@",self);
+    return %orig;
+}
+
+-(void)setPreferences:(WeatherPreferences *)arg1 {
+    %orig;
+    NSLog(@"methodHook | 22 %@",self);
+}
+-(WeatherPreferences *)preferences{
+    NSLog(@"methodHook | 23 %@",self);
+    return %orig;
+}
+-(void)locationManager:(id)arg1 didChangeAuthorizationStatus:(int)arg2 {
+    %orig;
+    NSLog(@"methodHook | 24 manager %@ %@", arg1, self);
+}
+-(void)locationManager:(id)arg1 didUpdateLocations:(id)arg2 {
+    %orig;
+    NSLog(@"methodHook | 25 manager %@ locaton %@", arg1, self);
+}
+-(void)setWeatherLocationManagerGenerator:(id)arg1 {
+    %orig;
+    NSLog(@"methodHook | 26 %@",self);
+}
+-(WFGeocodeRequest *)geocodeRequest{
+    NSLog(@"methodHook | 27 %@",self);
+    return %orig;
+}
+-(void)setGeocodeRequest:(WFGeocodeRequest *)arg1 {
+    %orig;
+    NSLog(@"methodHook | 28 %@",self);
+}
+-(WeatherLocationManager *)locationManager{
+    NSLog(@"methodHook | 29 %@",self);
+    return %orig;
+}
+-(void)setLocationManager:(WeatherLocationManager *)arg1 {
+    %orig;
+    NSLog(@"methodHook | 30 %@",self);
+}
+
+%end
+
 %ctor{
     if([prefs boolForKey:@"homeScreenWeather"]){
         %init(LiveWeather);
@@ -180,4 +309,6 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
         %init(WeatherBackground);
     }
     %init(_ungrouped);
+    
+    dlopen("/System/Library/PrivateFrameworks/Weather.framework/Weather", RTLD_NOW);
 }
