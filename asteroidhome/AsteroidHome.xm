@@ -50,7 +50,12 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     self.todayModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: wPrefs effectiveBundleIdentifier:@"com.apple.weather"];
     
     [self.todayModel.locationManager forceLocationUpdate];
-    [self.todayModel _executeLocationUpdateForLocalWeatherCityWithCompletion:^{nil;}];
+    [self.todayModel _executeLocationUpdateForLocalWeatherCityWithCompletion:^{[self.todayModel executeModelUpdateWithCompletion:^{nil;}];
+        
+    }];
+    
+    
+    
 
     
     

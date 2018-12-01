@@ -65,6 +65,7 @@
 @interface WATodayModel
 +(id)autoupdatingLocationModelWithPreferences:(id)arg1 effectiveBundleIdentifier:(id)arg2 ;
 -(void)_fireTodayModelWantsUpdate;
+-(BOOL)executeModelUpdateWithCompletion:(/*^block*/id)arg1 ;
 @property (nonatomic,retain) NSDate * lastUpdateDate;  
 
 @end
@@ -78,6 +79,7 @@
 @end
 
 @interface WATodayAutoupdatingLocationModel : WATodayModel
+-(BOOL)_reloadForecastData:(BOOL)arg1 ;
 -(void)setPreferences:(WeatherPreferences *)arg1;
 -(WAForecastModel *)forecastModel;
 @property (assign,nonatomic) unsigned long long citySource;
