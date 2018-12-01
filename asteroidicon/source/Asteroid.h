@@ -27,6 +27,7 @@
 -(unsigned long long)sunriseTime;
 -(unsigned long long)sunsetTime;
 -(BOOL)isDay;
+-(void) update;
 -(NSDate*) updateTime;
 @end
 
@@ -37,6 +38,7 @@
 -(void)setLocationTrackingActive:(BOOL)arg1;
 -(CLLocation*)location;
 -(void)setDelegate:(id)arg1;
+-(void)forceLocationUpdate;
 @end
 
 @interface WeatherPreferences
@@ -60,9 +62,21 @@
 @property (nonatomic,retain) City * city;
 @end
 
-@interface WATodayAutoupdatingLocationModel
--(void)setPreferences:(WeatherPreferences *)arg1;
--(WAForecastModel *)forecastModel;
+@interface WATodayModel
++(id)autoupdatingLocationModelWithPreferences:(id)arg1 effectiveBundleIdentifier:(id)arg2 ;
+-(void)_fireTodayModelWantsUpdate;
+@property (nonatomic,retain) NSDate * lastUpdateDate;  
+
 @end
 
+@interface WATodayAutoupdatingLocationModel : WATodayModel
+-(void)setPreferences:(WeatherPreferences *)arg1;
+-(WAForecastModel *)forecastModel;
+@property (assign,nonatomic) unsigned long long citySource;
+@property (nonatomic,retain) WeatherLocationManager * locationManager;
+@property (assign,nonatomic) BOOL isLocationTrackingEnabled;    
+@end
+@interface WALockscreenWidgetViewController : UIViewController
+@property (nonatomic,retain) WATodayModel * todayModel;
+@end
 

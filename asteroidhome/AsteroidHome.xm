@@ -2,6 +2,7 @@
 @interface SBHomeScreenView : UIView
 @property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
 @property (nonatomic,retain) NSTimer *refreshTimer;
+@property (nonatomic, retain) WATodayAutoupdatingLocationModel *todayModel;
 @end 
 
 @interface SBHomeScreenView (Weather)
@@ -14,6 +15,7 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
 %hook SBHomeScreenView
 %property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
 %property (nonatomic,retain) NSTimer *refreshTimer;
+%property (nonatomic, retain) WATodayAutoupdatingLocationModel *todayModel;
 
 - (void)layoutSubviews {
     %orig;
@@ -45,9 +47,22 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     //City* city = [wPrefs localWeatherCity];
     
     WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
-    WATodayAutoupdatingLocationModel *todayModel = [[%c(WATodayAutoupdatingLocationModel) alloc] init];
-    [todayModel setPreferences:wPrefs];
+    self.todayModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: wPrefs effectiveBundleIdentifier:@"com.apple.springboard"];
+    
+    self.todayModel.isLocationTrackingEnabled = YES;
+    [self.todayModel.locationManager forceLocationUpdate];
+    
+    //[[%c(WATodayAutoupdatingLocationModel) alloc] init];
+    //[todayModel setPreferences:wPrefs];
     City *city = ([prefs boolForKey:@"isLocal"] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
+    
+    //City *city = todayModel.forecastModel.city;
+    
+   // WALockscreenWidgetViewController *weatherCont = [[NSClassFromString(@"WALockscreenWidgetViewController") alloc] init];
+    
+    [city update];
+    
+    NSLog(@"lock_TWEAK | city: %@ and %@ date: %@",city, self.todayModel.forecastModel.city, self.todayModel.lastUpdateDate);
     /*
     City *city = nil;
     if ([prefs boolForKey:@"isLocal"]){
@@ -75,10 +90,9 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     } else {
         city = [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
     }*/
+
     
-    NSLog(@"lock_TWEAK | city: %@",city);
-    
-        if (city){
+        //if (city){
             NSLog(@"lock_TWEAK | adding to superview");
             [self.referenceView removeFromSuperview];
     
@@ -91,7 +105,7 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
             self.referenceView.clipsToBounds = YES;
             [self addSubview:self.referenceView];
             [self sendSubviewToBack:self.referenceView];
-        }
+       // }
 }
         
 %end 
