@@ -313,7 +313,13 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                                                            userInfo:nil
                                                             repeats:YES];
         // making sure the weather is updated once
-        [self updateLockView];
+        double delayInSeconds = 4.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        
+        dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+            [self updateLockView];
+        });
+        
     }
     
 }
