@@ -4,11 +4,12 @@
 @property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
 @property (nonatomic,retain) NSTimer *refreshTimer;
 @property (nonatomic, retain) WATodayAutoupdatingLocationModel *todayModel;
--(void) updateView2: (WAForecastModel *) forecast;
+-(void) updateView: (City *) city;
 @end 
 
 @interface SBHomeScreenView (Weather)
--(void)updateView;
+-(void)updateView: (City *) city;
+-(void) updateWeatherData;
 @end 
 
 static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
@@ -23,32 +24,24 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     %orig;
     if(!self.referenceView){
 
-        [self updateView];
+        [self updateWeatherData];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(weatherTimer:) name:@"weatherTimerUpdate" object:nil];
     }
-    /*
-    [NSTimer scheduledTimerWithTimeInterval:300.0f
-                                     target:self
-                                   selector:@selector(updateView)
-                                   userInfo:nil
-                                    repeats:YES];
-    */
-    
-    //[self updateView];
 }
 %new
 - (void) weatherTimer: (NSNotification *)notification{
-    [self updateView];
+    [self updateWeatherData];
 }
 
 %new
--(void) updateView2: (WAForecastModel *) forecast{
+-(void) updateView: (City *) city{
     
     [self.referenceView removeFromSuperview];
     
     self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
-    [self.referenceView.background setCity:forecast.city];
+    [self.referenceView.background setCity:city];
     [self.referenceView.background setTag:123];
+    
     [[self.referenceView.background condition] resume];
     
     self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -56,49 +49,33 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     [self addSubview:self.referenceView];
     [self sendSubviewToBack:self.referenceView];
     
-    NSLog(@"lock_TWEAK | %@", forecast.city);
+    NSLog(@"lock_TWEAK | %@", city);
 }
 
 %new 
--(void)updateView{
+-(void)updateWeatherData{
     
     NSLog(@"lock_TWEAK | updateView");
     
-    //This sets up local weather
-    
-    WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
-    self.todayModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: wPrefs effectiveBundleIdentifier:@"com.apple.weather"];
-    
-    [self.todayModel.locationManager forceLocationUpdate];
-    [self.todayModel _executeLocationUpdateForLocalWeatherCityWithCompletion:^{
-        [self.todayModel _executeLocationUpdateWithCompletion:^{
+    if([prefs boolForKey:@"isLocal"]){
+        //This sets up local weather, and anyone on github better appreciate this - the casle
+        WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
+        self.todayModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: wPrefs effectiveBundleIdentifier:@"com.apple.weather"];
+        [self.todayModel.locationManager forceLocationUpdate];
+        [self.todayModel _executeLocationUpdateForLocalWeatherCityWithCompletion:^{
             if(self.todayModel.geocodeRequest.geocodedResult){
                 WATodayModel *modelFromLocation = [%c(WATodayModel) modelWithLocation:self.todayModel.geocodeRequest.geocodedResult];
                 [modelFromLocation executeModelUpdateWithCompletion:^{
-                    [modelFromLocation _executeForecastRetrievalForLocation:self.todayModel.geocodeRequest.geocodedResult completion:^{
-                        [self.todayModel _willDeliverForecastModel:modelFromLocation.forecastModel];
-                        self.todayModel.forecastModel = modelFromLocation.forecastModel;
-                        [self updateView2:modelFromLocation.forecastModel];
-                    }];
+                    [self.todayModel _willDeliverForecastModel:modelFromLocation.forecastModel];
+                    self.todayModel.forecastModel = modelFromLocation.forecastModel;
+                    [self updateView:modelFromLocation.forecastModel.city];
                 }];
             } else NSLog(@"lock_TWEAK | didnt work");
         }];
         
-    }];
-    
-    //City *city = ([prefs boolForKey:@"isLocal"] ? self.todayModel.forecastModel.city : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
-    
-   // WALockscreenWidgetViewController *weatherCont = [[NSClassFromString(@"WALockscreenWidgetViewController") alloc] init];
-    
-    //[city update];
-    
-    //NSLog(@"lock_TWEAK | city: %@ request: %@",city, [wPrefs localWeatherCity]);
-    
-        //if (city){
-            NSLog(@"lock_TWEAK | adding to superview");
-    
-       //}
-    
+    } else {
+        [self updateView:[[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]];
+    }
 }
         
 %end 

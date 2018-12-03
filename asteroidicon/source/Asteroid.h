@@ -59,7 +59,7 @@
 -(void)updateWeatherForLocation:(id)arg1 city:(id)arg2 ;
 @end
 
-@interface WAForecastModel
+@interface WAForecastModel : NSObject
 @property (nonatomic,retain) City * city;
 -(BOOL)isPopulated;
 
