@@ -411,8 +411,6 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                 if([view isKindOfClass: %c(UILabel)]){
                     [self tc_animateFilter:view];
                 }
-                
-                
             }
             ((UIGestureRecognizer *)((NSArray *)[self.weather _gestureRecognizers])[0]).enabled = NO; // Swipe
             
@@ -570,6 +568,12 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         }];
     }
     city = nil;
+}
+%end
+
+%hook SBIdleTimerDefaults
+-(double)minimumLockscreenIdleTime {
+    return tc_editing ? 1000 : %orig;
 }
 %end
 

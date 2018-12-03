@@ -172,3 +172,7 @@
 - (long long)dismissalSlidingMode;
 //@property (nonatomic, retain) SBCoverSheetPanelBackgroundContainerView *panelBackgroundContainerView;
 @end
+
+@interface SBIdleTimerDefaults
+-(double)minimumLockscreenIdleTime;
+@end
