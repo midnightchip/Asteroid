@@ -27,11 +27,7 @@ static WUIWeatherCondition* condition = nil;
 static UIView* weatherAnimation = nil;
 static bool Loaded = NO;
 
-void loadWeatherAnimation(){
-
-	
-    City *city = ([prefs boolForKey:@"isLocal"] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
-
+void loadWeatherAnimation(City *city){
 	if(!Loaded){
 	    if(city){
 		    weatherAnimation = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
@@ -65,6 +61,18 @@ void loadWeatherAnimation(){
 	}
 }
 
+void loadCityForView(){
+    if([prefs boolForKey:@"isLocal"]){
+        AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
+        [weatherModel updateWeatherDataWithCompletion:^{
+            loadWeatherAnimation(weatherModel.city);
+        }];
+    } else {
+        City *city = [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
+        loadWeatherAnimation(city);
+    }
+}
+
 /* remove view from screen */
 void pauseAnimation(){
 	[condition pause];
@@ -77,7 +85,7 @@ void pauseAnimation(){
 		if(arg1){
 			pauseAnimation();
 		}else{
-			loadWeatherAnimation();
+            loadCityForView();
 		}
 	}
 %end
@@ -85,7 +93,7 @@ void pauseAnimation(){
 %hook SpringBoard
 -(void)applicationDidFinishLaunching:(id)application{
     %orig;
-    loadWeatherAnimation();
+    loadCityForView();
 }
 %end
 

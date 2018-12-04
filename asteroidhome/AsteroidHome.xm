@@ -2,14 +2,11 @@
 #import <objc/message.h>
 @interface SBHomeScreenView : UIView
 @property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
-@property (nonatomic,retain) NSTimer *refreshTimer;
-@property (nonatomic, retain) WATodayAutoupdatingLocationModel *todayModel;
--(void) updateView: (City *) city;
+@property (nonatomic, retain) AWeatherModel *weatherModel;
 @end 
 
 @interface SBHomeScreenView (Weather)
--(void)updateView: (City *) city;
--(void) updateWeatherData;
+-(void)updateView;
 @end 
 
 static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
@@ -17,29 +14,29 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
 %group LiveWeather
 %hook SBHomeScreenView
 %property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
-%property (nonatomic,retain) NSTimer *refreshTimer;
-%property (nonatomic, retain) WATodayAutoupdatingLocationModel *todayModel;
+%property (nonatomic, retain) AWeatherModel *weatherModel;
 
 - (void)layoutSubviews {
     %orig;
     if(!self.referenceView){
-
-        [self updateWeatherData];
+        self.weatherModel = [%c(AWeatherModel) sharedInstance];
+        [self.weatherModel updateWeatherDataWithCompletion:^{
+            [self updateView];
+        }];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(weatherTimer:) name:@"weatherTimerUpdate" object:nil];
     }
 }
 %new
 - (void) weatherTimer: (NSNotification *)notification{
-    [self updateWeatherData];
+    [self updateView];
 }
 
 %new
--(void) updateView: (City *) city{
-    
+-(void) updateView{
     [self.referenceView removeFromSuperview];
     
     self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
-    [self.referenceView.background setCity:city];
+    [self.referenceView.background setCity:self.weatherModel.city];
     [self.referenceView.background setTag:123];
     
     [[self.referenceView.background condition] resume];
@@ -49,33 +46,7 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     [self addSubview:self.referenceView];
     [self sendSubviewToBack:self.referenceView];
     
-    NSLog(@"lock_TWEAK | %@", city);
-}
-
-%new 
--(void)updateWeatherData{
-    
-    NSLog(@"lock_TWEAK | updateView");
-    
-    if([prefs boolForKey:@"isLocal"]){
-        //This sets up local weather, and anyone on github better appreciate this - the casle
-        WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
-        self.todayModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: wPrefs effectiveBundleIdentifier:@"com.apple.weather"];
-        [self.todayModel.locationManager forceLocationUpdate];
-        [self.todayModel _executeLocationUpdateForLocalWeatherCityWithCompletion:^{
-            if(self.todayModel.geocodeRequest.geocodedResult){
-                WATodayModel *modelFromLocation = [%c(WATodayModel) modelWithLocation:self.todayModel.geocodeRequest.geocodedResult];
-                [modelFromLocation executeModelUpdateWithCompletion:^{
-                    [self.todayModel _willDeliverForecastModel:modelFromLocation.forecastModel];
-                    self.todayModel.forecastModel = modelFromLocation.forecastModel;
-                    [self updateView:modelFromLocation.forecastModel.city];
-                }];
-            } else NSLog(@"lock_TWEAK | didnt work");
-        }];
-        
-    } else {
-        [self updateView:[[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]];
-    }
+    NSLog(@"lock_TWEAK | %@", self.weatherModel.city);
 }
         
 %end 

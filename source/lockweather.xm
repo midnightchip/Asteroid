@@ -1,6 +1,5 @@
 #include "lockweather.h"
 
-
 //TODO Change today to use the cases in descriptions
 //TODO Fix Blur on lockscreen vs just pulling down notification center
 //TODO make only appear during set times
@@ -125,11 +124,9 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 %property (nonatomic, retain) UILabel *currentTemp;
 %property (retain, nonatomic) UIVisualEffectView *blurView;
 %property (retain, nonatomic) UIButton *dismissButton;
-%property (retain, nonatomic) WALockscreenWidgetViewController *weatherCont;
-%property (retain, nonatomic) NSTimer *refreshTimer;
 %property (retain, nonatomic) NSTimer *inactiveTimer;
 %property (nonatomic, retain) NSDictionary *centerDict;
-%property (nonatomic, retain) WAWeatherPlatterViewController *weatherController;
+%property (nonatomic, retain) AWeatherModel *weatherModel;
 
 %property (nonatomic, retain) UILabel *notifcationLabel;
 
@@ -166,6 +163,8 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             
         }];
         
+        // Registering observer for weather update
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateWeather:) name:@"weatherTimerUpdate" object:nil];
         
         CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
                                         (const void*)self,
@@ -293,36 +292,12 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         if(savedCenterData[@"notificationLabel"]){
             self.notifcationLabel.center = ((NSValue*)savedCenterData[@"notificationLabel"]).CGPointValue;
         }
-        
-        
-    }
-    /*
-     if(!self.weatherController){
-     WATodayAutoUpdatingLocationModel *locModel = [[%c(WATodayAutoUpdatingLocationModel) alloc] initWithPreferences: [%c(WeatherPreferences) sharedPreferences] effectiveBundleIdentifier: @"com.apple.weather"];
-     self.weatherController = [[%c(WAWeatherPlatterViewController) alloc] initWithLocation: locModel];
-     [self.weatherController _buildModelForLocation: locModel];
-     [self addSubview: self.weatherController.view];
-     
-     }
-     */
-    // Creating a refresh timer
-    if(!self.refreshTimer){
-        self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:300.0
-                                                             target:self
-                                                           selector:@selector(updateWeather:)
-                                                           userInfo:nil
-                                                            repeats:YES];
-        // making sure the weather is updated once
-        double delayInSeconds = 4.0;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        
-        dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-            [self updateLockView];
-        });
-        
     }
     
-    
+    if(!self.weatherModel){
+        self.weatherModel = [%c(AWeatherModel) sharedInstance];
+        [self.weatherModel updateWeatherDataWithCompletion:^{nil;}];
+    }
 }
 /*
 - (void) updateForPresentation:(id) arg1 {
@@ -495,12 +470,14 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 
 // Handling a timer fire (refresh weather info)
 %new
--(void) updateWeather: (NSTimer *) sender {
+-(void) updateWeather: (NSNotification *) sender {
+    /*
     dispatch_async(dispatch_get_main_queue(), ^{
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"weatherTimerUpdate"
      object:nil];
     });
+     */
     [self updateLockView];
 }
 

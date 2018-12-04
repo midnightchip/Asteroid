@@ -6,9 +6,9 @@ Conflicts:
 Replaces:
 Priority: optional
 Architecture: iphoneos-arm
-Description: An awesome MobileSubstrate tweak!
-Maintainer: midnightchips
-Author: midnightchips
+Description: System-wide weather tweak.
+Maintainer: midnightchips & the casle
+Author: midnightchips & the casle
 Section: Tweaks
-dev: midnightchips
+dev: midnightchips & the casle
 Icon:

@@ -9,7 +9,7 @@ GO_EASY_ON_ME = 0
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = lockweather
-$(TWEAK_NAME)_FILES = $(wildcard source/*.m source/*.xm)
+$(TWEAK_NAME)_FILES = $(wildcard source/*.m source/*.xm source/*.mm )
 $(TWEAK_NAME)_FRAMEWORKS = CoreLocation 
 $(TWEAK_NAME)_PRIVATE_FRAMEWORKS = Weather
 $(TWEAK_NAME)_CFLAGS += -fobjc-arc -I$(THEOS_PROJECT_DIR)/source
