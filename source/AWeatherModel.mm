@@ -1,7 +1,5 @@
 #include "AWeatherModel.h"
 
-
-
 @implementation AWeatherModel{
     // iVars if needed
 }
@@ -48,13 +46,12 @@
         self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
         compBlock();
     }
-    
 }
 
 -(void)setUpRefreshTimer{
     // Creating a refresh timer
     if(!self.refreshTimer){
-        self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:300.0
+        self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:([prefs doubleForKey:@"refreshRate"] * 60)
                                                              target:self
                                                            selector:@selector(updateWeather:)
                                                            userInfo:nil

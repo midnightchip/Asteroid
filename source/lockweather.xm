@@ -65,6 +65,18 @@ static void savingValuesToFile(SBDashBoardMainPageView *sender){
 static void updatePreferenceValues(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
     SBDashBoardMainPageView *self = (__bridge SBDashBoardMainPageView *)observer;
     
+    // Resetting sizing.
+    if([prefs boolForKey:@"resetSizing"]){
+        /*
+        [prefs removeObjectForKey:@"greetingSize"];
+        [prefs removeObjectForKey:@"wDescriptionSize"];
+        [prefs removeObjectForKey:@"tempSize"];
+        [prefs removeObjectForKey:@"iconSize"];
+        */
+        [prefs setObject: @(NO) forKey:@"resetSizing"];
+        [prefs save];
+    }
+    
     // Updating currentTemp font
     if([prefs boolForKey:@"customFont"]){
         self.currentTemp.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"tempSize"]];
@@ -111,6 +123,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         
         [prefs setObject: @(NO) forKey:@"resetXY"];
     }
+    
     
     // Update weather stuff
     [self updateLockView];

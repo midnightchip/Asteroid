@@ -23,6 +23,10 @@
     [prefs setObject: @(YES) forKey:@"resetXY"];
     [prefs saveAndPostNotification];
 }
+-(void)resetSizeMethod{
+    [prefs setObject: @(YES) forKey:@"resetSizing"];
+    [prefs saveAndPostNotification];
+}
 
 @end 
 

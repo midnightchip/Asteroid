@@ -18,5 +18,9 @@
 		<string>FFFFFF</string>
 		<key>glyphColor</key>
 		<string>FFFFFF</string>
+        <key>refreshRate</key>
+        <real>5</key>
+        <key>iconSize</key> <!--Data for the lock icon-->
+        <real>1</real>
 	</dict>
 </plist>

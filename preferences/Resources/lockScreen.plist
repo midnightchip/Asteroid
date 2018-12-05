@@ -299,6 +299,16 @@
                 <key>label</key>
                 <string>Reset Locations</string>
             </dict>
+            <dict>
+                <key>action</key>
+                <string>resetSizeMethod</string>
+                <key>alignment</key>
+                <string>center</string>
+                <key>cell</key>
+                <string>PSButtonCell</string>
+                <key>label</key>
+                <string>Reset Sizing</string>
+            </dict>
 
 			<dict>
 				<key>cell</key>

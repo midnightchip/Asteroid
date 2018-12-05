@@ -18,7 +18,22 @@
 				<key>defaults</key>
 				<string>com.midnightchips.asteroid</string>
 			</dict>
-
+            
+            <dict>
+                <key>action</key>
+                <string>pushToView:</string>
+                <key>cell</key>
+                <string>PSLinkCell</string>
+                <key>pushToPlist</key>
+                <string>genSettings</string>
+                <key>label</key>
+                <string>General Settings</string>
+                <key>sublabel</key>
+                <string>Configure general options</string>
+                <key>key</key>
+                <string>genSettings</string>
+            </dict>
+            
 			<dict>
 				<key>action</key>
 				<string>pushToView:</string>
