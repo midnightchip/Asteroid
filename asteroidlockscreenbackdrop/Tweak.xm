@@ -22,6 +22,8 @@
 @interface SBDashBoardView : UIView
 @end
 
+
+
 static WUIDynamicWeatherBackground* dynamicBG = nil;
 static WUIWeatherCondition* condition = nil;
 static UIView* weatherAnimation = nil;
@@ -33,10 +35,12 @@ void loadWeatherAnimation(City *city){
 		    weatherAnimation = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
 				weatherAnimation.clipsToBounds = YES;
 			WUIWeatherConditionBackgroundView *referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+			//self.weatherModel.city.conditionCode = 16;
 			dynamicBG = [referenceView background];
 			condition = [dynamicBG condition];
 			[condition resume];
 			[weatherAnimation addSubview:dynamicBG];
+			city.conditionCode = 16;
 			[dynamicBG setCity: city];
 			SBLockScreenManager *manager = [%c(SBLockScreenManager) sharedInstance];
 

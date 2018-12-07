@@ -38,7 +38,7 @@
 
 
 		self.cleanTemp = [[UILabel alloc] initWithFrame:CGRectMake(self.cleanView.frame.size.width, self.cleanView.frame.size.height, self.cleanView.frame.size.width, self.cleanView.frame.size.height/3)];
-		[self.cleanTemp setCenter:CGPointMake(self.cleanView.frame.size.width/2, self.cleanView.frame.size.height/4)]
+		[self.cleanTemp setCenter:CGPointMake(self.cleanView.frame.size.width/2, self.cleanView.frame.size.height/4)];
 
 		self.cleanHi = [[UILabel alloc] initWithFrame:CGRectMake(self.cleanView.frame.size.width, self.cleanView.frame.size.height, self.cleanView.frame.size.width, self.cleanView.frame.size.height/3)];
 		[self.cleanHi setCenter:CGPointMake(self.cleanView.frame.size.width, self.cleanView.frame.size.height/2)];

@@ -13,11 +13,14 @@ typedef void(^completion)();
 @property (nonatomic, retain) WAForecastModel *forecastModel;
 @property (nonatomic, retain) City *city;
 @property (nonatomic, retain) NSTimer *refreshTimer;
-@property (nonatomic, getter=isLocalWeather) BOOL localWeather;
-
+@property (nonatomic, getter=isLocalWeather) BOOL localWeather; 
 
 + (instancetype)sharedInstance;
 -(void)updateWeatherDataWithCompletion:(completion) compBlock;
 -(void)setUpRefreshTimer;
 -(void) postNotification;
+@end
+
+@interface City (Condition)
+-(void)setConditionCode:(long long)arg1;
 @end

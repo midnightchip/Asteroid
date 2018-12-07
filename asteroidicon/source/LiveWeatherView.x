@@ -94,6 +94,7 @@ static WUIWeatherCondition* condition = nil;
         
         //self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.bounds];
         if([prefs boolForKey:@"appScreenWeather"]){
+            city.conditionCode = 16;
             [self.referenceView.background setCity:city];
             [[self.referenceView.background condition] resume];
             self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
