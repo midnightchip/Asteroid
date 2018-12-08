@@ -26,3 +26,5 @@
 @property (nonatomic,retain) WATodayModel * todayModel;
 @end
 
+
+

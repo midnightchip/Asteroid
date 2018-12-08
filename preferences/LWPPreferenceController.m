@@ -1,10 +1,10 @@
 #include "LWPPreferenceController.h"
 
 
-@interface CSPListController (lockscreen)
+@interface CSPListController (Asteroid)
 @end 
 
-@implementation CSPListController (lockscreen)
+@implementation CSPListController (Asteroid)
 -(NSArray *)getImageType{
 	return [[NSArray alloc] initWithObjects: @"Filled Solid Color", @"Outline Image", nil];
 }
@@ -28,6 +28,10 @@
     [prefs saveAndPostNotification];
 }
 
+-(NSArray*)weatherConditions{
+    NSArray *unorganized =  [[NSArray alloc] initWithObjects: @"SevereThunderstorm",@"Rain", @"Thunderstorm", @"Haze", @"PartlyCloudyDay", @"MixedRainAndSnow", @"SnowFlurries", @"Smoky", @"MixedRainAndSleet", @"ClearNight", @"SnowShowers", @"MixedSnowAndSleet", @"Breezy", @"ScatteredSnowShowers", @"FreezingDrizzle", @"BlowingSnow", @"Sunny", @"Drizzle", @"Windy", @"MostlySunnyNight", @"Snow", @"HeavySnow", @"Frigid", @"ScatteredSnowShowers", @"MostlySunnyDay", @"Hail", @"Blizzard", @"Cloudy", @"MixedRainFall", @"Sleet", @"PartlyCloudyDay", @"MostlyCloudyNight", @"Hot", @"Dust", @"HeavyRain", @"MostlyCloudyDay", @"IsolatedThunderstorms", @"SnowShowers", @"PartlyCloudyNight", @"ScatteredShowers", @"IsolatedThundershowers", @"ScatteredThunderstorms", @"Tornado", @"FreezingRain", @"TropicalStorm", @"Showers1", @"Hurricane", @"Fog", nil];
+    return [unorganized sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+}
 @end 
 
 @implementation LWPPreferenceController
