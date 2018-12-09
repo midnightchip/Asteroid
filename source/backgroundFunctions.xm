@@ -1,4 +1,4 @@
-#import "lockweather.h"
+#import "AsteroidLockScreen.h"
 
 // Data required for the isOnLockscreen() function --------------------------------------------------------------------------------------
 BOOL isUILocked() {
