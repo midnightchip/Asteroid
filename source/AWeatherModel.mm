@@ -78,6 +78,7 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
         [self.locationProviderModel.locationManager forceLocationUpdate];
         [self.locationProviderModel _executeLocationUpdateForLocalWeatherCityWithCompletion:^{
             if(self.locationProviderModel.geocodeRequest.geocodedResult){
+                self.geoLocation = self.locationProviderModel.geocodeRequest.geocodedResult;
                 self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.locationProviderModel.geocodeRequest.geocodedResult];
                 [self.todayModel executeModelUpdateWithCompletion:^{
                     self.forecastModel = self.todayModel.forecastModel;

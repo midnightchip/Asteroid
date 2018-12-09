@@ -62,12 +62,6 @@
 @property (nonatomic, retain) WATodayPadView *todayView;
 @end
 
-@interface WAWeatherPlatterViewController : UIViewController
--(id)initWithLocation:(id)arg1 ;
--(void)_buildModelForLocation:(id)arg1 ;
-@end
-
-
 @interface SBDashBoardMainPageView : UIView
 @property (nonatomic, retain) UIView *weather;
 @property (nonatomic, retain) UIImageView *logo;
