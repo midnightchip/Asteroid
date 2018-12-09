@@ -7,6 +7,10 @@
 @property (nonatomic, retain) NSArray *allSubviews;
 @end
 
+@interface UIVisualEffectView (asteroid)
+@property (nonatomic,copy) NSArray * contentEffects;
+@end
+
 @interface SBDashBoardMainPageView : UIView
 @property (nonatomic, retain) UIView *holderView;
 @property (nonatomic, retain) UIImageView *cleanLogo;
@@ -102,15 +106,16 @@
 }
 %end 
 
-
 %hook WAWeatherPlatterViewController
 -(void) viewWillLayoutSubviews{
-    %orig;
     for(id object in self.view.allSubviews){
         if([object isKindOfClass:%c(UILabel)]){
             UILabel *label = object;
             label.textColor = [UIColor whiteColor];
-            label.tintColor = [UIColor whiteColor];
+        }
+        if([object isKindOfClass:%c(UIVisualEffectView)]){
+            UIVisualEffectView *effect = object;
+            effect.contentEffects = nil;
         }
     }
 }

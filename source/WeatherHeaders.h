@@ -82,5 +82,6 @@
 -(id)initWithLocation:(id)arg1 ;
 -(void)_buildModelForLocation:(id)arg1 ;
 @property (nonatomic,retain) UIStackView * hourlyBeltView;
-@property (nonatomic,retain) UIView * headerView;  
+@property (nonatomic,retain) UIView * headerView;
 @end
+
