@@ -1,4 +1,4 @@
-#import "../asteroidicon/source/Asteroid.h"
+#import "Asteroid.h"
 
 @interface SBAlert : UIViewController
 @end

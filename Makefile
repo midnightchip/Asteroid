@@ -9,20 +9,16 @@ GO_EASY_ON_ME = 0
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = lockweather
-$(TWEAK_NAME)_FILES = $(wildcard source/*.m source/*.xm source/*.mm )
+$(TWEAK_NAME)_FILES = $(wildcard source/*.m source/*.xm source/*.mm source/*.x)
 $(TWEAK_NAME)_FRAMEWORKS = CoreLocation 
-$(TWEAK_NAME)_PRIVATE_FRAMEWORKS = Weather
+$(TWEAK_NAME)_PRIVATE_FRAMEWORKS = Weather WeatherUI
 $(TWEAK_NAME)_CFLAGS += -fobjc-arc -I$(THEOS_PROJECT_DIR)/source
 $(TWEAK_NAME)_LDFLAGS += -lCSPreferencesProvider  -lCSWeather
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
 SUBPROJECTS += preferences
-SUBPROJECTS += asteroidicon
-SUBPROJECTS += asteroidhome
 
-SUBPROJECTS += asteroidlockscreenbackdrop
-SUBPROJECTS += asteroidcleanview
 include $(THEOS_MAKE_PATH)/aggregate.mk
 
 after-install::

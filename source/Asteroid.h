@@ -1,5 +1,5 @@
-#import "../../source/LWPProvider.h"
-#import "../../source/AWeatherModel.h"
+#import "LWPProvider.h"
+#import "AWeatherModel.h"
 #import <CoreLocation/CoreLocation.h>
 
 /* weather background */

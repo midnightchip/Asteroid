@@ -1,4 +1,4 @@
-#import "../asteroidicon/source/Asteroid.h"
+#import "Asteroid.h"
 #import <objc/message.h>
 @interface SBHomeScreenView : UIView
 @property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
