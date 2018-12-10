@@ -105,7 +105,9 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     self.wDescription.textColor = [prefs colorForKey:@"textColor"];
     
    if(![prefs boolForKey:@"enableForeHeader"]){
-        self.forecastCont.headerView = nil;
+       
+       self.forecastCont.headerView.hidden = YES;
+       self.forecastCont.headerView = nil;
         self.forecastCont.dividerLineView.hidden = TRUE;
     }
     
