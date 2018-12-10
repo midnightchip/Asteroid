@@ -250,8 +250,6 @@
 				<string>com.midnightchips.asteroid</string>
 				<key>defaultsPath</key>
 				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
-				<key>callbackAction</key>
-				<string>refreshImage</string>
 			</dict>
 
 			<dict>
