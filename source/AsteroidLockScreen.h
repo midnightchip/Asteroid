@@ -10,6 +10,7 @@
 @interface UIView (tweak_cat)
 -(id) _viewDelegate;
 -(id) _gestureRecognizers;
+@property (nonatomic, retain) NSArray *allSubviews;
 
 @end
 
@@ -73,6 +74,7 @@
 @property (retain, nonatomic) NSTimer *inactiveTimer;
 @property (nonatomic, retain) NSDictionary *centerDict;
 @property (nonatomic, retain) AWeatherModel *weatherModel;
+@property (nonatomic, retain) WAWeatherPlatterViewController *forecastCont;
 
 @property (nonatomic, retain) UILabel *notifcationLabel;
 
@@ -126,4 +128,8 @@
 
 @interface SBIdleTimerDefaults
 -(double)minimumLockscreenIdleTime;
+@end
+
+@interface UIVisualEffectView (asteroid)
+@property (nonatomic,copy) NSArray * contentEffects;
 @end

@@ -1,15 +1,6 @@
-#import <CSWeather/CSWeatherInformationProvider.h>
+/*#import <CSWeather/CSWeatherInformationProvider.h>
 #import "WeatherHeaders.h"
 #import "AWeatherModel.h"
-
-
-@interface UIView (asteroid)
-@property (nonatomic, retain) NSArray *allSubviews;
-@end
-
-@interface UIVisualEffectView (asteroid)
-@property (nonatomic,copy) NSArray * contentEffects;
-@end
 
 @interface SBDashBoardMainPageView : UIView
 @property (nonatomic, retain) UIView *holderView;
@@ -19,7 +10,6 @@
 @property (nonatomic, retain) UILabel *cleanTemp;
 @property (nonatomic, retain) UILabel *cleanHi;
 @property (nonatomic, retain) UILabel *cleanLow;
-@property (nonatomic, retain) WAWeatherPlatterViewController *forecastCont;
 @end 
 
 %hook SBDashBoardMainPageView
@@ -30,7 +20,6 @@
 %property (nonatomic, retain) UILabel *cleanTemp;
 %property (nonatomic, retain) UILabel *cleanHi;
 %property (nonatomic, retain) UILabel *cleanLow;
-%property (nonatomic, retain) WAWeatherPlatterViewController *forecastCont;
 
 - (void)layoutSubviews {
     %orig;
@@ -38,22 +27,6 @@
         self.holderView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         [self.holderView setUserInteractionEnabled:YES];
         [self addSubview:self.holderView];
-        
-    }
-    if(!self.forecastCont){
-        self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] init]; // Temp to make sure its called once
-        static AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
-        [weatherModel updateWeatherDataWithCompletion:^{
-            self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] initWithLocation:weatherModel.city];
-            
-            // Setting text color white.
-            
-            NSLog(@"lock_TWEAK | %@", self.forecastCont.hourlyBeltView.allSubviews[0]);
-            
-            ((UIView *)((NSArray *)self.forecastCont.view.layer.sublayers)[0]).hidden = YES; // Visual Effect view to hidden
-            self.forecastCont.view.frame = CGRectMake(0, (self.frame.size.height / 2), self.frame.size.width, self.frame.size.height);
-            [self addSubview:self.forecastCont.view];
-        }];
         
     }
     
@@ -107,22 +80,10 @@
 }
 %end 
 
-// Making sure the forecast view is the right color
-%hook WAWeatherPlatterViewController
--(void) viewWillLayoutSubviews{
-    for(id object in self.view.allSubviews){
-        if([object isKindOfClass:%c(UILabel)]){
-            UILabel *label = object;
-            label.textColor = [UIColor whiteColor];
-        }
-        if([object isKindOfClass:%c(UIVisualEffectView)]){
-            UIVisualEffectView *effect = object;
-            effect.contentEffects = nil;
-        }
-    }
-}
-%end
 
+
+// Experimental---------------------------------------
+/*
 @interface SBPagedScrollView : UIView
 @property (nonatomic,copy) NSArray * pageViews;
 @end
@@ -132,6 +93,10 @@
 @end
 
 @interface SBDashBoardView : UIView
+@end
+
+@interface SBDashBoardPageViewController
+
 @end
 
 @interface SBDashBoardViewController : UIViewController
@@ -159,6 +124,19 @@
 
 // This crashes stuff
 //SBDashBoardMainPageContentViewController *viewCont = [[%c(SBDashBoardMainPageContentViewController) alloc] init];
+/*
+@interface SBDashBoardWeatherPageContentViewController : SBDashBoardPageViewController {
+    
+}
+@end
+@implementation
+-(instancetype) init{
+    if(self = [super init]){
+    }
+    return self;
+}
+
+@end
 
 %hook SBDashBoardViewController
 -(NSUInteger) _indexOfCameraPage{
@@ -170,7 +148,7 @@
     }
     else return %orig;
 }
-/*
+
 -(void) _setPageViewControllers:(id) arg1{
     NSLog(@"lock_TWEAK | The arg: %@", arg1[0]);
     NSArray *pageViews = arg1;
@@ -184,8 +162,7 @@
     
     
 }
-*/
-/*
+
 -(void) _setAllowedPageViewControllers:(id) arg1{
     NSLog(@"lock_TWEAK | The arg: %@", arg1[0]);
     NSArray *pageViews = arg1;
@@ -197,11 +174,11 @@
     } else %orig;
     //} else %orig;
 }
-*/
+
 %end
 
-/*
-%hook SBDashBoardPageViewController
+
+%hook SBDashBoardMainPageContentViewController
 -(id)initWithNibName:(id)arg1 bundle:(id)arg2 {
     if((self = %orig)){
         NSLog(@"lock_TWEAK | %@, %@", arg1, arg2);

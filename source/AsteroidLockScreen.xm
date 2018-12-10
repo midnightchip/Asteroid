@@ -140,6 +140,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 %property (retain, nonatomic) NSTimer *inactiveTimer;
 %property (nonatomic, retain) NSDictionary *centerDict;
 %property (nonatomic, retain) AWeatherModel *weatherModel;
+%property (nonatomic, retain) WAWeatherPlatterViewController *forecastCont;
 
 %property (nonatomic, retain) UILabel *notifcationLabel;
 
@@ -233,6 +234,19 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         if(savedCenterData[@"currentTemp"]){
             self.currentTemp.center = ((NSValue*)savedCenterData[@"currentTemp"]).CGPointValue;
         }
+    }
+    
+    if(!self.forecastCont){
+        self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] init]; // Temp to make sure its called once
+        static AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
+        [weatherModel updateWeatherDataWithCompletion:^{
+            self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] initWithLocation:self.weatherModel.city];
+            
+            ((UIView *)((NSArray *)self.forecastCont.view.layer.sublayers)[0]).hidden = YES; // Visual Effect view to hidden
+            self.forecastCont.view.frame = CGRectMake(0, (self.frame.size.height / 2), self.frame.size.width, self.frame.size.height);
+            [self.weather addSubview:self.forecastCont.view];
+        }];
+        
     }
     
     // Creating the greeting label
@@ -556,9 +570,28 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             // Updating the the text of the wDescription
             self.wDescription.text = weather[@"kCurrentDescription"];
             self.greetingLabel.textAlignment = NSTextAlignmentCenter;
+            
+            // Update the forecast
+            [self.forecastCont _updateViewContent];
         }];
     }
     city = nil;
+}
+%end
+
+// Making sure the forecast view is the right color
+%hook WAWeatherPlatterViewController
+-(void) viewWillLayoutSubviews{
+    for(id object in self.view.allSubviews){
+        if([object isKindOfClass:%c(UILabel)]){
+            UILabel *label = object;
+            label.textColor = [UIColor whiteColor];
+        }
+        if([object isKindOfClass:%c(UIVisualEffectView)]){
+            UIVisualEffectView *effect = object;
+            effect.contentEffects = nil;
+        }
+    }
 }
 %end
 
