@@ -51,6 +51,7 @@
             NSLog(@"lock_TWEAK | %@", self.forecastCont.hourlyBeltView.allSubviews[0]);
             
             ((UIView *)((NSArray *)self.forecastCont.view.layer.sublayers)[0]).hidden = YES; // Visual Effect view to hidden
+            self.forecastCont.view.frame = CGRectMake(0, (self.frame.size.height / 2), self.frame.size.width, self.frame.size.height);
             [self addSubview:self.forecastCont.view];
         }];
         
@@ -106,6 +107,7 @@
 }
 %end 
 
+// Making sure the forecast view is the right color
 %hook WAWeatherPlatterViewController
 -(void) viewWillLayoutSubviews{
     for(id object in self.view.allSubviews){
@@ -121,3 +123,78 @@
 }
 %end
 
+@interface SBPagedScrollView : UIView
+@property (nonatomic,copy) NSArray * pageViews;
+@end
+
+@interface SBDashBoardPageViewController : UIViewController
+
+@end
+
+@interface SBDashBoardViewController : UIViewController
+
+@end
+// THis one actually sort of woeks except causes crash when going to camera
+/*
+%hook SBPagedScrollView
+-(void) setPageViews:(id) arg1{
+    NSLog(@"lock_TWEAK | The arg: %@", arg1[0]);
+    NSArray *pageViews = arg1;
+    //if(pageViews){
+        if(pageViews.count < 4){
+            
+            UIView *view = [[UIView alloc] initWithFrame:self.frame];
+            NSArray *newPages = @[pageViews[0], pageViews[1], view, pageViews[2]];
+            %orig(newPages);
+        } //else %orig;
+    //} else %orig;
+    
+    
+}
+%end
+*/
+
+// This crashes stuff
+//UIViewController *viewCont = [[%c(UIViewController) alloc] initWithNibName:@"view" bundle:nil];
+
+%hook SBDashBoardViewController
+/*
+-(void) _setPageViewControllers:(id) arg1{
+    NSLog(@"lock_TWEAK | The arg: %@", arg1[0]);
+    NSArray *pageViews = arg1;
+    //if(pageViews){
+    if(pageViews.count < 4){
+        viewCont.view.frame = self.view.frame;
+        NSArray *newPages = @[pageViews[0], pageViews[1], viewCont, pageViews[2]];
+        %orig(newPages);
+    } else %orig;
+    //} else %orig;
+    
+    
+}
+*/
+/*
+-(void) _setAllowedPageViewControllers:(id) arg1{
+    NSLog(@"lock_TWEAK | The arg: %@", arg1[0]);
+    NSArray *pageViews = arg1;
+    //if(pageViews){
+    if(pageViews.count < 4){
+        viewCont.view.frame = self.view.frame;
+        NSArray *newPages = @[pageViews[0], pageViews[1], viewCont, pageViews[2]];
+        %orig(newPages);
+    } else %orig;
+    //} else %orig;
+}
+ */
+%end
+
+/*
+%hook SBDashBoardPageViewController
+-(id)initWithNibName:(id)arg1 bundle:(id)arg2 {
+    if((self = %orig)){
+        NSLog(@"lock_TWEAK | %@, %@", arg1, arg2);
+    }
+    return self;
+}
+%end
+*/
