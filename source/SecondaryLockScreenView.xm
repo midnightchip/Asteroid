@@ -127,12 +127,15 @@
 @property (nonatomic,copy) NSArray * pageViews;
 @end
 
-@interface SBDashBoardPageViewController : UIViewController
+@interface SBDashBoardMainPageContentViewController : UIViewController
 
 @end
 
-@interface SBDashBoardViewController : UIViewController
+@interface SBDashBoardView : UIView
+@end
 
+@interface SBDashBoardViewController : UIViewController
+@property (setter=_setPageViewControllers:,nonatomic,copy) NSArray * pageViewControllers;
 @end
 // THis one actually sort of woeks except causes crash when going to camera
 
@@ -143,7 +146,7 @@
     //if(pageViews){
         if(pageViews.count < 4){
             
-            UIView *view = [[UIView alloc] initWithFrame:self.frame];
+            SBDashBoardView *view = [[%c(SBDashBoardView) alloc] initWithFrame:self.frame];
             NSArray *newPages = @[pageViews[0], pageViews[1], view, pageViews[2]];
             %orig(newPages);
         } //else %orig;
@@ -155,9 +158,18 @@
 
 
 // This crashes stuff
-//UIViewController *viewCont = [[UIViewController alloc] init];
+//SBDashBoardMainPageContentViewController *viewCont = [[%c(SBDashBoardMainPageContentViewController) alloc] init];
 
 %hook SBDashBoardViewController
+-(NSUInteger) _indexOfCameraPage{
+    return 3;
+}
+-(id) pageViewControllerAtIndex:(NSUInteger)arg1{
+    if((int)arg1 == 3){
+        return self.pageViewControllers[2];
+    }
+    else return %orig;
+}
 /*
 -(void) _setPageViewControllers:(id) arg1{
     NSLog(@"lock_TWEAK | The arg: %@", arg1[0]);
@@ -180,12 +192,12 @@
     //if(pageViews){
     if(pageViews.count < 4){
         viewCont.view.frame = self.view.frame;
-        NSArray *newPages = @[pageViews[0], pageViews[1], viewCont, pageViews[2]];
+        NSArray *newPages = @[pageViews[0], pageViews[1], pageViews[2], viewCont];
         %orig(newPages);
     } else %orig;
     //} else %orig;
 }
- */
+*/
 %end
 
 /*
