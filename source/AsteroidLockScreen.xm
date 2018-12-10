@@ -104,6 +104,16 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     }
     self.wDescription.textColor = [prefs colorForKey:@"textColor"];
     
+   if(![prefs boolForKey:@"enableForeHeader"]){
+        self.forecastCont.headerView = nil;
+        self.forecastCont.dividerLineView.hidden = TRUE;
+    }
+    
+    if(![prefs boolForKey:@"enableForeTable"]){
+        self.forecastCont.hourlyForecastViews = nil;
+        self.forecastCont.dividerLineView.hidden = TRUE;
+    }
+    
     // Reseting location
     if([prefs boolForKey:@"resetXY"]){
         savedCenterData = nil;
@@ -248,6 +258,8 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             ((UIView *)((NSArray *)self.forecastCont.view.layer.sublayers)[0]).hidden = YES; // Visual Effect view to hidden
             self.forecastCont.view.frame = CGRectMake(0, (self.frame.size.height / 2), self.frame.size.width, self.frame.size.height/3);
             [self.weather addSubview:self.forecastCont.view];
+            
+            [prefs postNotification];
             
             setGesturesForView(self, self.forecastCont.view);
             
