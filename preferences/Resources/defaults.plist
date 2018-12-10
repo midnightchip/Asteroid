@@ -22,5 +22,8 @@
         <real>5</real>
         <key>iconSize</key> <!--Data for the lock icon-->
         <real>1</real>
+        <key>icforecastContViewSizeonSize</key> <!--Data for the lock icon-->
+        <real>1</real>
+        
 	</dict>
 </plist>

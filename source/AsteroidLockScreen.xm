@@ -28,6 +28,7 @@ static BOOL tc_editing;
 static double lastZoomValue = 0;
 static SBDashBoardMainPageView *mainPageView;
 static NSNumber *initialIconFrame;
+static NSNumber *initialForeFrame;
 
 
 // Setting the gestures function
@@ -48,7 +49,9 @@ void setGesturesForView(UIView *superview, UIView *view){
 
 static void savingValuesToFile(SBDashBoardMainPageView *sender){
     SBDashBoardMainPageView *self = sender;
-    viewDict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"greetingLabel" : [NSValue valueWithCGPoint:self.greetingLabel.center], @"wDescription" : [NSValue valueWithCGPoint:self.wDescription.center], @"currentTemp" : [NSValue valueWithCGPoint:self.currentTemp.center], @"dismissButton" : [NSValue valueWithCGPoint:self.dismissButton.center], @"notificationLabel" : [NSValue valueWithCGPoint:self.notifcationLabel.center]};
+    viewDict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"greetingLabel" : [NSValue valueWithCGPoint:self.greetingLabel.center], @"wDescription" : [NSValue valueWithCGPoint:self.wDescription.center], @"currentTemp" : [NSValue valueWithCGPoint:self.currentTemp.center], @"dismissButton" : [NSValue valueWithCGPoint:self.dismissButton.center], @"notificationLabel" : [NSValue valueWithCGPoint:self.notifcationLabel.center], @"forecastContView" : [NSValue valueWithCGPoint:self.forecastCont.view.center]
+        
+    };
     
     BOOL isDir;
     NSFileManager *fileManager= [NSFileManager defaultManager];
@@ -243,8 +246,24 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] initWithLocation:self.weatherModel.city];
             
             ((UIView *)((NSArray *)self.forecastCont.view.layer.sublayers)[0]).hidden = YES; // Visual Effect view to hidden
-            self.forecastCont.view.frame = CGRectMake(0, (self.frame.size.height / 2), self.frame.size.width, self.frame.size.height);
+            self.forecastCont.view.frame = CGRectMake(0, (self.frame.size.height / 2), self.frame.size.width, self.frame.size.height/3);
             [self.weather addSubview:self.forecastCont.view];
+            
+            setGesturesForView(self, self.forecastCont.view);
+            
+            if(savedCenterData[@"forecastContView"]){
+                self.forecastCont.view.center = ((NSValue*)savedCenterData[@"forecastContView"]).CGPointValue;
+            }
+            
+            initialForeFrame = @(self.forecastCont.view.frame.size.width);
+            
+            if([prefs doubleForKey:@"forecastContViewSize"]){
+                [self.forecastCont.view layer].anchorPoint = CGPointMake(0.5, 0.5);
+                
+                //NSLog(@"lock_TWEAK | %f", [prefs doubleForKey:@"iconSize"]);
+                
+                self.forecastCont.view.transform = CGAffineTransformScale(self.forecastCont.view.transform, [prefs doubleForKey:@"forecastContViewSize"], [prefs doubleForKey:@"forecastContViewSize"]);
+            }
         }];
         
     }
@@ -386,7 +405,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     if(sender.state == UIGestureRecognizerStateBegan) {
         hapticFeedbackSoft();
         if(tc_editing) {
-            for(UIView *view in @[self.logo, self.greetingLabel, self.wDescription, self.currentTemp, self.dismissButton, self.notifcationLabel]){
+            for(UIView *view in @[self.logo, self.greetingLabel, self.wDescription, self.currentTemp, self.dismissButton, self.notifcationLabel, self.forecastCont.view]){
                 view.alpha=1;
                 [view.layer removeAllAnimations];
                 ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[0]).enabled = NO; // Pan
@@ -399,6 +418,8 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             // Saving icon ratio
             [prefs setObject: @(@(self.logo.frame.size.width).doubleValue / initialIconFrame.doubleValue) forKey:@"iconSize"];
             
+            [prefs setObject: @(@(self.forecastCont.view.frame.size.width).doubleValue / initialForeFrame.doubleValue) forKey:@"forecastContViewSize"];
+            
             // Saving values
             savingValuesToFile(self);
             
@@ -408,7 +429,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             [prefs saveAndPostNotification];
         }
         else {
-            for(UIView *view in @[self.logo, self.greetingLabel, self.wDescription, self.currentTemp, self.dismissButton, self.notifcationLabel]){
+            for(UIView *view in @[self.logo, self.greetingLabel, self.wDescription, self.currentTemp, self.dismissButton, self.notifcationLabel, self.forecastCont.view]){
                 ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[0]).enabled = YES; // Pan
                 ((UIGestureRecognizer *)((NSArray *)[view _gestureRecognizers])[1]).enabled = YES; // Zoom
                 if([view isKindOfClass: %c(UILabel)]){
