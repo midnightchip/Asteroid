@@ -252,9 +252,9 @@
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>label</key>
-				<string>Contact</string>
+				<string>Special Thanks</string>
 				<key>footerText</key>
-				<string>Legal</string>
+				<string></string>
 				<key>footerAlignment</key>
 				<integer>0</integer>
 			</dict>
@@ -307,7 +307,7 @@
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>label</key>
-				<string>Contact</string>
+				<string>Legal</string>
 				<key>footerText</key>
 				<string>MidnightChips &amp; the casle © 2018</string>
 				<key>footerAlignment</key>
