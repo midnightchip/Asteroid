@@ -68,15 +68,10 @@ void loadWeatherAnimation(City *city){
 }
 
 void loadCityForView(){
-    if([prefs boolForKey:@"isLocal"]){
         AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
         [weatherModel updateWeatherDataWithCompletion:^{
             loadWeatherAnimation(weatherModel.city);
-        }];
-    } else {
-        City *city = [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
-        loadWeatherAnimation(city);
-    }
+        }];  
 }
 
 /* remove view from screen */
