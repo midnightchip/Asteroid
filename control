@@ -1,6 +1,6 @@
 Package: com.midnightchips.asteroid
 Name: Asteroid
-Depends: firmware (>= 11.0), mobilesubstrate, preferenceloader, com.creaturecoding.libcspreferences, com.creaturecoding.libcsweather (>= 0.6.0b-35)
+Depends: firmware (>= 11.0), mobilesubstrate, preferenceloader, com.creaturecoding.libcspreferences
 Version: 1.0
 Conflicts:
 Replaces:
