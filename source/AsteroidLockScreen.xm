@@ -218,7 +218,10 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     // Creating the logo (icon)
     if(!self.logo){
         self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225)];
-        [self.weather addSubview:self.logo];
+        if([prefs boolForKey:@"addLogo"]){
+            [self.weather addSubview:self.logo];
+        }
+        
         //self.logo.center = [self.centerDict[@"logo"] CGPointValue];
         setGesturesForView(self, self.logo);
         
@@ -242,7 +245,9 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         
         self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225)];
         self.currentTemp.textAlignment = NSTextAlignmentCenter;
+        if([prefs boolForKey:@"addTemp"]){
         [self.weather addSubview: self.currentTemp];
+        }
         
         setGesturesForView(self, self.currentTemp);
         
@@ -286,7 +291,9 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     if(!self.greetingLabel){
         self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6)];
         self.greetingLabel.textAlignment = NSTextAlignmentCenter;
+        if([prefs boolForKey:@"addgreetLabel"]){
         [self.weather addSubview:self.greetingLabel];
+        }
         
         setGesturesForView(self, self.greetingLabel);
         
@@ -303,8 +310,9 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.wDescription.numberOfLines = 0;
         self.wDescription.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.wDescription.preferredMaxLayoutWidth = self.weather.frame.size.width;
-        
+        if([prefs boolForKey:@"addDescription"]){
         [self.weather addSubview:self.wDescription];
+        }
         
         
         setGesturesForView(self, self.wDescription);
@@ -323,7 +331,9 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                      forControlEvents:UIControlEventTouchUpInside];
         [self.dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
         self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
+        if([prefs boolForKey:@"addDismiss"]){
         [self.weather addSubview:self.dismissButton];
+        }
         
         setGesturesForView(self, self.dismissButton);
         
@@ -344,8 +354,10 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.notifcationLabel.layer.cornerRadius = 12.5;
         
         self.notifcationLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        if([prefs boolForKey:@"addNotification"]){
         
         [self.weather addSubview:self.notifcationLabel];
+        }
         
         setGesturesForView(self, self.notifcationLabel);
         
@@ -706,8 +718,9 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     //always fill the view
     self.blurEffectView.frame = self.view.bounds;
     self.blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
+    if([prefs boolForKey:@"addBlur"]){
     [((SBDashBoardView *)self.view).backgroundView addSubview: self.blurEffectView];
+    }
     // Notification called when the lockscreen / nc is revealed (this is posted by the system)
     [[NSNotificationCenter defaultCenter] addObserverForName: @"weatherStateChanged" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
         if(isDismissed){
@@ -753,18 +766,9 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
  */
 
 
-%ctor{
+/*%ctor{
     if([prefs boolForKey:@"greetView"]){
         %init(_ungrouped);
     }
     
-    // Debugging
-    /*
-     [[NSNotificationCenter defaultCenter] addObserverForName:NULL object:NULL queue:NULL usingBlock:^(NSNotification *note) {
-     if ([note.name containsString:@"UIViewAnimationDidCommitNotification"] || [note.name containsString:@"UIViewAnimationDidStopNotification"] || [note.name containsString:@"UIScreenBrightnessDidChangeNotification"]){
-     } else {
-     NSLog(@"UNIQUE: %@", note.name);
-     }
-     }];
-     */
-}
+}*/

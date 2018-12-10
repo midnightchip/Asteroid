@@ -24,6 +24,7 @@
         <real>1</real>
         <key>icforecastContViewSizeonSize</key> <!--Data for the lock icon-->
         <real>1</real>
-        
+		<key>customAppColor</key>
+        <string>FFFFFF</string>
 	</dict>
 </plist>
