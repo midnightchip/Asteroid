@@ -33,6 +33,8 @@
 -(void)setLocalWeatherEnabled:(BOOL)arg1;
 -(City*)cityFromPreferencesDictionary:(id)arg1;
 -(BOOL)isCelsius;
+-(BOOL)isLocalWeatherEnabled;
+@property (assign,setter=setLocalWeatherEnabled:,getter=isLocalWeatherEnabled,nonatomic) BOOL isLocalWeatherEnabled; 
 @end
 
 @interface TWCLocationUpdater

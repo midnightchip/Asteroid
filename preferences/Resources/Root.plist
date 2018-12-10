@@ -11,18 +11,30 @@
 				<key>cellClass</key>
 				<string>CSPImageCell</string>
 				<key>height</key>
-				<string>160</string>
+				<string>200</string>
 				<key>static</key>
-				<true/>
+				<false/>
 				<key>key</key>
 				<string>selectPhotos</string>
 				<key>storePath</key>
-				<string>/Library/PreferenceBundles/HomeGesture.bundle/banner.png</string>
+				<string>/Library/PreferenceBundles/Asteroid.bundle/Asteroid.png</string>
 				<key>defaults</key>
-				<string>com.vitataf.homegesture</string>
+				<string>com.midnightchips.asteroid</string>
 				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/HomeGesture.bundle</string>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+				<key>sublabel</key>
+				<string>Asteroid\nby: MidnightChips &amp; the casle</string>
 			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+				<key>label</key>
+				<string>by: MidnightChips &amp; the casle</string>
+				<key>footerAlignment</key>
+				<integer>0</integer>
+			</dict>
+
 			<dict>
 				<key>cell</key>
 				<string>PSSwitchCell</string>
@@ -114,42 +126,7 @@
 				<string>iconConfig</string>
 			</dict>
 
-			<dict>
-				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>label</key>
-				<string>Choose Custom Conditions</string>
-				<key>key</key>
-				<string>customCondition</string>
-				<key>PostNotification</key>
-				<string>com.midnightchips.asteroid.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.asteroid</string>
-			</dict>
-
-			<dict>
-				<key>cell</key>
-				<string>PSLinkListCell</string>
-				<key>detail</key>
-				<string>CSListItemsController</string>
-				<key>label</key>
-				<string>Select Custom Weather Conditions</string>
-				<key>sublabel</key>
-				<string>This overides your weather background animation.</string>
-				<key>key</key>
-				<string>weatherConditions</string>
-				<key>titlesDataSource</key>
-				<string>weatherConditions</string>
-				<key>valuesDataSource</key>
-				<string>weatherConditions</string>
-				<key>PostNotification</key>
-				<string>com.midnightchips.asteroid.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.asteroid</string>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
-			</dict>
-
+			
 
 
 			<dict>

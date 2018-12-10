@@ -70,7 +70,7 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
 }
 
 -(void)updateWeatherDataWithCompletion:(completion) compBlock{
-    if([prefs boolForKey:@"isLocal"]){
+    if([[objc_getClass("WeatherPreferences") sharedPreferences] isLocalWeatherEnabled]){
         self.localWeather = YES;
         //This sets up local weather, and anyone on github better appreciate this - the casle
         self.weatherPreferences = [objc_getClass("WeatherPreferences") sharedPreferences];

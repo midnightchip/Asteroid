@@ -26,23 +26,6 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Use Local Weather</string>
-				<key>sublabel</key>
-				<string>Requires Location Based Services to be On. If unchecked, weather is displayed from first weather card in the Weather App</string>
-				<key>key</key>
-				<string>isLocal</string>
-				<key>PostNotification</key>
-				<string>com.midnightchips.asteroid.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.asteroid</string>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
-			</dict>
-
-			<dict>
-				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>label</key>
 				<string>Enable Home Screen</string>
 				<key>sublabel</key>
 				<string>Enable/Disable Live Weather on HomeScreen</string>
@@ -55,6 +38,66 @@
 				<key>defaultsPath</key>
 				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
 			</dict>
+
+			<!--<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Use Local Weather</string>
+				<key>sublabel</key>
+				<string>Requires Location Based Services to be On. If unchecked, weather is displayed from first weather card in the Weather App</string>
+				<key>key</key>
+				<string>isLocal</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+			</dict>-->
+
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Choose Custom Conditions</string>
+				<key>key</key>
+				<string>customCondition</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>enableSpecifiers</key>
+				<array>
+					<string>weatherConditions</string>
+				</array>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSLinkListCell</string>
+				<key>detail</key>
+				<string>CSListItemsController</string>
+				<key>label</key>
+				<string>Select Custom Weather Conditions</string>
+				<key>sublabel</key>
+				<string>This overides your weather background animation.</string>
+				<key>key</key>
+				<string>weatherConditions</string>
+				<key>titlesDataSource</key>
+				<string>weatherConditions</string>
+				<key>valuesDataSource</key>
+				<string>weatherConditions</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+			</dict>
+
+
+			
 
 			<dict>
 				<key>cell</key>
