@@ -1,6 +1,6 @@
 #import <CSWeather/CSWeatherInformationProvider.h>
-#import "../source/WeatherHeaders.h"
-#import "../source/AWeatherModel.h"
+#import "WeatherHeaders.h"
+#import "AWeatherModel.h"
 
 
 @interface UIView (asteroid)

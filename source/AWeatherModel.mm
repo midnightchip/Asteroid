@@ -96,6 +96,7 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
     } else {
         self.localWeather = NO;
         self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
+        self.city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditions"]] doubleValue];
         compBlock();
     }
 }
