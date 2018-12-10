@@ -135,7 +135,7 @@
 
 @end
 // THis one actually sort of woeks except causes crash when going to camera
-/*
+
 %hook SBPagedScrollView
 -(void) setPageViews:(id) arg1{
     NSLog(@"lock_TWEAK | The arg: %@", arg1[0]);
@@ -152,10 +152,10 @@
     
 }
 %end
-*/
+
 
 // This crashes stuff
-//UIViewController *viewCont = [[%c(UIViewController) alloc] initWithNibName:@"view" bundle:nil];
+//UIViewController *viewCont = [[UIViewController alloc] init];
 
 %hook SBDashBoardViewController
 /*
