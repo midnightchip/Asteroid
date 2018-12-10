@@ -16,10 +16,6 @@
 			<true/>
 			<key>label</key>
 			<string>Asteroid</string>
-			<key>headerString</key>
-			<string>Asteroid\nby: MidnightChips &amp; the casle</string>
-			<key>headerFont</key>
-			<string>.SFUIDisplay-Regular</string>
 			<key>primaryFontSize</key>
 			<real>36</real>
 			<key>secondaryFontSize</key>
