@@ -86,5 +86,6 @@
 -(void) _updateViewContent;
 @property (nonatomic,retain) NSArray * hourlyForecastViews;
 @property (nonatomic,retain) UIView * dividerLineView;
+@property (nonatomic,retain) WATodayModel * model;   
 @end
 

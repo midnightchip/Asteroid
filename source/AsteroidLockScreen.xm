@@ -572,6 +572,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             self.greetingLabel.textAlignment = NSTextAlignmentCenter;
             
             // Update the forecast
+            self.forecastCont.model = self.weatherModel.todayModel;
             [self.forecastCont _updateViewContent];
         }];
     }
