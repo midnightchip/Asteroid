@@ -18,6 +18,7 @@ $(TWEAK_NAME)_LDFLAGS += -lCSPreferencesProvider  -lCSWeather
 include $(THEOS_MAKE_PATH)/tweak.mk
 
 SUBPROJECTS += preferences
+SUBPROJECTS += AsteroidHelper
 
 include $(THEOS_MAKE_PATH)/aggregate.mk
 

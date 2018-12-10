@@ -78,6 +78,7 @@
 -(void)_executeLocationUpdateWithCompletion:(/*^block*/id)arg1;
 @property (nonatomic,retain) WFGeocodeRequest * geocodeRequest;
 -(void)_willDeliverForecastModel:(id)arg1 ;
+-(BOOL)isLocationTrackingEnabled;
 @end
 
 @interface WAWeatherPlatterViewController : UIViewController
