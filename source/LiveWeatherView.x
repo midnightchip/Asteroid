@@ -20,9 +20,64 @@ static NSDictionary *conditions = nil;
 
 
 - (instancetype)initWithFrame:(CGRect)frame {
+    conditions = @{@"SevereThunderstorm" : @3,
+@"Rain" : @12,
+@"Thunderstorm" : @4,
+@"Haze" : @21,
+@"PartlyCloudyDay" :  @30,
+@"MixedRainAndSnow" : @5,
+@"SnowFlurries" : @13,
+@"Smoky" : @22,
+@"MixedRainAndSleet" : @6,
+@"ClearNight" : @31,
+@"SnowShowers" : @14,
+@"MixedSnowAndSleet" : @7,
+@"Breezy" : @23,
+@"ScatteredSnowShowers" : @40,
+@"FreezingDrizzle" : @8,
+@"BlowingSnow" : @15,
+@"Sunny" : @32,
+@"Drizzle" : @9,
+@"Windy" : @24,
+@"MostlySunnyNight" : @33,
+@"Snow" : @16,
+@"HeavySnow" : @41,
+@"Frigid" : @25,
+@"ScatteredSnowShowers" : @42,
+@"MostlySunnyDay" : @34,
+@"Hail" : @17,
+@"Blizzard" : @43,
+@"Cloudy" : @26,
+@"MixedRainFall" : @35,
+@"Sleet" : @18,
+@"PartlyCloudyDay" : @44,
+@"MostlyCloudyNight" : @27,
+@"Hot" : @36,
+@"Dust" : @19,
+@"HeavyRain" : @45,
+@"MostlyCloudyDay" : @28,
+@"IsolatedThunderstorms" : @37,
+@"SnowShowers" : @46,
+@"PartlyCloudyNight" : @29,
+@"ScatteredShowers" : @38,
+@"IsolatedThundershowers" : @47,
+@"ScatteredThunderstorms" : @39,
+@"Tornado" : @0,
+@"FreezingRain" : @10,
+@"TropicalStorm" : @1,
+@"Showers1" : @11,
+@"Hurricane" : @2,
+@"Fog" : @20
+};
+
     if(self = [super initWithFrame:frame]) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.backgroundColor = [UIColor clearColor];//colorWithRed:0.118 green:0.118 blue:0.125 alpha:1.00];
+            if([prefs boolForKey:@"customAppColor"]){
+                self.backgroundColor = [prefs colorForKey:@"appColor"];
+            }else{
+                self.backgroundColor = [UIColor clearColor];
+            }
+            //colorWithRed:0.118 green:0.118 blue:0.125 alpha:1.00];
             self.clipsToBounds = YES;
             [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
                 //Temperature Data
@@ -65,7 +120,11 @@ static NSDictionary *conditions = nil;
                 
                 
                     self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
+                    if([prefs boolForKey:@"customConditionIcon"]){
+                        city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
+                    }
                     [self.referenceView.background setCity:city];
+                    
                     [[self.referenceView.background condition] resume];
                 
                     self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -147,10 +206,14 @@ conditions = @{@"SevereThunderstorm" : @3,
         
         //self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.bounds];
         if([prefs boolForKey:@"appScreenWeather"]){
-            //city.conditionCode = 16;
+            if([prefs boolForKey:@"customConditionIcon"]){
+                city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
+            }
             [self.referenceView.background setCity:city];
             [[self.referenceView.background condition] resume];
             self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        }else{
+
         }
         //[self addSubview:self.referenceView];
         //[self sendSubviewToBack:self.referenceView];
@@ -165,6 +228,7 @@ conditions = @{@"SevereThunderstorm" : @3,
                  [self.logo setTintColor:[UIColor whiteColor]];*/
                 
                 self.temp.text = weather[@"kCurrentTemperatureForLocale"];
+                //TODO set adaptive color
                 self.temp.textColor = [UIColor whiteColor];
                 
             }];

@@ -83,5 +83,7 @@
 -(void)_buildModelForLocation:(id)arg1 ;
 @property (nonatomic,retain) UIStackView * hourlyBeltView;
 @property (nonatomic,retain) UIView * headerView;
+@property (nonatomic,retain) NSArray * hourlyForecastViews;
+@property (nonatomic,retain) UIView * dividerLineView; 
 @end
 

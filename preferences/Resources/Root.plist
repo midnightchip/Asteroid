@@ -4,6 +4,25 @@
 	<dict>
 		<key>items</key>
 		<array>
+
+			<dict>
+				<key>cell</key>
+				<string>PSTableCell</string>
+				<key>cellClass</key>
+				<string>CSPImageCell</string>
+				<key>height</key>
+				<string>160</string>
+				<key>static</key>
+				<true/>
+				<key>key</key>
+				<string>selectPhotos</string>
+				<key>storePath</key>
+				<string>/Library/PreferenceBundles/HomeGesture.bundle/banner.png</string>
+				<key>defaults</key>
+				<string>com.vitataf.homegesture</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/HomeGesture.bundle</string>
+			</dict>
 			<dict>
 				<key>cell</key>
 				<string>PSSwitchCell</string>
@@ -77,7 +96,36 @@
 				<string>Configure Live Weather Background Settings</string>
 				<key>key</key>
 				<string>liveWeather</string>
-			</dict>	
+			</dict>
+
+
+			<dict>
+				<key>action</key>
+				<string>pushToView:</string>
+				<key>cell</key>
+				<string>PSLinkCell</string>
+				<key>pushToPlist</key>
+				<string>icon</string>
+				<key>label</key>
+				<string>Weather App Icon</string>
+				<key>sublabel</key>
+				<string>Configure Weather App Icon</string>
+				<key>key</key>
+				<string>iconConfig</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Choose Custom Conditions</string>
+				<key>key</key>
+				<string>customCondition</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+			</dict>
 
 			<dict>
 				<key>cell</key>
@@ -101,6 +149,8 @@
 				<key>defaultsPath</key>
 				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
 			</dict>
+
+
 
 			<dict>
 				<key>cell</key>
