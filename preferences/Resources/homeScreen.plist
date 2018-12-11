@@ -26,7 +26,7 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Hide Dock</string>
+				<string>Hide Folders</string>
 				<key>sublabel</key>
 				<string>Makes Home Screen Folders Transparent</string>
 				<key>key</key>
@@ -52,6 +52,6 @@
 		</array>
 
 		<key>title</key>
-		<string>Lock Screen</string>
+		<string>Home Screen</string>
 	</dict>
 </plist>

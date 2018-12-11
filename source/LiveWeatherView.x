@@ -118,7 +118,7 @@ static WUIWeatherCondition* condition = nil;
                     [todayModel setPreferences:wPrefs];
                     City *city = ([[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
                 //[[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled]
-                
+                if([prefs boolForKey:@"appScreenWeather"]){
                     self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
                     /*if([prefs boolForKey:@"customConditionIcon"]){
                         city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
@@ -136,6 +136,7 @@ static WUIWeatherCondition* condition = nil;
                     [self.referenceView.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:-4].active = YES;
                     [self.referenceView.topAnchor constraintEqualToAnchor:self.topAnchor constant:4].active = YES;
                     [self.referenceView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4].active = YES;
+                }
                 //}
                 
                 
