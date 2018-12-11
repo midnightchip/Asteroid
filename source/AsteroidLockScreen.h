@@ -74,6 +74,7 @@
 @property (nonatomic, retain) UILabel *greetingLabel;
 @property (nonatomic, retain) UILabel *wDescription;
 @property (nonatomic, retain) UILabel *currentTemp;
+@property (nonatomic, retain) UILabel *editingLabel;
 @property (retain, nonatomic) UIVisualEffectView *blurView;
 @property (retain, nonatomic) UIButton *dismissButton;
 @property (retain, nonatomic) NSTimer *inactiveTimer;

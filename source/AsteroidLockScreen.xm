@@ -150,6 +150,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 %property (nonatomic, retain) UILabel *greetingLabel;
 %property (nonatomic, retain) UILabel *wDescription;
 %property (nonatomic, retain) UILabel *currentTemp;
+%property (nonatomic, retain) UILabel *editingLabel;
 %property (retain, nonatomic) UIVisualEffectView *blurView;
 %property (retain, nonatomic) UIButton *dismissButton;
 %property (retain, nonatomic) NSTimer *inactiveTimer;
@@ -254,6 +255,19 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         if(savedCenterData[@"currentTemp"]){
             self.currentTemp.center = ((NSValue*)savedCenterData[@"currentTemp"]).CGPointValue;
         }
+    }
+    
+    if(!self.editingLabel){
+        self.editingLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 25, 50, 25)];
+        self.editingLabel.textAlignment = NSTextAlignmentCenter;
+        self.editingLabel.textColor = [UIColor whiteColor];
+        self.editingLabel.layer.masksToBounds = YES;
+        self.editingLabel.adjustsFontSizeToFitWidth = YES;
+        self.editingLabel.text = @"Editing";
+        self.editingLabel.hidden = YES;
+        
+        self.editingLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [self.weather addSubview:self.editingLabel];
     }
     
     if(!self.forecastCont){
@@ -441,6 +455,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             }
             ((UIGestureRecognizer *)((NSArray *)[self.weather _gestureRecognizers])[0]).enabled = YES; // Swipe
             
+            self.editingLabel.hidden = YES;
             tc_editing = NO;
             
             // Saving icon ratio
@@ -466,6 +481,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             }
             ((UIGestureRecognizer *)((NSArray *)[self.weather _gestureRecognizers])[0]).enabled = NO; // Swipe
             
+            self.editingLabel.hidden = NO;
             tc_editing = YES;
         }
     }
