@@ -16,11 +16,11 @@ static WUIDynamicWeatherBackground* dynamicBG = nil;
 static WUIWeatherCondition* condition = nil;
 
 //Find a place to store this
-static NSDictionary *conditions = nil;
+//static NSDictionary *conditions = nil;
 
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    conditions = @{@"SevereThunderstorm" : @3,
+    /*conditions = @{@"SevereThunderstorm" : @3,
 @"Rain" : @12,
 @"Thunderstorm" : @4,
 @"Haze" : @21,
@@ -68,7 +68,7 @@ static NSDictionary *conditions = nil;
 @"Showers1" : @11,
 @"Hurricane" : @2,
 @"Fog" : @20
-};
+};*/
 
     if(self = [super initWithFrame:frame]) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -120,9 +120,9 @@ static NSDictionary *conditions = nil;
                 //[[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled]
                 
                     self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
-                    if([prefs boolForKey:@"customConditionIcon"]){
+                    /*if([prefs boolForKey:@"customConditionIcon"]){
                         city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
-                    }
+                    }*/
                     [self.referenceView.background setCity:city];
                     
                     [[self.referenceView.background condition] resume];
@@ -147,7 +147,7 @@ static NSDictionary *conditions = nil;
 }
 -(void)updateWeatherDisplay{
 //Objective-C requires this to be done in runtime rather than compile time. objective-C++ doesn't have this restriction.
-conditions = @{@"SevereThunderstorm" : @3,
+/* = @{@"SevereThunderstorm" : @3,
 @"Rain" : @12,
 @"Thunderstorm" : @4,
 @"Haze" : @21,
@@ -195,7 +195,7 @@ conditions = @{@"SevereThunderstorm" : @3,
 @"Showers1" : @11,
 @"Hurricane" : @2,
 @"Fog" : @20
-};
+};*/
 
     dispatch_async(dispatch_get_main_queue(), ^{
         WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
@@ -206,9 +206,9 @@ conditions = @{@"SevereThunderstorm" : @3,
         
         //self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.bounds];
         //if([prefs boolForKey:@"appScreenWeather"]){
-            if([prefs boolForKey:@"customConditionIcon"]){
+           /* if([prefs boolForKey:@"customConditionIcon"]){
                 city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
-            }
+            }*/
             [self.referenceView.background setCity:city];
             [[self.referenceView.background condition] resume];
             self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
