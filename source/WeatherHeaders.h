@@ -1,5 +1,9 @@
 #import <CoreLocation/CoreLocation.h>
 
+@interface WFLocation
+
+@end
+
 @interface City : NSObject
 -(NSMutableArray*)hourlyForecasts;
 -(NSMutableArray*)dayForecasts;
@@ -8,6 +12,7 @@
 -(unsigned long long)sunriseTime;
 -(unsigned long long)sunsetTime;
 @property (assign,nonatomic) BOOL isLocalWeatherCity;
+@property (nonatomic, retain) WFLocation *wfLocation;
 -(BOOL)isDay;
 -(void) update;
 -(NSDate*) updateTime;
@@ -59,9 +64,7 @@
 -(void)_executeForecastRetrievalForLocation:(id)arg1 completion:(/*^block*/id)arg2 ;
 @end
 
-@interface WFLocation
 
-@end
 
 @interface WFGeocodeRequest
 @property (retain) WFLocation * geocodedResult;

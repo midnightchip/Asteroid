@@ -99,6 +99,8 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
                 NSLog(@"lock_TWEAK | didnt work");
                 self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
                 self.localWeather = self.city.isLocalWeatherCity;
+                self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.city.wfLocation];
+                [self.todayModel executeModelUpdateWithCompletion:^{nil;}];
                 self.populated = YES;
                 [self postNotification];
                 [self setUpRefreshTimer];
