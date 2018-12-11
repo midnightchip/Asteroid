@@ -14,7 +14,8 @@ typedef void(^completion)();
 @property (nonatomic, retain) WAForecastModel *forecastModel;
 @property (nonatomic, retain) City *city;
 @property (nonatomic, retain) NSTimer *refreshTimer;
-@property (nonatomic, getter=isLocalWeather) BOOL localWeather; 
+@property (nonatomic, getter=isLocalWeather) BOOL localWeather;
+@property (nonatomic, getter=isPopulated) BOOL populated;
 
 + (instancetype)sharedInstance;
 -(void)updateWeatherDataWithCompletion:(completion) compBlock;

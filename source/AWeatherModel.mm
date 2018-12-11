@@ -70,8 +70,8 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
 }
 
 -(void)updateWeatherDataWithCompletion:(completion) compBlock{
-    if([[objc_getClass("WeatherPreferences") sharedPreferences] isLocalWeatherEnabled]){
-        self.localWeather = YES;
+    //if([[objc_getClass("WeatherPreferences") sharedPreferences] isLocalWeatherEnabled]){
+        //self.localWeather = YES;
         //This sets up local weather, and anyone on github better appreciate this - the casle
         self.weatherPreferences = [objc_getClass("WeatherPreferences") sharedPreferences];
         self.locationProviderModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
@@ -88,6 +88,8 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
                     if([prefs boolForKey:@"customCondition"]){
                         self.city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditions"]] doubleValue];
                     }
+                    self.localWeather = self.city.isLocalWeatherCity;
+                    self.populated = YES;
                     [self postNotification];
                     [self setUpRefreshTimer];
                     compBlock();
@@ -95,7 +97,7 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
             } else NSLog(@"lock_TWEAK | didnt work");
         }];
         
-    } else {
+    /*} else {
         self.localWeather = NO;
         self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
         if([prefs boolForKey:@"customCondition"]){
@@ -103,7 +105,7 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
         }
         
         compBlock();
-    }
+    }*/
 }
 
 -(void)setUpRefreshTimer{

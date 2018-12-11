@@ -557,9 +557,9 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 
 %new
 -(void) updateLockView {
-    City *city = (/*[prefs boolForKey:@"isLocal"] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : */[[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
+    //City *city = (/*[prefs boolForKey:@"isLocal"] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : */[[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
     
-    if(city){
+    if(self.weatherModel.isPopulated){
         [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
             
             // Updating the image icon
@@ -623,7 +623,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             [self.forecastCont _updateViewContent];
         }];
     }
-    city = nil;
+    //city = nil;
 }
 %end
 

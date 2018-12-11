@@ -111,7 +111,7 @@ static NSDictionary *conditions = nil;
                 [self.logo.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4].active = YES;
                 
                 //Live background
-                if([prefs boolForKey:@"appScreenWeather"]){
+                //if([prefs boolForKey:@"appScreenWeather"]){
                     WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
                     WATodayAutoupdatingLocationModel *todayModel = [[%c(WATodayAutoupdatingLocationModel) alloc] init];
                 
@@ -136,7 +136,7 @@ static NSDictionary *conditions = nil;
                     [self.referenceView.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:-4].active = YES;
                     [self.referenceView.topAnchor constraintEqualToAnchor:self.topAnchor constant:4].active = YES;
                     [self.referenceView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4].active = YES;
-                }
+                //}
                 
                 
             }];
@@ -205,16 +205,16 @@ conditions = @{@"SevereThunderstorm" : @3,
         City *city = ([[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
         
         //self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.bounds];
-        if([prefs boolForKey:@"appScreenWeather"]){
+        //if([prefs boolForKey:@"appScreenWeather"]){
             if([prefs boolForKey:@"customConditionIcon"]){
                 city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
             }
             [self.referenceView.background setCity:city];
             [[self.referenceView.background condition] resume];
             self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        }else{
+        //}else{
 
-        }
+       // }
         //[self addSubview:self.referenceView];
         //[self sendSubviewToBack:self.referenceView];
         if(city){
