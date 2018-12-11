@@ -85,9 +85,10 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
                     [self.locationProviderModel _willDeliverForecastModel:self.forecastModel];
                     self.locationProviderModel.forecastModel = self.forecastModel;
                     self.city = self.forecastModel.city;
-                    /*if([prefs boolForKey:@"customCondition"]){
-                        self.city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditions"]] doubleValue];
-                    }*/
+                    if([prefs boolForKey:@"customCondition"]){
+                        self.fakeCity = [[objc_getClass("City") alloc] init];
+                        self.fakeCity.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditions"]] doubleValue];
+                    }
                     self.localWeather = self.city.isLocalWeatherCity;
                     self.populated = YES;
                     [self postNotification];

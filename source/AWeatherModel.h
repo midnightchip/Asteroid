@@ -13,6 +13,7 @@ typedef void(^completion)();
 @property (nonatomic, retain) WATodayModel *todayModel;
 @property (nonatomic, retain) WAForecastModel *forecastModel;
 @property (nonatomic, retain) City *city;
+@property (nonatomic, retain) City *fakeCity;
 @property (nonatomic, retain) NSTimer *refreshTimer;
 @property (nonatomic, getter=isLocalWeather) BOOL localWeather;
 @property (nonatomic, getter=isPopulated) BOOL populated;
