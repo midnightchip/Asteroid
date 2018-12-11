@@ -260,8 +260,10 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] init]; // Temp to make sure its called once
         static AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
         [weatherModel updateWeatherDataWithCompletion:^{
-            self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] initWithLocation:self.weatherModel.city];
+            City *city = ([[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
+            self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] initWithLocation:city];//self.weatherModel.city];
             
+
             ((UIView *)((NSArray *)self.forecastCont.view.layer.sublayers)[0]).hidden = YES; // Visual Effect view to hidden
             self.forecastCont.view.frame = CGRectMake(0, (self.frame.size.height / 2), self.frame.size.width, self.frame.size.height/3);
             [self.weather addSubview:self.forecastCont.view];

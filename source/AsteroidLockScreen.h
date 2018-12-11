@@ -55,12 +55,17 @@
 @property(retain, nonatomic) UILabel *naturalLanguageDescriptionLabel;
 @end
 
+@interface WATodayHeaderView : UILabel
+@property (nonatomic,retain) UILabel * locationLabel; 
+@property (nonatomic,copy) NSString * locationName;   
+@end 
 
 @interface WALockscreenWidgetViewController : UIViewController
 +(id) sharedInstanceIfExists;
 -(void) updateWeather;
 @property (nonatomic, retain) WAForecastModel *currentForecastModel;
 @property (nonatomic, retain) WATodayPadView *todayView;
+@property (nonatomic, retain) WATodayHeaderView *headerView;
 @end
 
 @interface SBDashBoardMainPageView : UIView

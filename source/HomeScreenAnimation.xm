@@ -9,7 +9,7 @@
 -(void)updateView;
 @end 
 
-/*static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
+static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
 @"Rain" : @12,
 @"Thunderstorm" : @4,
 @"Haze" : @21,
@@ -57,7 +57,7 @@
 @"Showers1" : @11,
 @"Hurricane" : @2,
 @"Fog" : @20
-};*/
+};
 
 static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
 
@@ -87,9 +87,15 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     
     self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
     //EZ custom weather animation
-    
+    City *customWeather = self.weatherModel.city;
+    if([prefs boolForKey:@"customCondition"]){
+        customWeather.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditions"]] doubleValue];
+        [self.referenceView.background setCity:customWeather];
+    }else{
+        [self.referenceView.background setCity:self.weatherModel.city];
+    }
     //self.weatherModel.city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditions"]] doubleValue];//16;
-    [self.referenceView.background setCity:self.weatherModel.city];
+    
     [self.referenceView.background setTag:123];
     
     [[self.referenceView.background condition] resume];
