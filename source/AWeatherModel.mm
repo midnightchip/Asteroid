@@ -85,17 +85,25 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
                     [self.locationProviderModel _willDeliverForecastModel:self.forecastModel];
                     self.locationProviderModel.forecastModel = self.forecastModel;
                     self.city = self.forecastModel.city;
-                    if([prefs boolForKey:@"customCondition"]){
-                        self.fakeCity = [[objc_getClass("City") alloc] init];
-                        self.fakeCity.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditions"]] doubleValue];
-                    }
                     self.localWeather = self.city.isLocalWeatherCity;
                     self.populated = YES;
+                    
+                    self.fakeCity = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
+                    
                     [self postNotification];
                     [self setUpRefreshTimer];
                     compBlock();
                 }];
-            } else NSLog(@"lock_TWEAK | didnt work");
+                
+            } else{
+                NSLog(@"lock_TWEAK | didnt work");
+                self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
+                self.localWeather = self.city.isLocalWeatherCity;
+                self.populated = YES;
+                [self postNotification];
+                [self setUpRefreshTimer];
+                compBlock();
+            }
         }];
         
     /*} else {
