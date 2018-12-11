@@ -274,8 +274,14 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] init]; // Temp to make sure its called once
         static AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
         [weatherModel updateWeatherDataWithCompletion:^{
-            City *city = ([[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
-            self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] initWithLocation:city];//self.weatherModel.city];
+            //Janky fix 
+            //If local, set the weather in a new instance, otherwise just pull from shared provider.
+            if([prefs boolForKey:@"customCondition"] && [[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled]){
+                City *city = [[%c(WeatherPreferences) sharedPreferences] localWeatherCity];
+                self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] initWithLocation:city];
+            }else{
+                self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] initWithLocation:self.weatherModel.city];
+            }
             
 
             ((UIView *)((NSArray *)self.forecastCont.view.layer.sublayers)[0]).hidden = YES; // Visual Effect view to hidden
