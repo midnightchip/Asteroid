@@ -74,6 +74,9 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
     self.weatherPreferences = [objc_getClass("WeatherPreferences") sharedPreferences];
     self.locationProviderModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
     [self.locationProviderModel.locationManager forceLocationUpdate];
+    
+    self.fakeCity = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
+    
     [self.locationProviderModel _executeLocationUpdateForLocalWeatherCityWithCompletion:^{
         if(self.locationProviderModel.geocodeRequest.geocodedResult){
             self.geoLocation = self.locationProviderModel.geocodeRequest.geocodedResult;
@@ -85,8 +88,6 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
                 self.city = self.forecastModel.city;
                 self.localWeather = self.city.isLocalWeatherCity;
                 self.populated = YES;
-                
-                self.fakeCity = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
                 
                 [self postNotification];
                 [self setUpRefreshTimer];
