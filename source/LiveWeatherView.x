@@ -79,67 +79,72 @@ static WUIWeatherCondition* condition = nil;
             }
             //colorWithRed:0.118 green:0.118 blue:0.125 alpha:1.00];
             self.clipsToBounds = YES;
-            [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
-                //Temperature Data
-                self.temp = [[UILabel alloc]init];
-                self.temp.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-                self.temp.text = weather[@"kCurrentTemperatureForLocale"];
-                self.temp.textColor = [UIColor whiteColor];
-                self.temp.textAlignment = NSTextAlignmentCenter;
-                [self.temp setCenter:CGPointMake(self.frame.size.width / 1.9, self.frame.size.height / 1.3)];
-                [self addSubview: self.temp];
-                
-                //Icon
-                self.logo = [[UIImageView alloc] init];//WithFrame:self.frame];
-                self.logo.frame = CGRectMake(0, 0, self.frame.size.width /1.5 , self.frame.size.height /1.5 );
-                UIImage *icon;
-                icon = weather[@"kCurrentConditionImage"];
-                self.logo.image = icon;
-                self.logo.contentMode = UIViewContentModeScaleAspectFit;
-                [self.logo setCenter:CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2.5)];
-                //self.logo.center = self.center;
-                
-                /*self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                 //TODO enable changing this color
-                 [self.logo setTintColor:[UIColor whiteColor]];
-                 self.logo.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;*/
-                [self addSubview: self.logo];
-                
-                [self.logo.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:4].active = YES;
-                [self.logo.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:-4].active = YES;
-                [self.logo.topAnchor constraintEqualToAnchor:self.topAnchor constant:4].active = YES;
-                [self.logo.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4].active = YES;
-                
-                //Live background
-                //if([prefs boolForKey:@"appScreenWeather"]){
+            AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
+            [weatherModel updateWeatherDataWithCompletion:^{
+                [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
+                    //Temperature Data
+                    self.temp = [[UILabel alloc]init];
+                    self.temp.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+                    self.temp.text = weather[@"kCurrentTemperatureForLocale"];
+                    self.temp.textColor = [UIColor whiteColor];
+                    self.temp.textAlignment = NSTextAlignmentCenter;
+                    [self.temp setCenter:CGPointMake(self.frame.size.width / 1.9, self.frame.size.height / 1.3)];
+                    [self addSubview: self.temp];
+                    
+                    //Icon
+                    self.logo = [[UIImageView alloc] init];//WithFrame:self.frame];
+                    self.logo.frame = CGRectMake(0, 0, self.frame.size.width /1.5 , self.frame.size.height /1.5 );
+                    UIImage *icon;
+                    icon = weather[@"kCurrentConditionImage"];
+                    self.logo.image = icon;
+                    self.logo.contentMode = UIViewContentModeScaleAspectFit;
+                    [self.logo setCenter:CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2.5)];
+                    //self.logo.center = self.center;
+                    
+                    /*self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                     //TODO enable changing this color
+                     [self.logo setTintColor:[UIColor whiteColor]];
+                     self.logo.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;*/
+                    [self addSubview: self.logo];
+                    
+                    [self.logo.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:4].active = YES;
+                    [self.logo.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:-4].active = YES;
+                    [self.logo.topAnchor constraintEqualToAnchor:self.topAnchor constant:4].active = YES;
+                    [self.logo.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4].active = YES;
+                    
+                    //Live background
+                    //if([prefs boolForKey:@"appScreenWeather"]){
                     WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
                     WATodayAutoupdatingLocationModel *todayModel = [[%c(WATodayAutoupdatingLocationModel) alloc] init];
-                
+                    
                     [todayModel setPreferences:wPrefs];
                     City *city = ([[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
-                //[[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled]
-                
+                    //[[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled]
+                    
                     self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
                     /*if([prefs boolForKey:@"customConditionIcon"]){
-                        city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
-                    }*/
+                     city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
+                     }*/
                     [self.referenceView.background setCity:city];
                     
                     [[self.referenceView.background condition] resume];
-                
+                    
                     self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
                     self.referenceView.clipsToBounds = YES;
                     [self addSubview:self.referenceView];
                     [self sendSubviewToBack:self.referenceView];
-                
+                    
                     [self.referenceView.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:4].active = YES;
                     [self.referenceView.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:-4].active = YES;
                     [self.referenceView.topAnchor constraintEqualToAnchor:self.topAnchor constant:4].active = YES;
                     [self.referenceView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4].active = YES;
-                //}
-                
-                
+                    //}
+                    
+                    
+                }];
             }];
+            
+            
         });
     }
     
