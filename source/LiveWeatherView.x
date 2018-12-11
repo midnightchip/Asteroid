@@ -120,9 +120,9 @@ static NSDictionary *conditions = nil;
                 //[[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled]
                 
                     self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
-                    /*if([prefs boolForKey:@"customConditionIcon"]){
+                    if([prefs boolForKey:@"customConditionIcon"]){
                         city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
-                    }*/
+                    }
                     [self.referenceView.background setCity:city];
                     
                     [[self.referenceView.background condition] resume];
@@ -206,6 +206,9 @@ conditions = @{@"SevereThunderstorm" : @3,
         
         //self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.bounds];
         //if([prefs boolForKey:@"appScreenWeather"]){
+            if([prefs boolForKey:@"customConditionIcon"]){
+                city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
+            }
             [self.referenceView.background setCity:city];
             [[self.referenceView.background condition] resume];
             self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

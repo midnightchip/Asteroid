@@ -22,3 +22,7 @@ typedef void(^completion)();
 -(void)setUpRefreshTimer;
 -(void) postNotification;
 @end
+
+@interface City (Condition)
+-(void)setConditionCode:(long long)arg1;
+@end

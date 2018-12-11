@@ -86,6 +86,9 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     [self.referenceView removeFromSuperview];
     
     self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
+    //EZ custom weather animation
+    
+    //self.weatherModel.city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditions"]] doubleValue];//16;
     [self.referenceView.background setCity:self.weatherModel.city];
     [self.referenceView.background setTag:123];
     
