@@ -86,7 +86,7 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
                 [self.locationProviderModel _willDeliverForecastModel:self.forecastModel];
                 self.locationProviderModel.forecastModel = self.forecastModel;
                 self.city = self.forecastModel.city;
-                self.fakeCity = [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:self.city]];
+                //self.fakeCity = [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:self.city]];
                 self.localWeather = self.city.isLocalWeatherCity;
                 self.populated = YES;
                 
