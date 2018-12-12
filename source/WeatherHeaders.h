@@ -61,6 +61,7 @@
 +(id)modelWithLocation:(id)arg1;
 @property (nonatomic,retain) WAForecastModel * forecastModel;
 -(id)location;
+-(void)addObserver:(id)arg1 ;
 -(void)_executeForecastRetrievalForLocation:(id)arg1 completion:(/*^block*/id)arg2 ;
 @end
 
@@ -73,6 +74,7 @@
 @interface WATodayAutoupdatingLocationModel : WATodayModel
 -(BOOL)_reloadForecastData:(BOOL)arg1 ;
 -(void)setPreferences:(WeatherPreferences *)arg1;
+-(void)_kickstartLocationManager;
 -(WAForecastModel *)forecastModel;
 @property (assign,nonatomic) unsigned long long citySource;
 @property (nonatomic,retain) WeatherLocationManager * locationManager;
@@ -95,3 +97,9 @@
 @property (nonatomic,retain) WATodayModel * model;   
 @end
 
+@protocol WATodayModelObserver <NSObject>
+@required
+-(void)todayModelWantsUpdate:(WATodayModel *)model;
+-(void)todayModel:(WATodayModel *)model forecastWasUpdated:(WAForecastModel *)forecast;
+
+@end

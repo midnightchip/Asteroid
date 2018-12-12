@@ -86,6 +86,7 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
                 [self.locationProviderModel _willDeliverForecastModel:self.forecastModel];
                 self.locationProviderModel.forecastModel = self.forecastModel;
                 self.city = self.forecastModel.city;
+                self.fakeCity = [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:self.city]];
                 self.localWeather = self.city.isLocalWeatherCity;
                 self.populated = YES;
                 
@@ -96,6 +97,7 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
             
         } else{
             NSLog(@"lock_TWEAK | didnt work");
+            /*
             self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
             self.localWeather = self.city.isLocalWeatherCity;
             self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.city.wfLocation];
@@ -103,7 +105,7 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
             self.populated = YES;
             [self postNotification];
             [self setUpRefreshTimer];
-            compBlock();
+            compBlock();*/
         }
     }];
 }
