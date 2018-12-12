@@ -465,9 +465,9 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             tc_editing = NO;
             
             // Saving icon ratio
-            [prefs setObject: @(@(self.logo.frame.size.width).doubleValue / initialIconFrame.doubleValue) forKey:@"iconSize"];
+            if(self.logo.frame.origin.x) [prefs setObject: @(@(self.logo.frame.size.width).doubleValue / initialIconFrame.doubleValue) forKey:@"iconSize"];
             
-            [prefs setObject: @(@(self.forecastCont.view.frame.size.width).doubleValue / initialForeFrame.doubleValue) forKey:@"forecastContViewSize"];
+             if(self.forecastCont.view.frame.origin.x) [prefs setObject: @(@(self.forecastCont.view.frame.size.width).doubleValue / initialForeFrame.doubleValue) forKey:@"forecastContViewSize"];
             
             // Saving values
             savingValuesToFile(self);
