@@ -1,10 +1,10 @@
-#import <LWPProvider.h>
+#import "../source/LWPProvider.h"
 #import <CSWeather/CSWeatherInformationProvider.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <notify.h>
 #import <CoreLocation/CoreLocation.h>
 
-#import "AWeatherModel.h"
+#import "../source/AWeatherModel.h"
 
 
 @interface UIView (tweak_cat)
