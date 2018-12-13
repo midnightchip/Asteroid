@@ -19,7 +19,9 @@
 		<key>glyphColor</key>
 		<string>FFFFFF</string>
         <key>refreshRate</key>
-        <real>5</real>
+        <real>6</real>
+        <key>inactiveValue</key>
+        <real>11</real>
         <key>iconSize</key> <!--Data for the lock icon-->
         <real>1</real>
         <key>icforecastContViewSizeonSize</key> <!--Data for the lock icon-->

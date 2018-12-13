@@ -175,7 +175,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         [[NSNotificationCenter defaultCenter] addObserverForName: @"SBBacklightFadeFinishedNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
             [self.inactiveTimer invalidate];
             NSLog(@"lock_TWEAK | Timer set");
-            self.inactiveTimer = [NSTimer scheduledTimerWithTimeInterval:600.0
+            self.inactiveTimer = [NSTimer scheduledTimerWithTimeInterval:([prefs doubleForKey:@"inactiveValue"] * 60)
                                                                   target:self
                                                                 selector:@selector(revealWeather:)
                                                                 userInfo:nil

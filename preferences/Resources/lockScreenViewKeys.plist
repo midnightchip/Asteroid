@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+
+		<key>items</key>
+		<array>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSGroupCell</string>
+                <key>label</key>
+                <string>Editing</string>
+                <key>footerText</key>
+                <string>Components can be resized and moved around the lock screen through editing mode. To enter editing  mode, long press any of the lock screen icons. In order to save all changes, exit editing mode by long pressing again .</string>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSGroupCell</string>
+                <key>footerText</key>
+                <string>Pleasantry Text Size.</string>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSSwitchCell</string>
+                <key>label</key>
+                <string>Enable Pleasantry</string>
+                <key>key</key>
+                <string>addgreetLabel</string>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+            </dict>
+			
+            <dict>
+                <key>cell</key>
+                <string>PSSliderCell</string>
+                <key>key</key>
+                <string>greetingSize</string>
+                <key>showValue</key>
+                <true/>
+                <key>min</key>
+                <real>12</real>
+                <key>max</key>
+                <real>60</real>
+                <key>isSegmented</key>
+                <true/>
+                <key>segmentCount</key>
+                <real>48</real>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+            </dict>
+
+            <dict>
+                <key>cell</key>
+                <string>PSGroupCell</string>
+                <key>footerText</key>
+                <string>Weather Description Size.</string>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSSwitchCell</string>
+                <key>label</key>
+                <string>Enable Weather Description</string>
+                <key>key</key>
+                <string>addDescription</string>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSSliderCell</string>
+                <key>key</key>
+                <string>wDescriptionSize</string>
+                <key>showValue</key>
+                <true/>
+                <key>min</key>
+                <real>12</real>
+                <key>max</key>
+                <real>60</real>
+                <key>isSegmented</key>
+                <true/>
+                <key>segmentCount</key>
+                <real>48</real>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSGroupCell</string>
+                <key>footerText</key>
+                <string>Current Temperature Text Size</string>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSSwitchCell</string>
+                <key>label</key>
+                <string>Enable Current Temperature</string>
+                <key>key</key>
+                <string>addTemp</string>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSSliderCell</string>
+                <key>key</key>
+                <string>tempSize</string>
+                <key>showValue</key>
+                <true/>
+                <key>min</key>
+                <real>12</real>
+                <key>max</key>
+                <real>60</real>
+                <key>isSegmented</key>
+                <true/>
+                <key>segmentCount</key>
+                <real>48</real>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSGroupCell</string>
+            </dict>
+            
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Enable Glyph</string>
+				<key>key</key>
+				<string>addLogo</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+			</dict>
+
+
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Enable Dismiss Button</string>
+				<key>key</key>
+				<string>addDismiss</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Enable Notification Reminder</string>
+				<key>key</key>
+				<string>addNotification</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Enable Blur</string>
+				<key>key</key>
+				<string>addBlur</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+			</dict>
+
+            <dict>
+                <key>cell</key>
+                <string>PSGroupCell</string>
+                <key>label</key>
+                <string>Forecast Options</string>
+            </dict>
+            
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Enable Weather Preview</string>
+				<key>key</key>
+				<string>enableForeHeader</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Enable Weather Forecast Info</string>
+				<key>key</key>
+				<string>enableForeTable</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+			</dict>
+		</array>
+
+		<key>title</key>
+		<string>Components</string>
+	</dict>
+</plist>

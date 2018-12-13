@@ -8,7 +8,7 @@
             <dict>
                 <key>cell</key>
                 <string>PSGroupCell</string>
-                <key>footerText</key>
+                <key>label</key>
                 <string>Refresh Rate</string>
             </dict>
             
@@ -48,6 +48,6 @@
 		</array>
 
 		<key>title</key>
-		<string>Lock Screen</string>
+		<string>General Settings</string>
 	</dict>
 </plist>
