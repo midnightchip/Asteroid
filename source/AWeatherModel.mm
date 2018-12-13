@@ -73,6 +73,8 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
     //This sets up local weather, and anyone on github better appreciate this - the casle
     self.weatherPreferences = [objc_getClass("WeatherPreferences") sharedPreferences];
     self.locationProviderModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
+    [self.locationProviderModel setLocationServicesActive:YES];
+    [self.locationProviderModel setIsLocationTrackingEnabled:YES];
     [self.locationProviderModel.locationManager forceLocationUpdate];
     
     //self.fakeCity = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
@@ -97,7 +99,7 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
             
         } else{
             NSLog(@"lock_TWEAK | didnt work");
-            /*
+            
             self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
             self.localWeather = self.city.isLocalWeatherCity;
             self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.city.wfLocation];
@@ -105,9 +107,10 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
             self.populated = YES;
             [self postNotification];
             [self setUpRefreshTimer];
-            compBlock();*/
+            compBlock();
         }
     }];
+    [self.locationProviderModel setIsLocationTrackingEnabled:NO];
 }
 
 -(void)setUpRefreshTimer{

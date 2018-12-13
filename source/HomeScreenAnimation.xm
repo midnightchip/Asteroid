@@ -1,11 +1,13 @@
 #import "Asteroid.h"
 #import <objc/message.h>
 @interface SBHomeScreenView : UIView
+//@interface SBFWallpaperView : UIView
 @property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
 @property (nonatomic, retain) AWeatherModel *weatherModel;
 @end 
 
 @interface SBHomeScreenView (Weather)
+//@interface SBFWallpaperView (Weather)
 -(void)updateView;
 @end 
 
@@ -63,6 +65,7 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
 
 %group LiveWeather
 %hook SBHomeScreenView
+//%hook SBFWallpaperView
 %property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
 %property (nonatomic, retain) AWeatherModel *weatherModel;
 

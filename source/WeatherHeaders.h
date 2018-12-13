@@ -63,6 +63,7 @@
 -(id)location;
 -(void)addObserver:(id)arg1 ;
 -(void)_executeForecastRetrievalForLocation:(id)arg1 completion:(/*^block*/id)arg2 ;
+
 @end
 
 
@@ -76,6 +77,8 @@
 -(void)setPreferences:(WeatherPreferences *)arg1;
 -(void)_kickstartLocationManager;
 -(WAForecastModel *)forecastModel;
+-(void)setIsLocationTrackingEnabled:(BOOL)arg1;
+-(void)setLocationServicesActive:(BOOL)arg1;
 @property (assign,nonatomic) unsigned long long citySource;
 @property (nonatomic,retain) WeatherLocationManager * locationManager;
 @property (assign,nonatomic) BOOL isLocationTrackingEnabled;
