@@ -12,7 +12,7 @@
                 <key>label</key>
                 <string>Editing</string>
                 <key>footerText</key>
-                <string>Components can be resized and moved around the lock screen through editing mode. To enter editing  mode, long press any of the lock screen icons. In order to save all changes, exit editing mode by long pressing again .</string>
+                <string>Components can be resized and moved around the lock screen through editing mode. To enter editing  mode, long press any of the lock screen icons. In order to save all changes, exit editing mode by long pressing again.</string>
             </dict>
             
             <dict>
