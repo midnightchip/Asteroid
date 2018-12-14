@@ -348,6 +348,27 @@
 				<key>action</key>
 				<string>openInBrowser:</string>
 				<key>username</key>
+				<string>CreatureSurvive</string>
+				<key>provider</key>
+				<string>1</string>
+				<key>height</key>
+				<string>81</string>
+				<key>devName</key>
+				<string></string>
+				<key>devTitle</key>
+				<string>Creature Survive</string>
+				<key>devSubtitle</key>
+				<string>Follow Creature on Twitter</string>
+			</dict>
+
+			<dict>
+				<key>cell</key>
+				<string>PSLinkCell</string>
+				<key>cellClass</key>
+				<string>CSPDeveloperCell</string>
+				<key>action</key>
+				<string>openInBrowser:</string>
+				<key>username</key>
 				<string>TPinpal</string>
 				<key>provider</key>
 				<string>1</string>
