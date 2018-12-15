@@ -18,6 +18,8 @@ extern BOOL isOnLockscreen();
 extern void hapticFeedbackSoft();
 
 NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/Application Support/lockWeather.bundle"];
+
+
 //NSString *alertTitle = [tweakBundle localizedStringForKey:@"ALERT_TITLE" value:@"" table:nil];
 
 // Statics
@@ -29,6 +31,7 @@ static double lastZoomValue = 0;
 static SBDashBoardMainPageView *mainPageView;
 static NSNumber *initialIconFrame;
 static NSNumber *initialForeFrame;
+static WATodayAutoupdatingLocationModel* todayModel = nil;
 
 
 // Setting the gestures function
@@ -269,7 +272,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.editingLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self.weather addSubview:self.editingLabel];
     }
-    static WATodayAutoupdatingLocationModel* todayModel = nil;
+    
     
     if(!self.forecastCont){
         self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] init]; // Temp to make sure its called once
@@ -648,7 +651,16 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             self.greetingLabel.textAlignment = NSTextAlignmentCenter;
             
             // Update the forecast
-            self.forecastCont.model = self.weatherModel.todayModel;
+            WeatherPreferences *preferences = [%c(WeatherPreferences) sharedPreferences];
+            if(!todayModel){
+                todayModel = [%c(WATodayModel) autoupdatingLocationModelWithPreferences:preferences effectiveBundleIdentifier:@"com.apple.weather"];
+            }
+            [todayModel setLocationServicesActive:YES];
+            [todayModel setIsLocationTrackingEnabled:YES];
+            [todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *arg2) {
+                self.forecastCont.model = todayModel;
+                [todayModel setIsLocationTrackingEnabled:NO];
+            }];
             [self.forecastCont _updateViewContent];
         }];
     }
