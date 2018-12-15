@@ -269,43 +269,48 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.editingLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self.weather addSubview:self.editingLabel];
     }
+    static WATodayAutoupdatingLocationModel* todayModel = nil;
     
     if(!self.forecastCont){
         self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] init]; // Temp to make sure its called once
-        static AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
-        [weatherModel updateWeatherDataWithCompletion:^{
-            //Janky fix 
-            //If local, set the weather in a new instance, otherwise just pull from shared provider.
-            if([prefs boolForKey:@"customCondition"] && [[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled]){
-                City *city = [[%c(WeatherPreferences) sharedPreferences] localWeatherCity];
-                self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] initWithLocation:city];
-            }else{
-                self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] initWithLocation:self.weatherModel.city];
+            //Thank you Matchstic, better than my janky check.
+            WeatherPreferences *preferences = [%c(WeatherPreferences) sharedPreferences];
+            if(!todayModel){
+                todayModel = [%c(WATodayModel) autoupdatingLocationModelWithPreferences:preferences effectiveBundleIdentifier:@"com.apple.weather"];
             }
+            [todayModel setLocationServicesActive:YES];
+            [todayModel setIsLocationTrackingEnabled:YES];
+            [todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *arg2) {
+			if(todayModel.forecastModel.city){
+                [todayModel setIsLocationTrackingEnabled:NO];
+                self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] initWithLocation:todayModel.forecastModel.city];
+                ((UIView *)((NSArray *)self.forecastCont.view.layer.sublayers)[0]).hidden = YES; // Visual Effect view to hidden
+                self.forecastCont.view.frame = CGRectMake(0, (self.frame.size.height / 2), self.frame.size.width, self.frame.size.height/3);
+                [self.weather addSubview:self.forecastCont.view];
             
-
-            ((UIView *)((NSArray *)self.forecastCont.view.layer.sublayers)[0]).hidden = YES; // Visual Effect view to hidden
-            self.forecastCont.view.frame = CGRectMake(0, (self.frame.size.height / 2), self.frame.size.width, self.frame.size.height/3);
-            [self.weather addSubview:self.forecastCont.view];
+                [prefs postNotification];
             
-            [prefs postNotification];
+                setGesturesForView(self, self.forecastCont.view);
             
-            setGesturesForView(self, self.forecastCont.view);
+                if(savedCenterData[@"forecastContView"]){
+                    self.forecastCont.view.center = ((NSValue*)savedCenterData[@"forecastContView"]).CGPointValue;
+                }
             
-            if(savedCenterData[@"forecastContView"]){
-                self.forecastCont.view.center = ((NSValue*)savedCenterData[@"forecastContView"]).CGPointValue;
-            }
+                initialForeFrame = @(self.forecastCont.view.frame.size.width);
             
-            initialForeFrame = @(self.forecastCont.view.frame.size.width);
-            
-            if([prefs doubleForKey:@"forecastContViewSize"]){
-                [self.forecastCont.view layer].anchorPoint = CGPointMake(0.5, 0.5);
+                if([prefs doubleForKey:@"forecastContViewSize"]){
+                    [self.forecastCont.view layer].anchorPoint = CGPointMake(0.5, 0.5);
                 
                 //NSLog(@"lock_TWEAK | %f", [prefs doubleForKey:@"iconSize"]);
                 
-                self.forecastCont.view.transform = CGAffineTransformScale(self.forecastCont.view.transform, [prefs doubleForKey:@"forecastContViewSize"], [prefs doubleForKey:@"forecastContViewSize"]);
-            }
-        }];
+                    self.forecastCont.view.transform = CGAffineTransformScale(self.forecastCont.view.transform, [prefs doubleForKey:@"forecastContViewSize"], [prefs doubleForKey:@"forecastContViewSize"]);
+                }
+				
+
+				
+			}
+            }];
+       // }];
         
     }
     
@@ -796,3 +801,26 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     }
     
 }*/
+
+%ctor{
+    if([prefs boolForKey:@"kLWPEnabled"]){
+        %init();
+    }
+    //Thank you june
+    NSArray *args = [[NSClassFromString(@"NSProcessInfo") processInfo] arguments];
+	NSUInteger count = args.count;
+	if (count != 0) {
+		NSString *executablePath = args[0];
+		if (executablePath) {
+			NSString *processName = [executablePath lastPathComponent];
+			BOOL isSpringBoard = [processName isEqualToString:@"SpringBoard"];
+			BOOL isApplication = [executablePath rangeOfString:@"/Application"].location != NSNotFound;
+			if (isSpringBoard || isApplication) {
+				/* Weather */
+				dlopen("System/Library/PrivateFrameworks/Weather.framework/Weather", RTLD_NOW);
+				/* WeatherUI */
+    			dlopen("System/Library/PrivateFrameworks/WeatherUI.framework/WeatherUI", RTLD_NOW);
+			}
+		}
+    }
+}

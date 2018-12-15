@@ -20,7 +20,7 @@ static WUIWeatherCondition* condition = nil;
 
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    /*conditions = @{@"SevereThunderstorm" : @3,
+NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
 @"Rain" : @12,
 @"Thunderstorm" : @4,
 @"Haze" : @21,
@@ -68,10 +68,12 @@ static WUIWeatherCondition* condition = nil;
 @"Showers1" : @11,
 @"Hurricane" : @2,
 @"Fog" : @20
-};*/
+};
 
     if(self = [super initWithFrame:frame]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 4);
+        dispatch_after(delay, dispatch_get_main_queue(), ^(void){
+        //dispatch_async(dispatch_get_main_queue(), ^{
             if([prefs boolForKey:@"customAppColor"]){
                 self.backgroundColor = [prefs colorForKey:@"appColor"];
             }else{
@@ -79,6 +81,8 @@ static WUIWeatherCondition* condition = nil;
             }
             //colorWithRed:0.118 green:0.118 blue:0.125 alpha:1.00];
             self.clipsToBounds = YES;
+            City *city = ([[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
+            if(city){
             [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
                 //Temperature Data
                 self.temp = [[UILabel alloc]init];
@@ -116,13 +120,13 @@ static WUIWeatherCondition* condition = nil;
                     WATodayAutoupdatingLocationModel *todayModel = [[%c(WATodayAutoupdatingLocationModel) alloc] init];
                 
                     [todayModel setPreferences:wPrefs];
-                    City *city = ([[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
+                    
                 //[[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled]
                 if([prefs boolForKey:@"appScreenWeather"]){
                     self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
-                    /*if([prefs boolForKey:@"customConditionIcon"]){
+                    if([prefs boolForKey:@"customConditionIcon"]){
                         city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
-                    }*/
+                    }
                     [self.referenceView.background setCity:city];
                     
                     [[self.referenceView.background condition] resume];
@@ -141,6 +145,7 @@ static WUIWeatherCondition* condition = nil;
                 
                 
             }];
+        }
         });
     }
     
@@ -148,7 +153,7 @@ static WUIWeatherCondition* condition = nil;
 }
 -(void)updateWeatherDisplay{
 //Objective-C requires this to be done in runtime rather than compile time. objective-C++ doesn't have this restriction.
-/* = @{@"SevereThunderstorm" : @3,
+NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
 @"Rain" : @12,
 @"Thunderstorm" : @4,
 @"Haze" : @21,
@@ -196,9 +201,10 @@ static WUIWeatherCondition* condition = nil;
 @"Showers1" : @11,
 @"Hurricane" : @2,
 @"Fog" : @20
-};*/
+};
 
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 4);
+        dispatch_after(delay, dispatch_get_main_queue(), ^(void){
         WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
         WATodayAutoupdatingLocationModel *todayModel = [[%c(WATodayAutoupdatingLocationModel) alloc] init];
         
@@ -207,9 +213,9 @@ static WUIWeatherCondition* condition = nil;
         
         //self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.bounds];
         //if([prefs boolForKey:@"appScreenWeather"]){
-           /* if([prefs boolForKey:@"customConditionIcon"]){
+            if([prefs boolForKey:@"customConditionIcon"]){
                 city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
-            }*/
+            }
             [self.referenceView.background setCity:city];
             [[self.referenceView.background condition] resume];
             self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -240,3 +246,27 @@ static WUIWeatherCondition* condition = nil;
 }
 
 @end
+
+
+%ctor{
+    if([prefs boolForKey:@"kLWPEnabled"]){
+        %init();
+    }
+    //Thank you june
+    NSArray *args = [[NSClassFromString(@"NSProcessInfo") processInfo] arguments];
+	NSUInteger count = args.count;
+	if (count != 0) {
+		NSString *executablePath = args[0];
+		if (executablePath) {
+			NSString *processName = [executablePath lastPathComponent];
+			BOOL isSpringBoard = [processName isEqualToString:@"SpringBoard"];
+			BOOL isApplication = [executablePath rangeOfString:@"/Application"].location != NSNotFound;
+			if (isSpringBoard || isApplication) {
+				/* Weather */
+				dlopen("System/Library/PrivateFrameworks/Weather.framework/Weather", RTLD_NOW);
+				/* WeatherUI */
+    			dlopen("System/Library/PrivateFrameworks/WeatherUI.framework/WeatherUI", RTLD_NOW);
+			}
+		}
+    }
+}

@@ -140,8 +140,8 @@ static WUIWeatherCondition* condition = nil;
 
 %ctor {
 
-	if ([[NSBundle mainBundle].bundleIdentifier isEqualToString:@"com.apple.springboard"] && [prefs boolForKey:@"appIcon"]){
-		%init();
-	}
+	if ([[NSBundle mainBundle].bundleIdentifier isEqualToString:@"com.apple.springboard"] && [prefs boolForKey:@"appIcon"] && [prefs boolForKey:@"kLWPEnabled"]){
+        %init();
+    }
 
 }

@@ -150,12 +150,34 @@ void pauseAnimation(){
 %hook SpringBoard
 -(void)applicationDidFinishLaunching:(id)application{
     %orig;
-    loadCityForView();
+	//thank you june
+	dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 4);
+        dispatch_after(delay, dispatch_get_main_queue(), ^(void){
+			loadCityForView();
+		});
 }
 %end
 
 %ctor{
-    if([prefs boolForKey:@"lockScreenWeather"]){
+    if([prefs boolForKey:@"lockScreenWeather"] && [prefs boolForKey:@"kLWPEnabled"]) {
         %init();
 	}
+    //Thank you june
+    NSArray *args = [[NSClassFromString(@"NSProcessInfo") processInfo] arguments];
+	NSUInteger count = args.count;
+	if (count != 0) {
+		NSString *executablePath = args[0];
+		if (executablePath) {
+			NSString *processName = [executablePath lastPathComponent];
+			BOOL isSpringBoard = [processName isEqualToString:@"SpringBoard"];
+			BOOL isApplication = [executablePath rangeOfString:@"/Application"].location != NSNotFound;
+			if (isSpringBoard || isApplication) {
+				/* Weather */
+				dlopen("System/Library/PrivateFrameworks/Weather.framework/Weather", RTLD_NOW);
+				/* WeatherUI */
+    			dlopen("System/Library/PrivateFrameworks/WeatherUI.framework/WeatherUI", RTLD_NOW);
+			}
+		}
+    }
 }
+

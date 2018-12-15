@@ -195,13 +195,30 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
 %end 
 
 %ctor{
-    if([prefs boolForKey:@"homeScreenWeather"]){
-        %init(LiveWeather);
-	}
-    if([prefs boolForKey:@"hideWeatherBackground"]){
-        %init(WeatherBackground);
+    if ([[NSBundle mainBundle].bundleIdentifier isEqualToString:@"com.apple.springboard"] && [prefs boolForKey:@"kLWPEnabled"]) {
+        if([prefs boolForKey:@"homeScreenWeather"]){
+            %init(LiveWeather);
+            }
+        if([prefs boolForKey:@"hideWeatherBackground"]){
+            %init(WeatherBackground);
+            }
+        %init(_ungrouped);
     }
-    %init(_ungrouped);
-    
-    dlopen("/System/Library/PrivateFrameworks/Weather.framework/Weather", RTLD_NOW);
+    //Thank you june
+    NSArray *args = [[NSClassFromString(@"NSProcessInfo") processInfo] arguments];
+	NSUInteger count = args.count;
+	if (count != 0) {
+		NSString *executablePath = args[0];
+		if (executablePath) {
+			NSString *processName = [executablePath lastPathComponent];
+			BOOL isSpringBoard = [processName isEqualToString:@"SpringBoard"];
+			BOOL isApplication = [executablePath rangeOfString:@"/Application"].location != NSNotFound;
+			if (isSpringBoard || isApplication) {
+				/* Weather */
+				dlopen("System/Library/PrivateFrameworks/Weather.framework/Weather", RTLD_NOW);
+				/* WeatherUI */
+    			dlopen("System/Library/PrivateFrameworks/WeatherUI.framework/WeatherUI", RTLD_NOW);
+			}
+		}
+    }
 }
