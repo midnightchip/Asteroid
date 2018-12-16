@@ -662,6 +662,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                 [todayModel setIsLocationTrackingEnabled:NO];
             }];
             [self.forecastCont _updateViewContent];
+            
         }];
     }
     //city = nil;

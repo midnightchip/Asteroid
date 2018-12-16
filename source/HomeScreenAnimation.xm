@@ -1,5 +1,8 @@
 #import "Asteroid.h"
 #import <objc/message.h>
+#import <SpringBoard/SpringBoard.h>
+#import <SpringBoard/SBApplication.h>
+
 @interface SBHomeScreenView : UIView
 //@interface SBFWallpaperView : UIView
 @property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
@@ -62,6 +65,7 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
 };
 
 static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+static WUIWeatherCondition* condition = nil;
 
 %group LiveWeather
 %hook SBHomeScreenView
@@ -102,7 +106,7 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     [self.referenceView.background setTag:123];
     
     [[self.referenceView.background condition] resume];
-    
+    condition = [self.referenceView.background condition];
     self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.referenceView.clipsToBounds = YES;
     [self addSubview:self.referenceView];
@@ -110,8 +114,48 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
     
     NSLog(@"lock_TWEAK | %@", self.weatherModel.city);
 }
+
         
 %end 
+static BOOL isPlaying = NO;
+void pauseHome(){
+	[condition pause];
+    isPlaying = NO;
+}
+void restartHome(){
+    if(!isPlaying){
+        [condition resume];
+        isPlaying = YES;
+    }
+}
+
+
+%hook SBLockScreenViewControllerBase
+- (void)setInScreenOffMode:(_Bool)arg1 forAutoUnlock:(_Bool)arg2{
+	%orig;
+		if(arg1){
+			pauseHome();
+		}else{
+			restartHome();
+		}
+}
+%end
+
+%hook SBHomeGestureSettings
+-(BOOL)isHomeGestureEnabled{
+    
+		NSString *currentApp;
+		SpringBoard *springBoard = (SpringBoard *)[UIApplication sharedApplication];
+		SBApplication *frontApp = (SBApplication *)[springBoard _accessibilityFrontMostApplication];
+		currentApp = [frontApp valueForKey:@"_bundleIdentifier"];
+		if([currentApp isEqualToString:@"com.apple.springboard"]){
+            restartHome();
+        }else{
+           pauseHome(); 
+        }
+    return %orig;
+}
+%end
 %end 
 
 @interface SBIconBlurryBackgroundView : UIView

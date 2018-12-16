@@ -82,7 +82,7 @@ NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
             //colorWithRed:0.118 green:0.118 blue:0.125 alpha:1.00];
             self.clipsToBounds = YES;
             City *city = ([[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
-            if(city){
+            //if(city){
             [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
                 //Temperature Data
                 self.temp = [[UILabel alloc]init];
@@ -145,7 +145,7 @@ NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
                 
                 
             }];
-        }
+        //}
         });
     }
     

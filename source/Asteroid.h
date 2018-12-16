@@ -7,6 +7,8 @@
 -(void)pause;
 -(void)resume;
 @property (assign,nonatomic) long long condition;
+-(void)setPlaying:(BOOL)arg1;
+-(BOOL)playing;
 @end;
 
 @interface WUIDynamicWeatherBackground : UIView

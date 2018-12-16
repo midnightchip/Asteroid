@@ -16,6 +16,8 @@
 -(BOOL)isDay;
 -(void) update;
 -(NSDate*) updateTime;
+@property (nonatomic,copy) NSString * name;  
+
 @end
 
 @interface WeatherLocationManager : NSObject
