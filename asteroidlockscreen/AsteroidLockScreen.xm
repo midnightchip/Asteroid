@@ -186,7 +186,24 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             
             if(![MSHookIvar<NCNotificationCombinedListViewController *>(((SBDashBoardMainPageContentViewController *)((UIView *)self)._viewDelegate).combinedListViewController, "_listViewController") hasContent]){
                 [self.inactiveTimer fire];
+            }else{
+                if([prefs boolForKey:@"hideOnNotif"]){
+                    [self hideWeather];
+                }
             }
+            if([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] == 0){
+                [self.inactiveTimer fire];
+                [[NSNotificationCenter defaultCenter]
+                    postNotificationName:@"stoppedPlaying"
+                    object:self];
+
+            } else if ([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] > 0){
+                [self hideWeather];
+                [[NSNotificationCenter defaultCenter]
+                postNotificationName:@"isPlayingSong"
+                object:self];
+            }
+
             
         }];
         
@@ -275,6 +292,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     
     
     if(!self.forecastCont){
+        
         self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] init]; // Temp to make sure its called once
             //Thank you Matchstic, better than my janky check.
             WeatherPreferences *preferences = [%c(WeatherPreferences) sharedPreferences];
@@ -563,6 +581,24 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
          object:self];
     }
 }
+//Hide weather with notification
+%new
+- (void) hideWeather{
+    if(!self.weather.hidden){
+        [UIView animateWithDuration:.5
+                              delay:0
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{self.weather.alpha = 0;}
+                         completion:^(BOOL finished){
+                             self.weather.hidden = YES;
+                             self.weather.alpha = 1;
+                         }];
+        isDismissed = YES;
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"weatherStateChanged"
+         object:self];
+    }
+}
 
 // Handles reveal
 %new
@@ -655,12 +691,15 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             if(!todayModel){
                 todayModel = [%c(WATodayModel) autoupdatingLocationModelWithPreferences:preferences effectiveBundleIdentifier:@"com.apple.weather"];
             }
+            
             [todayModel setLocationServicesActive:YES];
             [todayModel setIsLocationTrackingEnabled:YES];
             [todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *arg2) {
                 self.forecastCont.model = todayModel;
                 [todayModel setIsLocationTrackingEnabled:NO];
-            }];
+            }];  
+            [self.forecastCont.headerView _updateContent];   
+            //locationString = todayModel.forecastModel.city.name;
             [self.forecastCont _updateViewContent];
             
         }];
@@ -668,6 +707,24 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     //city = nil;
 }
 %end
+
+%hook WATodayHeaderView
+-(NSString *)locationName{
+    WeatherPreferences *preferences = [%c(WeatherPreferences) sharedPreferences];
+    if(!todayModel){
+        todayModel = [%c(WATodayModel) autoupdatingLocationModelWithPreferences:preferences effectiveBundleIdentifier:@"com.apple.weather"];
+    }
+    //NSString *cityName;      
+    [todayModel setLocationServicesActive:YES];
+    [todayModel setIsLocationTrackingEnabled:YES];
+    [todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *arg2) {
+        //cityName = todayModel.forecastModel.city.name;
+        [todayModel setIsLocationTrackingEnabled:NO];
+    }];  
+    return todayModel.forecastModel.city.name;
+    
+}
+%end 
 
 // Making sure the forecast view is the right color
 %hook WAWeatherPlatterViewController
@@ -816,7 +873,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 }*/
 
 %ctor{
-    if([prefs boolForKey:@"kLWPEnabled"]){
+    if([prefs boolForKey:@"kLWPEnabled"] && [prefs boolForKey:@"greetView"]){
         %init();
     }
     //Thank you june

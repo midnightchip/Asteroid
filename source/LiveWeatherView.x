@@ -71,8 +71,8 @@ NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
 };
 
     if(self = [super initWithFrame:frame]) {
-        dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 4);
-        dispatch_after(delay, dispatch_get_main_queue(), ^(void){
+        /*dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 4);
+        dispatch_after(delay, dispatch_get_main_queue(), ^(void){*/
         //dispatch_async(dispatch_get_main_queue(), ^{
             if([prefs boolForKey:@"customAppColor"]){
                 self.backgroundColor = [prefs colorForKey:@"appColor"];
@@ -123,6 +123,8 @@ NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
                     
                 //[[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled]
                 if([prefs boolForKey:@"appScreenWeather"]){
+                    dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 4);
+                    dispatch_after(delay, dispatch_get_main_queue(), ^(void){
                     self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
                     if([prefs boolForKey:@"customConditionIcon"]){
                         city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
@@ -135,18 +137,20 @@ NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
                     self.referenceView.clipsToBounds = YES;
                     [self addSubview:self.referenceView];
                     [self sendSubviewToBack:self.referenceView];
+        
                 
                     [self.referenceView.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:4].active = YES;
                     [self.referenceView.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:-4].active = YES;
                     [self.referenceView.topAnchor constraintEqualToAnchor:self.topAnchor constant:4].active = YES;
                     [self.referenceView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4].active = YES;
+                    });
                 }
                 //}
                 
                 
             }];
         //}
-        });
+        //});
     }
     
     return self;
@@ -203,8 +207,8 @@ NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
 @"Fog" : @20
 };
 
-    dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 4);
-        dispatch_after(delay, dispatch_get_main_queue(), ^(void){
+    /*ispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 4);
+        dispatch_after(delay, dispatch_get_main_queue(), ^(void){*/
         WeatherPreferences* wPrefs = [%c(WeatherPreferences) sharedPreferences];
         WATodayAutoupdatingLocationModel *todayModel = [[%c(WATodayAutoupdatingLocationModel) alloc] init];
         
@@ -213,12 +217,15 @@ NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
         
         //self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.bounds];
         //if([prefs boolForKey:@"appScreenWeather"]){
+            dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 4);
+        dispatch_after(delay, dispatch_get_main_queue(), ^(void){
             if([prefs boolForKey:@"customConditionIcon"]){
                 city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
             }
             [self.referenceView.background setCity:city];
             [[self.referenceView.background condition] resume];
             self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        });
         //}else{
 
        // }
@@ -241,7 +248,7 @@ NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
             }];
         }
         city = nil;
-    });
+    //});
     
 }
 

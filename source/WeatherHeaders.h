@@ -4,6 +4,8 @@
 
 @end
 
+
+
 @interface City : NSObject
 -(NSMutableArray*)hourlyForecasts;
 -(NSMutableArray*)dayForecasts;
@@ -91,11 +93,18 @@
 -(BOOL)isLocationTrackingEnabled;
 @end
 
+@interface WATodayHeaderView : UIView
+-(void)_updateContent;
+@property (nonatomic,copy) NSString * locationName; 
+@property (nonatomic,retain) UILabel * locationLabel;
+-(void)setLocationLabel:(UILabel *)arg1;
+@end 
+
 @interface WAWeatherPlatterViewController : UIViewController
 -(id)initWithLocation:(id)arg1 ;
 -(void)_buildModelForLocation:(id)arg1 ;
 @property (nonatomic,retain) UIStackView * hourlyBeltView;
-@property (nonatomic,retain) UIView * headerView;
+@property (nonatomic,retain) WATodayHeaderView * headerView;
 -(void) _updateViewContent;
 @property (nonatomic,retain) NSArray * hourlyForecastViews;
 @property (nonatomic,retain) UIView * dividerLineView;

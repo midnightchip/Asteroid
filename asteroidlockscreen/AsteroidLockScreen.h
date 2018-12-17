@@ -14,6 +14,11 @@
 
 @end
 
+
+@interface SpringBoard 
+-(int)nowPlayingProcessPID;
+@end
+
 //help from the_casle on the blur
 @interface SBUIBackgroundView : UIView
 @property (nonatomic, retain) UIVisualEffectView *blurEffectView;
@@ -55,10 +60,6 @@
 @property(retain, nonatomic) UILabel *naturalLanguageDescriptionLabel;
 @end
 
-@interface WATodayHeaderView : UILabel
-@property (nonatomic,retain) UILabel * locationLabel; 
-@property (nonatomic,copy) NSString * locationName;   
-@end 
 
 @interface WALockscreenWidgetViewController : UIViewController
 +(id) sharedInstanceIfExists;
@@ -88,6 +89,7 @@
 -(void)updateImage:(NSNotification *) notification;
 - (void)tc_animateFilter: (UIView *)view;
 -(void) updateLockView;
+-(void) hideWeather;
 @end
 
 @interface UIBlurEffect (lockweather)

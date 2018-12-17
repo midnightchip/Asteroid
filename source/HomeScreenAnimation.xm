@@ -164,6 +164,19 @@ void restartHome(){
 @interface SBFolderIconBackgroundView : SBIconBlurryBackgroundView
 @end 
 
+/*%hook SBFolderIconImageView 
+// Thanks poomsmart
+- (void)_updateAccessibilityBackgroundContrast
+{
+	%orig;
+	SBFolderIconBackgroundView *backgroundView = MSHookIvar<SBFolderIconBackgroundView *>(self, "_backgroundView");
+	UIView *accessibilityBackgroundView = MSHookIvar<UIView *>(self, "_accessibilityBackgroundView");
+	backgroundView.hidden = YES;
+	accessibilityBackgroundView.hidden = YES;
+
+}
+%end*/
+
 %hook SBFolderIconBackgroundView
 -(void)layoutSubviews{
     %orig;
@@ -171,7 +184,51 @@ void restartHome(){
         self.hidden = TRUE;
     }
 }
+//Thanks iPad_Kid, for whatever reason, the substrate update changed us from being hidden after being displayed once.
+- (void)setWallpaperBackgroundRect:(CGRect)rect forContents:(CGImageRef)contents withFallbackColor:(CGColorRef)fallbackColor {
+    if([prefs boolForKey:@"noFolderInBackground"]){
+        %orig(CGRectNull, NULL, NULL);
+    
+        self.backgroundColor = [UIColor clearColor];
+    }
+    
+}
 %end 
+//Figure this out at a later date
+/*@interface SBFolderControllerBackgroundView : UIView
+@property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
+@property (nonatomic, retain) AWeatherModel *weatherModel;
+@end 
+%hook SBFolderControllerBackgroundView 
+%property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
+%property (nonatomic, retain) AWeatherModel *weatherModel;
+
+-(void)layoutSubviews{
+    %orig;
+
+    [self.referenceView removeFromSuperview];
+    
+    self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
+    //EZ custom weather animation
+    City *customWeather = self.weatherModel.city;
+    if([prefs boolForKey:@"customCondition"]){
+        customWeather.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditions"]] doubleValue];
+        [self.referenceView.background setCity:customWeather];
+    }else{
+        [self.referenceView.background setCity:self.weatherModel.city];
+    }
+    
+    [self.referenceView.background setTag:123];
+    
+    [[self.referenceView.background condition] resume];
+    condition = [self.referenceView.background condition];
+    self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.referenceView.clipsToBounds = YES;
+    [self addSubview:self.referenceView];
+    [self bringSubviewToFront:self.referenceView];
+    
+}
+%end*/
 
 //Dock 
 @interface SBDockView : UIView 

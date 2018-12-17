@@ -155,8 +155,45 @@ void pauseAnimation(){
         dispatch_after(delay, dispatch_get_main_queue(), ^(void){
 			loadCityForView();
 		});
+	[[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(isPlaying)
+                                            name:@"isPlayingSong"
+											object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(stoppedPlaying)
+                                            name:@"stoppedPlaying"
+											object:nil];
+}
+
+%new 
+-(void)isPlaying{
+	pauseAnimation();
+	[weatherAnimation removeFromSuperview];
+	Loaded = NO;
+	//weatherAnimation.hidden = YES;
+}
+
+%new 
+-(void)stoppedPlaying{
+	//weatherAnimation.hidden = NO;
+    loadCityForView();
 }
 %end
+
+//Hide animation on music playing
+/*%hook SBDashBoardMainPageView
+- (void)layoutSubviews {
+    %orig;
+	if([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] == 0){
+			weatherAnimation.hidden = NO;
+            loadCityForView();
+        } else if([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] > 0){
+            pauseAnimation();
+			weatherAnimation.hidden = YES;
+		}
+	
+}
+%end */
 
 %ctor{
     if([prefs boolForKey:@"lockScreenWeather"] && [prefs boolForKey:@"kLWPEnabled"]) {
