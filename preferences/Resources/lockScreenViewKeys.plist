@@ -172,7 +172,7 @@
                 <string>/Library/PreferenceBundles/Asteroid.bundle</string>
             </dict>
             
-            <dict>
+           <!-- <dict>
                 <key>cell</key>
                 <string>PSSliderCell</string>
                 <key>key</key>
@@ -193,7 +193,7 @@
                 <string>com.midnightchips.asteroid</string>
                 <key>defaultsPath</key>
                 <string>/Library/PreferenceBundles/Asteroid.bundle</string>
-            </dict>
+            </dict> -->
             
             <dict>
                 <key>cell</key>
