@@ -183,25 +183,15 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                                                                 selector:@selector(revealWeather:)
                                                                 userInfo:nil
                                                                  repeats:YES];
-            
-            if(![MSHookIvar<NCNotificationCombinedListViewController *>(((SBDashBoardMainPageContentViewController *)((UIView *)self)._viewDelegate).combinedListViewController, "_listViewController") hasContent]){
+            //This is some black magic, I wrote this and I have no idea whats going on.
+            if(![MSHookIvar<NCNotificationCombinedListViewController *>(((SBDashBoardMainPageContentViewController *)((UIView *)self)._viewDelegate).combinedListViewController, "_listViewController") hasContent] && [(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] == 0){
                 [self.inactiveTimer fire];
-            }else{
+            }else if([MSHookIvar<NCNotificationCombinedListViewController *>(((SBDashBoardMainPageContentViewController *)((UIView *)self)._viewDelegate).combinedListViewController, "_listViewController") hasContent]){
                 if([prefs boolForKey:@"hideOnNotif"]){
                     [self hideWeather];
                 }
-            }
-            if([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] == 0){
-                [self.inactiveTimer fire];
-                [[NSNotificationCenter defaultCenter]
-                    postNotificationName:@"stoppedPlaying"
-                    object:self];
-
-            } else if ([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] > 0){
+            }else if ([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] > 0){
                 [self hideWeather];
-                [[NSNotificationCenter defaultCenter]
-                postNotificationName:@"isPlayingSong"
-                object:self];
             }
 
             

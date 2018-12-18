@@ -155,29 +155,31 @@ void pauseAnimation(){
         dispatch_after(delay, dispatch_get_main_queue(), ^(void){
 			loadCityForView();
 		});
-	[[NSNotificationCenter defaultCenter] addObserver:self
+	//Thought this was needed, its not.
+	/*[[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(isPlaying)
                                             name:@"isPlayingSong"
 											object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(stoppedPlaying)
                                             name:@"stoppedPlaying"
-											object:nil];
+											object:nil];*/
 }
-
+//Observe when the animation should stop
+/*
 %new 
 -(void)isPlaying{
 	pauseAnimation();
-	[weatherAnimation removeFromSuperview];
-	Loaded = NO;
-	//weatherAnimation.hidden = YES;
+	//[weatherAnimation removeFromSuperview];
+	//Loaded = NO;
+	weatherAnimation.hidden = YES;
 }
 
 %new 
 -(void)stoppedPlaying{
-	//weatherAnimation.hidden = NO;
+	weatherAnimation.hidden = NO;
     loadCityForView();
-}
+}*/
 %end
 
 //Hide animation on music playing
