@@ -153,6 +153,51 @@
             <dict>
                 <key>cell</key>
                 <string>PSGroupCell</string>
+                <key>footerText</key>
+                <string>Dismiss Button Size</string>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSSwitchCell</string>
+                <key>label</key>
+                <string>Enable Dismiss Button</string>
+                <key>key</key>
+                <string>addDismiss</string>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSSliderCell</string>
+                <key>key</key>
+                <string>tempSize</string>
+                <key>showValue</key>
+                <true/>
+                <key>min</key>
+                <real>12</real>
+                <key>max</key>
+                <real>60</real>
+                <key>isSegmented</key>
+                <true/>
+                <key>segmentCount</key>
+                <real>48</real>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSGroupCell</string>
             </dict>
             
 			<dict>
@@ -162,22 +207,6 @@
 				<string>Enable Glyph</string>
 				<key>key</key>
 				<string>addLogo</string>
-				<key>PostNotification</key>
-				<string>com.midnightchips.asteroid.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.asteroid</string>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
-			</dict>
-
-
-			<dict>
-				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>label</key>
-				<string>Enable Dismiss Button</string>
-				<key>key</key>
-				<string>addDismiss</string>
 				<key>PostNotification</key>
 				<string>com.midnightchips.asteroid.prefschanged</string>
 				<key>defaults</key>

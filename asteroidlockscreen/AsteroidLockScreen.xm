@@ -183,16 +183,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                                                                 selector:@selector(revealWeather:)
                                                                 userInfo:nil
                                                                  repeats:YES];
-            //This is some black magic, I wrote this and I have no idea whats going on.
-            if(![MSHookIvar<NCNotificationCombinedListViewController *>(((SBDashBoardMainPageContentViewController *)((UIView *)self)._viewDelegate).combinedListViewController, "_listViewController") hasContent] && [(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] == 0){
-                [self.inactiveTimer fire];
-            }else if([MSHookIvar<NCNotificationCombinedListViewController *>(((SBDashBoardMainPageContentViewController *)((UIView *)self)._viewDelegate).combinedListViewController, "_listViewController") hasContent]){
-                if([prefs boolForKey:@"hideOnNotif"]){
-                    [self hideWeather];
-                }
-            }else if ([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] > 0){
-                [self hideWeather];
-            }
+            
 
             
         }];
@@ -754,7 +745,22 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     }
     return self;
 }
-
+-(BOOL)hasContent{
+    BOOL content = %orig;
+    // Sending values to the background controller
+    //This is some black magic, I wrote this and I have no idea whats going on.
+    if(!content && [(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] == 0 && mainPageView.weather.hidden == YES){
+        [mainPageView.inactiveTimer fire];
+    }else if(content){
+        if([prefs boolForKey:@"hideOnNotif"]){
+            [mainPageView hideWeather];
+        }
+    }else if ([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] > 0){
+        [mainPageView hideWeather];
+    }
+    return content;
+    
+}
 %new
 -(void) updateViewCollectionWhenDismissed:(NSNotification *)sender{
     if(isDismissed){
