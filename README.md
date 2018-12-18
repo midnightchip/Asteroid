@@ -24,11 +24,10 @@ Licensed under the GNU General Public License, version 3.0. Refer to ![LICENSE.m
 - Requires libCSWeather 
 
 ## Availability
-Free on the ![Dynastic Repo](https://repo.dynastic.co)
+[![Available on Dynastic Repo](https://assets.dynastic.co/brand/repo/img/Available%20on%20Dynastic%20Repo.png)](https://repo.dynastic.co/)
 
 ## Installation 
-
-Add ![Dynastic Repo](https://repo.dynastic.co) to Cydia, download and install.
+[![Available on Dynastic Repo](https://assets.dynastic.co/brand/repo/img/Available%20on%20Dynastic%20Repo.png)](https://repo.dynastic.co/)
 
 
 ## Building
