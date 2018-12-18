@@ -32,6 +32,7 @@ static SBDashBoardMainPageView *mainPageView;
 static NSNumber *initialIconFrame;
 static NSNumber *initialForeFrame;
 static WATodayAutoupdatingLocationModel* todayModel = nil;
+static BOOL isWeatherLocked = nil;
 
 
 // Setting the gestures function
@@ -183,7 +184,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                                                                 selector:@selector(revealWeather:)
                                                                 userInfo:nil
                                                                  repeats:YES];
-            
+            isWeatherLocked = NO;
 
             
         }];
@@ -557,6 +558,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                              self.weather.alpha = 1;
                          }];
         isDismissed = YES;
+        isWeatherLocked = YES;
         [[NSNotificationCenter defaultCenter]
          postNotificationName:@"weatherStateChanged"
          object:self];
@@ -756,7 +758,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         //if([prefs boolForKey:@"hideOnNotif"]){
             [mainPageView hideWeather];
         //}
-    }else/* if ([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] > 0)*/{
+    }else if(!isWeatherLocked)/* if ([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] > 0)*/{
         //[mainPageView hideWeather];
         [mainPageView.inactiveTimer fire];
     }
