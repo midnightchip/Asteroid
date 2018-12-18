@@ -749,14 +749,16 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     BOOL content = %orig;
     // Sending values to the background controller
     //This is some black magic, I wrote this and I have no idea whats going on.
-    if(!content && [(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] == 0 && mainPageView.weather.hidden == YES){
-        [mainPageView.inactiveTimer fire];
-    }else if(content){
-        if([prefs boolForKey:@"hideOnNotif"]){
-            [mainPageView hideWeather];
-        }
-    }else if ([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] > 0){
+    if([(SpringBoard*)[UIApplication sharedApplication] isNowPlayingAppPlaying] == YES/* && mainPageView.weather.hidden == YES*/){
         [mainPageView hideWeather];
+        //[mainPageView.inactiveTimer fire];
+    }else if(content && [prefs boolForKey:@"hideOnNotif"]){
+        //if([prefs boolForKey:@"hideOnNotif"]){
+            [mainPageView hideWeather];
+        //}
+    }else/* if ([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] > 0)*/{
+        //[mainPageView hideWeather];
+        [mainPageView.inactiveTimer fire];
     }
     return content;
     

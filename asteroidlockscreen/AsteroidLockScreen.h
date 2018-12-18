@@ -17,6 +17,7 @@
 
 @interface SpringBoard 
 -(int)nowPlayingProcessPID;
+-(BOOL) isNowPlayingAppPlaying;
 @end
 
 //help from the_casle on the blur
