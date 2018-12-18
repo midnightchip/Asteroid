@@ -1,12 +1,12 @@
 Package: com.midnightchips.asteroid
 Name: Asteroid
 Depends: firmware (>= 11.0), mobilesubstrate, preferenceloader, com.creaturecoding.libcspreferences, com.creaturesurvive.libcscolorpicker
-Version: 1.1
+Version: 1.2
 Conflicts:
 Replaces:
 Priority: optional
 Architecture: iphoneos-arm
-Description: System-wide weather tweak.
+Description: System-Wide Weather.
 Maintainer: midnightchips & the casle
 Author: midnightchips & the casle
 Section: Tweaks
