@@ -3,7 +3,7 @@
 //TODO Change today to use the cases in descriptions
 //TODO Fix Blur on lockscreen vs just pulling down notification center
 //TODO make only appear during set times
-//TODO Ajust height of uilabel on text size.
+//TODO Ajust height of uilabel on text size. 
 //TODO Add option for right alignment or left alignment
 //TODO Add reset font sizes
 
@@ -161,7 +161,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 %property (nonatomic, retain) NSDictionary *centerDict;
 %property (nonatomic, retain) AWeatherModel *weatherModel;
 %property (nonatomic, retain) WAWeatherPlatterViewController *forecastCont;
-
+%property (nonatomic, retain) CSWeatherStore *store;
 %property (nonatomic, retain) UILabel *notifcationLabel;
 
 - (void)layoutSubviews {
@@ -611,18 +611,18 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     //City *city = (/*[prefs boolForKey:@"isLocal"] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : */[[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
     
     if(self.weatherModel.isPopulated){
-        [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
+        self.store = [CSWeatherStore weatherStoreForLocalWeather:YES autoUpdateInterval:15 updateHandler:^(CSWeatherStore *store) {
             
             // Updating the image icon
             UIImage *icon;
             BOOL setColor = FALSE;
             if(![prefs boolForKey:@"customImage"]){
-                icon = weather[@"kCurrentConditionImage_nc-variant"];
+                icon = store.currentConditionImageLarge;
             }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
-                icon = weather[@"kCurrentConditionImage_white-variant"];
+                icon = store.currentConditionImageLarge;
                 setColor = TRUE;
             }else{
-                icon = weather[@"kCurrentConditionImage_black-variant"];
+                icon = store.currentConditionImageDark;
                 setColor = TRUE;
             }
             
@@ -634,11 +634,11 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             self.logo.contentMode = UIViewContentModeScaleAspectFit;
             
             // Setting the current temperature text
-            if(weather[@"kCurrentTemperatureFahrenheit"] != nil){
-                self.currentTemp.text = weather[@"kCurrentTemperatureForLocale"];
-            }else{
-                self.currentTemp.text = @"Error";
-            }
+            //if(weather[@"kCurrentTemperatureFahrenheit"] != nil){
+            self.currentTemp.text = store.currentTemperatureLocale;
+            //}else{
+                //self.currentTemp.text = @"Error";
+            //}
             
             // Updating the Greeting Label
             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -666,7 +666,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             }
             
             // Updating the the text of the wDescription
-            self.wDescription.text = weather[@"kCurrentDescription"];
+            self.wDescription.text = store.currentConditionOverview;
             self.greetingLabel.textAlignment = NSTextAlignmentCenter;
             
             // Update the forecast

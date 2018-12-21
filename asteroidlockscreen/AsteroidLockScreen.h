@@ -1,9 +1,8 @@
 #import "../source/LWPProvider.h"
-#import <CSWeather/CSWeatherInformationProvider.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <notify.h>
 #import <CoreLocation/CoreLocation.h>
-
+#import <CSWeather/CSWeatherStore.h>
 #import "../source/AWeatherModel.h"
 
 
@@ -83,7 +82,7 @@
 @property (nonatomic, retain) NSDictionary *centerDict;
 @property (nonatomic, retain) AWeatherModel *weatherModel;
 @property (nonatomic, retain) WAWeatherPlatterViewController *forecastCont;
-
+@property (nonatomic, strong) CSWeatherStore *store;
 @property (nonatomic, retain) UILabel *notifcationLabel;
 
 

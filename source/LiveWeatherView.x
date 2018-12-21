@@ -8,6 +8,7 @@
 @property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
 @property (nonatomic, retain) UIImageView *logo;
 @property (nonatomic, retain) UILabel *temp;
+@property (nonatomic, strong) CSWeatherStore *store;
 @end
 
 @implementation LiveWeatherView
@@ -83,11 +84,11 @@ NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
             self.clipsToBounds = YES;
             City *city = ([[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
             //if(city){
-            [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
+            self.store = [CSWeatherStore weatherStoreForLocalWeather:YES autoUpdateInterval:15 updateHandler:^(CSWeatherStore *store) {
                 //Temperature Data
                 self.temp = [[UILabel alloc]init];
                 self.temp.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-                self.temp.text = weather[@"kCurrentTemperatureForLocale"];
+                self.temp.text = store.currentTemperatureLocale;
                 self.temp.textColor = [UIColor whiteColor];
                 self.temp.textAlignment = NSTextAlignmentCenter;
                 [self.temp setCenter:CGPointMake(self.frame.size.width / 1.9, self.frame.size.height / 1.3)];
@@ -97,7 +98,7 @@ NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
                 self.logo = [[UIImageView alloc] init];//WithFrame:self.frame];
                 self.logo.frame = CGRectMake(0, 0, self.frame.size.width /1.5 , self.frame.size.height /1.5 );
                 UIImage *icon;
-                icon = weather[@"kCurrentConditionImage"];
+                icon = store.currentConditionImageSmall;
                 self.logo.image = icon;
                 self.logo.contentMode = UIViewContentModeScaleAspectFit;
                 [self.logo setCenter:CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2.5)];
@@ -232,16 +233,16 @@ NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
         //[self addSubview:self.referenceView];
         //[self sendSubviewToBack:self.referenceView];
         if(city){
-            [[CSWeatherInformationProvider sharedProvider] updatedWeatherWithCompletion:^(NSDictionary *weather) {
+            self.store = [CSWeatherStore weatherStoreForLocalWeather:YES autoUpdateInterval:15 updateHandler:^(CSWeatherStore *store) {
                 UIImage *icon;
-                icon = weather[@"kCurrentConditionImage"];
+                icon = store.currentConditionImageSmall;
                 self.logo.image = icon;
                 self.logo.contentMode = UIViewContentModeScaleAspectFit;
                 self.logo.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
                 /*self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                  [self.logo setTintColor:[UIColor whiteColor]];*/
                 
-                self.temp.text = weather[@"kCurrentTemperatureForLocale"];
+                self.temp.text = store.currentTemperatureLocale;
                 //TODO set adaptive color
                 self.temp.textColor = [UIColor whiteColor];
                 

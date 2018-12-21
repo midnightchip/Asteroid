@@ -140,23 +140,7 @@ void restartHome(){
 		}
 }
 %end
-
-%hook SBHomeGestureSettings
--(BOOL)isHomeGestureEnabled{
-    
-		NSString *currentApp;
-		SpringBoard *springBoard = (SpringBoard *)[UIApplication sharedApplication];
-		SBApplication *frontApp = (SBApplication *)[springBoard _accessibilityFrontMostApplication];
-		currentApp = [frontApp valueForKey:@"_bundleIdentifier"];
-		if([currentApp isEqualToString:@"com.apple.springboard"]){
-            restartHome();
-        }else{
-           pauseHome(); 
-        }
-    return %orig;
-}
-%end
-%end 
+ 
 
 @interface SBIconBlurryBackgroundView : UIView
 @end 
@@ -193,6 +177,7 @@ void restartHome(){
     }
     
 }
+%end 
 %end 
 //Figure this out at a later date
 /*@interface SBFolderControllerBackgroundView : UIView

@@ -1,5 +1,5 @@
 #import <UIKit/UIKit.h>
-#import <CSWeather/CSWeatherInformationProvider.h>
+#import <CSWeather/CSWeatherStore.h>
 
 @interface LiveWeatherView : UIView 
 - (void)updateWeatherDisplay;
