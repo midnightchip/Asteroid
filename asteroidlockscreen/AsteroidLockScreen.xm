@@ -609,7 +609,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 -(void) updateLockView {
     //City *city = (/*[prefs boolForKey:@"isLocal"] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : */[[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
     if(self.weatherModel.isPopulated){
-        self.store = [CSWeatherStore weatherStoreForLocalWeather:YES autoUpdateInterval:15 updateHandler:^(CSWeatherStore *store) {
+        self.store = [CSWeatherStore weatherStoreForLocalWeather:YES autoUpdateInterval:15 savedCityIndex:0 updateHandler:^(CSWeatherStore *store) {
             
             // Updating the image icon
             UIImage *icon;
