@@ -8,8 +8,8 @@
 //TODO Add reset font sizes
 
 
-#define DIRECTORY_PATH @"/var/mobile/Library/Astroid"
-#define FILE_PATH @"/var/mobile/Library/Astroid/centerData.plist"
+#define DIRECTORY_PATH @"/var/mobile/Library/Asteroid"
+#define FILE_PATH @"/var/mobile/Library/Asteroid/centerData.plist"
 
 extern "C" NSString * NSStringFromCGAffineTransform(CGAffineTransform transform);
 
@@ -25,7 +25,6 @@ NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/Application Support/
 // Statics
 static NSDictionary *savedCenterData = [NSKeyedUnarchiver unarchiveObjectWithData: [NSData dataWithContentsOfFile: FILE_PATH]];
 static BOOL isDismissed = NO;
-static NSDictionary *viewDict;
 static BOOL tc_editing;
 static double lastZoomValue = 0;
 static SBDashBoardMainPageView *mainPageView;
@@ -53,7 +52,7 @@ void setGesturesForView(UIView *superview, UIView *view){
 
 static void savingValuesToFile(SBDashBoardMainPageView *sender){
     SBDashBoardMainPageView *self = sender;
-    viewDict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"greetingLabel" : [NSValue valueWithCGPoint:self.greetingLabel.center], @"wDescription" : [NSValue valueWithCGPoint:self.wDescription.center], @"currentTemp" : [NSValue valueWithCGPoint:self.currentTemp.center], @"dismissButton" : [NSValue valueWithCGPoint:self.dismissButton.center], @"notificationLabel" : [NSValue valueWithCGPoint:self.notifcationLabel.center], @"forecastContView" : [NSValue valueWithCGPoint:self.forecastCont.view.center]
+    NSDictionary *viewDict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"greetingLabel" : [NSValue valueWithCGPoint:self.greetingLabel.center], @"wDescription" : [NSValue valueWithCGPoint:self.wDescription.center], @"currentTemp" : [NSValue valueWithCGPoint:self.currentTemp.center], @"dismissButton" : [NSValue valueWithCGPoint:self.dismissButton.center], @"notificationLabel" : [NSValue valueWithCGPoint:self.notifcationLabel.center], @"forecastContView" : [NSValue valueWithCGPoint:self.forecastCont.view.center]
         
     };
     
@@ -166,6 +165,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 
 - (void)layoutSubviews {
     %orig;
+    NSLog(@"lock_TWEAK | value: %@", NSStringFromCGPoint(((NSValue*)savedCenterData[@"forecastContView"]).CGPointValue));
     if(!self.weather){
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         [self.weather setUserInteractionEnabled:YES];
@@ -184,7 +184,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                                                                 selector:@selector(revealWeather:)
                                                                 userInfo:nil
                                                                  repeats:YES];
-            isWeatherLocked = NO;
+            //isWeatherLocked = NO;
 
             
         }];
@@ -272,7 +272,6 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         [self.weather addSubview:self.editingLabel];
     }
     
-    
     if(!self.forecastCont){
         
         self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] init]; // Temp to make sure its called once
@@ -294,7 +293,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                 [prefs postNotification];
             
                 setGesturesForView(self, self.forecastCont.view);
-            
+                
                 if(savedCenterData[@"forecastContView"]){
                     self.forecastCont.view.center = ((NSValue*)savedCenterData[@"forecastContView"]).CGPointValue;
                 }
@@ -609,7 +608,6 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 %new
 -(void) updateLockView {
     //City *city = (/*[prefs boolForKey:@"isLocal"] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : */[[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
-    
     if(self.weatherModel.isPopulated){
         self.store = [CSWeatherStore weatherStoreForLocalWeather:YES autoUpdateInterval:15 updateHandler:^(CSWeatherStore *store) {
             
