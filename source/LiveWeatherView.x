@@ -84,7 +84,9 @@ NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
             self.clipsToBounds = YES;
             City *city = ([[%c(WeatherPreferences) sharedPreferences] isLocalWeatherEnabled] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : [[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
             //if(city){
-            self.store = [CSWeatherStore weatherStoreForLocalWeather:YES autoUpdateInterval:15 savedCityIndex:0 updateHandler:^(CSWeatherStore *store) {
+
+            //self.store =
+            [CSWeatherStore weatherStoreForLocalWeather:YES autoUpdateInterval:15 savedCityIndex:0 updateHandler:^(CSWeatherStore *store) {
                 //Temperature Data
                 self.temp = [[UILabel alloc]init];
                 self.temp.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
@@ -233,20 +235,20 @@ NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
         //[self addSubview:self.referenceView];
         //[self sendSubviewToBack:self.referenceView];
         //if(city){
-            //self.store = [CSWeatherStore weatherStoreForLocalWeather:YES autoUpdateInterval:15 updateHandler:^(CSWeatherStore *store) {
-                //UIImage *icon;
-                //icon = store.currentConditionImageSmall;
-                //self.logo.image = icon;
-                //self.logo.contentMode = UIViewContentModeScaleAspectFit;
-                //self.logo.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-                /*self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                 [self.logo setTintColor:[UIColor whiteColor]];*/
+            [CSWeatherStore weatherStoreForLocalWeather:YES autoUpdateInterval:15 savedCityIndex:0 updateHandler:^(CSWeatherStore *store) {
+                UIImage *icon;
+                icon = store.currentConditionImageSmall;
+                self.logo.image = icon;
+                self.logo.contentMode = UIViewContentModeScaleAspectFit;
+                self.logo.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+                self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                 [self.logo setTintColor:[UIColor whiteColor]];
                 
-                //self.temp.text = store.currentTemperatureLocale;
+                self.temp.text = store.currentTemperatureLocale;
                 //TODO set adaptive color
-                //self.temp.textColor = [UIColor whiteColor];
+                self.temp.textColor = [UIColor whiteColor];
                 
-            //}];
+            }];
         //}
         city = nil;
     //});
