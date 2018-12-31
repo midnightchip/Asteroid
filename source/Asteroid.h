@@ -4,11 +4,15 @@
 
 /* weather background */
 @interface WUIWeatherCondition : NSObject
+@property (assign,nonatomic) long long condition;
 -(void)pause;
 -(void)resume;
-@property (assign,nonatomic) long long condition;
+-(City *)city;
 -(void)setPlaying:(BOOL)arg1;
 -(BOOL)playing;
+-(double)alpha;
+-(void)setAlpha:(double)arg1 ;
+-(void)setCondition:(long long)arg1;
 @end;
 
 @interface WUIDynamicWeatherBackground : UIView

@@ -66,6 +66,7 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
 
 static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
 static WUIWeatherCondition* condition = nil;
+static int conditionNumberSet;
 
 %group LiveWeather
 %hook SBHomeScreenView
@@ -109,6 +110,7 @@ static WUIWeatherCondition* condition = nil;
     condition = [self.referenceView.background condition];
     self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.referenceView.clipsToBounds = YES;
+    conditionNumberSet = condition.condition;
     [self addSubview:self.referenceView];
     [self sendSubviewToBack:self.referenceView];
     
@@ -117,17 +119,39 @@ static WUIWeatherCondition* condition = nil;
 
         
 %end 
-static BOOL isPlaying = NO;
+//static BOOL isPlaying = NO;
 void pauseHome(){
 	[condition pause];
-    isPlaying = NO;
+    //isPlaying = NO;
 }
 void restartHome(){
-    if(!isPlaying){
+    //if(!condition.playing){
         [condition resume];
-        isPlaying = YES;
-    }
+        //isPlaying = YES;
+    //}
 }
+
+//Start stop view, save battery
+%hook SBHomeScreenWindow
+-(void)becomeKeyWindow
+{
+    %orig;
+    //if (!condition.playing)
+    //{
+    restartHome();
+    //}
+}
+
+-(void)resignKeyWindow
+{
+    %orig;
+    //if (condition.playing)
+    //{
+    pauseHome();
+    //}
+}
+%end
+
 
 
 %hook SBLockScreenViewControllerBase
@@ -278,6 +302,67 @@ void restartHome(){
 			}
 	}
 %end
+
+%hook WUIWeatherCondition
+	-(CALayer *)layer{
+		if(self.alpha == 982){
+			CALayer* layer = %orig;
+			for(CALayer* firstLayers in layer.sublayers){
+				if(firstLayers.backgroundColor){
+					firstLayers.backgroundColor = [UIColor clearColor].CGColor;
+				}
+				for(CALayer* secLayers in firstLayers.sublayers){
+					if(deviceVersion >= 11.1 && deviceVersion < 11.3){
+						//NSLog(@"WTest num  %d", conditionNumberSet);
+						/*
+							11.1.2 (at night)
+							Cold condition number 25 
+							Mostly cloudy night	condition number 27
+							Mostly cloudy day condition number 28
+							Clear night condition number 31
+							Sunny condition number 32
+							shows black background, this removes it.
+						*/
+						if(!condition.city.isDay){
+							if(secLayers.backgroundColor){
+								if(conditionNumberSet == 25 || conditionNumberSet == 27 || conditionNumberSet == 28 || conditionNumberSet == 31 || conditionNumberSet == 32 || conditionNumberSet == 46){
+									secLayers.backgroundColor = [UIColor clearColor].CGColor;
+								}
+							}
+						}
+					}
+					for(CALayer* thrLayers in secLayers.sublayers){
+						//NSLog(@"WTest style %@", thrLayers.name);
+						/* 
+							11.1.2 (night) clouds show a black box around clouds
+							Hiding the clouds here.
+						*/
+						if(deviceVersion >= 11.1 && deviceVersion < 11.3){
+							if(!condition.city.isDay){
+								if([thrLayers.name isEqualToString:@"💭 Background"]){
+									if(conditionNumberSet == 3 || conditionNumberSet == 4 || conditionNumberSet == 37 || conditionNumberSet == 47){
+										thrLayers.hidden = YES;
+									}
+								}
+								thrLayers.backgroundColor = [UIColor clearColor].CGColor;
+							}
+						}
+						if(![thrLayers isKindOfClass:[CAEmitterLayer class]] && ![thrLayers isKindOfClass:[CATransformLayer class]]){
+							if(thrLayers.backgroundColor){
+								thrLayers.backgroundColor = [UIColor clearColor].CGColor;
+							}
+							if([thrLayers isKindOfClass:[CAGradientLayer class]]){
+								thrLayers.hidden = YES;
+							}
+						}
+					}
+				}
+			}
+		}
+		return %orig;
+	}
+%end
+
 %end 
 
 %ctor{
