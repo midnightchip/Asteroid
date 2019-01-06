@@ -12,6 +12,8 @@
 		<real>20</real>
 		<key>tempSize</key>
 		<real>50</real>
+        <key>dismissButtonSize</key>
+        <real>18</real>
 		<key>blurAmount</key>
 		<real>5</real>
 		<key>textColor</key>
@@ -24,7 +26,7 @@
         <real>11</real>
         <key>iconSize</key> <!--Data for the lock icon-->
         <real>1</real>
-        <key>icforecastContViewSizeonSize</key> <!--Data for the lock icon-->
+        <key>forecastContViewSize</key> <!--Data for the lock icon-->
         <real>1</real>
 		<key>customAppColor</key>
         <string>FFFFFF</string>

@@ -172,11 +172,11 @@
                 <string>/Library/PreferenceBundles/Asteroid.bundle</string>
             </dict>
             
-           <!-- <dict>
+            <dict>
                 <key>cell</key>
                 <string>PSSliderCell</string>
                 <key>key</key>
-                <string>tempSize</string>
+                <string>dismissButtonSize</string>
                 <key>showValue</key>
                 <true/>
                 <key>min</key>
@@ -193,7 +193,7 @@
                 <string>com.midnightchips.asteroid</string>
                 <key>defaultsPath</key>
                 <string>/Library/PreferenceBundles/Asteroid.bundle</string>
-            </dict> -->
+            </dict>
             
             <dict>
                 <key>cell</key>

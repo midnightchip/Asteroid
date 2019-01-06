@@ -109,6 +109,14 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     }
     self.wDescription.textColor = [prefs colorForKey:@"textColor"];
     
+    // Setting the font for the dismissButton
+    if([prefs boolForKey:@"customFont"]){
+        self.dismissButton.titleLabel.font = [UIFont fontWithName:[prefs stringForKey:@"availableFonts"] size:[prefs intForKey:@"dismissButtonSize"]];
+    }else{
+        self.dismissButton.titleLabel.font = [UIFont systemFontOfSize:[prefs intForKey:@"dismissButtonSize"]];
+    }
+    self.dismissButton.titleLabel.textColor = [prefs colorForKey:@"textColor"];
+    
    if(![prefs boolForKey:@"enableForeHeader"]){
        
        self.forecastCont.headerView.hidden = YES;
@@ -484,6 +492,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             [prefs setObject: @(self.currentTemp.font.pointSize) forKey:@"tempSize"];
             [prefs setObject: @(self.greetingLabel.font.pointSize) forKey:@"greetingSize"];
             [prefs setObject: @(self.wDescription.font.pointSize) forKey:@"wDescriptionSize"];
+            [prefs setObject: @(self.dismissButton.titleLabel.font.pointSize) forKey:@"dismissButtonSize"];
             [prefs saveAndPostNotification];
         }
         else {
