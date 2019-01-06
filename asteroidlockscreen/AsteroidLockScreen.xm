@@ -23,7 +23,6 @@ NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/Application Support/
 //NSString *alertTitle = [tweakBundle localizedStringForKey:@"ALERT_TITLE" value:@"" table:nil];
 
 // Statics
-static NSDictionary *savedCenterData = [NSKeyedUnarchiver unarchiveObjectWithData: [NSData dataWithContentsOfFile: FILE_PATH]];
 static BOOL isDismissed = NO;
 static BOOL tc_editing;
 static double lastZoomValue = 0;
@@ -70,6 +69,9 @@ static void savingValuesToFile(SBDashBoardMainPageView *sender){
 // Master update notification
 static void updatePreferenceValues(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
     SBDashBoardMainPageView *self = (__bridge SBDashBoardMainPageView *)observer;
+    
+    // Getting saved values.
+    self.centerDict = [NSKeyedUnarchiver unarchiveObjectWithData: [NSData dataWithContentsOfFile: FILE_PATH]];
     
     // Resetting sizing.
     if([prefs boolForKey:@"resetSizing"]){
@@ -121,7 +123,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     
     // Reseting location
     if([prefs boolForKey:@"resetXY"]){
-        savedCenterData = nil;
+        self.centerDict = nil;
         
         // Just some rect stuff
         CGRect screenRect = [[UIScreen mainScreen] bounds];
@@ -165,7 +167,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 
 - (void)layoutSubviews {
     %orig;
-    NSLog(@"lock_TWEAK | value: %@", NSStringFromCGPoint(((NSValue*)savedCenterData[@"forecastContView"]).CGPointValue));
+    //NSLog(@"lock_TWEAK | value: %@", NSStringFromCGPoint(((NSValue*)self.centerDict[@"forecastContView"]).CGPointValue));
     if(!self.weather){
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         [self.weather setUserInteractionEnabled:YES];
@@ -228,8 +230,8 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         //self.logo.center = [self.centerDict[@"logo"] CGPointValue];
         setGesturesForView(self, self.logo);
         
-        if(savedCenterData[@"logo"]){
-            self.logo.center = ((NSValue*)savedCenterData[@"logo"]).CGPointValue;
+        if(self.centerDict[@"logo"]){
+            self.logo.center = ((NSValue*)self.centerDict[@"logo"]).CGPointValue;
         }
         
         initialIconFrame = @(self.logo.frame.size.width);
@@ -254,8 +256,8 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         
         setGesturesForView(self, self.currentTemp);
         
-        if(savedCenterData[@"currentTemp"]){
-            self.currentTemp.center = ((NSValue*)savedCenterData[@"currentTemp"]).CGPointValue;
+        if(self.centerDict[@"currentTemp"]){
+            self.currentTemp.center = ((NSValue*)self.centerDict[@"currentTemp"]).CGPointValue;
         }
     }
     
@@ -294,8 +296,8 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             
                 setGesturesForView(self, self.forecastCont.view);
                 
-                if(savedCenterData[@"forecastContView"]){
-                    self.forecastCont.view.center = ((NSValue*)savedCenterData[@"forecastContView"]).CGPointValue;
+                if(self.centerDict[@"forecastContView"]){
+                    self.forecastCont.view.center = ((NSValue*)self.centerDict[@"forecastContView"]).CGPointValue;
                 }
             
                 initialForeFrame = @(self.forecastCont.view.frame.size.width);
@@ -326,8 +328,8 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         
         setGesturesForView(self, self.greetingLabel);
         
-        if(savedCenterData[@"greetingLabel"]){
-            self.greetingLabel.center = ((NSValue*)savedCenterData[@"greetingLabel"]).CGPointValue;
+        if(self.centerDict[@"greetingLabel"]){
+            self.greetingLabel.center = ((NSValue*)self.centerDict[@"greetingLabel"]).CGPointValue;
         }
     }
     
@@ -346,8 +348,8 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         
         setGesturesForView(self, self.wDescription);
         
-        if(savedCenterData[@"wDescription"]){
-            self.wDescription.center = ((NSValue*)savedCenterData[@"wDescription"]).CGPointValue;
+        if(self.centerDict[@"wDescription"]){
+            self.wDescription.center = ((NSValue*)self.centerDict[@"wDescription"]).CGPointValue;
         }
         
     }
@@ -366,8 +368,8 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         
         setGesturesForView(self, self.dismissButton);
         
-        if(savedCenterData[@"dismissButton"]){
-            self.dismissButton.center = ((NSValue*)savedCenterData[@"dismissButton"]).CGPointValue;
+        if(self.centerDict[@"dismissButton"]){
+            self.dismissButton.center = ((NSValue*)self.centerDict[@"dismissButton"]).CGPointValue;
         }
         
     }
@@ -390,8 +392,8 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         
         setGesturesForView(self, self.notifcationLabel);
         
-        if(savedCenterData[@"notificationLabel"]){
-            self.notifcationLabel.center = ((NSValue*)savedCenterData[@"notificationLabel"]).CGPointValue;
+        if(self.centerDict[@"notificationLabel"]){
+            self.notifcationLabel.center = ((NSValue*)self.centerDict[@"notificationLabel"]).CGPointValue;
         }
     }
     
@@ -474,7 +476,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             // Saving icon ratio
             if(self.logo.frame.origin.x) [prefs setObject: @(@(self.logo.frame.size.width).doubleValue / initialIconFrame.doubleValue) forKey:@"iconSize"];
             
-             if(self.forecastCont.view.frame.origin.x) [prefs setObject: @(@(self.forecastCont.view.frame.size.width).doubleValue / initialForeFrame.doubleValue) forKey:@"forecastContViewSize"];
+            if(self.forecastCont.view.frame.origin.x) [prefs setObject: @(@(self.forecastCont.view.frame.size.width).doubleValue / initialForeFrame.doubleValue) forKey:@"forecastContViewSize"];
             
             // Saving values
             savingValuesToFile(self);
@@ -608,6 +610,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 %new
 -(void) updateLockView {
     //City *city = (/*[prefs boolForKey:@"isLocal"] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : */[[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
+    /*
     if(self.weatherModel.isPopulated){
         self.store = [CSWeatherStore weatherStoreForLocalWeather:YES autoUpdateInterval:15 savedCityIndex:0 updateHandler:^(CSWeatherStore *store) {
             
@@ -685,7 +688,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             
         }];
     }
-    //city = nil;
+    //city = nil;*/
 }
 %end
 
