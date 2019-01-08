@@ -196,7 +196,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                                                                 selector:@selector(revealWeather:)
                                                                 userInfo:nil
                                                                  repeats:YES];
-            //isWeatherLocked = NO;
+            isWeatherLocked = NO;
 
             
         }];
@@ -580,14 +580,15 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 %new
 - (void) hideWeather{
     if(!self.weather.hidden){
-        [UIView animateWithDuration:.5
+        /*[UIView animateWithDuration:.5
                               delay:0
                             options:UIViewAnimationOptionCurveEaseOut
                          animations:^{self.weather.alpha = 0;}
                          completion:^(BOOL finished){
                              self.weather.hidden = YES;
                              self.weather.alpha = 1;
-                         }];
+                         }];*/
+        self.weather.hidden = YES;
         isDismissed = YES;
         [[NSNotificationCenter defaultCenter]
          postNotificationName:@"weatherStateChanged"
@@ -598,11 +599,13 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 // Handles reveal
 %new
 - (void) revealWeather: (NSTimer *) sender{
-    self.weather.hidden = NO;
-    isDismissed = NO;
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"weatherStateChanged"
-     object:self];
+    if(!isWeatherLocked){
+        self.weather.hidden = NO;
+        isDismissed = NO;
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"weatherStateChanged"
+         object:self];
+    }
 }
 
 // Handling a timer fire (refresh weather info)
@@ -750,6 +753,16 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 }
 %end
 
+%hook MediaControlsPanelViewController
+-(BOOL) isOnScreen {
+    if(%orig && !isDismissed){
+        [mainPageView hideWeather];
+        isWeatherLocked = YES;
+    }
+    return %orig;
+}
+%end
+
 // Checking content
 %hook NCNotificationCombinedListViewController
 -(id) init{
@@ -763,14 +776,14 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     BOOL content = %orig;
     // Sending values to the background controller
     //This is some black magic, I wrote this and I have no idea whats going on.
-    if([(SpringBoard*)[UIApplication sharedApplication] isNowPlayingAppPlaying] == YES/* && mainPageView.weather.hidden == YES*/){
+    /*if([(SpringBoard*)[UIApplication sharedApplication] isNowPlayingAppPlaying] == YES && !isDismissed){
         [mainPageView hideWeather];
         //[mainPageView.inactiveTimer fire];
-    }else if(content && [prefs boolForKey:@"hideOnNotif"]){
+    }else if(content && [prefs boolForKey:@"hideOnNotif"] && !isDismissed){
         //if([prefs boolForKey:@"hideOnNotif"]){
             [mainPageView hideWeather];
         //}
-    }else if(!isWeatherLocked)/* if ([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] > 0)*/{
+    }else */if(!isWeatherLocked && isDismissed && [[%c(SBMediaController) sharedInstance] isPlaying] == NO)/* if ([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] > 0)*/{
         //[mainPageView hideWeather];
         [mainPageView.inactiveTimer fire];
     }

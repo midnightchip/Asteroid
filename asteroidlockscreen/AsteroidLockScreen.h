@@ -141,3 +141,7 @@
 @interface UIVisualEffectView (asteroid)
 @property (nonatomic,copy) NSArray * contentEffects;
 @end
+
+@interface SBMediaController
+-(BOOL) isPlaying;
+@end
