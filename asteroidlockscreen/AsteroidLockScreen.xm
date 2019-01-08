@@ -70,9 +70,6 @@ static void savingValuesToFile(SBDashBoardMainPageView *sender){
 static void updatePreferenceValues(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
     SBDashBoardMainPageView *self = (__bridge SBDashBoardMainPageView *)observer;
     
-    // Getting saved values.
-    self.centerDict = [NSKeyedUnarchiver unarchiveObjectWithData: [NSData dataWithContentsOfFile: FILE_PATH]];
-    
     // Resetting sizing.
     if([prefs boolForKey:@"resetSizing"]){
         /*
@@ -176,10 +173,15 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 - (void)layoutSubviews {
     %orig;
     //NSLog(@"lock_TWEAK | value: %@", NSStringFromCGPoint(((NSValue*)self.centerDict[@"forecastContView"]).CGPointValue));
+    
+    // This is basically an init lol
     if(!self.weather){
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         [self.weather setUserInteractionEnabled:YES];
         [self addSubview:self.weather];
+        
+        // Getting saved values.
+        self.centerDict = [NSKeyedUnarchiver unarchiveObjectWithData: [NSData dataWithContentsOfFile: FILE_PATH]];
         
         // Swipe Up to dismiss
         UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(buttonPressed:)];
