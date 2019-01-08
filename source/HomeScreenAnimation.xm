@@ -198,7 +198,7 @@ void restartHome(){
         %orig(CGRectNull, NULL, NULL);
     
         self.backgroundColor = [UIColor clearColor];
-    }
+    } else %orig;
     
 }
 %end 
