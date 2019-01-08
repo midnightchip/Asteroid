@@ -201,7 +201,7 @@ void restartHome(){
     } else %orig;
     
 }
-%end 
+%end
 %end 
 //Figure this out at a later date
 /*@interface SBFolderControllerBackgroundView : UIView

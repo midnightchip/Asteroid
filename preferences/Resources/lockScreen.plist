@@ -22,22 +22,6 @@
                 <key>defaultsPath</key>
                 <string>/Library/PreferenceBundles/Asteroid.bundle</string>
             </dict>
-			<dict>
-                <key>cell</key>
-                <string>PSSwitchCell</string>
-                <key>label</key>
-                <string>Hide Greeting View on Notification</string>
-				<key>sublabel</key>
-                <string>When there are notifications, hide the weather view</string>
-                <key>key</key>
-                <string>hideOnNotif</string>
-                <key>PostNotification</key>
-                <string>com.midnightchips.asteroid.prefschanged</string>
-                <key>defaults</key>
-                <string>com.midnightchips.asteroid</string>
-                <key>defaultsPath</key>
-                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
-            </dict>
             <dict>
                 <key>action</key>
                 <string>pushToView:</string>
