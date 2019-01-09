@@ -34,8 +34,8 @@ Licensed under the GNU General Public License, version 3.0. Refer to ![LICENSE.m
 
 1. Install ![Theos](https://github.com/theos/theos) installed.
 
-2. Install ![libCSColorPicker](https://github.com/CreatureSurvive/libCSColorPicker), ![libCSPreferences](https://github.com/CreatureSurvive/libCSPreferences) and ![libCSWeather
-](https://github.com/CreatureSurvive/libCSWeather) 
+2. Install ![libCSColorPicker](https://github.com/CreatureSurvive/libCSColorPicker), ![libCSPreferences](https://github.com/CreatureSurvive/libCSPreferences) and ![CSWeather
+](https://github.com/CreatureSurvive/CSWeather) 
 
 3. Type `make package` in the project directory
 

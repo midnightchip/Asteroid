@@ -95,10 +95,11 @@
 
 @interface WATodayHeaderView : UIView
 -(void)_updateContent;
-@property (nonatomic,copy) NSString * locationName; 
+@property (nonatomic, retain) UIViewController *_viewControllerForAncestor;
+@property (nonatomic,copy) NSString * locationName;
 @property (nonatomic,retain) UILabel * locationLabel;
 -(void)setLocationLabel:(UILabel *)arg1;
-@end 
+@end
 
 @interface WAWeatherPlatterViewController : UIViewController
 -(id)initWithLocation:(id)arg1 ;
@@ -110,6 +111,8 @@
 @property (nonatomic,retain) UIView * dividerLineView;
 @property (nonatomic,retain) WATodayModel * model;   
 @end
+
+
 
 @protocol WATodayModelObserver <NSObject>
 @required

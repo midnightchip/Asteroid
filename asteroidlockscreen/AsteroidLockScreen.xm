@@ -708,6 +708,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 }
 %end
 
+// hacky way to catch the city name not matching with rest of forecast
 %hook WATodayHeaderView
 -(NSString *)locationName{
     WeatherPreferences *preferences = [%c(WeatherPreferences) sharedPreferences];
@@ -720,7 +721,13 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     [todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *arg2) {
         //cityName = todayModel.forecastModel.city.name;
         [todayModel setIsLocationTrackingEnabled:NO];
-    }];  
+    }];
+    
+    // Checking to make sure the city name matches with the actual content
+    if(![((NSString *)((WAWeatherPlatterViewController *)self._viewControllerForAncestor).model.forecastModel.city.name) isEqualToString: ((NSString *)todayModel.forecastModel.city.name)]){
+        // something is fucked up, force everything to update
+        [[%c(AWeatherModel) sharedInstance] updateWeatherDataWithCompletion:^{nil;}];
+     }
     return todayModel.forecastModel.city.name;
     
 }
@@ -754,7 +761,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     return %orig;
 }
 %end
-
+// Hide when media present
 %hook MediaControlsPanelViewController
 -(BOOL) isOnScreen {
     if(%orig && !isDismissed){
@@ -776,29 +783,18 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 }
 -(BOOL)hasContent{
     BOOL content = %orig;
-    // Sending values to the background controller
-    //This is some black magic, I wrote this and I have no idea whats going on.
-    /*if([(SpringBoard*)[UIApplication sharedApplication] isNowPlayingAppPlaying] == YES && !isDismissed){
-        [mainPageView hideWeather];
-        //[mainPageView.inactiveTimer fire];
-    }else if(content && [prefs boolForKey:@"hideOnNotif"] && !isDismissed){
-        //if([prefs boolForKey:@"hideOnNotif"]){
-            [mainPageView hideWeather];
-        //}
-    }*/
+    
+    //This is some black magic, I wrote this and I have no idea whats going on. -Midnightchips & the casle 2018
     if(content && [prefs boolForKey:@"hideOnNotif"] && !isDismissed){
         [mainPageView hideWeather];
         NSLog(@"lock_TWEAK | hiding weather");
-    } else if(!isWeatherLocked && isDismissed && [[%c(SBMediaController) sharedInstance] isPlaying] == NO)/* if ([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] > 0)*/{
-        //[mainPageView hideWeather];
-        if([prefs boolForKey:@"hideOnNotif"] && !content){
+    } else if(!isWeatherLocked && isDismissed && [[%c(SBMediaController) sharedInstance] isPlaying] == NO){
+        if([prefs boolForKey:@"hideOnNotif"] && !content){ // Will make check hideOnNotif and content before revealing lock
             [mainPageView.inactiveTimer fire];
-        } else if(![prefs boolForKey:@"hideOnNotif"]){
+        } else if(![prefs boolForKey:@"hideOnNotif"]){ // Do as normally would if hideOnNotif not enabled
              [mainPageView.inactiveTimer fire];
         }
     }
-    /*
-    */
     return content;
     
 }
@@ -859,6 +855,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     }
     // Notification called when the lockscreen / nc is revealed (this is posted by the system)
     [[NSNotificationCenter defaultCenter] addObserverForName: @"weatherStateChanged" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+        NSLog(@"lock_TWEAK | Notification Posted");
         if(isDismissed){
             [UIView animateWithDuration:.5
                                   delay:0
