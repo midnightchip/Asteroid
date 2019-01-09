@@ -684,25 +684,27 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             self.wDescription.text = store.currentConditionOverview;
             self.greetingLabel.textAlignment = NSTextAlignmentCenter;
             
-            // Update the forecast
-            WeatherPreferences *preferences = [%c(WeatherPreferences) sharedPreferences];
-            if(!todayModel){
-                todayModel = [%c(WATodayModel) autoupdatingLocationModelWithPreferences:preferences effectiveBundleIdentifier:@"com.apple.weather"];
-            }
-            
-            [todayModel setLocationServicesActive:YES];
-            [todayModel setIsLocationTrackingEnabled:YES];
-            [todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *arg2) {
-                self.forecastCont.model = todayModel;
-                [todayModel setIsLocationTrackingEnabled:NO];
-            }];  
-            [self.forecastCont.headerView _updateContent];   
-            //locationString = todayModel.forecastModel.city.name;
-            [self.forecastCont _updateViewContent];
+     
             
         }];
     }
     //city = nil;*/
+    
+    // Update the forecast
+    WeatherPreferences *preferences = [%c(WeatherPreferences) sharedPreferences];
+    if(!todayModel){
+        todayModel = [%c(WATodayModel) autoupdatingLocationModelWithPreferences:preferences effectiveBundleIdentifier:@"com.apple.weather"];
+    }
+    
+    [todayModel setLocationServicesActive:YES];
+    [todayModel setIsLocationTrackingEnabled:YES];
+    [todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *arg2) {
+        self.forecastCont.model = todayModel;
+        [todayModel setIsLocationTrackingEnabled:NO];
+        [self.forecastCont.headerView _updateContent];
+        //locationString = todayModel.forecastModel.city.name;
+        [self.forecastCont _updateViewContent];
+    }];
 }
 %end
 
@@ -783,10 +785,20 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         //if([prefs boolForKey:@"hideOnNotif"]){
             [mainPageView hideWeather];
         //}
-    }else */if(!isWeatherLocked && isDismissed && [[%c(SBMediaController) sharedInstance] isPlaying] == NO)/* if ([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] > 0)*/{
+    }*/
+    if(content && [prefs boolForKey:@"hideOnNotif"] && !isDismissed){
+        [mainPageView hideWeather];
+        NSLog(@"lock_TWEAK | hiding weather");
+    } else if(!isWeatherLocked && isDismissed && [[%c(SBMediaController) sharedInstance] isPlaying] == NO)/* if ([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] > 0)*/{
         //[mainPageView hideWeather];
-        [mainPageView.inactiveTimer fire];
+        if([prefs boolForKey:@"hideOnNotif"] && !content){
+            [mainPageView.inactiveTimer fire];
+        } else if(![prefs boolForKey:@"hideOnNotif"]){
+             [mainPageView.inactiveTimer fire];
+        }
     }
+    /*
+    */
     return content;
     
 }
