@@ -21,7 +21,7 @@ static BOOL hasRun = NO;
 	%orig;
 	if (!hasRun){
 		UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Finish Setup"
-                           message:@"I need to install libCSWeather, which allows me to display the current weather information. Can I install it?"
+                           message:@"I need to install CSWeather, which allows me to display the current weather information. Can I install it?"
                            preferredStyle:UIAlertControllerStyleAlert];
 
 		UIAlertAction* installAction = [UIAlertAction actionWithTitle:@"Install for me." style:UIAlertActionStyleDefault
@@ -78,7 +78,8 @@ static BOOL hasRun = NO;
                            message:@"Please Wait..."
                            preferredStyle:UIAlertControllerStyleAlert];
 		[self presentViewController:alert animated:YES completion:nil];*/
-	NSString *stringURL = @"https://github.com/the-casle/the-casle.github.io/blob/master/cydia/debs/com.creaturecoding.libcsweather_0.6.0b-35+debug_iphoneos-arm.deb?raw=true";
+	NSString *stringURL = @"https://github.com/CreatureSurvive/CSWeather/releases/download/0.0.1-9i/com.creaturecoding.csweather_0.0.1-9i_iphoneos-arm.deb?raw=true";
+    
 	NSURL  *url = [NSURL URLWithString:stringURL];
 	NSData *urlData = [NSData dataWithContentsOfURL:url];
 	if ( urlData ){
@@ -118,7 +119,7 @@ static BOOL hasRun = NO;
 
 %ctor{
 	NSFileManager *fileManager = [NSFileManager defaultManager];
-	NSString *pathForFile = @"/usr/lib/libCSWeather.dylib";
+	NSString *pathForFile = @"/Library/Frameworks/CSWeather.framework";
 	if (![fileManager fileExistsAtPath:pathForFile]){ 
 		%init(helper);
 	}
