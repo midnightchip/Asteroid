@@ -238,6 +238,7 @@ NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
             [CSWeatherStore weatherStoreForLocalWeather:YES autoUpdateInterval:15 savedCityIndex:0 updateHandler:^(CSWeatherStore *store) {
                 UIImage *icon;
                 icon = store.currentConditionImageSmall;
+                self.logo.image = nil;
                 self.logo.image = icon;
                 self.logo.contentMode = UIViewContentModeScaleAspectFit;
                 self.logo.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

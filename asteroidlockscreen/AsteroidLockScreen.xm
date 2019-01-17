@@ -49,12 +49,7 @@ void setGesturesForView(UIView *superview, UIView *view){
     [view addGestureRecognizer: tapGestureRecognizer];
 }
 
-static void savingValuesToFile(SBDashBoardMainPageView *sender){
-    SBDashBoardMainPageView *self = sender;
-    NSDictionary *viewDict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"greetingLabel" : [NSValue valueWithCGPoint:self.greetingLabel.center], @"wDescription" : [NSValue valueWithCGPoint:self.wDescription.center], @"currentTemp" : [NSValue valueWithCGPoint:self.currentTemp.center], @"dismissButton" : [NSValue valueWithCGPoint:self.dismissButton.center], @"notificationLabel" : [NSValue valueWithCGPoint:self.notifcationLabel.center], @"forecastContView" : [NSValue valueWithCGPoint:self.forecastCont.view.center]
-        
-    };
-    
+static void createDirectoryAndFile(){
     BOOL isDir;
     NSFileManager *fileManager= [NSFileManager defaultManager];
     if(![fileManager fileExistsAtPath:DIRECTORY_PATH isDirectory:&isDir]){
@@ -63,6 +58,15 @@ static void savingValuesToFile(SBDashBoardMainPageView *sender){
     if(![fileManager fileExistsAtPath:FILE_PATH isDirectory:&isDir]){
         [fileManager createFileAtPath:FILE_PATH contents:nil attributes:nil];
     }
+}
+
+static void savingValuesToFile(SBDashBoardMainPageView *sender){
+    SBDashBoardMainPageView *self = sender;
+    NSDictionary *viewDict = @{ @"logo" : [NSValue valueWithCGPoint:self.logo.center], @"greetingLabel" : [NSValue valueWithCGPoint:self.greetingLabel.center], @"wDescription" : [NSValue valueWithCGPoint:self.wDescription.center], @"currentTemp" : [NSValue valueWithCGPoint:self.currentTemp.center], @"dismissButton" : [NSValue valueWithCGPoint:self.dismissButton.center], @"notificationLabel" : [NSValue valueWithCGPoint:self.notifcationLabel.center], @"forecastContView" : [NSValue valueWithCGPoint:self.forecastCont.view.center]
+        
+    };
+    
+    createDirectoryAndFile();
     [[NSKeyedArchiver archivedDataWithRootObject:viewDict] writeToFile:FILE_PATH atomically:YES];
 }
 
@@ -181,7 +185,32 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         [self addSubview:self.weather];
         
         // Getting saved values.
-        self.centerDict = [NSKeyedUnarchiver unarchiveObjectWithData: [NSData dataWithContentsOfFile: FILE_PATH]];
+        NSData *storeData = [NSData dataWithContentsOfFile: FILE_PATH];
+        if(storeData){
+            self.centerDict = [NSKeyedUnarchiver unarchiveObjectWithData: storeData];
+        } else {
+            
+            createDirectoryAndFile();
+            /*
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Asteroid"
+                                                                           message:@"Succesfully created file at \"/var/mobile/Library/Asteroid/centerData.plist\" in order to save during respring."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"rip" style:UIAlertActionStyleDefault
+                                                                 handler:^(UIAlertAction * action) {
+                                                                     //[self ]
+                                                                 }];
+            
+            [alert addAction:cancelAction];
+            [self._viewControllerForAncestor presentViewController:alert animated:YES completion:nil];*/
+        }
+        
+        // Crashy boi
+        /*
+        NSString *string = nil;
+        if(string) NSDictionary *crashyBoi = @{ @"crashYeet" : string};
+        crashyBoi = nil;
+        */
+        
         
         // Swipe Up to dismiss
         UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(buttonPressed:)];

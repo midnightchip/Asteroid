@@ -10,7 +10,7 @@ typedef void(^completion)();
 @property (nonatomic, retain) WeatherPreferences *weatherPreferences;
 @property (nonatomic, retain) WFLocation *geoLocation;
 @property (nonatomic, retain) WATodayAutoupdatingLocationModel *locationProviderModel;
-@property (nonatomic, retain) WATodayModel *todayModel;
+@property (nonatomic, retain) WATodayAutoupdatingLocationModel *todayModel;
 @property (nonatomic, retain) WAForecastModel *forecastModel;
 @property (nonatomic, retain) City *city;
 @property (nonatomic, retain) City *fakeCity;
@@ -19,9 +19,12 @@ typedef void(^completion)();
 @property (nonatomic, getter=isPopulated) BOOL populated;
 
 + (instancetype)sharedInstance;
+-(void) _kickStartWeatherFramework;
 -(void)updateWeatherDataWithCompletion:(completion) compBlock;
 -(void)setUpRefreshTimer;
 -(void) postNotification;
+
+
 @end
 
 @interface City (Condition)

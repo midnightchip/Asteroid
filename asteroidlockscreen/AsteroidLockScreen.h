@@ -85,7 +85,7 @@
 @property (nonatomic, strong) CSWeatherStore *store;
 @property (nonatomic, retain) UILabel *notifcationLabel;
 
-
+-(id) _viewControllerForAncestor;
 -(void)updateImage:(NSNotification *) notification;
 - (void)tc_animateFilter: (UIView *)view;
 -(void) updateLockView;

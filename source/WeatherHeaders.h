@@ -4,7 +4,9 @@
 
 @end
 
-
+@interface NSObject (asteroid)
+- (BOOL)isKindOfClass:(Class)aClass;
+@end
 
 @interface City : NSObject
 -(NSMutableArray*)hourlyForecasts;
@@ -57,7 +59,7 @@
 
 @end
 
-@interface WATodayModel
+@interface WATodayModel : NSObject
 +(id)autoupdatingLocationModelWithPreferences:(id)arg1 effectiveBundleIdentifier:(id)arg2 ;
 -(void)_fireTodayModelWantsUpdate;
 -(BOOL)executeModelUpdateWithCompletion:(/*^block*/id)arg1 ;

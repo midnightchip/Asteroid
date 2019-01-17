@@ -56,6 +56,7 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
 
 - (instancetype) init{
     if(self = [super init]){
+        
     }
     return self;
 }
@@ -69,16 +70,13 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
     return sharedInstance;
 }
 
--(void)updateWeatherDataWithCompletion:(completion) compBlock{
-    //This sets up local weather, and anyone on github better appreciate this - the casle
+-(void) _kickStartWeatherFramework{
     self.weatherPreferences = [objc_getClass("WeatherPreferences") sharedPreferences];
     self.locationProviderModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
     [self.locationProviderModel setLocationServicesActive:YES];
     [self.locationProviderModel setIsLocationTrackingEnabled:YES];
     //[self.locationProviderModel.locationManager forceLocationUpdate];
-    
-    //self.fakeCity = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
-    
+
     [self.locationProviderModel _executeLocationUpdateForLocalWeatherCityWithCompletion:^{
         if(self.locationProviderModel.geocodeRequest.geocodedResult){
             self.geoLocation = self.locationProviderModel.geocodeRequest.geocodedResult;
@@ -88,13 +86,11 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
                 [self.locationProviderModel _willDeliverForecastModel:self.forecastModel];
                 self.locationProviderModel.forecastModel = self.forecastModel;
                 self.city = self.forecastModel.city;
-                //self.fakeCity = [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:self.city]];
                 self.localWeather = self.city.isLocalWeatherCity;
                 self.populated = YES;
                 
                 [self postNotification];
                 [self setUpRefreshTimer];
-                compBlock();
             }];
             
         } else{
@@ -107,10 +103,31 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
             self.populated = YES;
             [self postNotification];
             [self setUpRefreshTimer];
-            compBlock();
         }
     }];
     [self.locationProviderModel setIsLocationTrackingEnabled:NO];
+}
+
+-(void)updateWeatherDataWithCompletion:(completion) compBlock{
+    if(!self.isPopulated){
+        //[self _kickStartWeatherFramework:compBlock];
+    } else {
+        //This sets up local weather, and anyone on github better appreciate this - the casle
+        if(![self.todayModel isKindOfClass:objc_getClass("WATodayAutoupdatingLocationModel")]){
+            self.todayModel = [objc_getClass("WATodayModel") autoupdatingLocationModelWithPreferences:self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
+        }
+        
+        [self.todayModel setLocationServicesActive:YES];
+        [self.todayModel setIsLocationTrackingEnabled:YES];
+        [self.todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *arg2) {
+            self.forecastModel = self.todayModel.forecastModel;
+            self.city = self.forecastModel.city;
+            
+            [self.todayModel setIsLocationTrackingEnabled:NO];
+            [self postNotification];
+            compBlock();
+        }];
+    }
 }
 
 -(void)setUpRefreshTimer{
@@ -137,3 +154,8 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
     });
 }
 @end
+
+%ctor{
+    // Used to kickstart AWeatherModel.
+    [[%c(AWeatherModel) sharedInstance] _kickStartWeatherFramework];
+}
