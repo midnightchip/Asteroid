@@ -23,7 +23,7 @@ NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/Application Support/
 //NSString *alertTitle = [tweakBundle localizedStringForKey:@"ALERT_TITLE" value:@"" table:nil];
 
 // Statics
-static BOOL isDismissed = nil;
+static BOOL isDismissed = NO;
 static BOOL tc_editing;
 static double lastZoomValue = 0;
 static SBDashBoardMainPageView *mainPageView;
@@ -581,12 +581,13 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
                          completion:^(BOOL finished){
                              self.weather.hidden = YES;
                              self.weather.alpha = 1;
+                             
+                             isDismissed = YES;
+                             isWeatherLocked = YES;
+                             [[NSNotificationCenter defaultCenter]
+                              postNotificationName:@"weatherStateChanged"
+                              object:self];
                          }];
-        isDismissed = YES;
-        isWeatherLocked = YES;
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"weatherStateChanged"
-         object:self];
     }
 }
 //Hide weather with notification
@@ -612,11 +613,10 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 // Handles reveal
 %new
 - (void) revealWeather: (NSTimer *) sender{
-    [self weatherLockReveal];
+    [self updateWeatherReveal];
 }
-
 %new
--(void) weatherLockReveal {
+-(void) updateWeatherReveal{
     //if(!isWeatherLocked){
     self.weather.hidden = NO;
     isDismissed = NO;
@@ -718,9 +718,9 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         NSLog(@"lock_TWEAK | hiding weather");
     } else if(!isWeatherLocked && isDismissed && [[%c(SBMediaController) sharedInstance] isPlaying] == NO){
         if([prefs boolForKey:@"hideOnNotif"] && !content){ // Will make check hideOnNotif and content before revealing lock
-            [mainPageView weatherLockReveal];
+            [mainPageView updateWeatherReveal];
         } else if(![prefs boolForKey:@"hideOnNotif"]){ // Do as normally would if hideOnNotif not enabled
-             [mainPageView weatherLockReveal];
+             [mainPageView updateWeatherReveal];
         }
     }
     return content;

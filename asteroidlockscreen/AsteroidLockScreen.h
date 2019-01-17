@@ -88,7 +88,7 @@
 -(id) _viewControllerForAncestor;
 -(void)updateImage:(NSNotification *) notification;
 - (void)tc_animateFilter: (UIView *)view;
--(void) weatherLockReveal;
+-(void) updateWeatherReveal;
 -(void) updateLockView;
 -(void) hideWeather;
 @end
