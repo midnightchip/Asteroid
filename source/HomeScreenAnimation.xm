@@ -78,9 +78,7 @@ static int conditionNumberSet;
     %orig;
     if(!self.referenceView){
         self.weatherModel = [%c(AWeatherModel) sharedInstance];
-        [self.weatherModel updateWeatherDataWithCompletion:^{
-            [self updateView];
-        }];
+        [self updateView];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(weatherTimer:) name:@"weatherTimerUpdate" object:nil];
     }
 }

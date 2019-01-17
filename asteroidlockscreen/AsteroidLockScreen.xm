@@ -23,13 +23,12 @@ NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/Application Support/
 //NSString *alertTitle = [tweakBundle localizedStringForKey:@"ALERT_TITLE" value:@"" table:nil];
 
 // Statics
-static BOOL isDismissed = NO;
+static BOOL isDismissed = nil;
 static BOOL tc_editing;
 static double lastZoomValue = 0;
 static SBDashBoardMainPageView *mainPageView;
 static NSNumber *initialIconFrame;
 static NSNumber *initialForeFrame;
-static WATodayAutoupdatingLocationModel* todayModel = nil;
 static BOOL isWeatherLocked = nil;
 
 
@@ -314,46 +313,31 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     }
     
     if(!self.forecastCont){
-        
         self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] init]; // Temp to make sure its called once
-            //Thank you Matchstic, better than my janky check.
-            WeatherPreferences *preferences = [%c(WeatherPreferences) sharedPreferences];
-            if(!todayModel){
-                todayModel = [%c(WATodayModel) autoupdatingLocationModelWithPreferences:preferences effectiveBundleIdentifier:@"com.apple.weather"];
-            }
-            [todayModel setLocationServicesActive:YES];
-            [todayModel setIsLocationTrackingEnabled:YES];
-            [todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *arg2) {
-			if(todayModel.forecastModel.city){
-                [todayModel setIsLocationTrackingEnabled:NO];
-                self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] initWithLocation:todayModel.forecastModel.city];
-                ((UIView *)((NSArray *)self.forecastCont.view.layer.sublayers)[0]).hidden = YES; // Visual Effect view to hidden
-                self.forecastCont.view.frame = CGRectMake(0, (self.frame.size.height / 2), self.frame.size.width, self.frame.size.height/3);
-                [self.weather addSubview:self.forecastCont.view];
+        
+        //Thank you Matchstic, better than my janky check.
+        self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] initWithLocation:self.weatherModel.city];
+        ((UIView *)((NSArray *)self.forecastCont.view.layer.sublayers)[0]).hidden = YES; // Visual Effect view to hidden
+        self.forecastCont.view.frame = CGRectMake(0, (self.frame.size.height / 2), self.frame.size.width, self.frame.size.height/3);
+        [self.weather addSubview:self.forecastCont.view];
+        
+        [prefs postNotification];
+        
+        setGesturesForView(self, self.forecastCont.view);
+        
+        if(self.centerDict[@"forecastContView"]){
+            self.forecastCont.view.center = ((NSValue*)self.centerDict[@"forecastContView"]).CGPointValue;
+        }
+        
+        initialForeFrame = @(self.forecastCont.view.frame.size.width);
+        
+        if([prefs doubleForKey:@"forecastContViewSize"]){
+            [self.forecastCont.view layer].anchorPoint = CGPointMake(0.5, 0.5);
             
-                [prefs postNotification];
+            //NSLog(@"lock_TWEAK | %f", [prefs doubleForKey:@"iconSize"]);
             
-                setGesturesForView(self, self.forecastCont.view);
-                
-                if(self.centerDict[@"forecastContView"]){
-                    self.forecastCont.view.center = ((NSValue*)self.centerDict[@"forecastContView"]).CGPointValue;
-                }
-            
-                initialForeFrame = @(self.forecastCont.view.frame.size.width);
-            
-                if([prefs doubleForKey:@"forecastContViewSize"]){
-                    [self.forecastCont.view layer].anchorPoint = CGPointMake(0.5, 0.5);
-                
-                //NSLog(@"lock_TWEAK | %f", [prefs doubleForKey:@"iconSize"]);
-                
-                    self.forecastCont.view.transform = CGAffineTransformScale(self.forecastCont.view.transform, [prefs doubleForKey:@"forecastContViewSize"], [prefs doubleForKey:@"forecastContViewSize"]);
-                }
-				
-
-				
-			}
-            }];
-       // }];
+            self.forecastCont.view.transform = CGAffineTransformScale(self.forecastCont.view.transform, [prefs doubleForKey:@"forecastContViewSize"], [prefs doubleForKey:@"forecastContViewSize"]);
+        }
         
     }
     
@@ -438,7 +422,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     
     if(!self.weatherModel){
         self.weatherModel = [%c(AWeatherModel) sharedInstance];
-        [self.weatherModel updateWeatherDataWithCompletion:^{nil;}];
+        //[self.weatherModel updateWeatherDataWithCompletion:^{nil;}];
     }
 }
 /*
@@ -628,13 +612,18 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 // Handles reveal
 %new
 - (void) revealWeather: (NSTimer *) sender{
-    if(!isWeatherLocked){
-        self.weather.hidden = NO;
-        isDismissed = NO;
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"weatherStateChanged"
-         object:self];
-    }
+    [self weatherLockReveal];
+}
+
+%new
+-(void) weatherLockReveal {
+    //if(!isWeatherLocked){
+    self.weather.hidden = NO;
+    isDismissed = NO;
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"weatherStateChanged"
+     object:self];
+    //}
 }
 
 // Handling a timer fire (refresh weather info)
@@ -652,112 +641,22 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 
 %new
 -(void) updateLockView {
-    //City *city = (/*[prefs boolForKey:@"isLocal"] ? [[%c(WeatherPreferences) sharedPreferences] localWeatherCity] : */[[%c(WeatherPreferences) sharedPreferences] cityFromPreferencesDictionary:[[[%c(WeatherPreferences) userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]]);
-    /*
-    if(self.weatherModel.isPopulated){
-        self.store = [CSWeatherStore weatherStoreForLocalWeather:YES autoUpdateInterval:15 savedCityIndex:0 updateHandler:^(CSWeatherStore *store) {
-            
-            // Updating the image icon
-            UIImage *icon;
-            BOOL setColor = FALSE;
-            if(![prefs boolForKey:@"customImage"]){
-                icon = store.currentConditionImageLarge;
-            }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
-                icon = store.currentConditionImageLarge;
-                setColor = TRUE;
-            }else{
-                icon = store.currentConditionImageDark;
-                setColor = TRUE;
-            }
-            
-            self.logo.image = icon;
-            if(setColor){
-                self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                [self.logo setTintColor:[prefs colorForKey:@"glyphColor"]];
-            }
-            self.logo.contentMode = UIViewContentModeScaleAspectFit;
-            
-            // Setting the current temperature text
-            //if(weather[@"kCurrentTemperatureFahrenheit"] != nil){
-            self.currentTemp.text = store.currentTemperatureLocale;
-            //}else{
-                //self.currentTemp.text = @"Error";
-            //}
-            
-            // Updating the Greeting Label
-            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-            [dateFormat setDateFormat:@"HH"];
-            dateFormat.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-            NSDate *currentTime;
-            currentTime = [NSDate date];
-            
-            switch ([[dateFormat stringFromDate:currentTime] intValue]){
-                case 0 ... 4:
-                    self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent"); //@"Good Evening";
-                    break;
-                    
-                case 5 ... 11:
-                    self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Morning" value:@"" table:nil];
-                    break;
-                    
-                case 12 ... 17:
-                    self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Afternoon" value:@"" table:nil];
-                    break;
-                    
-                case 18 ... 24:
-                    self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent");//@"Good Evening";
-                    break;
-            }
-            
-            // Updating the the text of the wDescription
-            self.wDescription.text = store.currentConditionOverview;
-            self.greetingLabel.textAlignment = NSTextAlignmentCenter;
-            
-     
-            
-        }];
-    }
-    //city = nil;*/
-    
     // Update the forecast
-    WeatherPreferences *preferences = [%c(WeatherPreferences) sharedPreferences];
-    if(!todayModel){
-        todayModel = [%c(WATodayModel) autoupdatingLocationModelWithPreferences:preferences effectiveBundleIdentifier:@"com.apple.weather"];
-    }
-    
-    [todayModel setLocationServicesActive:YES];
-    [todayModel setIsLocationTrackingEnabled:YES];
-    [todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *arg2) {
-        self.forecastCont.model = todayModel;
-        [todayModel setIsLocationTrackingEnabled:NO];
-        [self.forecastCont.headerView _updateContent];
-        //locationString = todayModel.forecastModel.city.name;
-        [self.forecastCont _updateViewContent];
-    }];
+    self.forecastCont.model = self.weatherModel.todayModel;
+    [self.forecastCont.headerView _updateContent];
+    [self.forecastCont _updateViewContent];
 }
 %end
 
 // hacky way to catch the city name not matching with rest of forecast
 %hook WATodayHeaderView
 -(NSString *)locationName{
-    WeatherPreferences *preferences = [%c(WeatherPreferences) sharedPreferences];
-    if(!todayModel){
-        todayModel = [%c(WATodayModel) autoupdatingLocationModelWithPreferences:preferences effectiveBundleIdentifier:@"com.apple.weather"];
-    }
-    //NSString *cityName;      
-    [todayModel setLocationServicesActive:YES];
-    [todayModel setIsLocationTrackingEnabled:YES];
-    [todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *arg2) {
-        //cityName = todayModel.forecastModel.city.name;
-        [todayModel setIsLocationTrackingEnabled:NO];
-    }];
-    
     // Checking to make sure the city name matches with the actual content
-    if(![((NSString *)((WAWeatherPlatterViewController *)self._viewControllerForAncestor).model.forecastModel.city.name) isEqualToString: ((NSString *)todayModel.forecastModel.city.name)]){
+    if(![((NSString *)((WAWeatherPlatterViewController *)self._viewControllerForAncestor).model.forecastModel.city.name) isEqualToString: ((NSString *)((AWeatherModel *)[%c(AWeatherModel) sharedInstance]).city.name)]){
         // something is fucked up, force everything to update
         [[%c(AWeatherModel) sharedInstance] updateWeatherDataWithCompletion:^{nil;}];
      }
-    return todayModel.forecastModel.city.name;
+    return ((AWeatherModel *)[%c(AWeatherModel) sharedInstance]).city.name;
     
 }
 %end 
@@ -819,9 +718,9 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         NSLog(@"lock_TWEAK | hiding weather");
     } else if(!isWeatherLocked && isDismissed && [[%c(SBMediaController) sharedInstance] isPlaying] == NO){
         if([prefs boolForKey:@"hideOnNotif"] && !content){ // Will make check hideOnNotif and content before revealing lock
-            [mainPageView.inactiveTimer fire];
+            [mainPageView weatherLockReveal];
         } else if(![prefs boolForKey:@"hideOnNotif"]){ // Do as normally would if hideOnNotif not enabled
-             [mainPageView.inactiveTimer fire];
+             [mainPageView weatherLockReveal];
         }
     }
     return content;

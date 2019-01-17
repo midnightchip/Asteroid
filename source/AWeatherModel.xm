@@ -109,14 +109,10 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
 }
 
 -(void)updateWeatherDataWithCompletion:(completion) compBlock{
-    if(!self.isPopulated){
-        //[self _kickStartWeatherFramework:compBlock];
-    } else {
-        //This sets up local weather, and anyone on github better appreciate this - the casle
+    if(self.isPopulated){
         if(![self.todayModel isKindOfClass:objc_getClass("WATodayAutoupdatingLocationModel")]){
             self.todayModel = [objc_getClass("WATodayModel") autoupdatingLocationModelWithPreferences:self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
         }
-        
         [self.todayModel setLocationServicesActive:YES];
         [self.todayModel setIsLocationTrackingEnabled:YES];
         [self.todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *arg2) {

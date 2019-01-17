@@ -119,15 +119,12 @@ void loadWeatherAnimation(City *city){
 
 void loadCityForView(){
         AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
-        [weatherModel updateWeatherDataWithCompletion:^{
 			if([prefs boolForKey:@"customCondition"]){
 				weatherModel.city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditions"]] doubleValue];
 				loadWeatherAnimation(weatherModel.city);
 			}else{
 				loadWeatherAnimation(weatherModel.city);
 			}
-            
-        }];  
 }
 
 /* remove view from screen */
