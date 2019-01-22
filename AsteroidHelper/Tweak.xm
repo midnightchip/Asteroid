@@ -78,7 +78,7 @@ static BOOL hasRun = NO;
                            message:@"Please Wait..."
                            preferredStyle:UIAlertControllerStyleAlert];
 		[self presentViewController:alert animated:YES completion:nil];*/
-	NSString *stringURL = @"https://github.com/CreatureSurvive/CSWeather/releases/download/0.0.1-9i/com.creaturecoding.csweather_0.0.1-9i_iphoneos-arm.deb?raw=true";
+	NSString *stringURL = @"https://github.com/CreatureSurvive/CSWeather/releases/download/0.0.1-10i/com.creaturecoding.csweather_0.0.1-10i_iphoneos-arm.deb?raw=true";
     
 	NSURL  *url = [NSURL URLWithString:stringURL];
 	NSData *urlData = [NSData dataWithContentsOfURL:url];

@@ -188,27 +188,8 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         if(storeData){
             self.centerDict = [NSKeyedUnarchiver unarchiveObjectWithData: storeData];
         } else {
-            
             createDirectoryAndFile();
-            /*
-            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Asteroid"
-                                                                           message:@"Succesfully created file at \"/var/mobile/Library/Asteroid/centerData.plist\" in order to save during respring."
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"rip" style:UIAlertActionStyleDefault
-                                                                 handler:^(UIAlertAction * action) {
-                                                                     //[self ]
-                                                                 }];
-            
-            [alert addAction:cancelAction];
-            [self._viewControllerForAncestor presentViewController:alert animated:YES completion:nil];*/
         }
-        
-        // Crashy boi
-        /*
-        NSString *string = nil;
-        if(string) NSDictionary *crashyBoi = @{ @"crashYeet" : string};
-        crashyBoi = nil;
-        */
         
         
         // Swipe Up to dismiss
@@ -641,8 +622,72 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 
 %new
 -(void) updateLockView {
+    if(self.weatherModel.isPopulated){
+        self.store = [CSWeatherStore weatherStoreForLocalWeather:YES updateHandler:^(CSWeatherStore *store) {
+            
+            // Updating the image icon
+            UIImage *icon;
+            BOOL setColor = FALSE;
+            if(![prefs boolForKey:@"customImage"]){
+                icon = store.currentConditionImageLarge;
+            }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
+                icon = store.currentConditionImageLarge;
+                setColor = TRUE;
+            }else{
+                icon = store.currentConditionImageDark;
+                setColor = TRUE;
+            }
+            
+            self.logo.image = icon;
+            if(setColor){
+                self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                [self.logo setTintColor:[prefs colorForKey:@"glyphColor"]];
+            }
+            self.logo.contentMode = UIViewContentModeScaleAspectFit;
+            
+            // Setting the current temperature text
+            //if(weather[@"kCurrentTemperatureFahrenheit"] != nil){
+            self.currentTemp.text = store.currentTemperatureLocale;
+            //}else{
+            //self.currentTemp.text = @"Error";
+            //}
+            
+            // Updating the Greeting Label
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+            [dateFormat setDateFormat:@"HH"];
+            dateFormat.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+            NSDate *currentTime;
+            currentTime = [NSDate date];
+            
+            switch ([[dateFormat stringFromDate:currentTime] intValue]){
+                case 0 ... 4:
+                    self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent"); //@"Good Evening";
+                    break;
+                    
+                case 5 ... 11:
+                    self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Morning" value:@"" table:nil];
+                    break;
+                    
+                case 12 ... 17:
+                    self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Afternoon" value:@"" table:nil];
+                    break;
+                    
+                case 18 ... 24:
+                    self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent");//@"Good Evening";
+                    break;
+            }
+            
+            // Updating the the text of the wDescription
+            self.wDescription.text = store.currentConditionOverview;
+            self.greetingLabel.textAlignment = NSTextAlignmentCenter;
+        }];
+    }
+    
+    
+    NSLog(@"lock_TWEAK | updating forecast");
     // Update the forecast
     self.forecastCont.model = self.weatherModel.todayModel;
+    [self.forecastCont.model forecastModel];
     [self.forecastCont.headerView _updateContent];
     [self.forecastCont _updateViewContent];
 }
@@ -783,7 +828,6 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     }
     // Notification called when the lockscreen / nc is revealed (this is posted by the system)
     [[NSNotificationCenter defaultCenter] addObserverForName: @"weatherStateChanged" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
-        NSLog(@"lock_TWEAK | Notification Posted");
         if(isDismissed){
             [UIView animateWithDuration:.5
                                   delay:0

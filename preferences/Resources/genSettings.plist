@@ -14,25 +14,33 @@
             
             <dict>
                 <key>cell</key>
-                <string>PSSliderCell</string>
-                <key>key</key>
-                <string>refreshRate</string>
-                <key>showValue</key>
-                <true/>
-                <key>min</key>
-                <real>1</real>
-                <key>max</key>
-                <real>61</real>
-                <key>isSegmented</key>
-                <true/>
-                <key>segmentCount</key>
-                <real>12</real>
-                <key>PostNotification</key>
-                <string>com.midnightchips.asteroid.prefschanged</string>
+                <string>PSLinkListCell</string>
                 <key>defaults</key>
                 <string>com.midnightchips.asteroid</string>
-                <key>defaultsPath</key>
-                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+                <key>label</key>
+                <string>Refresh Rate</string>
+                <key>detail</key>
+                <string>PSListItemsController</string>
+                <key>key</key>
+                <string>refreshRate</string>
+                <key>default</key>
+                <string>300</string>
+                <key>validTitles</key>
+                <array>
+                    <string>30 Seconds</string>
+                    <string>1 Mintute</string>
+                    <string>5 Minutes</string>
+                    <string>10 Minutes</string>
+                    <string>15 Minutes</string>
+                </array>
+                <key>validValues</key>
+                <array>
+                    <real>30</real>
+                    <real>60</real>
+                    <real>300</real>
+                    <real>600</real>
+                    <real>900</real>
+                </array>
             </dict>
             
 			<dict>

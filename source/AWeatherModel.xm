@@ -75,7 +75,6 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
     self.locationProviderModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
     [self.locationProviderModel setLocationServicesActive:YES];
     [self.locationProviderModel setIsLocationTrackingEnabled:YES];
-    //[self.locationProviderModel.locationManager forceLocationUpdate];
 
     [self.locationProviderModel _executeLocationUpdateForLocalWeatherCityWithCompletion:^{
         if(self.locationProviderModel.geocodeRequest.geocodedResult){
@@ -129,7 +128,7 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
 -(void)setUpRefreshTimer{
     // Creating a refresh timer
     if(!self.refreshTimer){
-        self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:([prefs doubleForKey:@"refreshRate"] * 60)
+        self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:([prefs doubleForKey:@"refreshRate"])
                                                              target:self
                                                            selector:@selector(updateWeather:)
                                                            userInfo:nil
