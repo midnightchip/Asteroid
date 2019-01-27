@@ -12,7 +12,11 @@
 @interface SBHomeScreenView (Weather)
 //@interface SBFWallpaperView (Weather)
 -(void)updateView;
-@end 
+@end
+
+@interface SpringBoard (asteroid)
+-(id)_accessibilityFrontMostApplication;
+@end
 
 static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
 @"Rain" : @12,
@@ -68,6 +72,16 @@ static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValu
 static WUIWeatherCondition* condition = nil;
 static int conditionNumberSet;
 
+static void updateAnimation(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    if(![((SpringBoard *)[%c(SpringBoard) sharedApplication]) _accessibilityFrontMostApplication]){
+        [condition resume];
+        NSLog(@"lock_TWEAK | animation start");
+    } else{
+        [condition pause];
+        NSLog(@"lock_TWEAK | animation stop");
+    }
+}
+
 %group LiveWeather
 %hook SBHomeScreenView
 //%hook SBFWallpaperView
@@ -111,58 +125,31 @@ static int conditionNumberSet;
     conditionNumberSet = condition.condition;
     [self addSubview:self.referenceView];
     [self sendSubviewToBack:self.referenceView];
-    
-    NSLog(@"lock_TWEAK | %@", self.weatherModel.city);
 }
 
         
 %end 
-//static BOOL isPlaying = NO;
-void pauseHome(){
-	[condition pause];
-    //isPlaying = NO;
-}
-void restartHome(){
-    //if(!condition.playing){
-        [condition resume];
-        //isPlaying = YES;
-    //}
-}
 
 //Start stop view, save battery
 %hook SBHomeScreenWindow
 -(void)becomeKeyWindow
 {
     %orig;
-    //if (!condition.playing)
-    //{
-    restartHome();
+    static dispatch_once_t onceToken; // onceToken = 0
+    dispatch_once(&onceToken, ^{
+        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
+                                        (const void*)self,
+                                        updateAnimation,
+                                        CFSTR("com.apple.springboard.screenchanged"),
+                                        NULL,
+                                        CFNotificationSuspensionBehaviorDeliverImmediately);
+    });
+    
     //}
 }
 
--(void)resignKeyWindow
-{
-    %orig;
-    //if (condition.playing)
-    //{
-    pauseHome();
-    //}
-}
 %end
 
-
-
-%hook SBLockScreenViewControllerBase
-- (void)setInScreenOffMode:(_Bool)arg1 forAutoUnlock:(_Bool)arg2{
-	%orig;
-		if(arg1){
-			pauseHome();
-		}else{
-			restartHome();
-		}
-}
-%end
- 
 
 @interface SBIconBlurryBackgroundView : UIView
 @end 

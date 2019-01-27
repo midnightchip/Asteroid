@@ -405,12 +405,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         //[self.weatherModel updateWeatherDataWithCompletion:^{nil;}];
     }
 }
-/*
-- (void) updateForPresentation:(id) arg1 {
-    %orig;
-    NSLog(@"lock_TWEAK | Updating");
-}
-*/
+
 // Begin of gesture methods -------------------
 %new
 - (void)tc_movingFilter:(UIPanGestureRecognizer *)sender{
@@ -677,7 +672,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     }
     
     
-    NSLog(@"lock_TWEAK | updating forecast");
+    //NSLog(@"lock_TWEAK | updating forecast");
     // Update the forecast
     self.forecastCont.model = self.weatherModel.todayModel;
     [self.forecastCont.model forecastModel];
