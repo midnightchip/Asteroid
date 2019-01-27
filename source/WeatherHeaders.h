@@ -4,6 +4,7 @@
 
 @end
 
+
 @interface NSObject (asteroid)
 - (BOOL)isKindOfClass:(Class)aClass;
 @end

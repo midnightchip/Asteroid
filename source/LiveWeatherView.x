@@ -153,7 +153,6 @@ static WUIWeatherCondition* condition = nil;
 }
 @end
 
-
 %ctor{
     if([prefs boolForKey:@"kLWPEnabled"]){
         %init();
