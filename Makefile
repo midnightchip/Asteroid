@@ -18,7 +18,6 @@ $(TWEAK_NAME)_LDFLAGS += -lCSPreferencesProvider
 include $(THEOS_MAKE_PATH)/tweak.mk
 
 SUBPROJECTS += preferences
-SUBPROJECTS += AsteroidHelper
 
 SUBPROJECTS += asteroidlockscreen
 include $(THEOS_MAKE_PATH)/aggregate.mk
