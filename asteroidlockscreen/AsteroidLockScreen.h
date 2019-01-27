@@ -18,6 +18,10 @@
 -(BOOL) isNowPlayingAppPlaying;
 @end
 
+@interface MediaControlsPanelViewController
+@property (nonatomic) BOOL isOnScreen;
+@end
+
 //help from the_casle on the blur
 @interface SBUIBackgroundView : UIView
 @property (nonatomic, retain) UIVisualEffectView *blurEffectView;

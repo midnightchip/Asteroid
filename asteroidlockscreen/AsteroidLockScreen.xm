@@ -27,6 +27,7 @@ static BOOL isDismissed = NO;
 static BOOL tc_editing;
 static double lastZoomValue = 0;
 static SBDashBoardMainPageView *mainPageView;
+static MediaControlsPanelViewController *mediaPanelCont;
 static NSNumber *initialIconFrame;
 static NSNumber *initialForeFrame;
 static BOOL isWeatherLocked = nil;
@@ -734,6 +735,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 // Hide when media present
 %hook MediaControlsPanelViewController
 -(BOOL) isOnScreen {
+    mediaPanelCont = self;
     if(%orig && !isDismissed){
         [mainPageView hideWeather];
         isWeatherLocked = YES;
@@ -758,7 +760,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     if(content && [prefs boolForKey:@"hideOnNotif"] && !isDismissed){
         [mainPageView hideWeather];
         NSLog(@"lock_TWEAK | hiding weather");
-    } else if(!isWeatherLocked && isDismissed && [[%c(SBMediaController) sharedInstance] isPlaying] == NO){
+    } else if(!isWeatherLocked && isDismissed && mediaPanelCont.isOnScreen == NO){
         if([prefs boolForKey:@"hideOnNotif"] && !content){ // Will make check hideOnNotif and content before revealing lock
             [mainPageView updateWeatherReveal];
         } else if(![prefs boolForKey:@"hideOnNotif"]){ // Do as normally would if hideOnNotif not enabled
