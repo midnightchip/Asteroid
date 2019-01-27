@@ -26,7 +26,9 @@ static WUIWeatherCondition* condition = nil;
         _weatherModel = [%c(AWeatherModel) sharedInstance];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(weatherNotification:) name:@"weatherTimerUpdate" object:nil];
-        if(_weatherModel.isPopulated)[self updateWeatherDisplay]; // New instances will need to be setup immediate instead of on notification.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, .5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            if(_weatherModel.isPopulated)[self updateWeatherDisplay]; // New instances will need to be setup immediate instead of on notification.
+        });
     }
     return self;
 }
@@ -136,6 +138,8 @@ static WUIWeatherCondition* condition = nil;
         icon = [_weatherModel glyphWithOption:1];
         self.logo.image = icon;
         [self.logo layoutSubviews];
+        
+        [self layoutSubviews];
         
         if([prefs boolForKey:@"appScreenWeather"]){
             if([prefs boolForKey:@"customConditionIcon"]){

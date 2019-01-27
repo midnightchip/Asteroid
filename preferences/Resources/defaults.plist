@@ -6,6 +6,8 @@
 		<true/>
 		<key>customFont</key>
 		<false/>
+        <key>greetView</key>
+        <false/>
 		<key>greetingSize</key>
 		<real>40</real>
 		<key>wDescriptionSize</key>
