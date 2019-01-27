@@ -137,6 +137,9 @@
 @property (nonatomic,copy) NSArray * contentEffects;
 @end
 
+@interface SBDashBoardWallpaperEffectView : UIView
+@end
+
 @interface SBMediaController
 -(BOOL) isPlaying;
 @end

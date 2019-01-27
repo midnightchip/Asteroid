@@ -711,6 +711,14 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 }
 %end
 
+%hook SBDashBoardWallpaperEffectView
+// removes the wallpaper view when opening camera
+// checks if the blur is visible when applying the new animation
+-(void)setHidden:(BOOL) arg1 {
+    %orig(YES);
+}
+%end
+
 %hook SBIdleTimerDefaults
 -(double)minimumLockscreenIdleTime {
     return tc_editing ? 1000 : %orig;
