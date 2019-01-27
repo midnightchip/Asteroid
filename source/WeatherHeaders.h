@@ -8,15 +8,22 @@
 - (BOOL)isKindOfClass:(Class)aClass;
 @end
 
+@interface WFTemperature : NSObject
+@property (nonatomic) double celsius;
+@property (nonatomic) double fahrenheit;
+-(CGFloat)temperatureForUnit:(int)arg1;
+@end
+
 @interface City : NSObject
 -(NSMutableArray*)hourlyForecasts;
 -(NSMutableArray*)dayForecasts;
 -(unsigned long long)conditionCode;
--(NSString *)temperature;
+-(WFTemperature *)temperature;
 -(unsigned long long)sunriseTime;
 -(unsigned long long)sunsetTime;
 @property (assign,nonatomic) BOOL isLocalWeatherCity;
 @property (nonatomic, retain) WFLocation *wfLocation;
+- (NSString *)naturalLanguageDescription;
 -(BOOL)isDay;
 -(void) update;
 -(NSDate*) updateTime;
@@ -114,7 +121,18 @@
 @property (nonatomic,retain) WATodayModel * model;   
 @end
 
+@interface WFTypes : NSObject
++ (NSArray *)WeatherDescriptions;
+@end
 
+
+@interface WeatherImageLoader : NSObject
++ (id)sharedImageLoader;
++ (id)conditionImageBundle;
++ (id)conditionImageNamed:(NSString *)name;
++ (id)conditionImageWithConditionIndex:(NSInteger)conditionCode;
++ (id)conditionImageNameWithConditionIndex:(NSInteger)conditionCode;
+@end
 
 @protocol WATodayModelObserver <NSObject>
 @required

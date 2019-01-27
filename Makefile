@@ -12,7 +12,6 @@ TWEAK_NAME = Asteroid
 $(TWEAK_NAME)_FILES = $(wildcard source/*.m source/*.xm source/*.mm source/*.x)
 $(TWEAK_NAME)_FRAMEWORKS = CoreLocation 
 $(TWEAK_NAME)_PRIVATE_FRAMEWORKS = Weather WeatherUI
-$(TWEAK_NAME)_EXTRA_FRAMEWORKS = CSWeather
 $(TWEAK_NAME)_CFLAGS += -fobjc-arc -I$(THEOS_PROJECT_DIR)/source
 $(TWEAK_NAME)_LDFLAGS += -lCSPreferencesProvider 
 

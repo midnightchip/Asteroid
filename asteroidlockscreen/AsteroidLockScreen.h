@@ -2,7 +2,6 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <notify.h>
 #import <CoreLocation/CoreLocation.h>
-#import <CSWeather/CSWeatherStore.h>
 #import "../source/AWeatherModel.h"
 
 
@@ -45,10 +44,6 @@
 @property (nonatomic,retain) NSString * temperature;
 @end
 
-@interface WFTemperature
--(CGFloat)temperatureForUnit:(int)arg1;
-@end
-
 @interface WADayForecast
 @property (nonatomic, retain) WFTemperature *high;
 @property (nonatomic, retain) WFTemperature *low;
@@ -82,7 +77,6 @@
 @property (nonatomic, retain) NSDictionary *centerDict;
 @property (nonatomic, retain) AWeatherModel *weatherModel;
 @property (nonatomic, retain) WAWeatherPlatterViewController *forecastCont;
-@property (nonatomic, strong) CSWeatherStore *store;
 @property (nonatomic, retain) UILabel *notifcationLabel;
 
 -(id) _viewControllerForAncestor;

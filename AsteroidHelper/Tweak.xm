@@ -1,4 +1,4 @@
-#import <CSPreferences/libCSPUtilities.h>
+/*#import <CSPreferences/libCSPUtilities.h>
 #import <spawn.h>
 #import "MBProgressHUD.h"
 //@import AFNetworking;
@@ -77,7 +77,7 @@ static BOOL hasRun = NO;
 	/*UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Downloading and Installing..."
                            message:@"Please Wait..."
                            preferredStyle:UIAlertControllerStyleAlert];
-		[self presentViewController:alert animated:YES completion:nil];*/
+		[self presentViewController:alert animated:YES completion:nil];
 	NSString *stringURL = @"https://github.com/CreatureSurvive/CSWeather/releases/download/0.0.1-10i/com.creaturecoding.csweather_0.0.1-10i_iphoneos-arm.deb?raw=true";
     
 	NSURL  *url = [NSURL URLWithString:stringURL];
@@ -124,3 +124,4 @@ static BOOL hasRun = NO;
 		%init(helper);
 	}
 }
+*/

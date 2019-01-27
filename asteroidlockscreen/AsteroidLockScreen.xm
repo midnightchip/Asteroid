@@ -170,7 +170,6 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 %property (nonatomic, retain) NSDictionary *centerDict;
 %property (nonatomic, retain) AWeatherModel *weatherModel;
 %property (nonatomic, retain) WAWeatherPlatterViewController *forecastCont;
-%property (nonatomic, retain) CSWeatherStore *store;
 %property (nonatomic, retain) UILabel *notifcationLabel;
 
 - (void)layoutSubviews {
@@ -623,64 +622,58 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 %new
 -(void) updateLockView {
     if(self.weatherModel.isPopulated){
-        self.store = [CSWeatherStore weatherStoreForLocalWeather:YES updateHandler:^(CSWeatherStore *store) {
-            
-            // Updating the image icon
-            UIImage *icon;
-            BOOL setColor = FALSE;
-            if(![prefs boolForKey:@"customImage"]){
-                icon = store.currentConditionImageLarge;
-            }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
-                icon = store.currentConditionImageLarge;
-                setColor = TRUE;
-            }else{
-                icon = store.currentConditionImageDark;
-                setColor = TRUE;
-            }
-            
-            self.logo.image = icon;
-            if(setColor){
-                self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                [self.logo setTintColor:[prefs colorForKey:@"glyphColor"]];
-            }
-            self.logo.contentMode = UIViewContentModeScaleAspectFit;
-            
-            // Setting the current temperature text
-            //if(weather[@"kCurrentTemperatureFahrenheit"] != nil){
-            self.currentTemp.text = store.currentTemperatureLocale;
-            //}else{
-            //self.currentTemp.text = @"Error";
-            //}
-            
-            // Updating the Greeting Label
-            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-            [dateFormat setDateFormat:@"HH"];
-            dateFormat.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-            NSDate *currentTime;
-            currentTime = [NSDate date];
-            
-            switch ([[dateFormat stringFromDate:currentTime] intValue]){
-                case 0 ... 4:
-                    self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent"); //@"Good Evening";
-                    break;
-                    
-                case 5 ... 11:
-                    self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Morning" value:@"" table:nil];
-                    break;
-                    
-                case 12 ... 17:
-                    self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Afternoon" value:@"" table:nil];
-                    break;
-                    
-                case 18 ... 24:
-                    self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent");//@"Good Evening";
-                    break;
-            }
-            
-            // Updating the the text of the wDescription
-            self.wDescription.text = store.currentConditionOverview;
-            self.greetingLabel.textAlignment = NSTextAlignmentCenter;
-        }];
+        
+        // Updating the image icon
+        UIImage *icon;
+        BOOL setColor = FALSE;
+        if(![prefs boolForKey:@"customImage"]){
+            icon = [self.weatherModel glyphWithOption:0];
+        }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
+            icon = [self.weatherModel glyphWithOption:0];
+            setColor = TRUE;
+        }else{
+            icon = [self.weatherModel glyphWithOption:2];
+            setColor = TRUE;
+        }
+        
+        self.logo.image = icon;
+        if(setColor){
+            self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            [self.logo setTintColor:[prefs colorForKey:@"glyphColor"]];
+        }
+        self.logo.contentMode = UIViewContentModeScaleAspectFit;
+        
+        
+        self.currentTemp.text = [self.weatherModel localeTemperature];
+        
+        // Updating the Greeting Label
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setDateFormat:@"HH"];
+        dateFormat.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        NSDate *currentTime;
+        currentTime = [NSDate date];
+        
+        switch ([[dateFormat stringFromDate:currentTime] intValue]){
+            case 0 ... 4:
+                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent"); //@"Good Evening";
+                break;
+                
+            case 5 ... 11:
+                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Morning" value:@"" table:nil];
+                break;
+                
+            case 12 ... 17:
+                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Afternoon" value:@"" table:nil];
+                break;
+                
+            case 18 ... 24:
+                self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];//NSLocalizedString(@"Good_Evening", @"Good Evening equivalent");//@"Good Evening";
+                break;
+        }
+        
+        // Updating the the text of the wDescription
+        self.wDescription.text = [self.weatherModel currentConditionOverview];
+        self.greetingLabel.textAlignment = NSTextAlignmentCenter;
     }
     
     
@@ -719,6 +712,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
             effect.contentEffects = nil;
         }
     }
+    self.dividerLineView.backgroundColor = [UIColor whiteColor];
 }
 %end
 

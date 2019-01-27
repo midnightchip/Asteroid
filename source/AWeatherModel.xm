@@ -50,8 +50,16 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
                                     @"Fog" : @20
                                     };
 
+typedef NSDictionary<NSString *, NSString *> *ConditionTable;
+enum {
+    ConditionImageTypeDefault = 0,
+    ConditionImageTypeDay = 1,
+    ConditionImageTypeNight = 2
+};
+typedef NSUInteger ConditionImageType;
+
 @implementation AWeatherModel{
-    // iVars if needed
+    NSBundle *_weatherBundle;
 }
 
 - (instancetype) init{
@@ -148,6 +156,79 @@ static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
          object:nil];
     });
 }
+
+// Below methods from https://github.com/CreatureSurvive/CSWeather
+- (UIImage *)imageForKey:(NSString *)key {
+    return [UIImage imageNamed:key inBundle:[self weatherBundle] compatibleWithTraitCollection:nil];
+}
+
+- (NSBundle *)weatherBundle {
+    if (!_weatherBundle) {
+        _weatherBundle = [NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/Weather.framework"];
+        [_weatherBundle load];
+    }
+    
+    return _weatherBundle;
+}
+
+-(NSString *) localeTemperature{
+    return [NSString stringWithFormat:@"%.0f°", [self.weatherPreferences isCelsius] ? self.city.temperature.celsius : self.city.temperature.fahrenheit];
+}
+
+- (NSString *)currentConditionOverview {
+    return [self.city naturalLanguageDescription];
+}
+
+-(UIImage *) glyphWithOption:(NSInteger) option{
+    NSInteger conditionCode = [self.city conditionCode];
+    NSString *conditionImageName = conditionCode < 3200 ? [WeatherImageLoader conditionImageNameWithConditionIndex:conditionCode] : nil;
+    ConditionImageType type = [conditionImageName containsString:@"day"] ? ConditionImageTypeDay : [conditionImageName containsString:@"night"] ? ConditionImageTypeNight : ConditionImageTypeDefault;
+    NSString *rootName;
+    
+    switch (type) {
+        case ConditionImageTypeDefault: {
+            if((int)option == 0){
+                return [self imageForKey:[conditionImageName stringByAppendingString:@"-nc"]];
+            } else if((int)option == 1){
+                return [self imageForKey:[conditionImageName stringByAppendingString:@"-white"]];
+            } else if((int)option == 2){
+                return [self imageForKey:[conditionImageName stringByAppendingString:@"-black"]];
+            }
+        } break;
+            
+        case ConditionImageTypeDay: {
+            rootName = [[conditionImageName stringByReplacingOccurrencesOfString:@"-day" withString:@""] stringByReplacingOccurrencesOfString:@"_day" withString:@""];
+            
+            if((int)option == 0){
+                return [self imageForKey:[rootName stringByAppendingString:@"_day-nc"]] ? :
+                [self imageForKey:[rootName stringByAppendingString:@"-day-nc"]];
+            } else if((int)option == 1){
+                return [self imageForKey:[rootName stringByAppendingString:@"_day-white"]] ? :
+                [self imageForKey:[rootName stringByAppendingString:@"-day-white"]];
+            } else if((int)option == 2){
+                return [self imageForKey:[rootName stringByAppendingString:@"_day-black"]] ? :
+                [self imageForKey:[rootName stringByAppendingString:@"-day-black"]];
+            }
+        } break;
+            
+        case ConditionImageTypeNight: {
+            rootName = [[conditionImageName stringByReplacingOccurrencesOfString:@"-night" withString:@""] stringByReplacingOccurrencesOfString:@"_night" withString:@""];
+            
+            if((int)option == 0){
+                return [self imageForKey:[rootName stringByAppendingString:@"_night-nc"]] ? :
+                [self imageForKey:[rootName stringByAppendingString:@"-night-nc"]];
+            } else if((int)option == 1){
+                return [self imageForKey:[rootName stringByAppendingString:@"_night-white"]] ? :
+                [self imageForKey:[rootName stringByAppendingString:@"-night-white"]];
+            } else if((int)option == 2){
+                return [self imageForKey:[rootName stringByAppendingString:@"_night-black"]] ? :
+                [self imageForKey:[rootName stringByAppendingString:@"-night-black"]];
+            }
+        } break;
+    }
+    return nil;
+}
+
 @end
 
 %ctor{

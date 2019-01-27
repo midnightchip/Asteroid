@@ -8,10 +8,11 @@
 @property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
 @property (nonatomic, retain) UIImageView *logo;
 @property (nonatomic, retain) UILabel *temp;
-@property (nonatomic, strong) CSWeatherStore *store;
 @end
 
-@implementation LiveWeatherView
+@implementation LiveWeatherView{
+    AWeatherModel *_weatherModel;
+}
 
 static WUIDynamicWeatherBackground* dynamicBG = nil;
 static WUIWeatherCondition* condition = nil;
@@ -22,8 +23,10 @@ static WUIWeatherCondition* condition = nil;
         else self.backgroundColor = [UIColor clearColor];
         self.clipsToBounds = YES;
         
+        _weatherModel = [%c(AWeatherModel) sharedInstance];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(weatherNotification:) name:@"weatherTimerUpdate" object:nil];
-        [self startCSWeatherBlock]; // New instances will need to be setup immediate instead of on notification.
+        if(_weatherModel.isPopulated)[self updateWeatherDisplay]; // New instances will need to be setup immediate instead of on notification.
     }
     return self;
 }
@@ -64,10 +67,10 @@ static WUIWeatherCondition* condition = nil;
 }
 
 -(void) weatherNotification: (NSNotification *) notification{
-    [self startCSWeatherBlock];
+    [self updateWeatherDisplay];
 }
 
--(void) startCSWeatherBlock{
+-(void)updateWeatherDisplay{
     NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
         @"Rain" : @12,
         @"Thunderstorm" : @4,
@@ -118,32 +121,31 @@ static WUIWeatherCondition* condition = nil;
         @"Fog" : @20
     };
     
-    self.store = [CSWeatherStore weatherStoreForLocalWeather:YES updateHandler:^(CSWeatherStore *store) {
-        if([prefs boolForKey:@"appIcon"]){
-            if(!self.isSetup){
-                [self setupTempLabel];
-                [self setupLogoView];
-                if([prefs boolForKey:@"appScreenWeather"]) [self setupReferenceView];
-                self.setup = YES;
-            }
-            
-            self.temp.text = store.currentTemperatureLocale;
-            
-            UIImage *icon;
-            icon = store.currentConditionImageSmall;
-            self.logo.image = icon;
-            
-            if([prefs boolForKey:@"appScreenWeather"]){
-                AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
-                if([prefs boolForKey:@"customConditionIcon"]){
-                    weatherModel.city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
-                }
-                [self.referenceView.background setCity:weatherModel.city];
-                
-                [[self.referenceView.background condition] resume];
-            }
+    if([prefs boolForKey:@"appIcon"]){
+        if(!self.isSetup){
+            [self setupTempLabel];
+            [self setupLogoView];
+            if([prefs boolForKey:@"appScreenWeather"]) [self setupReferenceView];
+            self.setup = YES;
         }
-    }];
+        
+        self.temp.text = [_weatherModel localeTemperature];
+        [self.temp layoutSubviews];
+        
+        UIImage *icon;
+        icon = [_weatherModel glyphWithOption:1];
+        self.logo.image = icon;
+        [self.logo layoutSubviews];
+        
+        if([prefs boolForKey:@"appScreenWeather"]){
+            if([prefs boolForKey:@"customConditionIcon"]){
+                _weatherModel.city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
+            }
+            [self.referenceView.background setCity:_weatherModel.city];
+            
+            [[self.referenceView.background condition] resume];
+        }
+    }
 }
 @end
 

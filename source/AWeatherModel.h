@@ -13,7 +13,6 @@ typedef void(^completion)();
 @property (nonatomic, retain) WATodayAutoupdatingLocationModel *todayModel;
 @property (nonatomic, retain) WAForecastModel *forecastModel;
 @property (nonatomic, retain) City *city;
-@property (nonatomic, retain) City *fakeCity;
 @property (nonatomic, retain) NSTimer *refreshTimer;
 @property (nonatomic, getter=isLocalWeather) BOOL localWeather;
 @property (nonatomic, getter=isPopulated) BOOL populated;
@@ -23,7 +22,11 @@ typedef void(^completion)();
 -(void)updateWeatherDataWithCompletion:(completion) compBlock;
 -(void)setUpRefreshTimer;
 -(void) postNotification;
-
+- (UIImage *)imageForKey:(NSString *)key;
+- (NSBundle *)weatherBundle;
+-(NSString *) localeTemperature;
+- (NSString *)currentConditionOverview;
+-(UIImage *) glyphWithOption:(NSInteger) option;
 
 @end
 
