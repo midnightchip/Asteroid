@@ -18,6 +18,18 @@
 -(id)_accessibilityFrontMostApplication;
 @end
 
+typedef NSDictionary<NSString *, NSString *> *LockTable;
+enum {
+    LockStateIsSpringBoard = 0,
+    LockStateIsNotificationCenter = 1,
+    LockStateIsUnknown = 2,
+    LockStateIsLockScreen = 3
+};
+BOOL isOnLockstate(NSUInteger state){
+    NSUInteger activeState = MSHookIvar<NSUInteger>([objc_getClass("SBLockStateAggregator") sharedInstance], "_lockState");
+    return state == activeState ? YES : NO;
+}
+
 static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
 @"Rain" : @12,
 @"Thunderstorm" : @4,
@@ -73,7 +85,7 @@ static WUIWeatherCondition* condition = nil;
 static int conditionNumberSet;
 
 static void updateAnimation(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-    if(![((SpringBoard *)[%c(SpringBoard) sharedApplication]) _accessibilityFrontMostApplication]){
+    if(isOnLockstate(LockStateIsSpringBoard) && MSHookIvar<BOOL>([%c(SBLockScreenManager) sharedInstance], "_isScreenOn")){
         [condition resume];
         NSLog(@"lock_TWEAK | animation start");
     } else{

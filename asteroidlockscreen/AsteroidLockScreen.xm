@@ -14,7 +14,6 @@
 extern "C" NSString * NSStringFromCGAffineTransform(CGAffineTransform transform);
 
 // external functions
-extern BOOL isOnLockscreen();
 extern void hapticFeedbackSoft();
 
 NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/Application Support/lockWeather.bundle"];

@@ -1,6 +1,7 @@
 #import "../source/LWPProvider.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <notify.h>
+#import <substrate.h>
 #import <CoreLocation/CoreLocation.h>
 #import "../source/AWeatherModel.h"
 

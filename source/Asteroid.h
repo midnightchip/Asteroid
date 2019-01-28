@@ -1,5 +1,6 @@
 #import "LWPProvider.h"
 #import "AWeatherModel.h"
+#import <substrate.h>
 #import <CoreLocation/CoreLocation.h>
 
 /* weather background */
