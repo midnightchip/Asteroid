@@ -115,31 +115,31 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 
 %new
 -(void) updateView{
-    [self.referenceView removeFromSuperview];
-    
-    self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
-    //EZ custom weather animation
-    City *customWeather = self.weatherModel.city;
-    if([prefs boolForKey:@"customCondition"]){
-        customWeather.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditions"]] doubleValue];
-        [self.referenceView.background setCity:customWeather];
-    }else{
-        [self.referenceView.background setCity:self.weatherModel.city];
-    }
-    //self.weatherModel.city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditions"]] doubleValue];//16;
-    
-    [self.referenceView.background setTag:123];
-    
-    [[self.referenceView.background condition] resume];
-    condition = [self.referenceView.background condition];
-    self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.referenceView.clipsToBounds = YES;
-    conditionNumberSet = condition.condition;
-    [self addSubview:self.referenceView];
-    [self sendSubviewToBack:self.referenceView];
-}
-
+    if(conditionNumberSet != self.weatherModel.city.conditionCode){
+        [self.referenceView removeFromSuperview];
         
+        self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
+        //EZ custom weather animation
+        City *customWeather = self.weatherModel.city;
+        if([prefs boolForKey:@"customCondition"]){
+            customWeather.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditions"]] doubleValue];
+            [self.referenceView.background setCity:customWeather];
+        }else{
+            [self.referenceView.background setCity:self.weatherModel.city];
+        }
+        //self.weatherModel.city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditions"]] doubleValue];//16;
+        
+        [self.referenceView.background setTag:123];
+        
+        [[self.referenceView.background condition] resume];
+        condition = [self.referenceView.background condition];
+        self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.referenceView.clipsToBounds = YES;
+        conditionNumberSet = condition.condition;
+        [self addSubview:self.referenceView];
+        [self sendSubviewToBack:self.referenceView];
+    }
+}
 %end 
 
 //Start stop view, save battery
