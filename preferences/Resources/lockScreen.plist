@@ -53,6 +53,27 @@
                 <string>genSettings</string>
             </dict>
             
+            <!-- <dict>
+                <key>cell</key>
+                <string>PSEditTextCell</string>
+                <key>cellClass</key>
+                <string>CSPDatePickerCell</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>default</key>
+                <string>7</string>
+                <key>detail</key>
+                <string>PSDetailController</string>
+                <key>label</key>
+                <string>date picker</string>
+                <key>placeholder</key>
+                <string>7</string>
+                <key>key</key>
+                <string>dateTest</string>
+                <key>PostNotification</key>
+                <string>com.creaturesurvive.motuumls.prefschanged</string>
+            </dict> -->
+            
             <dict>
                 <key>cell</key>
                 <string>PSGroupCell</string>
@@ -124,10 +145,7 @@
 				<string>fontNames</string>
 				<key>PostNotification</key>
 				<string>com.midnightchips.asteroid.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.asteroid</string>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+				
 			</dict>
             <dict>
                 <key>cell</key>

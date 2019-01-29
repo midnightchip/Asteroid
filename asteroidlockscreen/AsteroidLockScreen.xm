@@ -141,7 +141,12 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.logo.frame = CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225);
         self.currentTemp.frame = CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225);
         self.greetingLabel.frame = CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6);
-        self.wDescription.frame = CGRectMake(0, self.frame.size.height/2.1, self.weather.frame.size.width, self.frame.size.height/8.6);
+        
+        self.wDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, (self.weather.frame.size.width * .9), self.frame.size.height/8.6)];
+        CGPoint wDescriptionCenter = self.wDescription.center;
+        wDescriptionCenter.x = self.center.x;
+        self.wDescription.center = wDescriptionCenter;
+        
         self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
         self.notifcationLabel.frame = CGRectMake(self.weather.frame.size.width - 60, self.frame.size.height/2.5, 25, 25);
         
@@ -338,7 +343,11 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     
     // Creating the wDescription
     if(!self.wDescription){
-        self.wDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, self.weather.frame.size.width, self.frame.size.height/8.6)];
+        self.wDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, (self.weather.frame.size.width * .9), self.frame.size.height/8.6)];
+        CGPoint wDescriptionCenter = self.wDescription.center;
+        wDescriptionCenter.x = self.center.x;
+        self.wDescription.center = wDescriptionCenter;
+        
         self.wDescription.textAlignment = NSTextAlignmentCenter;
         self.wDescription.lineBreakMode = NSLineBreakByWordWrapping;
         self.wDescription.numberOfLines = 0;
