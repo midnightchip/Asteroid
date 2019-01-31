@@ -129,6 +129,10 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.forecastCont.dividerLineView.hidden = TRUE;
     }
     
+    if(![prefs boolForKey:@"enableForeHeader"] && ![prefs boolForKey:@"enableForeTable"]){
+        [self.forecastCont.view removeFromSuperview];
+    }
+    
     // Reseting location
     if([prefs boolForKey:@"resetXY"]){
         self.centerDict = nil;
@@ -144,7 +148,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         
         self.wDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, (self.weather.frame.size.width * .9), self.frame.size.height/8.6)];
         CGPoint wDescriptionCenter = self.wDescription.center;
-        wDescriptionCenter.x = self.center.x;
+        wDescriptionCenter.x = self.weather.center.x;
         self.wDescription.center = wDescriptionCenter;
         
         self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
@@ -345,7 +349,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     if(!self.wDescription){
         self.wDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.1, (self.weather.frame.size.width * .9), self.frame.size.height/8.6)];
         CGPoint wDescriptionCenter = self.wDescription.center;
-        wDescriptionCenter.x = self.center.x;
+        wDescriptionCenter.x = self.weather.center.x;
         self.wDescription.center = wDescriptionCenter;
         
         self.wDescription.textAlignment = NSTextAlignmentCenter;
@@ -768,7 +772,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     if(content && [prefs boolForKey:@"hideOnNotif"] && !isDismissed){
         [mainPageView hideWeather];
         NSLog(@"lock_TWEAK | hiding weather");
-    } else if(!isWeatherLocked && isDismissed && mediaPanelCont.isOnScreen == NO){
+    } else if(!isWeatherLocked && isDismissed && mediaPanelCont.isOnScreen == NO && [[%c(SBMediaController) sharedInstance] isPlaying] == NO){
         if([prefs boolForKey:@"hideOnNotif"] && !content){ // Will make check hideOnNotif and content before revealing lock
             [mainPageView updateWeatherReveal];
         } else if(![prefs boolForKey:@"hideOnNotif"]){ // Do as normally would if hideOnNotif not enabled
