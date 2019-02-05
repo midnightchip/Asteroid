@@ -4,6 +4,7 @@
 
 
 @interface CSPListController (Asteroid)
+-(NSDictionary*) weatherConditionsDict;
 @end 
 
 @implementation CSPListController (Asteroid)
@@ -30,9 +31,18 @@
     [prefs saveAndPostNotification];
 }
 
--(NSArray*)weatherConditions{
-    NSArray *unorganized =  [[NSArray alloc] initWithObjects: @"SevereThunderstorm",@"Rain", @"Thunderstorm", @"Haze", @"PartlyCloudyDay", @"MixedRainAndSnow", @"SnowFlurries", @"Smoky", @"MixedRainAndSleet", @"ClearNight", @"SnowShowers", @"MixedSnowAndSleet", @"Breezy", @"ScatteredSnowShowers", @"FreezingDrizzle", @"BlowingSnow", @"Sunny", @"Drizzle", @"Windy", @"MostlySunnyNight", @"Snow", @"HeavySnow", @"Frigid", @"ScatteredSnowShowers", @"MostlySunnyDay", @"Hail", @"Blizzard", @"Cloudy", @"MixedRainFall", @"Sleet", @"PartlyCloudyDay", @"MostlyCloudyNight", @"Hot", @"Dust", @"HeavyRain", @"MostlyCloudyDay", @"IsolatedThunderstorms", @"SnowShowers", @"PartlyCloudyNight", @"ScatteredShowers", @"IsolatedThundershowers", @"ScatteredThunderstorms", @"Tornado", @"FreezingRain", @"TropicalStorm", @"Showers1", @"Hurricane", @"Fog", nil];
-    return [unorganized sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+-(NSArray*)weatherConditionsKeys{
+    NSDictionary *conditions = [self weatherConditionsDict];
+    return [conditions allKeys];
+}
+
+-(NSArray*)weatherConditionsValues{
+    NSDictionary *conditions = [self weatherConditionsDict];
+    return [conditions allValues];
+}
+-(NSDictionary*) weatherConditionsDict{
+    NSDictionary *conditions = [[NSDictionary alloc] initWithObjectsAndKeys: @3, @"SevereThunderstorm", @12, @"Rain", @4, @"Thunderstorm", @21, @"Haze", @30, @"PartlyCloudyDay", @5, @"MixedRainAndSnow", @13, @"SnowFlurries", @22, @"Smoky", @6, @"MixedRainAndSleet", @31, @"ClearNight", @14, @"SnowShowers", @7, @"MixedSnowAndSleet", @23, @"Breezy", @40, @"ScatteredSnowShowers", @8, @"FreezingDrizzle", @15, @"BlowingSnow", @32, @"Sunny", @9, @"Drizzle", @24, @"Windy", @33, @"MostlySunnyNight", @16, @"Snow", @41, @"HeavySnow", @25, @"Frigid", @42, @"ScatteredSnowShowers", @34, @"MostlySunnyDay", @17, @"Hail", @43, @"Blizzard", @26, @"Cloudy", @35, @"MixedRainFall", @18, @"Sleet", @44, @"PartlyCloudyDay", @27, @"MostlyCloudyNight", @36, @"Hot", @19, @"Dust", @45, @"HeavyRain", @28, @"MostlyCloudyDay", @37, @"IsolatedThunderstorms", @46, @"SnowShowers", @29, @"PartlyCloudyNight", @38, @"ScatteredShowers", @47, @"IsolatedThundershowers", @39, @"ScatteredThunderstorms", @0, @"Tornado", @10, @"FreezingRain", @1, @"TropicalStorm", @11, @"Showers1", @2, @"Hurricane", @20, @"Fog", nil];
+    return conditions;
 }
 -(void)gplInfo{
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"License Information"

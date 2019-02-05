@@ -2,6 +2,7 @@
 #import "LWPProvider.h"
 #import <objc/runtime.h>
 #import "WeatherHeaders.h"
+#import "ConditionOption.h"
 #define prefs [LWPProvider sharedProvider]
 
 typedef void(^completion)();
@@ -26,7 +27,7 @@ typedef void(^completion)();
 - (NSBundle *)weatherBundle;
 -(NSString *) localeTemperature;
 - (NSString *)currentConditionOverview;
--(UIImage *) glyphWithOption:(NSInteger) option;
+-(UIImage *) glyphWithOption:(ConditionOption) option;
 
 @end
 

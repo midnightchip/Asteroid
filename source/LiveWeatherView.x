@@ -135,7 +135,7 @@ static WUIWeatherCondition* condition = nil;
         [self.temp layoutSubviews];
         
         UIImage *icon;
-        icon = [_weatherModel glyphWithOption:1];
+        icon = [_weatherModel glyphWithOption:ConditionOptionWhite];
         self.logo.image = icon;
         [self.logo layoutSubviews];
         

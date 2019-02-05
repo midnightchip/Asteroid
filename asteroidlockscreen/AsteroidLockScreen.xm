@@ -635,12 +635,12 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         UIImage *icon;
         BOOL setColor = FALSE;
         if(![prefs boolForKey:@"customImage"]){
-            icon = [self.weatherModel glyphWithOption:0];
+            icon = [self.weatherModel glyphWithOption:ConditionOptionDefault];
         }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
-            icon = [self.weatherModel glyphWithOption:0];
+            icon = [self.weatherModel glyphWithOption:ConditionOptionDefault];
             setColor = TRUE;
         }else{
-            icon = [self.weatherModel glyphWithOption:2];
+            icon = [self.weatherModel glyphWithOption:ConditionOptionBlack];
             setColor = TRUE;
         }
         

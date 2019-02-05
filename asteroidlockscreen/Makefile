@@ -1,7 +1,7 @@
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = AsteroidLockScreen
-AsteroidLockScreen_FILES = AsteroidLockScreen.xm backgroundFunctions.xm ../source/LWPProvider.m
+AsteroidLockScreen_FILES = $(wildcard *.xm *.m) ../source/LWPProvider.m
 AsteroidLockScreen_FRAMEWORKS = CoreLocation 
 AsteroidLockScreen_PRIVATE_FRAMEWORKS = Weather WeatherUI
 AsteroidLockScreen_LDFLAGS += -lCSPreferencesProvider  

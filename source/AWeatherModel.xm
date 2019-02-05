@@ -1,62 +1,10 @@
 #include "AWeatherModel.h"
 
-static NSDictionary *conditions = @{@"SevereThunderstorm" : @3,
-                                    @"Rain" : @12,
-                                    @"Thunderstorm" : @4,
-                                    @"Haze" : @21,
-                                    @"PartlyCloudyDay" :  @30,
-                                    @"MixedRainAndSnow" : @5,
-                                    @"SnowFlurries" : @13,
-                                    @"Smoky" : @22,
-                                    @"MixedRainAndSleet" : @6,
-                                    @"ClearNight" : @31,
-                                    @"SnowShowers" : @14,
-                                    @"MixedSnowAndSleet" : @7,
-                                    @"Breezy" : @23,
-                                    @"ScatteredSnowShowers" : @40,
-                                    @"FreezingDrizzle" : @8,
-                                    @"BlowingSnow" : @15,
-                                    @"Sunny" : @32,
-                                    @"Drizzle" : @9,
-                                    @"Windy" : @24,
-                                    @"MostlySunnyNight" : @33,
-                                    @"Snow" : @16,
-                                    @"HeavySnow" : @41,
-                                    @"Frigid" : @25,
-                                    @"ScatteredSnowShowers" : @42,
-                                    @"MostlySunnyDay" : @34,
-                                    @"Hail" : @17,
-                                    @"Blizzard" : @43,
-                                    @"Cloudy" : @26,
-                                    @"MixedRainFall" : @35,
-                                    @"Sleet" : @18,
-                                    @"PartlyCloudyDay" : @44,
-                                    @"MostlyCloudyNight" : @27,
-                                    @"Hot" : @36,
-                                    @"Dust" : @19,
-                                    @"HeavyRain" : @45,
-                                    @"MostlyCloudyDay" : @28,
-                                    @"IsolatedThunderstorms" : @37,
-                                    @"SnowShowers" : @46,
-                                    @"PartlyCloudyNight" : @29,
-                                    @"ScatteredShowers" : @38,
-                                    @"IsolatedThundershowers" : @47,
-                                    @"ScatteredThunderstorms" : @39,
-                                    @"Tornado" : @0,
-                                    @"FreezingRain" : @10,
-                                    @"TropicalStorm" : @1,
-                                    @"Showers1" : @11,
-                                    @"Hurricane" : @2,
-                                    @"Fog" : @20
-                                    };
-
-typedef NSDictionary<NSString *, NSString *> *ConditionTable;
-enum {
-    ConditionImageTypeDefault = 0,
-    ConditionImageTypeDay = 1,
-    ConditionImageTypeNight = 2
+typedef NS_ENUM(NSUInteger, ConditionImageType) {
+    ConditionImageTypeDefault,
+    ConditionImageTypeDay,
+    ConditionImageTypeNight
 };
-typedef NSUInteger ConditionImageType;
 
 @implementation AWeatherModel{
     NSBundle *_weatherBundle;
@@ -96,6 +44,9 @@ typedef NSUInteger ConditionImageType;
                 self.localWeather = self.city.isLocalWeatherCity;
                 self.populated = YES;
                 
+                if([prefs boolForKey:@"customCondition"]){
+                    self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
+                }
                 [self postNotification];
                 [self setUpRefreshTimer];
             }];
@@ -107,6 +58,9 @@ typedef NSUInteger ConditionImageType;
             self.localWeather = self.city.isLocalWeatherCity;
             self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.city.wfLocation];
             [self.todayModel executeModelUpdateWithCompletion:^{nil;}];
+            if([prefs boolForKey:@"customCondition"]){
+                self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
+            }
             self.populated = YES;
             [self postNotification];
             [self setUpRefreshTimer];
@@ -125,7 +79,9 @@ typedef NSUInteger ConditionImageType;
         [self.todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *arg2) {
             self.forecastModel = self.todayModel.forecastModel;
             self.city = self.forecastModel.city;
-            
+            if([prefs boolForKey:@"customCondition"]){
+                self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
+            }
             [self.todayModel setIsLocationTrackingEnabled:NO];
             [self postNotification];
             compBlock();
@@ -179,7 +135,7 @@ typedef NSUInteger ConditionImageType;
     return [self.city naturalLanguageDescription];
 }
 
--(UIImage *) glyphWithOption:(NSInteger) option{
+-(UIImage *) glyphWithOption:(ConditionOption) option{
     NSInteger conditionCode = [self.city conditionCode];
     NSString *conditionImageName = conditionCode < 3200 ? [WeatherImageLoader conditionImageNameWithConditionIndex:conditionCode] : nil;
     ConditionImageType type = [conditionImageName containsString:@"day"] ? ConditionImageTypeDay : [conditionImageName containsString:@"night"] ? ConditionImageTypeNight : ConditionImageTypeDefault;
@@ -187,11 +143,11 @@ typedef NSUInteger ConditionImageType;
     
     switch (type) {
         case ConditionImageTypeDefault: {
-            if((int)option == 0){
+            if(ConditionOptionDefault){
                 return [self imageForKey:[conditionImageName stringByAppendingString:@"-nc"]];
-            } else if((int)option == 1){
+            } else if(ConditionOptionWhite){
                 return [self imageForKey:[conditionImageName stringByAppendingString:@"-white"]];
-            } else if((int)option == 2){
+            } else if(ConditionOptionBlack){
                 return [self imageForKey:[conditionImageName stringByAppendingString:@"-black"]];
             }
         } break;
@@ -199,13 +155,13 @@ typedef NSUInteger ConditionImageType;
         case ConditionImageTypeDay: {
             rootName = [[conditionImageName stringByReplacingOccurrencesOfString:@"-day" withString:@""] stringByReplacingOccurrencesOfString:@"_day" withString:@""];
             
-            if((int)option == 0){
+            if(ConditionOptionDefault){
                 return [self imageForKey:[rootName stringByAppendingString:@"_day-nc"]] ? :
                 [self imageForKey:[rootName stringByAppendingString:@"-day-nc"]];
-            } else if((int)option == 1){
+            } else if(ConditionOptionWhite){
                 return [self imageForKey:[rootName stringByAppendingString:@"_day-white"]] ? :
                 [self imageForKey:[rootName stringByAppendingString:@"-day-white"]];
-            } else if((int)option == 2){
+            } else if(ConditionOptionBlack){
                 return [self imageForKey:[rootName stringByAppendingString:@"_day-black"]] ? :
                 [self imageForKey:[rootName stringByAppendingString:@"-day-black"]];
             }
@@ -214,13 +170,13 @@ typedef NSUInteger ConditionImageType;
         case ConditionImageTypeNight: {
             rootName = [[conditionImageName stringByReplacingOccurrencesOfString:@"-night" withString:@""] stringByReplacingOccurrencesOfString:@"_night" withString:@""];
             
-            if((int)option == 0){
+            if(ConditionOptionDefault){
                 return [self imageForKey:[rootName stringByAppendingString:@"_night-nc"]] ? :
                 [self imageForKey:[rootName stringByAppendingString:@"-night-nc"]];
-            } else if((int)option == 1){
+            } else if(ConditionOptionWhite){
                 return [self imageForKey:[rootName stringByAppendingString:@"_night-white"]] ? :
                 [self imageForKey:[rootName stringByAppendingString:@"-night-white"]];
-            } else if((int)option == 2){
+            } else if(ConditionOptionBlack){
                 return [self imageForKey:[rootName stringByAppendingString:@"_night-black"]] ? :
                 [self imageForKey:[rootName stringByAppendingString:@"-night-black"]];
             }

@@ -1,4 +1,5 @@
 #import "../source/LWPProvider.h"
+#import "../source/ConditionOption.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <notify.h>
 #import <substrate.h>

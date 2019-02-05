@@ -1,0 +1,5 @@
+@interface AGestureView : UIView
+
+
+
+@end
