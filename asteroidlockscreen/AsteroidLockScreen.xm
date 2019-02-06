@@ -180,6 +180,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
 %property (nonatomic, retain) AWeatherModel *weatherModel;
 %property (nonatomic, retain) WAWeatherPlatterViewController *forecastCont;
 %property (nonatomic, retain) UILabel *notifcationLabel;
+%property (nonatomic, retain) ASTGestureViewController *gestureViewController;
 
 - (void)layoutSubviews {
     %orig;
@@ -416,6 +417,11 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     if(!self.weatherModel){
         self.weatherModel = [%c(AWeatherModel) sharedInstance];
         //[self.weatherModel updateWeatherDataWithCompletion:^{nil;}];
+    }
+    
+    if(!self.gestureViewController){
+        self.gestureViewController = [[%c(ASTGestureViewController) alloc] init];
+        [self.weather addSubview: self.gestureViewController.view];
     }
 }
 
