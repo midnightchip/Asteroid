@@ -12,6 +12,7 @@
 @interface SBHomeScreenView (Weather)
 //@interface SBFWallpaperView (Weather)
 -(void)updateView;
+-(BOOL) shouldUpdateView:(WUIWeatherCondition *) currentCondition;
 @end
 
 @interface SpringBoard (asteroid)
@@ -64,7 +65,7 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 
 %new
 -(void) updateView{
-    if(conditionNumberSet != self.weatherModel.city.conditionCode || (condition.city ? condition.city.isDay : self.weatherModel.city.isDay) != self.weatherModel.city.isDay){
+    if(conditionNumberSet != self.weatherModel.city.conditionCode || [self shouldUpdateView:condition]){
         [self.referenceView removeFromSuperview];
         
         self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
@@ -80,6 +81,19 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
         [self addSubview:self.referenceView];
         [self sendSubviewToBack:self.referenceView];
     }
+}
+
+%new
+-(BOOL) shouldUpdateView:(WUIWeatherCondition *) currentCondition{
+    NSString *currentConditionFormatted = currentCondition.loadedFileName;
+    ConditionImageType currentConditionType = [self.weatherModel conditionImageTypeForString: currentConditionFormatted];
+    
+    NSInteger actualCode = [self.weatherModel.city conditionCode];
+    NSString *actualConditionImageName = actualCode < 3200 ? [WeatherImageLoader conditionImageNameWithConditionIndex:actualCode] : nil;
+    ConditionImageType actualConditionType = [self.weatherModel conditionImageTypeForString: actualConditionImageName];
+    
+    return currentConditionType != actualConditionType ? YES : NO;
+    
 }
 %end 
 

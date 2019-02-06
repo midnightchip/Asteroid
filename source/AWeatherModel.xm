@@ -1,11 +1,5 @@
 #include "AWeatherModel.h"
 
-typedef NS_ENUM(NSUInteger, ConditionImageType) {
-    ConditionImageTypeDefault,
-    ConditionImageTypeDay,
-    ConditionImageTypeNight
-};
-
 @implementation AWeatherModel{
     NSBundle *_weatherBundle;
 }
@@ -138,7 +132,7 @@ typedef NS_ENUM(NSUInteger, ConditionImageType) {
 -(UIImage *) glyphWithOption:(ConditionOption) option{
     NSInteger conditionCode = [self.city conditionCode];
     NSString *conditionImageName = conditionCode < 3200 ? [WeatherImageLoader conditionImageNameWithConditionIndex:conditionCode] : nil;
-    ConditionImageType type = [conditionImageName containsString:@"day"] ? ConditionImageTypeDay : [conditionImageName containsString:@"night"] ? ConditionImageTypeNight : ConditionImageTypeDefault;
+    ConditionImageType type = [self conditionImageTypeForString: conditionImageName];
     NSString *rootName;
     
     switch (type) {
@@ -183,6 +177,10 @@ typedef NS_ENUM(NSUInteger, ConditionImageType) {
         } break;
     }
     return nil;
+}
+
+-(ConditionImageType) conditionImageTypeForString: (NSString *) conditionString{
+    return [conditionString containsString:@"day"] ? ConditionImageTypeDay : [conditionString containsString:@"night"] ? ConditionImageTypeNight : ConditionImageTypeDefault;
 }
 
 @end

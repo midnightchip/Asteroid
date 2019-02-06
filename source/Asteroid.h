@@ -1,4 +1,5 @@
 #import "LWPProvider.h"
+#import "ConditionImageType.h"
 #import "AWeatherModel.h"
 #import <substrate.h>
 #import <CoreLocation/CoreLocation.h>
@@ -6,6 +7,7 @@
 /* weather background */
 @interface WUIWeatherCondition : NSObject
 @property (assign,nonatomic) long long condition;
+@property (nonatomic, retain) NSString *loadedFileName;
 -(void)pause;
 -(void)resume;
 -(City *)city;

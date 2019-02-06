@@ -3,6 +3,7 @@
 #import <objc/runtime.h>
 #import "WeatherHeaders.h"
 #import "ConditionOption.h"
+#import "ConditionImageType.h"
 #define prefs [LWPProvider sharedProvider]
 
 typedef void(^completion)();
@@ -28,7 +29,7 @@ typedef void(^completion)();
 -(NSString *) localeTemperature;
 - (NSString *)currentConditionOverview;
 -(UIImage *) glyphWithOption:(ConditionOption) option;
-
+-(ConditionImageType) conditionImageTypeForString: (NSString *) conditionString;
 @end
 
 @interface City (Condition)
