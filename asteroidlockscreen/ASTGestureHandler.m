@@ -1,49 +1,15 @@
-#import "ASTGestureViewController.h"
+#import "ASTGestureHandler.h"
 #import <QuartzCore/QuartzCore.h>
 
-@interface ASTGestureViewController ()
-@property (nonatomic, retain) UIView *firstPieceView;
-@property (nonatomic, retain) UIView *secondPieceView;
-@property (nonatomic, retain) UIView *thirdPieceView;
-
+@interface ASTGestureHandler ()
 @property (nonatomic, retain) UIView *pieceForReset;
 
 @end
 
 
 
-@implementation ASTGestureViewController{
+@implementation ASTGestureHandler{
 
-}
-
-- (instancetype) init{
-    if(self = [super init]){
-        
-    }
-    return self;
-}
-
-- (void)viewDidLoad{
-    self.firstPieceView = [[UIView alloc] initWithFrame:CGRectMake(10, 10, 100, 100)];
-    self.secondPieceView = [[UIView alloc] initWithFrame:CGRectMake(30, 30, 100, 100)];
-    self.thirdPieceView = [[UIView alloc] initWithFrame:CGRectMake(50, 50, 100, 100)];
-    
-    NSArray *viewArray = @[self.firstPieceView, self.secondPieceView, self.thirdPieceView];
-    
-    for(UIView *view in viewArray){
-        [view addGestureRecognizer:[self delegatedPanGestureRecognizer]];
-        [view addGestureRecognizer:[self delegatedRotationGestureRecognizer]];
-        [view addGestureRecognizer:[self delegatedPinchGestureRecognizer]];
-        [view addGestureRecognizer:[self delegatedMenuGestureRecognizer]];
-    }
-    
-    self.firstPieceView.backgroundColor = [UIColor redColor];
-    self.secondPieceView.backgroundColor = [UIColor blueColor];
-    self.thirdPieceView.backgroundColor = [UIColor greenColor];
-    
-    [self.view addSubview:self.firstPieceView];
-    [self.view addSubview:self.secondPieceView];
-    [self.view addSubview:self.thirdPieceView];
 }
 
 #pragma mark - Utility methods
@@ -70,8 +36,8 @@
 - (void)showResetMenu:(UILongPressGestureRecognizer *)gestureRecognizer
 {
     if ([gestureRecognizer state] == UIGestureRecognizerStateBegan) {
-        
-        [self becomeFirstResponder];
+        NSLog(@"lock_TWEAK | show menu");
+        [self.delegate becomeFirstResponder];
         self.pieceForReset = [gestureRecognizer view];
         
         /*
@@ -110,13 +76,6 @@
     [UIView commitAnimations];
 }
 
-
-// UIMenuController requires that we can become first responder or it won't display
-- (BOOL)canBecomeFirstResponder
-{
-    return YES;
-}
-
 #pragma mark - Creating Gestures
 
 -(UIPanGestureRecognizer *) delegatedPanGestureRecognizer{
@@ -147,7 +106,7 @@
     UILongPressGestureRecognizer *menuGesture = [[UILongPressGestureRecognizer alloc]
                                                  initWithTarget:self
                                                  action:@selector(showResetMenu:)];
-    menuGesture.delegate = self;
+    //menuGesture.delegate = self;
     return menuGesture;
 }
 
@@ -209,11 +168,6 @@
  */
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
-    // If the gesture recognizers's view isn't one of our pieces, don't allow simultaneous recognition.
-    if (gestureRecognizer.view != self.firstPieceView && gestureRecognizer.view != self.secondPieceView && gestureRecognizer.view != self.thirdPieceView) {
-        return NO;
-    }
-    
     // If the gesture recognizers are on different views, don't allow simultaneous recognition.
     if (gestureRecognizer.view != otherGestureRecognizer.view) {
         return NO;

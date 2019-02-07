@@ -5,7 +5,7 @@
 #import <substrate.h>
 #import <CoreLocation/CoreLocation.h>
 #import "../source/AWeatherModel.h"
-#import "ASTGestureViewController.h"
+#import "ASTViewController.h"
 
 
 @interface UIView (tweak_cat)
@@ -85,7 +85,7 @@
 @property (nonatomic, retain) AWeatherModel *weatherModel;
 @property (nonatomic, retain) WAWeatherPlatterViewController *forecastCont;
 @property (nonatomic, retain) UILabel *notifcationLabel;
-@property (nonatomic, retain) ASTGestureViewController *gestureViewController;
+@property (nonatomic, retain) ASTViewController *gestureViewController;
 
 -(id) _viewControllerForAncestor;
 -(void)updateImage:(NSNotification *) notification;
