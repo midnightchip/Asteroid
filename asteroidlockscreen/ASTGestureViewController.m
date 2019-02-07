@@ -27,34 +27,15 @@
     self.firstPieceView = [[UIView alloc] initWithFrame:CGRectMake(10, 10, 100, 100)];
     self.secondPieceView = [[UIView alloc] initWithFrame:CGRectMake(30, 30, 100, 100)];
     self.thirdPieceView = [[UIView alloc] initWithFrame:CGRectMake(50, 50, 100, 100)];
-
-    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc]
-                                          initWithTarget:self
-                                          action:@selector(panPiece:)];
-    panGesture.delegate = self;
-    UIRotationGestureRecognizer *rotateGesture = [[UIRotationGestureRecognizer alloc]
-                                          initWithTarget:self
-                                          action:@selector(rotatePiece:)];
-    rotateGesture.delegate = self;
-    UIPinchGestureRecognizer *scaleGesture = [[UIPinchGestureRecognizer alloc]
-                                          initWithTarget:self
-                                          action:@selector(scalePiece:)];
-    scaleGesture.delegate = self;
-    UIPinchGestureRecognizer *menuGesture = [[UIPinchGestureRecognizer alloc]
-                                          initWithTarget:self
-                                          action:@selector(showResetMenu:)];
-    menuGesture.delegate = self;
     
-    NSArray *gestureArray = @[panGesture, rotateGesture, scaleGesture, menuGesture];
+    NSArray *viewArray = @[self.firstPieceView, self.secondPieceView, self.thirdPieceView];
     
-    for(UIGestureRecognizer *gesture in gestureArray){
-        [self.firstPieceView addGestureRecognizer:gesture];
-        [self.secondPieceView addGestureRecognizer:gesture];
-        [self.thirdPieceView addGestureRecognizer:gesture];
-        
+    for(UIView *view in viewArray){
+        [view addGestureRecognizer:[self delegatedPanGestureRecognizer]];
+        [view addGestureRecognizer:[self delegatedRotationGestureRecognizer]];
+        [view addGestureRecognizer:[self delegatedPinchGestureRecognizer]];
+        [view addGestureRecognizer:[self delegatedMenuGestureRecognizer]];
     }
-    
-    
     
     self.firstPieceView.backgroundColor = [UIColor redColor];
     self.secondPieceView.backgroundColor = [UIColor blueColor];
@@ -134,6 +115,40 @@
 - (BOOL)canBecomeFirstResponder
 {
     return YES;
+}
+
+#pragma mark - Creating Gestures
+
+-(UIPanGestureRecognizer *) delegatedPanGestureRecognizer{
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc]
+                                          initWithTarget:self
+                                          action:@selector(panPiece:)];
+    panGesture.delegate = self;
+    return panGesture;
+}
+
+-(UIRotationGestureRecognizer *) delegatedRotationGestureRecognizer{
+    UIRotationGestureRecognizer *rotateGesture = [[UIRotationGestureRecognizer alloc]
+                                                  initWithTarget:self
+                                                  action:@selector(rotatePiece:)];
+    rotateGesture.delegate = self;
+    return rotateGesture;
+}
+
+-(UIPinchGestureRecognizer *) delegatedPinchGestureRecognizer{
+    UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc]
+                                              initWithTarget:self
+                                              action:@selector(scalePiece:)];
+    pinchGesture.delegate = self;
+    return pinchGesture;
+}
+
+-(UILongPressGestureRecognizer *) delegatedMenuGestureRecognizer{
+    UILongPressGestureRecognizer *menuGesture = [[UILongPressGestureRecognizer alloc]
+                                                 initWithTarget:self
+                                                 action:@selector(showResetMenu:)];
+    menuGesture.delegate = self;
+    return menuGesture;
 }
 
 
