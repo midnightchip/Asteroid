@@ -7,7 +7,4 @@
 -(UIRotationGestureRecognizer *) delegatedRotationGestureRecognizer;
 -(UIPinchGestureRecognizer *) delegatedPinchGestureRecognizer;
 -(UILongPressGestureRecognizer *) delegatedMenuGestureRecognizer;
-
-- (void)setDelegate:(id <ASTGestureDelegate>)aDelegate;
-
 @end
