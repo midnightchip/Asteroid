@@ -1,6 +1,9 @@
 #import "ASTGestureHandler.h"
 #import <QuartzCore/QuartzCore.h>
 
+// Heavily based off of:
+// https://developer.apple.com/library/archive/samplecode/Touches/Touches.zip
+
 @interface ASTGestureHandler ()
 
 @end
@@ -14,8 +17,9 @@
     } delegateRespondsTo;
 }
 
-@synthesize delegate;
+#pragma mark - Delegate property
 
+@synthesize delegate;
 
 - (void)setDelegate:(id <ASTGestureDelegate>)aDelegate {
     if (delegate != aDelegate) {
@@ -28,9 +32,6 @@
 
 #pragma mark - Utility methods
 
-/**
- Scale and rotation transforms are applied relative to the layer's anchor point this method moves a gesture recognizer's view's anchor point between the user's fingers.
- */
 - (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
 {
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
@@ -43,10 +44,6 @@
     }
 }
 
-
-/**
- Display a menu with a single item to allow the piece's transform to be reset.
- */
 - (void)_showResetMenu:(UILongPressGestureRecognizer *)gestureRecognizer
 {
     if(delegateRespondsTo.showResetMenu){
@@ -84,17 +81,13 @@
     UILongPressGestureRecognizer *menuGesture = [[UILongPressGestureRecognizer alloc]
                                                  initWithTarget:self
                                                  action:@selector(_showResetMenu:)];
-    //menuGesture.delegate = self;
+    menuGesture.delegate = self;
     return menuGesture;
 }
 
 
 #pragma mark - Touch handling
 
-/**
- Shift the piece's center by the pan amount.
- Reset the gesture recognizer's translation to {0, 0} after applying so the next callback is a delta from the current position.
- */
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer
 {
     UIView *piece = [gestureRecognizer view];
@@ -109,11 +102,6 @@
     }
 }
 
-
-/**
- Rotate the piece by the current rotation.
- Reset the gesture recognizer's rotation to 0 after applying so the next callback is a delta from the current rotation.
- */
 - (void)rotatePiece:(UIRotationGestureRecognizer *)gestureRecognizer
 {
     [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
@@ -124,11 +112,6 @@
     }
 }
 
-
-/**
- Scale the piece by the current scale.
- Reset the gesture recognizer's rotation to 0 after applying so the next callback is a delta from the current scale.
- */
 - (void)scalePiece:(UIPinchGestureRecognizer *)gestureRecognizer
 {
     [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
@@ -139,19 +122,12 @@
     }
 }
 
-
-/**
- Ensure that the pinch, pan and rotate gesture recognizers on a particular view can all recognize simultaneously.
- Prevent other gesture recognizers from recognizing simultaneously.
- */
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
-    // If the gesture recognizers are on different views, don't allow simultaneous recognition.
     if (gestureRecognizer.view != otherGestureRecognizer.view) {
         return NO;
     }
     
-    // If either of the gesture recognizers is the long press, don't allow simultaneous recognition.
     if ([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]] || [otherGestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]]) {
         return NO;
     }
