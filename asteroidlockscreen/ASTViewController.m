@@ -16,6 +16,8 @@
 
 }
 
+@synthesize pieceForReset = _pieceForReset;
+
 - (instancetype) init{
     if(self = [super init]){
         self.gestureHandler = [[ASTGestureHandler alloc] init];
@@ -55,8 +57,43 @@
     return YES;
 }
 
+#pragma mark - Delegated
+
+- (void) showResetMenu:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    if ([gestureRecognizer state] == UIGestureRecognizerStateBegan) {
+        [self becomeFirstResponder];
+        self.pieceForReset = [gestureRecognizer view];
+        
+        /*
+         Set up the reset menu.
+         */
+        NSString *menuItemTitle = NSLocalizedString(@"Reset", @"Reset menu item title");
+        UIMenuItem *resetMenuItem = [[UIMenuItem alloc] initWithTitle:menuItemTitle action:@selector(resetPiece:)];
+        
+        UIMenuController *menuController = [UIMenuController sharedMenuController];
+        [menuController setMenuItems:@[resetMenuItem]];
+        
+        CGPoint location = [gestureRecognizer locationInView:[gestureRecognizer view]];
+        CGRect menuLocation = CGRectMake(location.x, location.y, 0, 0);
+        [menuController setTargetRect:menuLocation inView:[gestureRecognizer view]];
+        
+        [menuController setMenuVisible:YES animated:YES];
+    }
+}
 - (void)resetPiece:(UIMenuController *)controller
 {
-    [self.gestureHandler resetPiece:controller];
+    UIView *pieceForReset = self.pieceForReset;
+    
+    CGPoint centerPoint = CGPointMake(CGRectGetMidX(pieceForReset.bounds), CGRectGetMidY(pieceForReset.bounds));
+    CGPoint locationInSuperview = [pieceForReset convertPoint:centerPoint toView:[pieceForReset superview]];
+    
+    [[pieceForReset layer] setAnchorPoint:CGPointMake(0.5, 0.5)];
+    [pieceForReset setCenter:locationInSuperview];
+    
+    [UIView beginAnimations:nil context:nil];
+    [pieceForReset setTransform:CGAffineTransformIdentity];
+    [UIView commitAnimations];
 }
 @end
+

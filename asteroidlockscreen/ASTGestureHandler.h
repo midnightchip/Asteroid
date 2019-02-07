@@ -1,10 +1,13 @@
-@interface ASTGestureHandler : NSObject <UIGestureRecognizerDelegate>
-@property (nonatomic, retain) UIViewController *delegate;
+#import "ASTGestureDelegate.h"
 
-- (void)resetPiece:(UIMenuController *)controller;
+@interface ASTGestureHandler : NSObject <UIGestureRecognizerDelegate>
+@property (nonatomic, weak) id <ASTGestureDelegate> delegate;
+
 -(UIPanGestureRecognizer *) delegatedPanGestureRecognizer;
 -(UIRotationGestureRecognizer *) delegatedRotationGestureRecognizer;
 -(UIPinchGestureRecognizer *) delegatedPinchGestureRecognizer;
 -(UILongPressGestureRecognizer *) delegatedMenuGestureRecognizer;
+
+- (void)setDelegate:(id <ASTGestureDelegate>)aDelegate;
 
 @end

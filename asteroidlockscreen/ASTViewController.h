@@ -1,4 +1,5 @@
 #import "ASTGestureHandler.h"
+#import "ASTGestureDelegate.h"
 
-@interface ASTViewController : UIViewController
+@interface ASTViewController : UIViewController <ASTGestureDelegate>
 @end
