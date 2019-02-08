@@ -1,6 +1,7 @@
 #import "ASTGestureHandler.h"
 #import "ASTGestureDelegate.h"
 #import "../source/AWeatherModel.h"
+#import "../source/WeatherHeaders.h"
 
 @interface ASTViewController : UIViewController <ASTGestureDelegate>
 -(void) setupViewStyle;

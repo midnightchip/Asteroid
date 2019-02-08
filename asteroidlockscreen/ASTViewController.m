@@ -1,3 +1,14 @@
+/*
+ No saving to file
+ self.view isnt really hooked up yet to the other stuff
+ dismiss button ^
+ Animation / enable
+ Notification counter
+ More menu items
+ 
+ */
+
+
 #import "ASTViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -6,6 +17,7 @@
 @property (nonatomic, retain) UILabel *greetingLabel;
 @property (nonatomic, retain) UILabel *wDescription;
 @property (nonatomic, retain) UILabel *currentTemp;
+@property (nonatomic, retain) WAWeatherPlatterViewController *forecastCont;
 @property (retain, nonatomic) UIButton *dismissButton;
 
 @property (nonatomic, retain) AWeatherModel *weatherModel;
@@ -68,6 +80,12 @@
         [self.view addSubview:self.wDescription];
     }
     
+    self.forecastCont = [[objc_getClass("WAWeatherPlatterViewController") alloc] init]; // Temp to make sure its called once
+    self.forecastCont = [[objc_getClass("WAWeatherPlatterViewController") alloc] initWithLocation:self.weatherModel.city];
+    ((UIView *)((NSArray *)self.forecastCont.view.layer.sublayers)[0]).hidden = YES; // Visual Effect view to hidden
+    self.forecastCont.view.frame = CGRectMake(0, (self.view.frame.size.height / 2), self.view.frame.size.width, self.view.frame.size.height/3);
+    [self.view addSubview:self.forecastCont.view];
+    
     self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.dismissButton addTarget:self
                            action:@selector(buttonPressed:)
@@ -78,7 +96,7 @@
         [self.view addSubview:self.dismissButton];
     }
     
-    NSArray *viewArray = @[self.logo, self.greetingLabel, self.wDescription, self.currentTemp, self.dismissButton];
+    NSArray *viewArray = @[self.logo, self.greetingLabel, self.wDescription, self.currentTemp, self.forecastCont.view, self.dismissButton];
     
     for(UIView *view in viewArray){
         [view addGestureRecognizer:[self.gestureHandler delegatedPanGestureRecognizer]];
@@ -103,6 +121,21 @@
         self.wDescription.font = [UIFont systemFontOfSize:[prefs intForKey:@"wDescriptionSize"]];
         self.dismissButton.titleLabel.font = [UIFont systemFontOfSize:[prefs intForKey:@"dismissButtonSize"]];
     }
+    
+    if(![prefs boolForKey:@"enableForeHeader"]){
+        
+        self.forecastCont.headerView.hidden = YES;
+        self.forecastCont.headerView = nil;
+        self.forecastCont.dividerLineView.hidden = TRUE;
+    }
+    if(![prefs boolForKey:@"enableForeTable"]){
+        self.forecastCont.hourlyForecastViews = nil;
+        self.forecastCont.dividerLineView.hidden = TRUE;
+    }
+    if(![prefs boolForKey:@"enableForeHeader"] && ![prefs boolForKey:@"enableForeTable"]){
+        [self.forecastCont.view removeFromSuperview];
+    }
+    
     self.currentTemp.textColor = [prefs colorForKey:@"textColor"];
     self.greetingLabel.textColor = [prefs colorForKey:@"textColor"];
     self.wDescription.textColor = [prefs colorForKey:@"textColor"];
@@ -162,6 +195,11 @@
 
         self.wDescription.text = [self.weatherModel currentConditionOverview];
         self.greetingLabel.textAlignment = NSTextAlignmentCenter;
+        
+        self.forecastCont.model = self.weatherModel.todayModel;
+        [self.forecastCont.model forecastModel];
+        [self.forecastCont.headerView _updateContent];
+        [self.forecastCont _updateViewContent];
     }
 }
 - (void) buttonPressed: (UIButton*)sender{

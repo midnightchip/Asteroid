@@ -309,7 +309,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.forecastCont = [[%c(WAWeatherPlatterViewController) alloc] initWithLocation:self.weatherModel.city];
         ((UIView *)((NSArray *)self.forecastCont.view.layer.sublayers)[0]).hidden = YES; // Visual Effect view to hidden
         self.forecastCont.view.frame = CGRectMake(0, (self.frame.size.height / 2), self.frame.size.width, self.frame.size.height/3);
-        [self.weather addSubview:self.forecastCont.view];
+        //[self.weather addSubview:self.forecastCont.view];
         
         [prefs postNotification];
         
