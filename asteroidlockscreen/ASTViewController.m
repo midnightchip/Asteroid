@@ -1,7 +1,7 @@
 /*
  No saving to file
  self.view isnt really hooked up yet to the other stuff
- dismiss button ^
+ dismiss button with swipe^
  Animation / enable
  Notification counter
  More menu items
@@ -203,7 +203,11 @@
     }
 }
 - (void) buttonPressed: (UIButton*)sender{
-
+    if(!self.view.hidden){
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"astDimissButtonPressed"
+         object:self];
+    }
 }
 
 #pragma mark - Menu Controller

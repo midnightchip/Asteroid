@@ -228,6 +228,8 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         // Registering observer for weather update
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateWeather:) name:@"weatherTimerUpdate" object:nil];
         
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buttonPressed:) name:@"astDimissButtonPressed" object:nil];
+        
         CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
                                         (const void*)self,
                                         updatePreferenceValues,
