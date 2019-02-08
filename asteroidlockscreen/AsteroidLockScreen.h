@@ -6,6 +6,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "../source/AWeatherModel.h"
 #import "ASTViewController.h"
+#import <SpringBoard/SpringBoard.h>
 
 
 @interface UIView (tweak_cat)
@@ -16,14 +17,10 @@
 @end
 
 
-@interface SpringBoard 
--(int)nowPlayingProcessPID;
--(BOOL) isNowPlayingAppPlaying;
-@end
-
 @interface MediaControlsPanelViewController
 @property (nonatomic) BOOL isOnScreen;
 @end
+
 
 //help from the_casle on the blur
 @interface SBUIBackgroundView : UIView
@@ -56,19 +53,8 @@
 @property (nonatomic, retain) WFTemperature *low;
 @end
 
-
-
 @interface WAWeatherCityView
 @property(retain, nonatomic) UILabel *naturalLanguageDescriptionLabel;
-@end
-
-
-@interface WALockscreenWidgetViewController : UIViewController
-+(id) sharedInstanceIfExists;
--(void) updateWeather;
-@property (nonatomic, retain) WAForecastModel *currentForecastModel;
-@property (nonatomic, retain) WATodayPadView *todayView;
-@property (nonatomic, retain) WATodayHeaderView *headerView;
 @end
 
 @interface SBDashBoardMainPageView : UIView
@@ -114,13 +100,6 @@
 
 @interface UILabel (lockTweak)
 -(BOOL) checkForGesture;
-@end
-
-@interface UIFont (lock)
-@property (nonatomic, readonly) double pointSizeForScaling;
-@property (nonatomic, readonly) double pointSize;
-- (double)_scaledValueForValue:(double)arg1;
--(id) _fontScaledByScaleFactor:(double)arg1;
 @end
 
 @interface SBLockScreenManager

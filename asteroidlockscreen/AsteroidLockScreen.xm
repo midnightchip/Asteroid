@@ -252,7 +252,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
     if(!self.logo){
         self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225)];
         if([prefs boolForKey:@"addLogo"]){
-            [self.weather addSubview:self.logo];
+           // [self.weather addSubview:self.logo];
         }
         
         //self.logo.center = [self.centerDict[@"logo"] CGPointValue];
@@ -279,7 +279,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225)];
         self.currentTemp.textAlignment = NSTextAlignmentCenter;
         if([prefs boolForKey:@"addTemp"]){
-        [self.weather addSubview: self.currentTemp];
+        //[self.weather addSubview: self.currentTemp];
         }
         
         setGesturesForView(self, self.currentTemp);
@@ -299,7 +299,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.editingLabel.hidden = YES;
         
         self.editingLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [self.weather addSubview:self.editingLabel];
+        //[self.weather addSubview:self.editingLabel];
     }
     
     if(!self.forecastCont){
@@ -336,7 +336,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2.5, self.frame.size.width, self.frame.size.height/8.6)];
         self.greetingLabel.textAlignment = NSTextAlignmentCenter;
         if([prefs boolForKey:@"addgreetLabel"]){
-        [self.weather addSubview:self.greetingLabel];
+        //[self.weather addSubview:self.greetingLabel];
         }
         
         setGesturesForView(self, self.greetingLabel);
@@ -359,7 +359,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.wDescription.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.wDescription.preferredMaxLayoutWidth = self.weather.frame.size.width;
         if([prefs boolForKey:@"addDescription"]){
-        [self.weather addSubview:self.wDescription];
+        //[self.weather addSubview:self.wDescription];
         }
         
         
@@ -380,7 +380,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         [self.dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
         self.dismissButton.frame = CGRectMake(0, self.frame.size.height/1.3, self.frame.size.width, self.frame.size.height/8.6);
         if([prefs boolForKey:@"addDismiss"]){
-        [self.weather addSubview:self.dismissButton];
+        //[self.weather addSubview:self.dismissButton];
         }
         
         setGesturesForView(self, self.dismissButton);
@@ -404,7 +404,7 @@ static void updatePreferenceValues(CFNotificationCenterRef center, void *observe
         self.notifcationLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         if([prefs boolForKey:@"addNotification"]){
         
-        [self.weather addSubview:self.notifcationLabel];
+        //[self.weather addSubview:self.notifcationLabel];
         }
         
         setGesturesForView(self, self.notifcationLabel);
