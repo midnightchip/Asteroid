@@ -8,7 +8,6 @@
  
  */
 
-
 #import "ASTViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -20,17 +19,32 @@
 @property (nonatomic, retain) WAWeatherPlatterViewController *forecastCont;
 @property (retain, nonatomic) UIButton *dismissButton;
 
-@property (nonatomic, retain) AWeatherModel *weatherModel;
+@property (nonatomic, retain) ASTComponentView *logoComponentView;
+@property (nonatomic, retain) ASTComponentView *greetingLabelComponentView;
+@property (nonatomic, retain) ASTComponentView *wDescriptionComponentView;
+@property (nonatomic, retain) ASTComponentView *currentTempComponentView;
+@property (nonatomic, retain) ASTComponentView *forecastComponentView;
+@property (nonatomic, retain) ASTComponentView *dismissButtonComponentView;
 
+@property (nonatomic, retain) UIView *logoGestureView;
+@property (nonatomic, retain) UIView *greetingLabelGestureView;
+@property (nonatomic, retain) UIView *wDescriptionGestureView;
+@property (nonatomic, retain) UIView *currentTempGestureView;
+@property (nonatomic, retain) UIView *forecastGestureView;
+@property (nonatomic, retain) UIView *dismissButtonGestureView;
+
+@property (nonatomic, retain) AWeatherModel *weatherModel;
+@property (nonatomic, getter=isEditing) BOOL editing;
+@property (nonatomic, retain) UIView *doneButtonView;
 
 @property (nonatomic, retain) ASTGestureHandler *gestureHandler;
 
 @end
 
 @implementation ASTViewController{
-
+    
 }
-
+@synthesize editing;
 @synthesize pieceForReset = _pieceForReset;
 
 - (instancetype) init{
@@ -49,64 +63,122 @@
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;
     
-    self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225)];
+    self.logoGestureView = [[UIView alloc] initWithFrame:CGRectMake(screenWidth/3.6, screenHeight/2.1, 100, 225)];
+    self.logoComponentView = [[ASTComponentView alloc] initWithFrame:CGRectMake(0, 0, self.logoGestureView.frame.size.width, self.logoGestureView.frame.size.height)];
+    self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.logoComponentView.frame.size.width, self.logoComponentView.frame.size.height)];
+    [self.logoComponentView addSubview:self.logo];
+    [self.logoGestureView addSubview: self.logoComponentView];
     if([prefs boolForKey:@"addLogo"]){
-        [self.view addSubview:self.logo];
+        [self.view addSubview: self.logoGestureView];
     }
     
-    self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225)];
+    self.currentTempGestureView = [[UIView alloc] initWithFrame:CGRectMake(screenWidth/2.1, screenHeight/2.1, 100, 225)];
+    self.currentTempComponentView = [[ASTComponentView alloc] initWithFrame:CGRectMake(0, 0, self.currentTempGestureView.frame.size.width, self.currentTempGestureView.frame.size.height)];
+    self.currentTemp = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.currentTempComponentView.frame.size.width, self.currentTempComponentView.frame.size.height)];
     self.currentTemp.textAlignment = NSTextAlignmentCenter;
+    [self.currentTempComponentView addSubview: self.currentTemp];
+    [self.currentTempGestureView addSubview: self.currentTempComponentView];
     if([prefs boolForKey:@"addTemp"]){
-        [self.view addSubview: self.currentTemp];
+        [self.view addSubview: self.currentTempGestureView];
     }
     
-    self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2.5, self.view.frame.size.width, self.view.frame.size.height/8.6)];
+    self.greetingLabelGestureView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2.5, self.view.frame.size.width, self.view.frame.size.height/8.6)];
+    self.greetingLabelComponentView = [[ASTComponentView alloc] initWithFrame:CGRectMake(0, 0, self.greetingLabelGestureView.frame.size.width, self.greetingLabelGestureView.frame.size.height)];
+    self.greetingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.greetingLabelComponentView.frame.size.width, self.greetingLabelComponentView.frame.size.height)];
     self.greetingLabel.textAlignment = NSTextAlignmentCenter;
+    [self.greetingLabelComponentView addSubview: self.greetingLabel];
+    [self.greetingLabelGestureView addSubview: self.greetingLabelComponentView];
     if([prefs boolForKey:@"addgreetLabel"]){
-        [self.view addSubview:self.greetingLabel];
+        [self.view addSubview:self.greetingLabelGestureView];
     }
     
-    self.wDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2.1, (self.view.frame.size.width * .9), self.view.frame.size.height/8.6)];
-    CGPoint wDescriptionCenter = self.wDescription.center;
+    self.wDescriptionGestureView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2.1, (self.view.frame.size.width * .9), self.view.frame.size.height/8.6)];
+    self.wDescriptionComponentView = [[ASTComponentView alloc] initWithFrame:CGRectMake(0, 0, self.wDescriptionGestureView.frame.size.width, self.wDescriptionGestureView.frame.size.height)];
+    self.wDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.wDescriptionComponentView.frame.size.width, self.wDescriptionComponentView.frame.size.height)];
+    CGPoint wDescriptionCenter = self.wDescriptionGestureView.center;
     wDescriptionCenter.x = self.view.center.x;
-    self.wDescription.center = wDescriptionCenter;
+    self.wDescriptionGestureView.center = wDescriptionCenter;
     
     self.wDescription.textAlignment = NSTextAlignmentCenter;
     self.wDescription.lineBreakMode = NSLineBreakByWordWrapping;
     self.wDescription.numberOfLines = 0;
     self.wDescription.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.wDescription.preferredMaxLayoutWidth = self.view.frame.size.width;
+    [self.wDescriptionComponentView addSubview: self.wDescription];
+    [self.wDescriptionGestureView addSubview: self.wDescriptionComponentView];
     if([prefs boolForKey:@"addDescription"]){
-        [self.view addSubview:self.wDescription];
+        [self.view addSubview:self.wDescriptionGestureView];
     }
     
-    self.forecastCont = [[objc_getClass("WAWeatherPlatterViewController") alloc] init]; // Temp to make sure its called once
+    self.forecastGestureView = [[UIView alloc] initWithFrame:CGRectMake(0, (self.view.frame.size.height / 2), self.view.frame.size.width, self.view.frame.size.height/3)];
+    self.forecastComponentView = [[ASTComponentView alloc] initWithFrame:CGRectMake(0, 0, self.forecastGestureView.frame.size.width, self.forecastGestureView.frame.size.height)];
     self.forecastCont = [[objc_getClass("WAWeatherPlatterViewController") alloc] initWithLocation:self.weatherModel.city];
     ((UIView *)((NSArray *)self.forecastCont.view.layer.sublayers)[0]).hidden = YES; // Visual Effect view to hidden
-    self.forecastCont.view.frame = CGRectMake(0, (self.view.frame.size.height / 2), self.view.frame.size.width, self.view.frame.size.height/3);
-    [self.view addSubview:self.forecastCont.view];
+    self.forecastCont.view.frame = CGRectMake(0, 0, self.forecastComponentView.frame.size.width, self.forecastComponentView.frame.size.height);
+    [self.forecastComponentView addSubview:self.forecastCont.view];
+    [self.forecastGestureView addSubview: self.forecastComponentView];
+    if([prefs boolForKey:@"enableForeHeader"] && [prefs boolForKey:@"enableForeTable"]){
+        [self.view addSubview: self.forecastGestureView];
+    }
     
+    
+    self.dismissButtonGestureView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/1.3, self.view.frame.size.width, self.view.frame.size.height/8.6)];
+    self.dismissButtonComponentView = [[ASTComponentView alloc] initWithFrame:CGRectMake(0, 0, self.dismissButtonGestureView.frame.size.width, self.dismissButtonGestureView.frame.size.height)];
     self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.dismissButton addTarget:self
                            action:@selector(buttonPressed:)
                  forControlEvents:UIControlEventTouchUpInside];
     [self.dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
-    self.dismissButton.frame = CGRectMake(0, self.view.frame.size.height/1.3, self.view.frame.size.width, self.view.frame.size.height/8.6);
+    self.dismissButton.frame = CGRectMake(0, 0, self.dismissButtonComponentView.frame.size.width, self.dismissButtonComponentView.frame.size.height);
+    [self.dismissButtonComponentView addSubview: self.dismissButton];
+    [self.dismissButtonGestureView addSubview: self.dismissButtonComponentView];
     if([prefs boolForKey:@"addDismiss"]){
-        [self.view addSubview:self.dismissButton];
+        [self.view addSubview:self.dismissButtonGestureView];
     }
     
-    NSArray *viewArray = @[self.logo, self.greetingLabel, self.wDescription, self.currentTemp, self.forecastCont.view, self.dismissButton];
+    CGFloat topPadding = 0.0;
+    if (@available(iOS 11.0, *)){
+        UIWindow *window = UIApplication.sharedApplication.keyWindow;
+        topPadding = window.safeAreaInsets.top;
+    }
+    self.doneButtonView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 60, (int)topPadding + 5, 50, 20)];
+    UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [doneButton addTarget:self
+                           action:@selector(doneButtonPressed:)
+                 forControlEvents:UIControlEventTouchUpInside];
+    NSDictionary *attrDict = @{
+                               NSFontAttributeName : [UIFont boldSystemFontOfSize:13],
+                               NSForegroundColorAttributeName : [UIColor blackColor]
+                               };
+    NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:@"Done" attributes:attrDict];
+    [doneButton setAttributedTitle:attrString forState:UIControlStateNormal];
+    doneButton.frame = self.doneButtonView.bounds;
+    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    blurEffectView.frame = self.doneButtonView.bounds;
+    self.doneButtonView.layer.cornerRadius = 10;
+    self.doneButtonView.layer.masksToBounds = YES;
+    self.doneButtonView.hidden = YES;
+    [self.doneButtonView addSubview:blurEffectView];
+    [self.doneButtonView addSubview:doneButton];
+    [self.view addSubview:self.doneButtonView];
     
-    for(UIView *view in viewArray){
-        [view addGestureRecognizer:[self.gestureHandler delegatedPanGestureRecognizer]];
-        [view addGestureRecognizer:[self.gestureHandler delegatedRotationGestureRecognizer]];
-        [view addGestureRecognizer:[self.gestureHandler delegatedPinchGestureRecognizer]];
+    NSArray *gestureArray = [self arrayOfGestureViews];
+    for(UIView *view in gestureArray){
         [view addGestureRecognizer:[self.gestureHandler delegatedMenuGestureRecognizer]];
         view.userInteractionEnabled = YES;
     }
     
     [self setupViewStyle];
+    self.editing = NO;
+}
+
+-(void) setEditing:(BOOL) edit{
+    editing = edit;
+    NSArray *componentViews = [self arrayOfComponentViews];
+    for(ASTComponentView *view in componentViews){
+        view.editing = edit;
+    }
 }
 
 -(void) setupViewStyle {
@@ -210,6 +282,58 @@
     }
 }
 
+- (void) doneButtonPressed: (UIButton*)sender{
+    self.editing = NO;
+    [self removeASTGesturesAndHideButton];
+}
+
+-(void) addASTGesturesAndRevealButton{
+    self.doneButtonView.alpha = 0;
+    self.doneButtonView.hidden = NO;
+    
+    [UIView animateWithDuration:.2
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{self.doneButtonView.alpha = 1;}
+                     completion:nil];
+    
+    NSArray *gestureArray = [self arrayOfGestureViews];
+    for(UIView *view in gestureArray){
+        [view addGestureRecognizer:[self.gestureHandler delegatedPanGestureRecognizer]];
+        [view addGestureRecognizer:[self.gestureHandler delegatedRotationGestureRecognizer]];
+        [view addGestureRecognizer:[self.gestureHandler delegatedPinchGestureRecognizer]];
+        view.userInteractionEnabled = YES;
+    }
+}
+
+-(void) removeASTGesturesAndHideButton{
+    [UIView animateWithDuration:.2
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{self.doneButtonView.alpha = 0;}
+                     completion:^(BOOL finished){
+                         self.doneButtonView.hidden = YES;
+                         self.doneButtonView.alpha = 1;
+                     }];
+    NSArray *gestureArray = [self arrayOfGestureViews];
+    for(UIView *view in gestureArray){
+        NSArray *gestureRecognizers = [view gestureRecognizers];
+        for(UIGestureRecognizer *gestureRecognizer in gestureRecognizers){
+            if(![gestureRecognizer isKindOfClass:objc_getClass("UILongPressGestureRecognizer")]){
+                [view removeGestureRecognizer:gestureRecognizer];
+            }
+        }
+    }
+}
+
+-(NSArray *) arrayOfGestureViews{
+    return @[self.logoGestureView, self.greetingLabelGestureView, self.wDescriptionGestureView, self.currentTempGestureView, self.forecastGestureView, self.dismissButtonGestureView];
+}
+
+-(NSArray *) arrayOfComponentViews{
+    return @[self.logoComponentView, self.greetingLabelComponentView, self.wDescriptionComponentView, self.currentTempComponentView, self.forecastComponentView, self.dismissButtonComponentView];
+}
+
 #pragma mark - Menu Controller
 
 // UIMenuController requires that we can become first responder or it won't display
@@ -223,23 +347,28 @@
 - (void) showResetMenu:(UILongPressGestureRecognizer *)gestureRecognizer
 {
     if ([gestureRecognizer state] == UIGestureRecognizerStateBegan) {
-        [self becomeFirstResponder];
-        self.pieceForReset = [gestureRecognizer view];
-        
-        /*
-         Set up the reset menu.
-         */
-        NSString *menuItemTitle = NSLocalizedString(@"Reset", @"Reset menu item title");
-        UIMenuItem *resetMenuItem = [[UIMenuItem alloc] initWithTitle:menuItemTitle action:@selector(resetPiece:)];
-        
-        UIMenuController *menuController = [UIMenuController sharedMenuController];
-        [menuController setMenuItems:@[resetMenuItem]];
-        
-        CGPoint location = [gestureRecognizer locationInView:[gestureRecognizer view]];
-        CGRect menuLocation = CGRectMake(location.x, location.y, 0, 0);
-        [menuController setTargetRect:menuLocation inView:[gestureRecognizer view]];
-        
-        [menuController setMenuVisible:YES animated:YES];
+        if(self.isEditing){
+            [self becomeFirstResponder];
+            self.pieceForReset = [gestureRecognizer view];
+            
+            /*
+             Set up the reset menu.
+             */
+            NSString *menuItemTitle = NSLocalizedString(@"Reset", @"Reset menu item title");
+            UIMenuItem *resetMenuItem = [[UIMenuItem alloc] initWithTitle:menuItemTitle action:@selector(resetPiece:)];
+            
+            UIMenuController *menuController = [UIMenuController sharedMenuController];
+            [menuController setMenuItems:@[resetMenuItem]];
+            
+            CGPoint location = [gestureRecognizer locationInView:[gestureRecognizer view]];
+            CGRect menuLocation = CGRectMake(location.x, location.y, 0, 0);
+            [menuController setTargetRect:menuLocation inView:[gestureRecognizer view]];
+            
+            [menuController setMenuVisible:YES animated:YES];
+        } else if(!self.isEditing){
+            self.editing = YES;
+            [self addASTGesturesAndRevealButton];
+        }
     }
 }
 - (void)resetPiece:(UIMenuController *)controller
