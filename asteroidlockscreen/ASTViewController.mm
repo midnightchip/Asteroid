@@ -356,6 +356,9 @@
 - (void) doneButtonPressed: (UIButton*)sender{
     self.editing = NO;
     [self removeASTGesturesAndHideButton];
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"astEnableLock"
+     object:self];
     [self saveValuesToFile];
 }
 
@@ -455,6 +458,9 @@
             [menuController setMenuVisible:YES animated:YES];
         } else if(!self.isEditing){
             self.editing = YES;
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"astDisableLock"
+             object:self];
             [self addASTGesturesAndRevealButton];
         }
     }

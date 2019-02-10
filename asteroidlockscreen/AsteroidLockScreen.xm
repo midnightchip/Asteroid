@@ -156,6 +156,25 @@ static BOOL isWeatherLocked = nil;
 }
 %end
 
+%hook SBDashBoardIdleTimerProvider
+- (instancetype)initWithDelegate:(id)arg1 {
+    %orig;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(turnOffAutoLock) name:@"astDisableLock" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(turnOnAutoLock) name:@"astEnableLock" object:nil];
+    return self;
+}
+
+%new
+- (void)turnOffAutoLock {
+    [self addDisabledIdleTimerAssertionReason:@"Asteroid_owo"];
+}
+
+%new
+- (void)turnOnAutoLock {
+    [self removeDisabledIdleTimerAssertionReason:@"Asteroid_owo"];
+}
+%end
+
 %hook SBDashBoardWallpaperEffectView
 // removes the wallpaper view when opening camera
 // checks if the blur is visible when applying the new animation

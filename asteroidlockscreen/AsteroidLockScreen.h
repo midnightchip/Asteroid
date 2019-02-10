@@ -111,6 +111,12 @@
 -(double)minimumLockscreenIdleTime;
 @end
 
+@interface SBDashBoardIdleTimerProvider : NSObject
+@property (getter=isIdleTimerEnabled,nonatomic,readonly) BOOL idleTimerEnabled;
+- (void)addDisabledIdleTimerAssertionReason:(id)arg1;
+- (void)removeDisabledIdleTimerAssertionReason:(id)arg1;
+@end
+
 @interface UIVisualEffectView (asteroid)
 @property (nonatomic,copy) NSArray * contentEffects;
 @end
