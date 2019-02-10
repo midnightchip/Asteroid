@@ -15,7 +15,7 @@
 -(BOOL) shouldUpdateView:(WUIWeatherCondition *) currentCondition;
 @end
 
-@interface SpringBoard (asteroid)
+@interface UIApplication (asteroid)
 -(id)_accessibilityFrontMostApplication;
 @end
 
@@ -35,12 +35,10 @@ static WUIWeatherCondition* condition = nil;
 static int conditionNumberSet;
 
 static void updateAnimation(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-    if([[UIApplication sharedApplication] isKindOfClass:%c(SpringBoard)] && MSHookIvar<BOOL>([%c(SBLockScreenManager) sharedInstance], "_isScreenOn")){
+    if([[UIApplication sharedApplication] _accessibilityFrontMostApplication] == 0 && MSHookIvar<BOOL>([%c(SBLockScreenManager) sharedInstance], "_isScreenOn")){
         [condition resume];
-        NSLog(@"lock_TWEAK | animation start");
     } else{
         [condition pause];
-        NSLog(@"lock_TWEAK | animation stop");
     }
 }
 

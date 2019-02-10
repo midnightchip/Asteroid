@@ -1,6 +1,6 @@
 /*
  TODO: Notification counter
- TODO: Weather Animation Stopping
+ TODO: Go away autolock
  */
 
 #import "ASTViewController.h"

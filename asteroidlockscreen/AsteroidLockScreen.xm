@@ -1,8 +1,6 @@
 #include "AsteroidLockScreen.h"
 
 //TODO Change today to use the cases in descriptions
-//TODO Fix Blur on lockscreen vs just pulling down notification center
-//TODO make only appear during set times
 //TODO Ajust height of uilabel on text size. 
 //TODO Add option for right alignment or left alignment
 //TODO Add reset font sizes
