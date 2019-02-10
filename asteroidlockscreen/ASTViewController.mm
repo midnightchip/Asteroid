@@ -307,7 +307,7 @@
 #pragma mark - Read/Write to disk
 -(void) creatingDirectoryAndFile{
     if([prefs boolForKey:@"resetXY"]){
-        [[NSFileManager defaultManager] removeItemAtPath:[NSHomeDirectory() stringByAppendingPathComponent:FILE_PATH] error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:FILE_PATH error:nil];
         [prefs setObject: @(NO) forKey:@"resetXY"];
         [prefs save];
     }
