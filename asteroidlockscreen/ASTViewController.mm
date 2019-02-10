@@ -1,6 +1,5 @@
 /*
  TODO: Notification counter
- TODO: Go away autolock
  */
 
 #import "ASTViewController.h"

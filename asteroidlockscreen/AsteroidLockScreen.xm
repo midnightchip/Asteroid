@@ -83,7 +83,7 @@ static BOOL isWeatherLocked = nil;
 // Dismiss button pressed
 %new
 - (void) buttonPressed: (UIButton*)sender{
-    if(!self.weather.hidden){
+    //if(!self.weather.hidden){
         [UIView animateWithDuration:.5
                               delay:0
                             options:UIViewAnimationOptionCurveEaseOut
@@ -98,24 +98,24 @@ static BOOL isWeatherLocked = nil;
                               postNotificationName:@"weatherStateChanged"
                               object:self];
                          }];
-    }
+    //}
 }
 //Hide weather with notification
 %new
 - (void) hideWeather{
-    if(!self.weather.hidden){
+    //if(!self.weather.hidden){
         self.weather.hidden = YES;
         isDismissed = YES;
         [[NSNotificationCenter defaultCenter]
          postNotificationName:@"weatherStateChanged"
          object:self];
-    }
+    //}
 }
 
 // Handles reveal
 %new
 - (void) revealWeather: (NSTimer *) sender{
-    [self updateWeatherReveal];
+    //[self updateWeatherReveal];
 }
 %new
 -(void) updateWeatherReveal{
@@ -269,18 +269,14 @@ static BOOL isWeatherLocked = nil;
     }
     // Notification called when the lockscreen / nc is revealed (this is posted by the system)
     [[NSNotificationCenter defaultCenter] addObserverForName: @"weatherStateChanged" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
+        NSLog(@"lock_TWEAK | %d", isDismissed);
         if(isDismissed){
             [UIView animateWithDuration:.5
                                   delay:0
                                 options:UIViewAnimationOptionCurveEaseOut
                              animations:^{self.blurEffectView.alpha = 0;}
-                             completion:^(BOOL finished){
-                                 self.blurEffectView.hidden = YES;
-                                 self.blurEffectView.alpha = 1;
-                             }];
+                             completion:nil];
         } else {
-            self.blurEffectView.alpha = 0;
-            self.blurEffectView.hidden = NO;
             [UIView animateWithDuration:.5
                                   delay:0
                                 options:UIViewAnimationOptionCurveEaseInOut
@@ -292,32 +288,6 @@ static BOOL isWeatherLocked = nil;
 }
 
 %end
-
-// Debugging
-/*
- %hookf(uint32_t, notify_post, const char *name) {
- uint32_t r = %orig;
- //if (strstr(name, "notification")) {
- NSLog(@"NOTI_MON: %s", name);
- //}
- return r;
- }
- %hookf(void, CFNotificationCenterPostNotification, CFNotificationCenterRef center, CFNotificationName name, const void *object, CFDictionaryRef userInfo, Boolean deliverImmediately) {
- %orig;
- NSString *notiName = (__bridge NSString *)name;
- //if ([notiName containsString:@"notification"]) {
- NSLog(@"NOTI_MON: %@", notiName);
- //}
- }
- */
-
-
-/*%ctor{
-    if([prefs boolForKey:@"greetView"]){
-        %init(_ungrouped);
-    }
-    
-}*/
 
 %ctor{
     if([prefs boolForKey:@"kLWPEnabled"] && [prefs boolForKey:@"greetView"]){
