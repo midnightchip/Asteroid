@@ -5,9 +5,14 @@
 
 #import "ASTViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import <substrate.h>
 
 #define DIRECTORY_PATH @"/var/mobile/Library/Asteroid"
 #define FILE_PATH @"/var/mobile/Library/Asteroid/centerData.plist"
+
+@interface SBDashBoardQuickActionsButton : UIButton
+-(id)initWithType:(long long)arg1 ;
+@end
 
 @interface ASTViewController ()
 @property (nonatomic, retain) UIImageView *logo;
@@ -15,6 +20,7 @@
 @property (nonatomic, retain) UILabel *wDescription;
 @property (nonatomic, retain) UILabel *currentTemp;
 @property (nonatomic, retain) WAWeatherPlatterViewController *forecastCont;
+@property (retain, nonatomic) UIView *dismissButtonView;
 @property (retain, nonatomic) UIButton *dismissButton;
 
 @property (nonatomic, retain) ASTComponentView *logoComponentView;
@@ -119,13 +125,25 @@
     
     self.dismissButtonGestureView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/1.3, self.view.frame.size.width, self.view.frame.size.height/8.6)];
     self.dismissButtonComponentView = [[ASTComponentView alloc] initWithFrame:CGRectMake(0, 0, self.dismissButtonGestureView.frame.size.width, self.dismissButtonGestureView.frame.size.height)];
+    self.dismissButtonView = [[UIView alloc] initWithFrame:CGRectMake(0,0,110,50)];
     self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    SBDashBoardQuickActionsButton *actionButton = [[objc_getClass("SBDashBoardQuickActionsButton") alloc] initWithType:2];
+    UIVisualEffectView *effectView = MSHookIvar<UIVisualEffectView *>(actionButton, "_backgroundEffectView");
+    effectView.frame = self.dismissButtonView.bounds;
     [self.dismissButton addTarget:self
                            action:@selector(buttonPressed:)
                  forControlEvents:UIControlEventTouchUpInside];
     [self.dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
-    self.dismissButton.frame = CGRectMake(0, 0, self.dismissButtonComponentView.frame.size.width, self.dismissButtonComponentView.frame.size.height);
-    [self.dismissButtonComponentView addSubview: self.dismissButton];
+    self.dismissButton.frame = self.dismissButtonView.bounds;
+    effectView.layer.cornerRadius = 25;
+    effectView.layer.masksToBounds = YES;
+    CGPoint dismissButtonCenter = self.dismissButtonView.center;
+    dismissButtonCenter.x = self.view.center.x;
+    dismissButtonCenter.y = self.dismissButtonComponentView.bounds.size.height / 2;
+    self.dismissButtonView.center = dismissButtonCenter;
+    [self.dismissButtonView addSubview: effectView];
+    [self.dismissButtonView addSubview: self.dismissButton];
+    [self.dismissButtonComponentView addSubview: self.dismissButtonView];
     [self.dismissButtonGestureView addSubview: self.dismissButtonComponentView];
     if([prefs boolForKey:@"addDismiss"]){
         [self.view addSubview:self.dismissButtonGestureView];
@@ -221,7 +239,7 @@
     self.currentTemp.textColor = [prefs colorForKey:@"textColor"];
     self.greetingLabel.textColor = [prefs colorForKey:@"textColor"];
     self.wDescription.textColor = [prefs colorForKey:@"textColor"];
-    self.dismissButton.titleLabel.textColor = [prefs colorForKey:@"textColor"];
+    //self.dismissButton.titleLabel.textColor = [prefs colorForKey:@"textColor"];
     
     [self readingValuesFromFile];
 }
