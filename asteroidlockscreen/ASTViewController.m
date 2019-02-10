@@ -221,6 +221,11 @@
 }
 
 -(void) creatingDirectoryAndFile{
+    if([prefs boolForKey:@"resetXY"]){
+        [[NSFileManager defaultManager] removeItemAtPath:[NSHomeDirectory() stringByAppendingPathComponent:FILE_PATH] error:nil];
+        [prefs setObject: @(NO) forKey:@"resetXY"];
+        [prefs save];
+    }
     BOOL isDir;
     NSFileManager *fileManager= [NSFileManager defaultManager];
     if(![fileManager fileExistsAtPath:DIRECTORY_PATH isDirectory:&isDir]){
