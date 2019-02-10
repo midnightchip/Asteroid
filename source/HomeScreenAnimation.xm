@@ -35,7 +35,7 @@ static WUIWeatherCondition* condition = nil;
 static int conditionNumberSet;
 
 static void updateAnimation(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-    if(isOnLockstate(LockStateIsSpringBoard) && MSHookIvar<BOOL>([%c(SBLockScreenManager) sharedInstance], "_isScreenOn")){
+    if([[UIApplication sharedApplication] isKindOfClass:%c(SpringBoard)] && MSHookIvar<BOOL>([%c(SBLockScreenManager) sharedInstance], "_isScreenOn")){
         [condition resume];
         NSLog(@"lock_TWEAK | animation start");
     } else{

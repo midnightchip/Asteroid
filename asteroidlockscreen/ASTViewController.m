@@ -1,8 +1,5 @@
 /*
  No saving to file
- self.view isnt really hooked up yet to the other stuff
- dismiss button with swipe^
- Animation / enable
  Notification counter
  More menu items
  
@@ -10,6 +7,9 @@
 
 #import "ASTViewController.h"
 #import <QuartzCore/QuartzCore.h>
+
+#define DIRECTORY_PATH @"/var/mobile/Library/Asteroid"
+#define FILE_PATH @"/var/mobile/Library/Asteroid/centerData.plist"
 
 @interface ASTViewController ()
 @property (nonatomic, retain) UIImageView *logo;
@@ -38,7 +38,6 @@
 @property (nonatomic, retain) UIView *doneButtonView;
 
 @property (nonatomic, retain) ASTGestureHandler *gestureHandler;
-
 @end
 
 @implementation ASTViewController{
@@ -136,12 +135,7 @@
         [self.view addSubview:self.dismissButtonGestureView];
     }
     
-    CGFloat topPadding = 0.0;
-    if (@available(iOS 11.0, *)){
-        UIWindow *window = UIApplication.sharedApplication.keyWindow;
-        topPadding = window.safeAreaInsets.top;
-    }
-    self.doneButtonView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 60, (int)topPadding + 5, 50, 20)];
+    self.doneButtonView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 60, 25, 50, 20)];
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [doneButton addTarget:self
                            action:@selector(doneButtonPressed:)
@@ -169,6 +163,7 @@
         view.userInteractionEnabled = YES;
     }
     
+    [self creatingTagsForGestures];
     [self setupViewStyle];
     self.editing = NO;
 }
@@ -212,6 +207,73 @@
     self.greetingLabel.textColor = [prefs colorForKey:@"textColor"];
     self.wDescription.textColor = [prefs colorForKey:@"textColor"];
     self.dismissButton.titleLabel.textColor = [prefs colorForKey:@"textColor"];
+    
+    [self readingValuesFromFile];
+}
+
+-(void) creatingTagsForGestures{
+    int i = 80085;
+    for(UIView *view in [self arrayOfGestureViews]){
+        view.tag = i;
+        i++;
+    }
+    [self creatingDirectoryAndFile];
+}
+
+-(void) creatingDirectoryAndFile{
+    BOOL isDir;
+    NSFileManager *fileManager= [NSFileManager defaultManager];
+    if(![fileManager fileExistsAtPath:DIRECTORY_PATH isDirectory:&isDir]){
+        [fileManager createDirectoryAtPath:DIRECTORY_PATH withIntermediateDirectories:YES attributes:nil error:NULL];
+    }
+    if(![fileManager fileExistsAtPath:FILE_PATH isDirectory:&isDir]){
+        [fileManager createFileAtPath:FILE_PATH contents:nil attributes:nil];
+    }
+}
+
+-(void) readingValuesFromFile{
+    NSDictionary *valueDict = [NSKeyedUnarchiver unarchiveObjectWithData: [NSData dataWithContentsOfFile: FILE_PATH]];
+    NSArray *gestureArray = [self arrayOfGestureViews];
+    for(UIView *view in gestureArray){
+        NSString *centerKey = [NSString stringWithFormat:@"%d-center", (int)view.tag];
+        CGPoint center = [valueDict[centerKey] CGPointValue];
+        NSString *anchorKey = [NSString stringWithFormat:@"%d-anchor", (int)view.tag];
+        CGPoint anchor = [valueDict[anchorKey] CGPointValue];
+        if(center.x != 0 && center.y != 0) view.center = center;
+        NSString *transformKey = [NSString stringWithFormat:@"%d-transform", (int)view.tag];
+        CGAffineTransform transform = [self convertArrayToCGAffineTransform:valueDict[transformKey]];
+        if(anchor.x != 0 && anchor.y != 0)view.layer.anchorPoint = anchor;
+        if(transform.a != 0 || transform.b != 0) [view setTransform:transform];
+    }
+}
+
+-(void) saveValuesToFile{
+    NSArray *gestureArray = [self arrayOfGestureViews];
+    NSMutableDictionary *valueDict = [[NSMutableDictionary alloc] init];
+    for(UIView *view in gestureArray){
+        NSString *centerKey = [NSString stringWithFormat:@"%d-center", (int)view.tag];
+        valueDict[centerKey] = [NSValue valueWithCGPoint:view.center];
+        NSString *anchorKey = [NSString stringWithFormat:@"%d-anchor", (int)view.tag];
+        valueDict[anchorKey] = [NSValue valueWithCGPoint:view.layer.anchorPoint];
+        NSString *transformKey = [NSString stringWithFormat:@"%d-transform", (int)view.tag];
+        valueDict[transformKey] = [self convertCGAffineTransformToArray:[view transform]];
+    }
+    [[NSKeyedArchiver archivedDataWithRootObject:valueDict] writeToFile:FILE_PATH atomically:YES];
+}
+
+-(NSArray *) convertCGAffineTransformToArray:(CGAffineTransform) transform{
+    return @[[NSNumber numberWithFloat:transform.a], [NSNumber numberWithFloat:transform.b], [NSNumber numberWithFloat:transform.c], [NSNumber numberWithFloat:transform.d], [NSNumber numberWithFloat:transform.tx], [NSNumber numberWithFloat:transform.ty]];
+}
+
+-(CGAffineTransform) convertArrayToCGAffineTransform:(NSArray *) array{
+    NSNumber *a = array[0];
+    NSNumber *b = array[1];
+    NSNumber *c = array[2];
+    NSNumber *d = array[3];
+    NSNumber *tx = array[4];
+    NSNumber *ty = array[5];
+    
+    return CGAffineTransformMake(a.floatValue, b.floatValue, c.floatValue, d.floatValue, tx.floatValue, ty.floatValue);
 }
 
 -(void) weatherNotificationPosted: (NSNotification *)notification{
@@ -285,6 +347,7 @@
 - (void) doneButtonPressed: (UIButton*)sender{
     self.editing = NO;
     [self removeASTGesturesAndHideButton];
+    [self saveValuesToFile];
 }
 
 -(void) addASTGesturesAndRevealButton{
