@@ -59,17 +59,8 @@
 
 @interface SBDashBoardMainPageView : UIView
 @property (nonatomic, retain) UIView *weather;
-@property (nonatomic, retain) UIImageView *logo;
-@property (nonatomic, retain) UILabel *greetingLabel;
-@property (nonatomic, retain) UILabel *wDescription;
-@property (nonatomic, retain) UILabel *currentTemp;
-@property (nonatomic, retain) UILabel *editingLabel;
-@property (retain, nonatomic) UIVisualEffectView *blurView;
-@property (retain, nonatomic) UIButton *dismissButton;
 @property (retain, nonatomic) NSTimer *inactiveTimer;
-@property (nonatomic, retain) NSDictionary *centerDict;
 @property (nonatomic, retain) AWeatherModel *weatherModel;
-@property (nonatomic, retain) WAWeatherPlatterViewController *forecastCont;
 @property (nonatomic, retain) UILabel *notifcationLabel;
 @property (nonatomic, retain) ASTViewController *gestureViewController;
 
