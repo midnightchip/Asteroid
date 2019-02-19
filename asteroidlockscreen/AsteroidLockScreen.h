@@ -82,6 +82,7 @@
 
 @interface SBDashBoardMainPageContentViewController
 @property (nonatomic,readonly) SBDashBoardCombinedListViewController * combinedListViewController;
+@property (assign,getter=isTransitioning,nonatomic) BOOL transitioning;
 @end
 
 
