@@ -31,9 +31,6 @@
 		[messagingCenter runServerOnCurrentThread];
 
 		// Register Messages
-		/*[messagingCenter registerForMessageName:@"writeStringTo" target:self selector:@selector(handleString:withUserInfo:)];
-		[messagingCenter registerForMessageName:@"createDir" target:self selector:@selector(handleDir:withUserInfo:)];
-		[messagingCenter registerForMessageName:@"writeDataTo" target:self selector:@selector(handleData:withUserInfo:)];*/
 		[messagingCenter registerForMessageName:@"weatherIcon" target:self selector:@selector(returnWeatherLogo)];
 		[messagingCenter registerForMessageName:@"weatherTemp" target:self selector:@selector(returnWeatherTemp)];
 	}
