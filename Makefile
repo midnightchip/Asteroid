@@ -20,6 +20,7 @@ include $(THEOS_MAKE_PATH)/tweak.mk
 SUBPROJECTS += preferences
 
 SUBPROJECTS += asteroidlockscreen
+#SUBPROJECTS += asteroidstatusbar
 include $(THEOS_MAKE_PATH)/aggregate.mk
 
 after-install::
