@@ -1,14 +1,12 @@
-#import "../source/AWeatherModel.h"
-
+#include <AppSupport/CPDistributedMessagingCenter.h>
+#import <rocketbootstrap/rocketbootstrap.h>
 @interface _UIStatusBarStringView : UILabel
-@property (nonatomic, retain) AWeatherModel *weatherModel;
 @end
 
 %hook _UIStatusBarStringView
-%property (nonatomic, retain) AWeatherModel *weatherModel;
 - (void)setText:(NSString *)text {
 	if([text containsString:@":"]) {
-        self.weatherModel = [%c(AWeatherModel) sharedInstance];
+        //self.weatherModel = [%c(AWeatherModel) sharedInstance];
 		//NSTextAttachment *image = [[NSTextAttachment alloc] init];
 		//image.image = [self.weatherModel glyphWithOption:ConditionOptionWhite];
 		//NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:image];
@@ -16,7 +14,11 @@
 		//NSMutableAttributedString *myString= [[NSMutableAttributedString alloc] initWithString:@"Hi"];
 		//[myString appendAttributedString:attachmentString];
 		//NSString *newString = [NSString stringWithFormat:@"%@ %@", text, @"Hi"];
-        NSString *newString = [self.weatherModel localeTemperature];
+		CPDistributedMessagingCenter *messagingCenter;
+		messagingCenter = [CPDistributedMessagingCenter centerNamed:@"com.midnightchips.AsteroidServer"];
+		rocketbootstrap_distributedmessagingcenter_apply(messagingCenter);
+        NSDictionary *serverDict = [messagingCenter sendMessageAndReceiveReplyName:@"weatherTemp" userInfo:nil/* optional dictionary */];//[self.weatherModel localeTemperature];
+		NSString *newString = serverDict[@"temp"];
 		self.numberOfLines = 2;
 		self.textAlignment = 1;
 		[self setFont: [self.font fontWithSize:12]];

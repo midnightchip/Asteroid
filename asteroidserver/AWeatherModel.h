@@ -24,11 +24,11 @@ typedef void(^completion)();
 -(void)updateWeatherDataWithCompletion:(completion) compBlock;
 -(void)setUpRefreshTimer;
 -(void) postNotification;
-//- (UIImage *)imageForKey:(NSString *)key;
-//- (NSBundle *)weatherBundle;
+- (UIImage *)imageForKey:(NSString *)key;
+- (NSBundle *)weatherBundle;
 -(NSString *) localeTemperature;
 - (NSString *)currentConditionOverview;
-//-(UIImage *) glyphWithOption:(ConditionOption) option;
+-(UIImage *) glyphWithOption:(ConditionOption) option;
 -(ConditionImageType) conditionImageTypeForString: (NSString *) conditionString;
 @end
 

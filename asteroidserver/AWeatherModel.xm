@@ -108,18 +108,18 @@
 }
 
 // Below methods from https://github.com/CreatureSurvive/CSWeather
-/*- (UIImage *)imageForKey:(NSString *)key {
+- (UIImage *)imageForKey:(NSString *)key {
     return [UIImage imageNamed:key inBundle:[self weatherBundle] compatibleWithTraitCollection:nil];
-}*/
+}
 
-/*- (NSBundle *)weatherBundle {
+- (NSBundle *)weatherBundle {
     if (!_weatherBundle) {
         _weatherBundle = [NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/Weather.framework"];
         [_weatherBundle load];
     }
     
     return _weatherBundle;
-}*/
+}
 
 -(NSString *) localeTemperature{
     return [NSString stringWithFormat:@"%.0f°", [self.weatherPreferences isCelsius] ? self.city.temperature.celsius : self.city.temperature.fahrenheit];
@@ -129,7 +129,7 @@
     return [self.city naturalLanguageDescription];
 }
 
-/*-(UIImage *) glyphWithOption:(ConditionOption) option{
+-(UIImage *) glyphWithOption:(ConditionOption) option{
     NSInteger conditionCode = [self.city conditionCode];
     NSString *conditionImageName = conditionCode < 3200 ? [WeatherImageLoader conditionImageNameWithConditionIndex:conditionCode] : nil;
     ConditionImageType type = [self conditionImageTypeForString: conditionImageName];
@@ -178,7 +178,7 @@
     }
     return nil;
 }
-*/
+
 -(ConditionImageType) conditionImageTypeForString: (NSString *) conditionString{
     return [conditionString containsString:@"day"] ? ConditionImageTypeDay : [conditionString containsString:@"night"] ? ConditionImageTypeNight : ConditionImageTypeDefault;
 }
