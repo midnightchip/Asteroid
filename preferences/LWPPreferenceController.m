@@ -36,12 +36,18 @@
 
 -(NSArray*)weatherConditionsKeys{
     NSDictionary *conditions = [self weatherConditionsDict];
-    return [conditions allKeys];
+    NSArray *unorganizedKeys = [conditions allKeys];
+    return [unorganizedKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];;
 }
 
 -(NSArray*)weatherConditionsValues{
     NSDictionary *conditions = [self weatherConditionsDict];
-    return [conditions allValues];
+    NSArray *organizedKeys = [self weatherConditionsKeys];
+    NSMutableArray *organizedValues = [[NSMutableArray alloc] init];
+    for(NSString *key in organizedKeys){
+        [organizedValues addObject:conditions[key]];
+    }
+    return organizedValues;
 }
 -(NSDictionary*) weatherConditionsDict{
     NSDictionary *conditions = [[NSDictionary alloc] initWithObjectsAndKeys: @3, @"SevereThunderstorm", @12, @"Rain", @4, @"Thunderstorm", @21, @"Haze", @30, @"PartlyCloudyDay", @5, @"MixedRainAndSnow", @13, @"SnowFlurries", @22, @"Smoky", @6, @"MixedRainAndSleet", @31, @"ClearNight", @14, @"SnowShowers", @7, @"MixedSnowAndSleet", @23, @"Breezy", @40, @"ScatteredSnowShowers", @8, @"FreezingDrizzle", @15, @"BlowingSnow", @32, @"Sunny", @9, @"Drizzle", @24, @"Windy", @33, @"MostlySunnyNight", @16, @"Snow", @41, @"HeavySnow", @25, @"Frigid", @42, @"ScatteredSnowShowers", @34, @"MostlySunnyDay", @17, @"Hail", @43, @"Blizzard", @26, @"Cloudy", @35, @"MixedRainFall", @18, @"Sleet", @44, @"PartlyCloudyDay", @27, @"MostlyCloudyNight", @36, @"Hot", @19, @"Dust", @45, @"HeavyRain", @28, @"MostlyCloudyDay", @37, @"IsolatedThunderstorms", @46, @"SnowShowers", @29, @"PartlyCloudyNight", @38, @"ScatteredShowers", @47, @"IsolatedThundershowers", @39, @"ScatteredThunderstorms", @0, @"Tornado", @10, @"FreezingRain", @1, @"TropicalStorm", @11, @"Showers1", @2, @"Hurricane", @20, @"Fog", nil];

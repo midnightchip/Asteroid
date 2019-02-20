@@ -177,6 +177,26 @@
 				<string>ChangeLog</string>
 				<key>changes</key>
 				<array>
+                    <dict>
+                        <key>1.3.5</key>
+                        <array>
+                            <string>- Redesigned lockscreen controller with new animations.</string>
+                            <string>- Rewrote how lockscreen components are saved to file.</string>
+                            <string>- Set the font size for dismiss button.</string>
+                            <string>- Saving size of forecast views.</string>
+                            <string>- Removed libcsweather.</string>
+                            <string>- Fix bug when accessing camera.</string>
+                            <string>- Disable if media player is revealed.</string>
+                            <string>- Option to dismiss when notifications are present.</string>
+                            <string>- Cleaned up preferences.</string>
+                            <string>- Consolidated retrieving weather data (save battery).</string>
+                            <string>- Weather app will no longer display incorrect local weather.</string>
+                            <string>- Icon properly updates.</string>
+                            <string>- Fix animation freezing.</string>
+                            <string>- Pause animations when not visible (save battery).</string>
+                            <string> - Started using changelog lol.</string>
+                        </array>
+                    </dict>
 					<dict>
 						<key>0.0.1</key>
 						<array>

@@ -74,9 +74,9 @@
 				<key>key</key>
 				<string>weatherConditionsIcon</string>
 				<key>titlesDataSource</key>
-				<string>weatherConditions</string>
+				<string>weatherConditionsKeys</string>
 				<key>valuesDataSource</key>
-				<string>weatherConditions</string>
+				<string>weatherConditionsValues</string>
 				<key>PostNotification</key>
 				<string>com.midnightchips.asteroid.prefschanged</string>
 				<key>defaults</key>
