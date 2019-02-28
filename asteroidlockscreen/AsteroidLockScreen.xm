@@ -15,7 +15,6 @@ static BOOL isWeatherLocked = nil;
 %property (nonatomic, retain) UIView *weather;
 %property (retain, nonatomic) NSTimer *inactiveTimer;
 %property (nonatomic, retain) AWeatherModel *weatherModel;
-%property (nonatomic, retain) UILabel *notifcationLabel;
 %property (nonatomic, retain) ASTViewController *gestureViewController;
 
 - (void)layoutSubviews {
@@ -53,22 +52,6 @@ static BOOL isWeatherLocked = nil;
     
     // setting a static
     mainPageView = self;
-    
-    // Creating the notification label
-    if(!self.notifcationLabel){
-        self.notifcationLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.weather.frame.size.width - 60, self.frame.size.height/2.5, 25, 25)];
-        self.notifcationLabel.textAlignment = NSTextAlignmentCenter;
-        self.notifcationLabel.textColor = [UIColor whiteColor];
-        self.notifcationLabel.backgroundColor = [UIColor redColor];
-        self.notifcationLabel.layer.masksToBounds = YES;
-        self.notifcationLabel.adjustsFontSizeToFitWidth = YES;
-        self.notifcationLabel.layer.cornerRadius = 12.5;
-        
-        self.notifcationLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        if([prefs boolForKey:@"addNotification"]){
-            //[self.weather addSubview:self.notifcationLabel];
-        }
-    }
     
     if(!self.weatherModel){
         self.weatherModel = [%c(AWeatherModel) sharedInstance];
@@ -185,7 +168,7 @@ static BOOL isWeatherLocked = nil;
 
 %hook NCNotificationPriorityList
 -(NSUInteger) count {
-    mainPageView.notifcationLabel.text = [NSString stringWithFormat:@"%i", (int)%orig];
+    [mainPageView.gestureViewController updateNotifcationWithText:[NSString stringWithFormat:@"%i", (int)%orig]];
     return %orig;
 }
 %end

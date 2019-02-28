@@ -21,6 +21,7 @@
 @property (nonatomic, retain) WAWeatherPlatterViewController *forecastCont;
 @property (retain, nonatomic) UIView *dismissButtonView;
 @property (retain, nonatomic) UIButton *dismissButton;
+@property (nonatomic, retain) UILabel *notificationLabel;
 
 @property (nonatomic, retain) ASTComponentView *logoComponentView;
 @property (nonatomic, retain) ASTComponentView *greetingLabelComponentView;
@@ -28,6 +29,7 @@
 @property (nonatomic, retain) ASTComponentView *currentTempComponentView;
 @property (nonatomic, retain) ASTComponentView *forecastComponentView;
 @property (nonatomic, retain) ASTComponentView *dismissButtonComponentView;
+@property (nonatomic, retain) ASTComponentView *notificationLabelComponentView;
 
 @property (nonatomic, retain) UIView *logoGestureView;
 @property (nonatomic, retain) UIView *greetingLabelGestureView;
@@ -35,6 +37,7 @@
 @property (nonatomic, retain) UIView *currentTempGestureView;
 @property (nonatomic, retain) UIView *forecastGestureView;
 @property (nonatomic, retain) UIView *dismissButtonGestureView;
+@property (nonatomic, retain) UIView *notificationLabelGestureView;
 
 @property (nonatomic, retain) AWeatherModel *weatherModel;
 @property (nonatomic, getter=isEditing) BOOL editing;
@@ -146,6 +149,22 @@
     [self.dismissButtonGestureView addSubview: self.dismissButtonComponentView];
     if([prefs boolForKey:@"addDismiss"]){
         [self.view addSubview:self.dismissButtonGestureView];
+    }
+    
+    self.notificationLabelGestureView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 60, self.view.frame.size.height/2.5, 25, 25)];
+    self.notificationLabelComponentView = [[ASTComponentView alloc] initWithFrame:CGRectMake(0, 0, self.notificationLabelGestureView.frame.size.width, self.notificationLabelGestureView.frame.size.height)];
+    self.notificationLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
+    self.notificationLabel.textAlignment = NSTextAlignmentCenter;
+    self.notificationLabel.textColor = [UIColor whiteColor];
+    self.notificationLabel.backgroundColor = [UIColor redColor];
+    self.notificationLabel.layer.masksToBounds = YES;
+    self.notificationLabel.adjustsFontSizeToFitWidth = YES;
+    self.notificationLabel.layer.cornerRadius = 12.5;
+    self.notificationLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self.notificationLabelComponentView addSubview:self.notificationLabel];
+    [self.notificationLabelGestureView addSubview: self.notificationLabelComponentView];
+    if([prefs boolForKey:@"addNotification"]){
+        [self.view addSubview:self.notificationLabelGestureView];
     }
     
     self.doneButtonView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 60, 25, 50, 20)];
@@ -304,6 +323,10 @@
     }
 }
 
+-(void) updateNotifcationWithText:(NSString *) text{
+    self.notificationLabel.text = text;
+}
+
 #pragma mark - Read/Write to disk
 -(void) creatingDirectoryAndFile{
     if([prefs boolForKey:@"resetXY"]){
@@ -417,11 +440,11 @@
 }
 
 -(NSArray *) arrayOfGestureViews{
-    return @[self.logoGestureView, self.greetingLabelGestureView, self.wDescriptionGestureView, self.currentTempGestureView, self.forecastGestureView, self.dismissButtonGestureView];
+    return @[self.logoGestureView, self.greetingLabelGestureView, self.wDescriptionGestureView, self.currentTempGestureView, self.forecastGestureView, self.dismissButtonGestureView, self.notificationLabelGestureView];
 }
 
 -(NSArray *) arrayOfComponentViews{
-    return @[self.logoComponentView, self.greetingLabelComponentView, self.wDescriptionComponentView, self.currentTempComponentView, self.forecastComponentView, self.dismissButtonComponentView];
+    return @[self.logoComponentView, self.greetingLabelComponentView, self.wDescriptionComponentView, self.currentTempComponentView, self.forecastComponentView, self.dismissButtonComponentView, self.notificationLabelComponentView];
 }
 
 #pragma mark - Menu Controller

@@ -7,4 +7,5 @@
 @interface ASTViewController : UIViewController <ASTGestureDelegate>
 -(void) setupViewStyle;
 -(void) updateViewForWeatherData;
+-(void) updateNotifcationWithText:(NSString *) text;
 @end

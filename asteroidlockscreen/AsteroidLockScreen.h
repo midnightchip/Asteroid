@@ -61,7 +61,6 @@
 @property (nonatomic, retain) UIView *weather;
 @property (retain, nonatomic) NSTimer *inactiveTimer;
 @property (nonatomic, retain) AWeatherModel *weatherModel;
-@property (nonatomic, retain) UILabel *notifcationLabel;
 @property (nonatomic, retain) ASTViewController *gestureViewController;
 
 -(id) _viewControllerForAncestor;
