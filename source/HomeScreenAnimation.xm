@@ -67,6 +67,10 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
         [self.referenceView removeFromSuperview];
         
         self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
+        if([prefs boolForKey:@"hideWeatherBackground"]){
+            self.referenceView.background.hidesBackground = YES;
+            self.referenceView.background.condition.hidesBackground = YES;
+        }
 
         [self.referenceView.background setCity:self.weatherModel.city];        
         [self.referenceView.background setTag:123];
@@ -222,40 +226,47 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 //Thanks June
 %group WeatherBackground
 %hook WUIDynamicWeatherBackground
-	-(id)gradientLayer{
-		return nil;
-		return %orig;
-	}
-	-(void)setCurrentBackground:(CALayer *)arg1{
-
-	}
-	-(void)setBackgroundCache:(NSCache *)arg1{
-	
-	}
-	/* 11.1.2 Still nees improving */ 
-	-(void)addSublayer:(id)arg1{
-		%orig;
-			if(deviceVersion < 11.3){
-				CALayer* layer = arg1;
-				for(CALayer* firstLayers in layer.sublayers){
-					if(firstLayers.backgroundColor){
-						firstLayers.backgroundColor = [UIColor clearColor].CGColor;
-					}
-					for(CALayer* secLayers in firstLayers.sublayers){
-						for(CALayer* thrLayers in secLayers.sublayers){
-							if([thrLayers isKindOfClass:[CAGradientLayer class]]){
-								thrLayers.hidden = YES;
-							}
-						}
-					}
-				}
-			}
-	}
+%property (nonatomic, retain) BOOL hidesBackground;
+-(id)gradientLayer{
+    if(self.hidesBackground) return nil;
+    else return %orig;
+}
+-(void)setCurrentBackground:(CALayer *)arg1{
+    if(!self.hidesBackground){
+        %orig;
+    }
+}
+-(void)setBackgroundCache:(NSCache *)arg1{
+    if(!self.hidesBackground){
+        %orig;
+    }
+    
+}
+/* 11.1.2 Still nees improving */
+-(void)addSublayer:(id)arg1{
+    %orig;
+    if(deviceVersion < 11.3 && self.hidesBackground){
+        CALayer* layer = arg1;
+        for(CALayer* firstLayers in layer.sublayers){
+            if(firstLayers.backgroundColor){
+                firstLayers.backgroundColor = [UIColor clearColor].CGColor;
+            }
+            for(CALayer* secLayers in firstLayers.sublayers){
+                for(CALayer* thrLayers in secLayers.sublayers){
+                    if([thrLayers isKindOfClass:[CAGradientLayer class]]){
+                        thrLayers.hidden = YES;
+                    }
+                }
+            }
+        }
+    }
+}
 %end
 
 %hook WUIWeatherCondition
+%property (nonatomic, retain) BOOL hidesBackground;
 	-(CALayer *)layer{
-		if(self.alpha == 982){
+		if(self.alpha == 982 && self.hidesBackground){
 			CALayer* layer = %orig;
 			for(CALayer* firstLayers in layer.sublayers){
 				if(firstLayers.backgroundColor){

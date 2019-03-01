@@ -57,6 +57,9 @@ static WUIWeatherCondition* condition = nil;
 
 -(void) setupReferenceView{
     self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
+    if(![prefs boolForKey:@"appScreenWeather"]){
+        self.referenceView.hidesConditions = YES;
+    }
     self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.referenceView.clipsToBounds = YES;
     [self addSubview:self.referenceView];
@@ -127,7 +130,7 @@ static WUIWeatherCondition* condition = nil;
         if(!self.isSetup){
             [self setupTempLabel];
             [self setupLogoView];
-            if([prefs boolForKey:@"appScreenWeather"]) [self setupReferenceView];
+            if([prefs boolForKey:@"appScreenWeatherBackground"]) [self setupReferenceView];
             self.setup = YES;
         }
         
@@ -141,7 +144,7 @@ static WUIWeatherCondition* condition = nil;
         
         [self layoutSubviews];
         
-        if([prefs boolForKey:@"appScreenWeather"]){
+        if([prefs boolForKey:@"appScreenWeatherBackground"]){
             if([prefs boolForKey:@"customConditionIcon"]){
                 _weatherModel.city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
             }

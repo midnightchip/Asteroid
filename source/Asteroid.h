@@ -8,6 +8,7 @@
 @interface WUIWeatherCondition : NSObject
 @property (assign,nonatomic) long long condition;
 @property (nonatomic, retain) NSString *loadedFileName;
+@property (nonatomic) BOOL hidesBackground;
 -(void)pause;
 -(void)resume;
 -(City *)city;
@@ -22,9 +23,11 @@
 -(void)setCity:(id)arg1 ;
 -(void)setCondition:(long long)arg1 ;
 -(WUIWeatherCondition *)condition;
+@property (nonatomic) BOOL hidesBackground;
 @end
 
 @interface WUIWeatherConditionBackgroundView : UIView
+@property (nonatomic) BOOL hidesConditions;
 -(id)initWithFrame:(CGRect)arg1 ;
 -(WUIDynamicWeatherBackground *)background;
 -(void)prepareToSuspend;

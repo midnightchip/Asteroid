@@ -23,14 +23,35 @@
 				<key>isGroupToggle</key>
 				<true/>
 			</dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSSwitchCell</string>
+                <key>label</key>
+                <string>Enable Background</string>
+                <key>sublabel</key>
+                <string>Background for Weather Icon</string>
+                <key>key</key>
+                <string>appScreenWeatherBackground</string>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+                <key>enableSpecifiers</key>
+                <array>
+                    <string>appScreenWeather</string>
+                </array>
+            </dict>
 
 			<dict>
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Enable Weather App Icon Background</string>
+				<string>Enable Live Condition Background</string>
 				<key>sublabel</key>
-				<string>Enable/Disable Live Weather Background on Weather App Screen</string>
+				<string>Live Weather Condition Over Weather Icon</string>
 				<key>key</key>
 				<string>appScreenWeather</string>
 				<key>PostNotification</key>

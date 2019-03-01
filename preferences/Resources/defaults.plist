@@ -6,6 +6,8 @@
 		<true/>
 		<key>customFont</key>
 		<false/>
+        <key>appScreenWeatherBackground</key>
+        <true/>
         <key>greetView</key>
         <false/>
 		<key>greetingSize</key>
