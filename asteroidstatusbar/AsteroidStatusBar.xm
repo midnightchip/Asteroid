@@ -13,7 +13,7 @@
 @class AsteroidServer;
 @interface AsteroidServer : NSObject
 +(AsteroidServer *)sharedInstance;
--(NSDictionary *)returnWeatherTemp;
+-(NSDictionary *)returnWeatherTempDict;
 @end
 
 /*static NSString *weatherTemp() {
@@ -39,11 +39,13 @@
 	if([text containsString:@":"]) {
 		if (isSB){
 			NSDictionary *serverDict = [[NSDictionary alloc] init];
-			serverDict = [[%c(AsteroidServer) sharedInstance] returnWeatherTemp];
+			serverDict = [[%c(AsteroidServer) sharedInstance] returnWeatherTempDict];
 			self.tempString = serverDict[@"temp"];
 		}else{
 			[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(setupTempText:) name:@"com.midnightchips.asteroid.statusbar" object:nil];
+		
 			CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.midnightchips.asteroid.asteroidtemp"), NULL, NULL, true);
+			
 		}
 		NSString *newString = self.tempString;//weatherTemp();
 		self.numberOfLines = 2;
@@ -57,8 +59,10 @@
 }
 %new 
 -(void)setupTempText:(NSNotification *)notification{
-	//if([notification.userInfo[@"temp"]])
-	self.tempString = notification.userInfo[@"temp"];
+	NSLog(@"ASTEROIDSTATUS CALLED %@", notification.userInfo);
+	if(notification.userInfo[@"temp"]){
+		self.tempString = notification.userInfo[@"temp"];
+	}
 }
 
 %end

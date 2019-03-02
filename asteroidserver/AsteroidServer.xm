@@ -26,26 +26,26 @@ extern "C" CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void
 	return sharedInstance;
 }
 
-/*- (id)init {
+- (id)init {
 	if ((self = [super init])) {
 		self.weatherModel = [%c(AWeatherModel) sharedInstance];
 		// ...
 		// Center name must be unique, recommend using application identifier.
-		CPDistributedMessagingCenter * messagingCenter = [CPDistributedMessagingCenter centerNamed:@"com.midnightchips.AsteroidServer"];
+		/*CPDistributedMessagingCenter * messagingCenter = [CPDistributedMessagingCenter centerNamed:@"com.midnightchips.AsteroidServer"];
 		rocketbootstrap_distributedmessagingcenter_apply(messagingCenter);
 		[messagingCenter runServerOnCurrentThread];
 
 		// Register Messages
 		[messagingCenter registerForMessageName:@"weatherIcon" target:self selector:@selector(returnWeatherLogo)];
-		[messagingCenter registerForMessageName:@"weatherTemp" target:self selector:@selector(returnWeatherTemp)];
+		[messagingCenter registerForMessageName:@"weatherTemp" target:self selector:@selector(returnWeatherTemp)];*/
 	}
 
 	return self;
-}*/
+}
 
 static inline void sendWeather(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
         /* afaik you don't need any info you sent since you already messaged the specific observer? */
- 
+		NSLog(@"ASTEROIDSERVER CALLED");
         NSMutableDictionary *tempDict = [[NSMutableDictionary alloc] init];
         [tempDict setObject:[[AsteroidServer sharedInstance] returnWeatherTemp] forKey:@"temp"];
         [[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"com.midnightchips.asteroid.statusbar" object:nil userInfo:tempDict];
@@ -68,7 +68,7 @@ static inline void sendWeather(CFNotificationCenterRef center, void *observer, C
 	if([self.weatherModel localeTemperature]){
 		sendTemp[@"temp"] = [self.weatherModel localeTemperature];
 	}else{
-		sendTemp[@"temp"] = @"MISSING";
+		sendTemp[@"temp"] = @"Error";
 	}
 	
 	HBLogDebug(@"returningWEatherTemp %@", sendTemp);
@@ -80,7 +80,7 @@ static inline void sendWeather(CFNotificationCenterRef center, void *observer, C
 %ctor{
 	HBLogDebug(@"Loaded");
 	[AsteroidServer load];
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
                                     NULL,
                                     &sendWeather,
                                     CFSTR("com.midnightchips.asteroid.asteroidtemp"),
