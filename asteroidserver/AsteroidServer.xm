@@ -48,7 +48,9 @@ static inline void sendWeather(CFNotificationCenterRef center, void *observer, C
 		NSLog(@"ASTEROIDSERVER CALLED");
         NSMutableDictionary *tempDict = [[NSMutableDictionary alloc] init];
         [tempDict setObject:[[AsteroidServer sharedInstance] returnWeatherTemp] forKey:@"temp"];
-        [[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"com.midnightchips.asteroid.statusbar" object:nil userInfo:tempDict];
+		CFDictionaryRef dict = (__bridge CFDictionaryRef)tempDict;
+		CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), CFSTR("com.midnightchips.asteroid.asteroidstatusbar"), NULL, dict, true);
+        //[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"com.midnightchips.asteroid.statusbar" object:nil userInfo:tempDict];
 }
 
 -(UIImage *)returnWeatherLogo{
@@ -80,7 +82,7 @@ static inline void sendWeather(CFNotificationCenterRef center, void *observer, C
 %ctor{
 	HBLogDebug(@"Loaded");
 	[AsteroidServer load];
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
                                     NULL,
                                     &sendWeather,
                                     CFSTR("com.midnightchips.asteroid.asteroidtemp"),
