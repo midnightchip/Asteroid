@@ -1,42 +1,64 @@
-#include <AppSupport/CPDistributedMessagingCenter.h>
-#import <rocketbootstrap/rocketbootstrap.h>
+
+#import <CoreFoundation/CFNotificationCenter.h>
 #define isSB [[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.apple.springboard"]
 
 @interface _UIStatusBarStringView : UILabel
+@property (nonatomic, retain) NSString *statusString;
+-(void)setupTempText;
+-(void)updateString;
+@end
+
+@interface NSDistributedNotificationCenter : NSNotificationCenter
 @end
 
 @class AsteroidServer;
 @interface AsteroidServer : NSObject
 +(AsteroidServer *)sharedInstance;
--(NSDictionary *)returnWeatherTemp;
+-(NSDictionary *)returnWeatherTempDict;
 @end
 
-static NSString *weatherTemp() {
+extern "C" CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
+
+/*static NSString *weatherTemp() {
     NSDictionary* serverDict;
     if (isSB) {
         serverDict = [[%c(AsteroidServer) sharedInstance] returnWeatherTemp];
+		//NSLog(@"ASTEROIDSERVER FROMSB");
     } else {
-        CPDistributedMessagingCenter *messagingCenter;
-	messagingCenter = [CPDistributedMessagingCenter centerNamed:@"com.midnightchips.AsteroidServer"];
-	rocketbootstrap_distributedmessagingcenter_apply(messagingCenter);
-        serverDict = [messagingCenter sendMessageAndReceiveReplyName:@"weatherTemp" userInfo:nil/* optional dictionary */];
+		CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.midnightchips.asteroid.asteroidtemp"), NULL, NULL, true);
+		[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(parseTemp) name:@"com.midnightchips.asteroid.statusbar" object:nil];
     }
-    return serverDict[@"temp"];
+	
+	return serverDict[@"temp"];
+    
+}*/
+static NSString *tempString = [[NSString alloc] init];
+
+static inline void receiveWeather(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+        /* afaik you don't need any info you sent since you already messaged the specific observer? */
+		NSLog(@"ASTEROIDSTATUS CALLED");
+    NSDictionary *weather = (__bridge NSDictionary*)userInfo;
+		tempString = weather[@"temp"];
+		NSLog(@"ASTEROIDSTATUS CALLED %@", tempString);
+		//CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.midnightchips.asteroid.asteroidstatusbar"), NULL, NULL, true);
+        //[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"com.midnightchips.asteroid.statusbar" object:nil userInfo:tempDict];
 }
 
+
 %hook _UIStatusBarStringView
+%property (nonatomic, retain) NSString *statusString;
 - (void)setText:(NSString *)text {
 	if([text containsString:@":"]) {
-        //self.weatherModel = [%c(AWeatherModel) sharedInstance];
-		//NSTextAttachment *image = [[NSTextAttachment alloc] init];
-		//image.image = [self.weatherModel glyphWithOption:ConditionOptionWhite];
-		//NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:image];
-		//icon = 
-		//NSMutableAttributedString *myString= [[NSMutableAttributedString alloc] initWithString:@"Hi"];
-		//[myString appendAttributedString:attachmentString];
-		//NSString *newString = [NSString stringWithFormat:@"%@ %@", text, @"Hi"];
-		//[self.weatherModel localeTemperature];
-		NSString *newString = weatherTemp();
+		if (isSB){
+			NSDictionary *serverDict = [[NSDictionary alloc] init];
+			serverDict = [[%c(AsteroidServer) sharedInstance] returnWeatherTempDict];
+			tempString = serverDict[@"temp"];
+		}else{
+			CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), CFSTR("com.midnightchips.asteroid.asteroidtemp"), NULL, NULL, true);
+			
+		}
+		[self updateString];
+		NSString *newString = self.statusString;//weatherTemp();
 		self.numberOfLines = 2;
 		self.textAlignment = 1;
 		[self setFont: [self.font fontWithSize:12]];
@@ -46,5 +68,20 @@ static NSString *weatherTemp() {
 		%orig(text);
 	}
 }
+%new 
+-(void)updateString{
+	self.statusString = tempString;
+}
 
 %end
+
+
+%ctor{
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
+                                    NULL,
+                                    &receiveWeather,
+                                    CFSTR("com.midnightchips.asteroid.asteroidstatusbar"),
+                                    NULL,
+                                    CFNotificationSuspensionBehaviorDeliverImmediately
+                                    );
+}
