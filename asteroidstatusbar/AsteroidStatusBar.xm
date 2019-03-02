@@ -1,8 +1,13 @@
-#include <AppSupport/CPDistributedMessagingCenter.h>
-#import <rocketbootstrap/rocketbootstrap.h>
+//#include <AppSupport/CPDistributedMessagingCenter.h>
+//#import <rocketbootstrap/rocketbootstrap.h>
 #define isSB [[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.apple.springboard"]
 
 @interface _UIStatusBarStringView : UILabel
+@property (nonatomic, retain) NSString *tempString;
+-(void)setupTempText;
+@end
+
+@interface NSDistributedNotificationCenter : NSNotificationCenter
 @end
 
 @class AsteroidServer;
@@ -11,32 +16,36 @@
 -(NSDictionary *)returnWeatherTemp;
 @end
 
-static NSString *weatherTemp() {
+/*static NSString *weatherTemp() {
     NSDictionary* serverDict;
     if (isSB) {
         serverDict = [[%c(AsteroidServer) sharedInstance] returnWeatherTemp];
+		//NSLog(@"ASTEROIDSERVER FROMSB");
     } else {
-        CPDistributedMessagingCenter *messagingCenter;
-	messagingCenter = [CPDistributedMessagingCenter centerNamed:@"com.midnightchips.AsteroidServer"];
-	rocketbootstrap_distributedmessagingcenter_apply(messagingCenter);
-        serverDict = [messagingCenter sendMessageAndReceiveReplyName:@"weatherTemp" userInfo:nil/* optional dictionary */];
+		CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.midnightchips.asteroid.asteroidtemp"), NULL, NULL, true);
+		[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(parseTemp) name:@"com.midnightchips.asteroid.statusbar" object:nil];
     }
-    return serverDict[@"temp"];
-}
+	
+	return serverDict[@"temp"];
+    
+}*/
+
+
+
 
 %hook _UIStatusBarStringView
+%property (nonatomic, retain) NSString *tempString;
 - (void)setText:(NSString *)text {
 	if([text containsString:@":"]) {
-        //self.weatherModel = [%c(AWeatherModel) sharedInstance];
-		//NSTextAttachment *image = [[NSTextAttachment alloc] init];
-		//image.image = [self.weatherModel glyphWithOption:ConditionOptionWhite];
-		//NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:image];
-		//icon = 
-		//NSMutableAttributedString *myString= [[NSMutableAttributedString alloc] initWithString:@"Hi"];
-		//[myString appendAttributedString:attachmentString];
-		//NSString *newString = [NSString stringWithFormat:@"%@ %@", text, @"Hi"];
-		//[self.weatherModel localeTemperature];
-		NSString *newString = weatherTemp();
+		if (isSB){
+			NSDictionary *serverDict = [[NSDictionary alloc] init];
+			serverDict = [[%c(AsteroidServer) sharedInstance] returnWeatherTemp];
+			self.tempString = serverDict[@"temp"];
+		}else{
+			[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(setupTempText:) name:@"com.midnightchips.asteroid.statusbar" object:nil];
+			CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.midnightchips.asteroid.asteroidtemp"), NULL, NULL, true);
+		}
+		NSString *newString = self.tempString;//weatherTemp();
 		self.numberOfLines = 2;
 		self.textAlignment = 1;
 		[self setFont: [self.font fontWithSize:12]];
@@ -45,6 +54,11 @@ static NSString *weatherTemp() {
 	else {
 		%orig(text);
 	}
+}
+%new 
+-(void)setupTempText:(NSNotification *)notification{
+	//if([notification.userInfo[@"temp"]])
+	self.tempString = notification.userInfo[@"temp"];
 }
 
 %end
