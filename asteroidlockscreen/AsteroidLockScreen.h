@@ -19,6 +19,7 @@
 
 @interface MediaControlsPanelViewController
 @property (nonatomic) BOOL isOnScreen;
++(id)panelViewControllerForCoverSheet;
 @end
 
 
@@ -59,7 +60,6 @@
 
 @interface SBDashBoardMainPageView : UIView
 @property (nonatomic, retain) UIView *weather;
-@property (retain, nonatomic) NSTimer *inactiveTimer;
 @property (nonatomic, retain) AWeatherModel *weatherModel;
 @property (nonatomic, retain) ASTViewController *gestureViewController;
 

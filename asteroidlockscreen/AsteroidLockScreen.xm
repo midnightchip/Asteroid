@@ -8,12 +8,10 @@
 // Statics
 static BOOL isDismissed = NO;
 static SBDashBoardMainPageView *mainPageView;
-static MediaControlsPanelViewController *mediaPanelCont;
 static BOOL isWeatherLocked = nil;
 
 %hook SBDashBoardMainPageView
 %property (nonatomic, retain) UIView *weather;
-%property (retain, nonatomic) NSTimer *inactiveTimer;
 %property (nonatomic, retain) AWeatherModel *weatherModel;
 %property (nonatomic, retain) ASTViewController *gestureViewController;
 
@@ -31,20 +29,7 @@ static BOOL isWeatherLocked = nil;
         [self.weather addGestureRecognizer: swipeUp];
         
         [[NSNotificationCenter defaultCenter] addObserverForName: @"SBBacklightFadeFinishedNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
-            [self.inactiveTimer invalidate];
-            NSLog(@"lock_TWEAK | Timer set");
-            self.inactiveTimer = [NSTimer scheduledTimerWithTimeInterval:([prefs doubleForKey:@"inactiveValue"] * 60)
-                                                                  target:self
-                                                                selector:@selector(revealWeather:)
-                                                                userInfo:nil
-                                                                 repeats:YES];
             isWeatherLocked = NO;
-        }];
-        
-        [[NSNotificationCenter defaultCenter] addObserverForName: @"SBCoverSheetWillDismissNotification" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
-            [self.inactiveTimer invalidate];
-            NSLog(@"lock_TWEAK | Cancel Timer");
-            
         }];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buttonPressed:) name:@"astDimissButtonPressed" object:nil];
@@ -176,7 +161,6 @@ static BOOL isWeatherLocked = nil;
 // Hide when media present
 %hook MediaControlsPanelViewController
 -(BOOL) isOnScreen {
-    mediaPanelCont = self;
     if(%orig && !isDismissed){
         [mainPageView hideWeather];
         isWeatherLocked = YES;
@@ -196,12 +180,10 @@ static BOOL isWeatherLocked = nil;
 }
 -(BOOL)hasContent{
     BOOL content = %orig;
-    
     //This is some black magic, I wrote this and I have no idea whats going on. -Midnightchips & the casle 2018
     if(content && [prefs boolForKey:@"hideOnNotif"] && !isDismissed){
         [mainPageView hideWeather];
-        NSLog(@"lock_TWEAK | hiding weather");
-    } else if(!isWeatherLocked && isDismissed && mediaPanelCont.isOnScreen == NO && [[%c(SBMediaController) sharedInstance] isPlaying] == NO){
+    } else if(!isWeatherLocked && isDismissed && ((MediaControlsPanelViewController *)[%c(MediaControlsPanelViewController) panelViewControllerForCoverSheet]).isOnScreen == NO && [[%c(SBMediaController) sharedInstance] isPlaying] == NO){
         if([prefs boolForKey:@"hideOnNotif"] && !content){ // Will make check hideOnNotif and content before revealing lock
             [mainPageView updateWeatherReveal];
         } else if(![prefs boolForKey:@"hideOnNotif"]){ // Do as normally would if hideOnNotif not enabled

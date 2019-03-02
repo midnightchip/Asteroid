@@ -74,38 +74,6 @@
                 <string>com.creaturesurvive.motuumls.prefschanged</string>
             </dict> -->
             
-            <dict>
-                <key>cell</key>
-                <string>PSGroupCell</string>
-                <key>label</key>
-                <string>Inactivity Timer</string>
-                <key>footerText</key>
-                <string>Lockscreen view is revealed after this period of inactivity.</string>
-            </dict>
-            
-            <dict>
-                <key>cell</key>
-                <string>PSSliderCell</string>
-                <key>key</key>
-                <string>inactiveValue</string>
-                <key>showValue</key>
-                <true/>
-                <key>min</key>
-                <real>1</real>
-                <key>max</key>
-                <real>61</real>
-                <key>isSegmented</key>
-                <true/>
-                <key>segmentCount</key>
-                <real>12</real>
-                <key>PostNotification</key>
-                <string>com.midnightchips.asteroid.prefschanged</string>
-                <key>defaults</key>
-                <string>com.midnightchips.asteroid</string>
-                <key>defaultsPath</key>
-                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
-            </dict>
-            
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
