@@ -174,7 +174,6 @@ static BOOL isWeatherLocked = nil;
 -(id) init{
     if((self = %orig)){
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateViewCollectionWhenDismissed:) name:@"weatherStateChanged" object:nil];
-        self.view.hidden = YES;
     }
     return self;
 }
@@ -196,8 +195,6 @@ static BOOL isWeatherLocked = nil;
 %new
 -(void) updateViewCollectionWhenDismissed:(NSNotification *)sender{
     if(isDismissed){
-        self.view.alpha = 0;
-        self.view.hidden = NO;
         [UIView animateWithDuration:.5
                               delay:0
                             options:UIViewAnimationOptionCurveEaseInOut
@@ -207,13 +204,9 @@ static BOOL isWeatherLocked = nil;
         [UIView animateWithDuration:.5
                               delay:0
                             options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{self.view.alpha = 1;}
-                         completion:^(BOOL finished){
-                             self.view.hidden = YES;
-                             self.view.alpha = 1;
-                         }];
+                         animations:^{self.view.alpha = 0;}
+                         completion:nil];
     }
-    
 }
 %end
 
@@ -234,7 +227,6 @@ static BOOL isWeatherLocked = nil;
     }
     // Notification called when the lockscreen / nc is revealed (this is posted by the system)
     [[NSNotificationCenter defaultCenter] addObserverForName: @"weatherStateChanged" object:NULL queue:NULL usingBlock:^(NSNotification *note) {
-        NSLog(@"lock_TWEAK | %d", isDismissed);
         if(isDismissed){
             [UIView animateWithDuration:.5
                                   delay:0
