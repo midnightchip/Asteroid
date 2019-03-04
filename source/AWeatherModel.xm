@@ -102,7 +102,7 @@
     }
 }
 -(void) updateWeather: (NSTimer *) sender {
-    [self updateWeatherDataWithCompletion:nil];
+    [self updateWeatherDataWithCompletion:^{nil;}];
 }
 -(void) postNotification{
     dispatch_async(dispatch_get_main_queue(), ^{
