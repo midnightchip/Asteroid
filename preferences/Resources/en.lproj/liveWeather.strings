@@ -1,0 +1,12 @@
+{
+    "Enable_Lock" = "Enable Lock Screen";
+    "Control_Lock" = "Enable/Disable Live Weather on LockScreen";
+    "Enable_Home" = "Enable Home Screen";
+    "Control_Home" = "Enable/Disable Live Weather on HomeScreen";
+    "Custom_Condition" = "Choose Custom Conditions";
+    "Select_Condition" = "Select Custom Weather Conditions";
+    "Overide_Animation" = "This overides your weather background animation.";
+    "Hide_Background" = "Hide Live Weather Background";
+    "Hide_Explain" = "Hides Background of Live Weather, Keeps the Animation";
+    "Live_Weather" = "Live Weather";
+}

@@ -9,7 +9,7 @@
                 <key>cell</key>
                 <string>PSGroupCell</string>
                 <key>label</key>
-                <string>Refresh Rate</string>
+                <string>Refresh_Rate</string>
             </dict>
             
             <dict>
@@ -18,7 +18,7 @@
                 <key>defaults</key>
                 <string>com.midnightchips.asteroid</string>
                 <key>label</key>
-                <string>Refresh Rate</string>
+                <string>Refresh_Rate</string>
                 <key>detail</key>
                 <string>PSListItemsController</string>
                 <key>key</key>
@@ -27,11 +27,11 @@
                 <string>300</string>
                 <key>validTitles</key>
                 <array>
-                    <string>30 Seconds</string>
-                    <string>1 Mintute</string>
-                    <string>5 Minutes</string>
-                    <string>10 Minutes</string>
-                    <string>15 Minutes</string>
+                    <string>30_Seconds</string>
+                    <string>1_Minute</string>
+                    <string>5_Minutes</string>
+                    <string>10_Minutes</string>
+                    <string>15_Minutes</string>
                 </array>
                 <key>validValues</key>
                 <array>
@@ -56,6 +56,6 @@
 		</array>
 
 		<key>title</key>
-		<string>General Settings</string>
+		<string>General_Settings</string>
 	</dict>
 </plist>

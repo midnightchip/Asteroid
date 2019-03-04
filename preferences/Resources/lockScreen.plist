@@ -10,7 +10,7 @@
                 <key>cell</key>
                 <string>PSSwitchCell</string>
                 <key>label</key>
-                <string>Enable Greeting View</string>
+                <string>Enable_Greet</string>
                 <key>key</key>
                 <string>greetView</string>
                 <key>isGroupToggle</key>
@@ -26,9 +26,9 @@
                 <key>cell</key>
                 <string>PSSwitchCell</string>
                 <key>label</key>
-                <string>Hide Greeting View on Notification</string>
+                <string>Hide_Notif</string>
 				<key>sublabel</key>
-                <string>When there are notifications, hide the weather view</string>
+                <string>Notif_Explain</string>
                 <key>key</key>
                 <string>hideOnNotif</string>
                 <key>PostNotification</key>
@@ -46,9 +46,9 @@
                 <key>pushToPlist</key>
                 <string>lockScreenViewKeys</string>
                 <key>label</key>
-                <string>Lockscreen Components</string>
+                <string>Lockscreen_Components</string>
                 <key>sublabel</key>
-                <string>Configure Lockscreen Components</string>
+                <string>Configure_Lockscreen_Components</string>
                 <key>key</key>
                 <string>genSettings</string>
             </dict>
@@ -78,14 +78,14 @@
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>label</key>
-				<string>Custom Fonts</string>
+				<string>Custom_Fonts</string>
 			</dict>
 
 			<dict>
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Enable Custom Font</string>
+				<string>Enable_Custom_Font</string>
 				<key>key</key>
 				<string>customFont</string>
 				<key>isGroupToggle</key>
@@ -106,7 +106,7 @@
 				<key>key</key>
 				<string>availableFonts</string>
 				<key>label</key>
-				<string>Select Custom Font</string>
+				<string>Select_Custom_Font</string>
 				<key>titlesDataSource</key>
 				<string>fontNames</string>
 				<key>valuesDataSource</key>
@@ -131,7 +131,7 @@
 				<key>key</key>
 				<string>textColor</string>
 				<key>label</key>
-				<string>Set Text Color</string>
+				<string>Set_Text_Color</string>
 				<key>fallback</key>
 				<string>FFFFFF</string>
 				<key>alpha</key>
@@ -149,7 +149,7 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Use Custom Glyph Image</string>
+				<string>Use_Custom_Glyph_Image</string>
 				<key>key</key>
 				<string>customImage</string>
 				<key>isGroupToggle</key>
@@ -168,7 +168,7 @@
 				<key>detail</key>
 				<string>CSListItemsController</string>
 				<key>label</key>
-				<string>Select Weather Glyph Type</string>
+				<string>Select_Weather_Glyph_Type</string>
 				<key>key</key>
 				<string>setImageType</string>
 				<key>titlesDataSource</key>
@@ -191,7 +191,7 @@
 				<key>key</key>
 				<string>glyphColor</string>
 				<key>label</key>
-				<string>Set Glyph Color</string>
+				<string>Set_Glyph_Color</string>
 				<key>fallback</key>
 				<string>FFFFFF</string>
 				<key>alpha</key>
@@ -208,7 +208,7 @@
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>label</key>
-				<string>Blur Amount</string>
+				<string>Blur_Amount</string>
 			</dict>
 
 			<dict>
@@ -248,6 +248,6 @@
 		</array>
 
 		<key>title</key>
-		<string>Lock Screen</string>
+		<string>Lock_Screen</string>
 	</dict>
 </plist>

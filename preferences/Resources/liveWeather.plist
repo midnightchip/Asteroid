@@ -9,9 +9,9 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Enable Lock Screen</string>
+				<string>Enable_Lock</string>
 				<key>sublabel</key>
-				<string>Enable/Disable Live Weather on LockScreen</string>
+				<string>Control_Lock</string>
 				<key>key</key>
 				<string>lockScreenWeather</string>
 				<key>PostNotification</key>
@@ -26,9 +26,9 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Enable Home Screen</string>
+				<string>Enable_Home</string>
 				<key>sublabel</key>
-				<string>Enable/Disable Live Weather on HomeScreen</string>
+				<string>Control_Home</string>
 				<key>key</key>
 				<string>homeScreenWeather</string>
 				<key>PostNotification</key>
@@ -60,7 +60,7 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Choose Custom Conditions</string>
+				<string>Custom_Condition</string>
 				<key>key</key>
 				<string>customCondition</string>
 				<key>PostNotification</key>
@@ -79,9 +79,9 @@
 				<key>detail</key>
 				<string>CSListItemsController</string>
 				<key>label</key>
-				<string>Select Custom Weather Conditions</string>
+				<string>Select_Condition</string>
 				<key>sublabel</key>
-				<string>This overides your weather background animation.</string>
+				<string>Overide_Animation</string>
 				<key>key</key>
 				<string>weatherConditions</string>
 				<key>titlesDataSource</key>
@@ -103,9 +103,9 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Hide Live Weather Background</string>
+				<string>Hide_Background</string>
 				<key>sublabel</key>
-				<string>Hides Background of Live Weather, Keeps the Animation</string>
+				<string>Hide_Explain</string>
 				<key>key</key>
 				<string>hideWeatherBackground</string>
 				<key>PostNotification</key>
@@ -130,6 +130,6 @@
 		</array>
 
 		<key>title</key>
-		<string>Live Weather</string>
+		<string>Live_Weather</string>
 	</dict>
 </plist>

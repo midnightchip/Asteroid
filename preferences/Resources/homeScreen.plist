@@ -9,9 +9,9 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Hide Dock</string>
+				<string>Hide_Dock</string>
 				<key>sublabel</key>
-				<string>Makes Home Screen Dock Transparent</string>
+				<string>Make_Transparent</string>
 				<key>key</key>
 				<string>noDock</string>
 				<key>PostNotification</key>
@@ -26,9 +26,9 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Hide Folders</string>
+				<string>Hide_Folders</string>
 				<key>sublabel</key>
-				<string>Makes Home Screen Folders Transparent</string>
+				<string>Make_Folder_Transparent</string>
 				<key>key</key>
 				<string>noFolders</string>
 				<key>PostNotification</key>
@@ -52,6 +52,6 @@
 		</array>
 
 		<key>title</key>
-		<string>Home Screen</string>
+		<string>Home_Screen</string>
 	</dict>
 </plist>

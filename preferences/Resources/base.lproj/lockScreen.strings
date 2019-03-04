@@ -1,0 +1,17 @@
+{
+    "Enable_Greet" = "Enable Greeting View";
+    "Hide_Notif" = "Hide Greeting View on Notification";
+    "Notif_Explain" = "When there are notifications, hide the weather view";
+    "Lockscreen_Components" = "Lockscreen Components";
+    "Configure_Lockscreen_Components" = "Configure Lockscreen Components";
+    "Custom_Fonts" = "Custom Fonts";
+    "Enable_Custom_Font" = "Enable Custom Font";
+    "Select_Custom_Font" = "Select Custom Font";
+    "Set_Text_Color" = "Set Text Color";
+    "Use_Custom_Glyph_Image" = "Use Custom Glyph Image";
+    "Select_Weather_Glyph_Type" = "Select Weather Glyph Type";
+    "Set_Glyph_Color" = "Set Glyph Color";
+    "Blur_Amount" = "Blur Amount";
+    "Lock_Screen" = "Lock Screen";
+
+}

@@ -65,7 +65,7 @@
 				<key>label</key>
 				<string>Depiction</string>
 				<key>sublabel</key>
-                <string>Learn more about Asteroid</string>
+                <string>Learn_more_about_Asteroid</string>
 			</dict>
 
 			<dict>
@@ -89,9 +89,9 @@
 				<key>icon</key>
 				<string/>
 				<key>label</key>
-				<string>Make a Donation</string>
+				<string>Make_a_Donation</string>
 				<key>sublabel</key>
-                <string>Help compensate the casle for his efforts</string>
+                <string>Compensate_Casle</string>
 			</dict>
 
 			<dict>
@@ -104,13 +104,13 @@
 				<key>calloutColor</key>
 				<string>#74d69c</string>
 				<key>url</key>
-				<string>https://paypal.me/MidnightChips</string>
+				<string>https://paypal.me/MidnightTweaks</string>
 				<key>icon</key>
 				<string/>
 				<key>label</key>
-				<string>Make a Donation</string>
+				<string>Make_a_Donation</string>
 				<key>sublabel</key>
-                <string>Help compensate MidnightChips for his efforts</string>
+                <string>Compensate_Midnight</string>
 			</dict>
 
 
@@ -129,9 +129,9 @@
 				<key>url</key>
 				<string>https://github.com/midnightchip/Asteroid/issues</string>
 				<key>label</key>
-				<string>Submit an Issue</string>
+				<string>Submit_an_Issue</string>
 				<key>sublabel</key>
-                <string>Report a bug on GitHub and feel warm and fuzzy</string>
+                <string>Report_Bug</string>
 			</dict>
 
             <dict>
@@ -144,9 +144,9 @@
                 <key>includeLogs</key>
                 <true/>
                 <key>label</key>
-                <string>Email Support</string>
+                <string>Email_Support</string>
 				<key>sublabel</key>
-                <string>Need help? Send me an email and I'll do my best.</string>
+                <string>Email_Me</string>
             </dict>
 
 			<dict>
@@ -155,9 +155,9 @@
 				<key>cell</key>
 				<string>PSButtonCell</string>
 				<key>label</key>
-				<string>Copy Tweak List</string>
+				<string>Copy_Tweak_List</string>
 				<key>sublabel</key>
-                <string>Needing a list of all installed tweaks?</string>
+                <string>Get_List</string>
 			</dict>
 
 			<dict>
@@ -166,7 +166,7 @@
 				<key>label</key>
 				<string>Contact</string>
 				<key>footerText</key>
-				<string>Special Thanks</string>
+				<string></string>
 				<key>footerAlignment</key>
 				<integer>0</integer>
 			</dict>
@@ -190,7 +190,7 @@
 				<key>devTitle</key>
 				<string>the casle</string>
 				<key>devSubtitle</key>
-				<string>Follow Me on Twitter</string>
+				<string>Follow the casle on Twitter</string>
 			</dict>
 
 			<dict>
@@ -211,7 +211,7 @@
 				<key>devTitle</key>
 				<string>MidnightChips</string>
 				<key>devSubtitle</key>
-				<string>Follow Me on Twitter</string>
+				<string>Follow MidnightChips on Twitter</string>
 			</dict>
 
 			<dict>
@@ -226,7 +226,7 @@
 				<key>label</key>
 				<string>u/the_casle</string>
 				<key>sublabel</key>
-                <string>Stay informed by following the casle on Reddit</string>
+                <string>Reddit_Casle</string>
 				<key>calloutColor</key>
 				<string>#FF5700</string>
 			</dict>
@@ -243,7 +243,7 @@
 				<key>label</key>
 				<string>u/MidnightChips</string>
 				<key>sublabel</key>
-                <string>Stay informed by following MidnightChips on Reddit</string>
+                <string>Reddit_Midnight</string>
 				<key>calloutColor</key>
 				<string>#FF5700</string>
 			</dict>
@@ -252,7 +252,7 @@
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>label</key>
-				<string>Special Thanks</string>
+				<string>Special_Thanks</string>
 				<key>footerText</key>
 				<string></string>
 				<key>footerAlignment</key>
@@ -312,9 +312,9 @@
 				<key>icon</key>
 				<string/>
 				<key>label</key>
-				<string>JunesiPhone Repo</string>
+				<string>June_Repo</string>
 				<key>sublabel</key>
-                <string>Support June by donating to get access to his amazing tweaks and themes.</string>
+                <string>June_Blurb</string>
 				<key>calloutColor</key>
 				<string>#FFFFFF</string>
 			</dict>
@@ -415,25 +415,6 @@
 				<integer>1</integer>
 			</dict>
 
-			
-
-			<dict>
-				<key>action</key>
-				<string>openInBrowser:</string>
-				<key>cell</key>
-				<string>PSLinkCell</string>
-				<key>url</key>
-				<string>https://github.com/jdg/MBProgressHUD</string>
-				<key>icon</key>
-				<string/>
-				<key>label</key>
-				<string>MBProgressHUD</string>
-				<key>sublabel</key>
-                <string>We Utilize MBProgressHUD, which is Licensed under the MIT License, compatible with the GPL License</string>
-				<key>calloutColor</key>
-				<string>#FFFFFF</string>
-			</dict>
-
 			<dict>
 				<key>action</key>
 				<string>openInBrowser:</string>
@@ -444,9 +425,9 @@
 				<key>icon</key>
 				<string/>
 				<key>label</key>
-				<string>Weather Animations</string>
+				<string>Weather_Animations</string>
 				<key>sublabel</key>
-                <string>We had permision to use portions of Weather Animations to start Asteroid.</string>
+                <string>WA_Perms</string>
 				<key>calloutColor</key>
 				<string>#FFFFFF</string>
 			</dict>
@@ -459,7 +440,7 @@
                 <key>cell</key>
                 <string>PSButtonCell</string>
                 <key>label</key>
-                <string>Licene Information</string>
+                <string>License_Information</string>
             </dict>
 
 
@@ -467,6 +448,6 @@
 		</array>
 
 		<key>title</key>
-		<string>Asteroid Support</string>
+		<string>Asteroid_Support</string>
 	</dict>
 </plist>
