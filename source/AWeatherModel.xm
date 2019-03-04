@@ -37,6 +37,7 @@
                 self.city = self.forecastModel.city;
                 self.localWeather = self.city.isLocalWeatherCity;
                 self.populated = YES;
+                self.hasFallenBack = NO;
                 
                 if([prefs boolForKey:@"customCondition"]){
                     self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
@@ -47,15 +48,19 @@
             
         } else{
             NSLog(@"lock_TWEAK | didnt work");
-            
-            self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
-            self.localWeather = self.city.isLocalWeatherCity;
-            self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.city.wfLocation];
-            [self.todayModel executeModelUpdateWithCompletion:^{nil;}];
-            if([prefs boolForKey:@"customCondition"]){
-                self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
+            if(((NSArray *)[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"]).count > 0){
+                self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
+                self.localWeather = self.city.isLocalWeatherCity;
+                self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.city.wfLocation];
+                [self.todayModel executeModelUpdateWithCompletion:^{nil;}];
+                if([prefs boolForKey:@"customCondition"]){
+                    self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
+                }
+                self.populated = YES;
+                self.hasFallenBack = NO;
+            } else {
+                self.hasFallenBack = YES;
             }
-            self.populated = YES;
             [self postNotification];
             [self setUpRefreshTimer];
         }
@@ -80,6 +85,9 @@
             [self postNotification];
             compBlock();
         }];
+    } else if(self.hasFallenBack){
+        [self postNotification];
+        compBlock();
     }
 }
 
@@ -118,11 +126,20 @@
 }
 
 -(NSString *) localeTemperature{
-    return [NSString stringWithFormat:@"%.0f°", [self.weatherPreferences isCelsius] ? self.city.temperature.celsius : self.city.temperature.fahrenheit];
+    if(!self.hasFallenBack){
+        return [NSString stringWithFormat:@"%.0f°", [self.weatherPreferences isCelsius] ? self.city.temperature.celsius : self.city.temperature.fahrenheit];
+    } else {
+        return @"--";
+    }
 }
 
 - (NSString *)currentConditionOverview {
-    return [self.city naturalLanguageDescription];
+    if(!self.hasFallenBack){
+        return [self.city naturalLanguageDescription];
+    } else {
+        return @"Weather Unavailable";
+    }
+    
 }
 
 -(UIImage *) glyphWithOption:(ConditionOption) option{

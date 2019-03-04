@@ -71,7 +71,7 @@ void loadWeatherAnimation(City *city){
 
 void loadCityForView(){
         AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
-			loadWeatherAnimation(weatherModel.city);
+    if(weatherModel.isPopulated)loadWeatherAnimation(weatherModel.city);
 }
 
 /* remove view from screen */

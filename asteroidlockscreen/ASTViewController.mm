@@ -267,7 +267,7 @@
 }
 
 -(void) updateViewForWeatherData {
-    if(self.weatherModel.isPopulated){
+    if(self.weatherModel.isPopulated || self.weatherModel.hasFallenBack){
         UIImage *icon;
         BOOL setColor = FALSE;
         if(![prefs boolForKey:@"customImage"]){
@@ -316,10 +316,12 @@
         self.wDescription.text = [self.weatherModel currentConditionOverview];
         self.greetingLabel.textAlignment = NSTextAlignmentCenter;
         
-        self.forecastCont.model = self.weatherModel.todayModel;
-        [self.forecastCont.model forecastModel];
-        [self.forecastCont.headerView _updateContent];
-        [self.forecastCont _updateViewContent];
+        if(self.weatherModel.isPopulated){
+            self.forecastCont.model = self.weatherModel.todayModel;
+            [self.forecastCont.model forecastModel];
+            [self.forecastCont.headerView _updateContent];
+            [self.forecastCont _updateViewContent];
+        }
     }
 }
 

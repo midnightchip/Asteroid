@@ -63,25 +63,27 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 
 %new
 -(void) updateView{
-    if(conditionNumberSet != self.weatherModel.city.conditionCode || [self shouldUpdateView:condition]){
-        [self.referenceView removeFromSuperview];
-        
-        self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
-        if([prefs boolForKey:@"hideWeatherBackground"]){
-            self.referenceView.background.hidesBackground = YES;
-            self.referenceView.background.condition.hidesBackground = YES;
+    if(self.weatherModel.isPopulated){
+        if(conditionNumberSet != self.weatherModel.city.conditionCode || [self shouldUpdateView:condition]){
+            [self.referenceView removeFromSuperview];
+            
+            self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
+            if([prefs boolForKey:@"hideWeatherBackground"]){
+                self.referenceView.background.hidesBackground = YES;
+                self.referenceView.background.condition.hidesBackground = YES;
+            }
+            
+            [self.referenceView.background setCity:self.weatherModel.city];
+            [self.referenceView.background setTag:123];
+            
+            [[self.referenceView.background condition] resume];
+            condition = [self.referenceView.background condition];
+            self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            self.referenceView.clipsToBounds = YES;
+            conditionNumberSet = condition.condition;
+            [self addSubview:self.referenceView];
+            [self sendSubviewToBack:self.referenceView];
         }
-
-        [self.referenceView.background setCity:self.weatherModel.city];        
-        [self.referenceView.background setTag:123];
-        
-        [[self.referenceView.background condition] resume];
-        condition = [self.referenceView.background condition];
-        self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        self.referenceView.clipsToBounds = YES;
-        conditionNumberSet = condition.condition;
-        [self addSubview:self.referenceView];
-        [self sendSubviewToBack:self.referenceView];
     }
 }
 
@@ -226,7 +228,7 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 //Thanks June
 %group WeatherBackground
 %hook WUIDynamicWeatherBackground
-%property (nonatomic, retain) BOOL hidesBackground;
+%property (nonatomic, assign) BOOL hidesBackground;
 -(id)gradientLayer{
     if(self.hidesBackground) return nil;
     else return %orig;
@@ -264,7 +266,7 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 %end
 
 %hook WUIWeatherCondition
-%property (nonatomic, retain) BOOL hidesBackground;
+%property (nonatomic, assign) BOOL hidesBackground;
 	-(CALayer *)layer{
 		if(self.alpha == 982 && self.hidesBackground){
 			CALayer* layer = %orig;

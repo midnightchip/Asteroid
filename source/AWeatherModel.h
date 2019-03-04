@@ -18,6 +18,7 @@ typedef void(^completion)();
 @property (nonatomic, retain) NSTimer *refreshTimer;
 @property (nonatomic, getter=isLocalWeather) BOOL localWeather;
 @property (nonatomic, getter=isPopulated) BOOL populated;
+@property (nonatomic) BOOL hasFallenBack;
 
 + (instancetype)sharedInstance;
 -(void) _kickStartWeatherFramework;

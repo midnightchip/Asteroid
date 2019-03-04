@@ -38,11 +38,6 @@ static BOOL isWeatherLocked = nil;
     // setting a static
     mainPageView = self;
     
-    if(!self.weatherModel){
-        self.weatherModel = [%c(AWeatherModel) sharedInstance];
-        //[self.weatherModel updateWeatherDataWithCompletion:^{nil;}];
-    }
-    
     if(!self.gestureViewController){
         self.gestureViewController = [[%c(ASTViewController) alloc] init];
         [self.weather addSubview: self.gestureViewController.view];
@@ -199,13 +194,17 @@ static BOOL isWeatherLocked = nil;
                               delay:0
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{self.view.alpha = 1;}
-                         completion:nil];
+                         completion:^(BOOL finished){
+                             [self.view setUserInteractionEnabled:YES];
+                         }];
     } else {
         [UIView animateWithDuration:.5
                               delay:0
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{self.view.alpha = 0;}
-                         completion:nil];
+                         completion:^(BOOL finished){
+                             [self.view setUserInteractionEnabled:NO];
+                         }];
     }
 }
 %end

@@ -26,7 +26,7 @@ static WUIWeatherCondition* condition = nil;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(weatherNotification:) name:@"weatherTimerUpdate" object:nil];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, .5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            if(_weatherModel.isPopulated)[self updateWeatherDisplay]; // New instances will need to be setup immediate instead of on notification.
+            [self updateWeatherDisplay]; // New instances will need to be setup immediate instead of on notification.
         });
     }
     return self;
@@ -72,6 +72,7 @@ static WUIWeatherCondition* condition = nil;
 
 -(void) weatherNotification: (NSNotification *) notification{
     [self updateWeatherDisplay];
+    
 }
 
 -(void)updateWeatherDisplay{
@@ -143,13 +144,15 @@ static WUIWeatherCondition* condition = nil;
         
         [self layoutSubviews];
         
-        if([prefs boolForKey:@"appScreenWeatherBackground"]){
+        if([prefs boolForKey:@"appScreenWeatherBackground"] && _weatherModel.isPopulated){
             if([prefs boolForKey:@"customConditionIcon"]){
                 _weatherModel.city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
             }
             [self.referenceView.background setCity:_weatherModel.city];
             
             [[self.referenceView.background condition] resume];
+        } else {
+            self.referenceView.backgroundColor = [UIColor grayColor];
         }
     }
 }
