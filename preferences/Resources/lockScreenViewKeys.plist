@@ -12,21 +12,21 @@
                 <key>label</key>
                 <string>Editing</string>
                 <key>footerText</key>
-                <string>Components can be resized and moved around the lock screen through editing mode. To enter editing  mode, long press any of the lock screen icons. In order to save all changes, exit editing mode by hitting the Done button.</string>
+                <string>Edit_Explain</string>
             </dict>
             
             <dict>
                 <key>cell</key>
                 <string>PSGroupCell</string>
                 <key>footerText</key>
-                <string>Pleasantry Text Size.</string>
+                <string>Pleasantry_Size</string>
             </dict>
             
             <dict>
                 <key>cell</key>
                 <string>PSSwitchCell</string>
                 <key>label</key>
-                <string>Enable Pleasantry</string>
+                <string>Enable_Pleasantry</string>
                 <key>key</key>
                 <string>addgreetLabel</string>
                 <key>PostNotification</key>
@@ -64,14 +64,14 @@
                 <key>cell</key>
                 <string>PSGroupCell</string>
                 <key>footerText</key>
-                <string>Weather Description Size.</string>
+                <string>Weather_Description_Size</string>
             </dict>
             
             <dict>
                 <key>cell</key>
                 <string>PSSwitchCell</string>
                 <key>label</key>
-                <string>Enable Weather Description</string>
+                <string>Enable_Weather_Description</string>
                 <key>key</key>
                 <string>addDescription</string>
                 <key>PostNotification</key>
@@ -109,14 +109,14 @@
                 <key>cell</key>
                 <string>PSGroupCell</string>
                 <key>footerText</key>
-                <string>Current Temperature Text Size</string>
+                <string>Current_Temperature_Text_Size</string>
             </dict>
             
             <dict>
                 <key>cell</key>
                 <string>PSSwitchCell</string>
                 <key>label</key>
-                <string>Enable Current Temperature</string>
+                <string>Enable_Current_Temperature</string>
                 <key>key</key>
                 <string>addTemp</string>
                 <key>PostNotification</key>
@@ -154,14 +154,14 @@
                 <key>cell</key>
                 <string>PSGroupCell</string>
                 <key>footerText</key>
-                <string>Dismiss Button Size</string>
+                <string>Dismiss_Button_Size</string>
             </dict>
             
             <dict>
                 <key>cell</key>
                 <string>PSSwitchCell</string>
                 <key>label</key>
-                <string>Enable Dismiss Button</string>
+                <string>Enable_Dismiss_Button</string>
                 <key>key</key>
                 <string>addDismiss</string>
                 <key>PostNotification</key>
@@ -204,7 +204,7 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Enable Glyph</string>
+				<string>Enable_Glyph</string>
 				<key>key</key>
 				<string>addLogo</string>
 				<key>PostNotification</key>
@@ -219,7 +219,7 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Enable Notification Reminder</string>
+				<string>Enable_Notification_Reminder</string>
 				<key>key</key>
 				<string>addNotification</string>
 				<key>PostNotification</key>
@@ -234,7 +234,7 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Enable Blur</string>
+				<string>Enable_Blur</string>
 				<key>key</key>
 				<string>addBlur</string>
 				<key>PostNotification</key>
@@ -249,14 +249,14 @@
                 <key>cell</key>
                 <string>PSGroupCell</string>
                 <key>label</key>
-                <string>Hourly Forecast Options</string>
+                <string>Hourly_Forecast_Options</string>
             </dict>
             
 			<dict>
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Enable Weather Preview</string>
+				<string>Enable_Weather_Preview</string>
 				<key>key</key>
 				<string>enableForeHeader</string>
 				<key>PostNotification</key>
@@ -271,7 +271,7 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Enable Weather Forecast Info</string>
+				<string>Enable_Weather_Forecast_Info</string>
 				<key>key</key>
 				<string>enableForeTable</string>
 				<key>PostNotification</key>
@@ -295,7 +295,7 @@
                 <key>cell</key>
                 <string>PSButtonCell</string>
                 <key>label</key>
-                <string>Reset Components</string>
+                <string>Reset_Components</string>
             </dict>
             
             <dict>

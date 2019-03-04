@@ -1,0 +1,14 @@
+{
+    "Enable_Icon" = "Enable Weather Icon Customization";
+    "Enables_Theme" = "Enables Tweaking Weather Icon";
+    "Enable_Background" = "Enable Background";
+    "Background_Icon" = "Background for Weather Icon";
+    "Enable_Live" = "Enable Live Condition Background";
+    "Weather_Location" = "Live Weather Condition Over Weather Icon";
+    "Custom_Weather" = "Custom Weather Conditions for Weather App";
+    "Select_Weather" = "Select Custom Weather Conditions";
+    "Overides_Current" = "This overides your weather background animation.";
+    "Background_Color" = "Set Weather App Background Color";
+    "Select_Color" = "Select Icon Color";
+    "Weather_Icon" = "Weather Icon";
+}

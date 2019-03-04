@@ -1,0 +1,16 @@
+{
+    "Enable_Tweak" = "Enable";
+    "Custom_Fonts" = " Custom Fonts";
+    "Use_Custom_Font" = "Use Custom Font";
+    "Custom_Font" = "Select Custom Font:";
+    "Font_Sizes" = "Font Sizes";
+    "Greeting_Size" = "Greeting Size";
+    "Description_Size" = "Description Size";
+    "Current_Temperature_Size" = "Current Temperature Size";
+    "Blur_Amount" = "Blur Amount";
+    "Support" = "Support, Donations and Contact";
+    "Backup" = "Backup and Restore";
+    "ChangeLog" = "ChangeLog";
+    "Version" = "Version:";
+    "Asteroid" = "Asteroid";
+}

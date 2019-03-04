@@ -144,7 +144,7 @@
 				<key>cell</key>
 				<string>PSLinkCell</string>
 				<key>pushToPlist</key>
-				<string>Support</string>
+				<string>AsteroidSupport</string>
 				<key>label</key>
 				<string>Support</string>
 				<key>key</key>

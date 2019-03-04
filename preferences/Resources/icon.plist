@@ -9,9 +9,9 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Enable Weather Icon Customization</string>
+				<string>Enable_Icon</string>
 				<key>sublabel</key>
-				<string>Enables Tweaking Weather Icon</string>
+				<string>Enables_Theme</string>
 				<key>key</key>
 				<string>appIcon</string>
 				<key>PostNotification</key>
@@ -28,9 +28,9 @@
                 <key>cell</key>
                 <string>PSSwitchCell</string>
                 <key>label</key>
-                <string>Enable Background</string>
+                <string>Enable_Background</string>
                 <key>sublabel</key>
-                <string>Background for Weather Icon</string>
+                <string>Background_Icon</string>
                 <key>key</key>
                 <string>appScreenWeatherBackground</string>
                 <key>PostNotification</key>
@@ -49,9 +49,9 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Enable Live Condition Background</string>
+				<string>Enable_Live</string>
 				<key>sublabel</key>
-				<string>Live Weather Condition Over Weather Icon</string>
+				<string>Weather_Location</string>
 				<key>key</key>
 				<string>appScreenWeather</string>
 				<key>PostNotification</key>
@@ -70,7 +70,7 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Custom Weather Conditions for Weather App</string>
+				<string>Custom_Weather</string>
 				<key>key</key>
 				<string>customConditionIcon</string>
 				<key>PostNotification</key>
@@ -89,9 +89,9 @@
 				<key>detail</key>
 				<string>CSListItemsController</string>
 				<key>label</key>
-				<string>Select Custom Weather Conditions</string>
+				<string>Select_Weather</string>
 				<key>sublabel</key>
-				<string>This overides your weather background animation.</string>
+				<string>Overides_Current</string>
 				<key>key</key>
 				<string>weatherConditionsIcon</string>
 				<key>titlesDataSource</key>
@@ -111,7 +111,7 @@
 				<key>cell</key>
 				<string>PSSwitchCell</string>
 				<key>label</key>
-				<string>Set Weather App Background Color</string>
+				<string>Background_Color</string>
 				<key>key</key>
 				<string>customAppColor</string>
 				<key>PostNotification</key>
@@ -132,7 +132,7 @@
 				<key>key</key>
 				<string>appColor</string>
 				<key>label</key>
-				<string>Select Icon Color</string>
+				<string>Select_Color</string>
 				<key>fallback</key>
 				<string>FFFFFF</string>
 				<key>alpha</key>
@@ -153,6 +153,6 @@
 		</array>
 
 		<key>title</key>
-		<string>Weather Icon</string>
+		<string>Weather_Icon</string>
 	</dict>
 </plist>

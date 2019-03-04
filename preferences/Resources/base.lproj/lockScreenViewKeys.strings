@@ -1,0 +1,20 @@
+{
+    "Editing" = "Editing";
+    "Edit_Explain" = "Components can be resized and moved around the lock screen through editing mode. To enter editing  mode, long press any of the lock screen icons. In order to save all changes, exit editing mode by hitting the Done button.";
+    "Pleasantry_Size" = "Pleasantry Text Size.";
+    "Enable_Pleasantry" = "Enable Pleasantry";
+    "Weather_Description_Size" = "Weather Description Size.";
+    "Enable_Weather_Description" = "Enable Weather Description";
+    "Current_Temperature_Text_Size" = "Current Temperature Text Size";
+    "Enable_Current_Temperature" = "Enable Current Temperature";
+    "Dismiss_Button_Size" = "Dismiss Button Size";
+    "Enable_Dismiss_Button" = "Enable Dismiss Button";
+    "Enable_Glyph" = "Enable Glyph";
+    "Enable_Notification_Reminder" = "Enable Notification Reminder";
+    "Enable_Blur" = "Enable Blur";
+    "Hourly_Forecast_Options" = "Hourly Forecast Options";
+    "Enable_Weather_Preview" = "Enable Weather Preview";
+    "Enable_Weather_Forecast_Info" = "Enable_Weather_Forecast_Info";
+    "Reset_Components" = "Reset Components";
+    "Components" = "Components";
+}
