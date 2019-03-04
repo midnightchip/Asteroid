@@ -64,42 +64,27 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 %new
 -(void) updateView{
     if(self.weatherModel.isPopulated){
-        if(conditionNumberSet != self.weatherModel.city.conditionCode || [self shouldUpdateView:condition]){
-            [self.referenceView removeFromSuperview];
-            
-            self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
-            if([prefs boolForKey:@"hideWeatherBackground"]){
-                self.referenceView.background.hidesBackground = YES;
-                self.referenceView.background.condition.hidesBackground = YES;
-            }
-            
-            [self.referenceView.background setCity:self.weatherModel.city];
-            [self.referenceView.background setTag:123];
-            
-            [[self.referenceView.background condition] resume];
-            condition = [self.referenceView.background condition];
-            self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            self.referenceView.clipsToBounds = YES;
-            conditionNumberSet = condition.condition;
-            [self addSubview:self.referenceView];
-            [self sendSubviewToBack:self.referenceView];
+        [self.referenceView removeFromSuperview];
+        
+        self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
+        if([prefs boolForKey:@"hideWeatherBackground"]){
+            self.referenceView.background.hidesBackground = YES;
+            self.referenceView.background.condition.hidesBackground = YES;
         }
+        
+        [self.referenceView.background setCity:self.weatherModel.city];
+        [self.referenceView.background setTag:123];
+        
+        [[self.referenceView.background condition] resume];
+        condition = [self.referenceView.background condition];
+        self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.referenceView.clipsToBounds = YES;
+        conditionNumberSet = condition.condition;
+        [self addSubview:self.referenceView];
+        [self sendSubviewToBack:self.referenceView];
     }
 }
-
-%new
--(BOOL) shouldUpdateView:(WUIWeatherCondition *) currentCondition{
-    NSString *currentConditionFormatted = currentCondition.loadedFileName;
-    ConditionImageType currentConditionType = [self.weatherModel conditionImageTypeForString: currentConditionFormatted];
-    
-    NSInteger actualCode = [self.weatherModel.city conditionCode];
-    NSString *actualConditionImageName = actualCode < 3200 ? [WeatherImageLoader conditionImageNameWithConditionIndex:actualCode] : nil;
-    ConditionImageType actualConditionType = [self.weatherModel conditionImageTypeForString: actualConditionImageName];
-    
-    return currentConditionType != actualConditionType ? YES : NO;
-    
-}
-%end 
+%end
 
 //Start stop view, save battery
 %hook SBHomeScreenWindow
