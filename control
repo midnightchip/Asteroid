@@ -1,7 +1,7 @@
 Package: com.midnightchips.asteroid
 Name: Asteroid
-Depends: firmware (>= 11.0), mobilesubstrate, preferenceloader, com.creaturecoding.libcspreferences, com.creaturesurvive.libcscolorpicker, com.rpetrich.rocketbootstrap (>= 1.0.2)
-Version: 1.3.5
+Depends: firmware (>= 11.0), mobilesubstrate, preferenceloader, com.creaturecoding.libcspreferences, com.creaturesurvive.libcscolorpicker
+Version: 2.0
 Conflicts:
 Replaces:
 Priority: optional
