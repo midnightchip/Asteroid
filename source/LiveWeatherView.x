@@ -4,7 +4,6 @@
 #import "Asteroid.h"
 
 @interface LiveWeatherView ()
-@property (assign, nonatomic) BOOL readyForUpdates;
 @property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
 @property (nonatomic, retain) UIImageView *logo;
 @property (nonatomic, retain) UILabel *temp;
