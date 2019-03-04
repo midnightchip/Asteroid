@@ -94,10 +94,7 @@
     }
 }
 -(void) updateWeather: (NSTimer *) sender {
-    [self updateWeatherDataWithCompletion:^{
-        [self postNotification];
-    }];
-    
+    [self updateWeatherDataWithCompletion:nil];
 }
 -(void) postNotification{
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -117,7 +114,6 @@
         _weatherBundle = [NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/Weather.framework"];
         [_weatherBundle load];
     }
-    
     return _weatherBundle;
 }
 
