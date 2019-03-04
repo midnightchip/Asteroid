@@ -1,0 +1,16 @@
+{
+    "Enable_Tweak" = "Etkinleştir";
+    "Custom_Fonts" = " Özel Yazı Tipleri";
+    "Use_Custom_Font" = "Özel Yazı Tipini Etkinleştir";
+    "Custom_Font" = "Özel Yazı Tipini Seç:";
+    "Font_Sizes" = "Yazı Tipi Boyutu";
+    "Greeting_Size" = "Karşılama Mesajı Boyutu";
+    "Description_Size" = "Açıklama Metni Boyutu";
+    "Current_Temperature_Size" = "Güncel Hava Sıcaklığı Boyutu";
+    "Blur_Amount" = "Arka Plan Bulanıklık Seviyesi";
+    "Support" = "Destek, Bağış ve İletişim";
+    "Backup" = "Yedekleme ve Geri Yükleme";
+    "ChangeLog" = "Güncelleme Geçmişi";
+    "Version" = "Versiyon:";
+    "Asteroid" = "Asteroid";
+}

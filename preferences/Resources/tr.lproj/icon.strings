@@ -1,0 +1,14 @@
+{
+    "Enable_Icon" = "Hava Durumu Simgesi Kişiselleştirmeyi Etkinleştir";
+    "Enables_Theme" = "Hava Durumu Simgesinde Değişikliklere İzin Verir";
+    "Enable_Background" = "Arka Planı Etkinleştir";
+    "Background_Icon" = "Hava Durumu Simgesi Arkaplanı";
+    "Enable_Live" = "Canlı Hava Durumu Arka Planını Etkinleştir";
+    "Weather_Location" = "Hava Durumu Simgesi Üzerinde Canlı Hava Durumu";
+    "Custom_Weather" = "Hava Durumu Uygulaması için Özel Durumlar";
+    "Select_Weather" = "Özel Hava Durumunu Seç";
+    "Overides_Current" = "Hava Durumu Varsayılan Animasyonu Olarak Kullanılır";
+    "Background_Color" = "Hava Durumu Uygulaması Arka Plan Rengi";
+    "Select_Color" = "Simge Rengini Seç";
+    "Weather_Icon" = "Hava Durumu Simgesi";
+}

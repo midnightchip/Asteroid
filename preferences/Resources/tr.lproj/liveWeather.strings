@@ -1,0 +1,12 @@
+{
+    "Enable_Lock" = "Kilit Ekranını Etkinleştir";
+    "Control_Lock" = "Kilit Ekranında Canlı Hava Durumunu Aç/Kapa";
+    "Enable_Home" = "Ana Ekranı Etkinleştir";
+    "Control_Home" = "Ana Ekranda Canlı Hava Durumunu Aç/Kapa";
+    "Custom_Condition" = "Özel Hava Durumunu Aktifleştir";
+    "Select_Condition" = "Özel Hava Durumunu Seç";
+    "Overide_Animation" = "Hava Durumu Varsayılan Animasyonu Olarak Kullanılır.";
+    "Hide_Background" = "Hava Durumu Arka Planını Gizle";
+    "Hide_Explain" = "Hava Durumu Arka Planını Gizler, Sadece Animasyon Oynatılır";
+    "Live_Weather" = "Canlı Hava Durumu";
+}

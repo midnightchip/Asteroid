@@ -1,0 +1,17 @@
+{
+    "Enable_Greet" = "Karşılama Ekranını Etkinleştir";
+    "Hide_Notif" = "Bildirimde Karşılama Ekranını Gizle";
+    "Notif_Explain" = "Bildirim olduğu zaman hava durumu ekranını gizler";
+    "Lockscreen_Components" = "Kilit Ekranı Bileşenleri";
+    "Configure_Lockscreen_Components" = "Kilit Ekranı Bileşenlerini Düzenle";
+    "Custom_Fonts" = "Özel Yazı Tipleri";
+    "Enable_Custom_Font" = "Özel Yazı Tipini Etkinleştir";
+    "Select_Custom_Font" = "Özel Yazı Tipini Seç";
+    "Set_Text_Color" = "Yazı Rengini Ayarla";
+    "Use_Custom_Glyph_Image" = "Özel Hava Durumu Simgesi Kullan";
+    "Select_Weather_Glyph_Type" = "Özel Hava Durumu Simgesini Seç";
+    "Set_Glyph_Color" = "Hava Durumu Simgesi Rengini Ayarla";
+    "Blur_Amount" = "Arka Plan Bulanıklık Seviyesi";
+    "Lock_Screen" = "Kilit Ekranı";
+
+}
