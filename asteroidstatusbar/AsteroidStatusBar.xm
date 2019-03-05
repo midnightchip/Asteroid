@@ -24,7 +24,8 @@ static NSString *weatherTemp() {
     }
     return serverDict[@"temp"];
 }
-
+//This method is straight up from the incredibly talented Blake Boxbergers "DateUnderTimeX"
+//https://github.com/BlakeBoxberger/DateUnderTimeX 
 %hook _UIStatusBarStringView
 - (void)setText:(NSString *)text {
 	if([text containsString:@":"]) {
@@ -37,6 +38,10 @@ static NSString *weatherTemp() {
 	else {
 		%orig(text);
 	}
+}
+- (void)setFont:(UIFont *)arg1{
+	UIFont *tempFont = [self.font fontWithSize:12];
+	%orig(tempFont);
 }
 
 %end
