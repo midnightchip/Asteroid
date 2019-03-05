@@ -94,7 +94,9 @@
 -(void)setUpRefreshTimer{
     // Creating a refresh timer
     if(!self.refreshTimer){
-        self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:([prefs doubleForKey:@"refreshRate"])
+        double refreshRate = [prefs doubleForKey:@"refreshRate"];
+        if(!refreshRate || refreshRate < 30) refreshRate = 300;
+        self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:refreshRate
                                                              target:self
                                                            selector:@selector(updateWeather:)
                                                            userInfo:nil
@@ -102,7 +104,11 @@
     }
 }
 -(void) updateWeather: (NSTimer *) sender {
-    [self updateWeatherDataWithCompletion:^{nil;}];
+    if(self.hasFallenBack == YES){
+        [self _kickStartWeatherFramework];
+    } else {
+        [self updateWeatherDataWithCompletion:^{nil;}];
+    }
 }
 -(void) postNotification{
     dispatch_async(dispatch_get_main_queue(), ^{

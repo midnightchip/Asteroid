@@ -30,16 +30,18 @@
                     <string>30_Seconds</string>
                     <string>1_Minute</string>
                     <string>5_Minutes</string>
-                    <string>10_Minutes</string>
                     <string>15_Minutes</string>
+                    <string>1 Hour</string>
+                    <string>2 Hours</string>
                 </array>
                 <key>validValues</key>
                 <array>
                     <real>30</real>
                     <real>60</real>
                     <real>300</real>
-                    <real>600</real>
                     <real>900</real>
+                    <real>3600</real>
+                    <real>7200</real>
                 </array>
             </dict>
             

@@ -1,38 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-	<dict>
-		<key>kLWPEnabled</key>
-		<true/>
-		<key>customFont</key>
-		<false/>
-        <key>appScreenWeatherBackground</key>
-        <true/>
-        <key>greetView</key>
-        <false/>
-		<key>greetingSize</key>
-		<real>40</real>
-		<key>wDescriptionSize</key>
-		<real>20</real>
-		<key>tempSize</key>
-		<real>50</real>
-        <key>dismissButtonSize</key>
-        <real>18</real>
-		<key>blurAmount</key>
-		<real>5</real>
-		<key>textColor</key>
-		<string>FFFFFF</string>
-		<key>glyphColor</key>
-		<string>FFFFFF</string>
-        <key>refreshRate</key>
-        <real>6</real>
-        <key>inactiveValue</key>
-        <real>11</real>
-        <key>iconSize</key> <!--Data for the lock icon-->
-        <real>1</real>
-        <key>forecastContViewSize</key> <!--Data for the lock icon-->
-        <real>1</real>
-		<key>customAppColor</key>
-        <string>FFFFFF</string>
-	</dict>
+<dict>
+	<key>kLWPEnabled</key>
+	<true/>
+	<key>customFont</key>
+	<false/>
+	<key>appScreenWeatherBackground</key>
+	<true/>
+	<key>greetView</key>
+	<false/>
+	<key>greetingSize</key>
+	<real>40</real>
+	<key>wDescriptionSize</key>
+	<real>20</real>
+	<key>tempSize</key>
+	<real>50</real>
+	<key>dismissButtonSize</key>
+	<real>18</real>
+	<key>blurAmount</key>
+	<real>5</real>
+	<key>textColor</key>
+	<string>FFFFFF</string>
+	<key>glyphColor</key>
+	<string>FFFFFF</string>
+	<key>refreshRate</key>
+	<integer>300</integer>
+	<key>iconSize</key>
+	<real>1</real>
+	<key>forecastContViewSize</key>
+	<real>1</real>
+	<key>customAppColor</key>
+	<string>FFFFFF</string>
+</dict>
 </plist>

@@ -2,6 +2,7 @@
 #import <objc/message.h>
 #import <SpringBoard/SpringBoard.h>
 #import <SpringBoard/SBApplication.h>
+#import "ConditionImageType.h"
 
 @interface SBHomeScreenView : UIView
 //@interface SBFWallpaperView : UIView
@@ -12,7 +13,7 @@
 @interface SBHomeScreenView (Weather)
 //@interface SBFWallpaperView (Weather)
 -(void)updateView;
--(BOOL) shouldUpdateView:(WUIWeatherCondition *) currentCondition;
+-(BOOL) needsUpdateForCode:(NSInteger) conditionCode;
 @end
 
 @interface UIApplication (asteroid)
@@ -63,13 +64,13 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 
 %new
 -(void) updateView{
-    if(self.weatherModel.isPopulated){
+    if(self.weatherModel.isPopulated && [self needsUpdateForCode:self.referenceView.background.condition.condition]){
         [self.referenceView removeFromSuperview];
         
         self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
         if([prefs boolForKey:@"hideWeatherBackground"]){
             self.referenceView.background.hidesBackground = YES;
-            self.referenceView.background.condition.hidesBackground = YES;
+            self.referenceView.background.condition.hidesConditionBackground = YES;
         }
         
         [self.referenceView.background setCity:self.weatherModel.city];
@@ -83,6 +84,22 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
         [self addSubview:self.referenceView];
         [self sendSubviewToBack:self.referenceView];
     }
+}
+
+%new
+-(BOOL) needsUpdateForCode:(NSInteger) conditionCode{
+    NSInteger actualCode = self.weatherModel.city.conditionCode;
+    if(conditionCode != actualCode){
+        return YES;
+    }
+    NSString *currentConditionImageName = conditionCode < 3200 ? [WeatherImageLoader conditionImageNameWithConditionIndex:conditionCode] : nil;
+    ConditionImageType currentType = [self.weatherModel conditionImageTypeForString: currentConditionImageName];
+    
+    NSString *actualConditionImageName = actualCode < 3200 ? [WeatherImageLoader conditionImageNameWithConditionIndex:actualCode] : nil;
+    ConditionImageType actualType = [self.weatherModel conditionImageTypeForString: actualConditionImageName];
+    
+    if(currentType != actualType) return YES;
+    else return NO;
 }
 %end
 
@@ -100,8 +117,6 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
                                         NULL,
                                         CFNotificationSuspensionBehaviorDeliverImmediately);
     });
-    
-    //}
 }
 
 %end
@@ -143,42 +158,7 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
     
 }
 %end 
-%end 
-//Figure this out at a later date
-/*@interface SBFolderControllerBackgroundView : UIView
-@property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
-@property (nonatomic, retain) AWeatherModel *weatherModel;
-@end 
-%hook SBFolderControllerBackgroundView 
-%property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
-%property (nonatomic, retain) AWeatherModel *weatherModel;
-
--(void)layoutSubviews{
-    %orig;
-
-    [self.referenceView removeFromSuperview];
-    
-    self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
-    //EZ custom weather animation
-    City *customWeather = self.weatherModel.city;
-    if([prefs boolForKey:@"customCondition"]){
-        customWeather.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditions"]] doubleValue];
-        [self.referenceView.background setCity:customWeather];
-    }else{
-        [self.referenceView.background setCity:self.weatherModel.city];
-    }
-    
-    [self.referenceView.background setTag:123];
-    
-    [[self.referenceView.background condition] resume];
-    condition = [self.referenceView.background condition];
-    self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.referenceView.clipsToBounds = YES;
-    [self addSubview:self.referenceView];
-    [self bringSubviewToFront:self.referenceView];
-    
-}
-%end*/
+%end
 
 //Dock 
 @interface SBDockView : UIView 
@@ -251,9 +231,9 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 %end
 
 %hook WUIWeatherCondition
-%property (nonatomic, assign) BOOL hidesBackground;
+%property (nonatomic, assign) BOOL hidesConditionBackground;
 	-(CALayer *)layer{
-		if(self.alpha == 982 && self.hidesBackground){
+		if(self.alpha == 982 && self.hidesConditionBackground){
 			CALayer* layer = %orig;
 			for(CALayer* firstLayers in layer.sublayers){
 				if(firstLayers.backgroundColor){

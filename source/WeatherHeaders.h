@@ -25,7 +25,7 @@
 @property (assign,nonatomic) BOOL isLocalWeatherCity;
 @property (nonatomic, retain) WFLocation *wfLocation;
 - (NSString *)naturalLanguageDescription;
--(BOOL)isDay;
+@property (assign,nonatomic) BOOL isDay;                                                 
 -(void) update;
 -(NSDate*) updateTime;
 @property (nonatomic,copy) NSString * name;  

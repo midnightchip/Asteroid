@@ -30,15 +30,29 @@ static WUIWeatherCondition* condition = nil;
 static UIView* weatherAnimation = nil;
 static bool Loaded = NO;
 
+static void updateAnimation(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    if(MSHookIvar<BOOL>([%c(SBLockScreenManager) sharedInstance], "_isScreenOn")){
+        if(MSHookIvar<NSUInteger>([objc_getClass("SBLockStateAggregator") sharedInstance], "_lockState") == 3 || MSHookIvar<NSUInteger>([objc_getClass("SBLockStateAggregator") sharedInstance], "_lockState") == 1){
+            [condition resume];
+        } else{
+            [condition pause];
+        }
+    } else {
+        [condition pause];
+    }
+}
+
 void loadWeatherAnimation(City *city){
+    NSLog(@"lock_TWEAK | loading");
 	if(!Loaded){
 	    if(city){
+            NSLog(@"lock_TWEAK | setup");
 		    weatherAnimation = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
 				weatherAnimation.clipsToBounds = YES;
 			WUIWeatherConditionBackgroundView *referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
             if([prefs boolForKey:@"hideWeatherBackground"]){
                 referenceView.background.hidesBackground = YES;
-                referenceView.background.condition.hidesBackground = YES;
+                referenceView.background.condition.hidesConditionBackground = YES;
             }
 
 			dynamicBG = [referenceView background];
@@ -63,9 +77,9 @@ void loadWeatherAnimation(City *city){
 		}
 	}else{
 		if(city){
+            NSLog(@"lock_TWEAK | set city");
 			[dynamicBG setCity: city];
 		}
-		[condition resume];
 	}
 }
 
@@ -74,21 +88,17 @@ void loadCityForView(){
     if(weatherModel.isPopulated)loadWeatherAnimation(weatherModel.city);
 }
 
-/* remove view from screen */
-void pauseAnimation(){
-	[condition pause];
+%hook SBLockScreenManager
+-(id)init{
+    if((self = %orig)){
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(weatherTimer:) name:@"weatherTimerUpdate" object:nil];
+    }
+    return self;
 }
-
-
-%hook SBLockScreenViewControllerBase
-	- (void)setInScreenOffMode:(_Bool)arg1 forAutoUnlock:(_Bool)arg2{
-		%orig;
-		if(arg1){
-			pauseAnimation();
-		}else{
-            loadCityForView();
-		}
-	}
+%new
+-(void) weatherTimer:(NSNotification *)notification{
+    loadCityForView();
+}
 %end
 
 %hook SpringBoard
@@ -99,52 +109,21 @@ void pauseAnimation(){
         dispatch_after(delay, dispatch_get_main_queue(), ^(void){
 			loadCityForView();
 		});
-	//Thought this was needed, its not.
-	/*[[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(isPlaying)
-                                            name:@"isPlayingSong"
-											object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(stoppedPlaying)
-                                            name:@"stoppedPlaying"
-											object:nil];*/
 }
-//Observe when the animation should stop
-/*
-%new 
--(void)isPlaying{
-	pauseAnimation();
-	//[weatherAnimation removeFromSuperview];
-	//Loaded = NO;
-	weatherAnimation.hidden = YES;
-}
-
-%new 
--(void)stoppedPlaying{
-	weatherAnimation.hidden = NO;
-    loadCityForView();
-}*/
 %end
-
-//Hide animation on music playing
-/*%hook SBDashBoardMainPageView
-- (void)layoutSubviews {
-    %orig;
-	if([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] == 0){
-			weatherAnimation.hidden = NO;
-            loadCityForView();
-        } else if([(SpringBoard*)[UIApplication sharedApplication] nowPlayingProcessPID] > 0){
-            pauseAnimation();
-			weatherAnimation.hidden = YES;
-		}
-	
-}
-%end */
 
 %ctor{
     if([prefs boolForKey:@"lockScreenWeather"] && [prefs boolForKey:@"kLWPEnabled"]) {
         %init();
 	}
+    
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
+                                    NULL,
+                                    updateAnimation,
+                                    CFSTR("com.apple.springboard.screenchanged"),
+                                    NULL,
+                                    CFNotificationSuspensionBehaviorDeliverImmediately);
+    
     //Thank you june
     NSArray *args = [[NSClassFromString(@"NSProcessInfo") processInfo] arguments];
 	NSUInteger count = args.count;

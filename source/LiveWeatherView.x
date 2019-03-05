@@ -146,7 +146,7 @@ static WUIWeatherCondition* condition = nil;
         
         if([prefs boolForKey:@"appScreenWeatherBackground"] && _weatherModel.isPopulated){
             if([prefs boolForKey:@"customConditionIcon"]){
-                _weatherModel.city.conditionCode = [[conditions objectForKey:[prefs stringForKey:@"weatherConditionsIcon"]] doubleValue];
+                _weatherModel.city.conditionCode = [prefs doubleForKey:@"weatherConditionsIcon"];
             }
             [self.referenceView.background setCity:_weatherModel.city];
             

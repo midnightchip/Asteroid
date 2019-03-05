@@ -167,7 +167,9 @@
         [self.view addSubview:self.notificationLabelGestureView];
     }
     
-    self.doneButtonView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 60, 25, 50, 20)];
+    CGRect stausBarFrame = [[objc_getClass("SpringBoard") sharedApplication] statusBarFrame];
+    
+    self.doneButtonView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 60, stausBarFrame.size.height + 5, 50, 20)];
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [doneButton addTarget:self
                            action:@selector(doneButtonPressed:)
@@ -184,7 +186,7 @@
     blurEffectView.frame = self.doneButtonView.bounds;
     self.doneButtonView.layer.cornerRadius = 10;
     self.doneButtonView.layer.masksToBounds = YES;
-    self.doneButtonView.hidden = YES;
+    self.doneButtonView.alpha = 0;
     [self.doneButtonView addSubview:blurEffectView];
     [self.doneButtonView addSubview:doneButton];
     [self.view addSubview:self.doneButtonView];
@@ -387,9 +389,6 @@
 }
 
 -(void) addASTGesturesAndRevealButton{
-    self.doneButtonView.alpha = 0;
-    self.doneButtonView.hidden = NO;
-    
     [UIView animateWithDuration:.2
                           delay:0
                         options:UIViewAnimationOptionCurveEaseInOut
@@ -410,10 +409,7 @@
                           delay:0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{self.doneButtonView.alpha = 0;}
-                     completion:^(BOOL finished){
-                         self.doneButtonView.hidden = YES;
-                         self.doneButtonView.alpha = 1;
-                     }];
+                     completion:nil];
     NSArray *gestureArray = [self arrayOfGestureViews];
     for(UIView *view in gestureArray){
         NSArray *gestureRecognizers = [view gestureRecognizers];
