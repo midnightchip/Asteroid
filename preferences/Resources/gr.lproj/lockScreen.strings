@@ -1,0 +1,17 @@
+{
+    "Enable_Greet" = "Ενεργοποίηση προβολής χαιρετισμού";
+    "Hide_Notif" = "Απόκρυψη προβολής χαιρετισμού στην ειδοποίηση";
+    "Notif_Explain" = "Όταν υπάρχουν ειδοποιήσεις, αποκρύψτε την προβολή καιρού";
+    "Lockscreen_Components" = "Μέρη του Lockscreen";
+    "Configure_Lockscreen_Components" = "Διαμορφώστε τα μέρη της οθόνης κλειδώματος";
+    "Custom_Fonts" = "Προσαρμοσμένες γραμματοσειρές";
+    "Enable_Custom_Font" = "Ενεργοποίηση προσαρμοσμένης γραμματοσειράς";
+    "Select_Custom_Font" = "Επιλέξτε προσαρμοσμένη γραμματοσειρά";
+    "Set_Text_Color" = "Ορισμός χρώματος κειμένου";
+    "Use_Custom_Glyph_Image" = "Χρησιμοποιήστε την προσαρμοσμένη εικόνα Glyph";
+    "Select_Weather_Glyph_Type" = "Επιλέξτε τύπο Glyph για τον καιρό";
+    "Set_Glyph_Color" = "Ορίστε το χρώμα Glyph";
+    "Blur_Amount" = "Ποσό θολώματος";
+    "Lock_Screen" = "Οθόνη Κλειδώματος";
+
+}
