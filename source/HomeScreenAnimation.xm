@@ -13,7 +13,7 @@
 @interface SBHomeScreenView (Weather)
 //@interface SBFWallpaperView (Weather)
 -(void)updateView;
--(BOOL) needsUpdateForCode:(NSInteger) conditionCode;
+-(BOOL) needsUpdateForCondition:(WUIWeatherCondition *) condition;
 @end
 
 @interface UIApplication (asteroid)
@@ -53,7 +53,7 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 
 %new
 -(void) updateView{
-    if(self.weatherModel.isPopulated && [self needsUpdateForCode:self.referenceView.background.condition.condition]){
+    if(self.weatherModel.isPopulated && [self needsUpdateForCondition:self.referenceView.background.condition]){
         [self.referenceView removeFromSuperview];
         
         self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
@@ -76,18 +76,19 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 }
 
 %new
--(BOOL) needsUpdateForCode:(NSInteger) conditionCode{
+-(BOOL) needsUpdateForCondition:(WUIWeatherCondition *) condition{
+    NSInteger conditionCode = condition.condition;
     NSInteger actualCode = self.weatherModel.city.conditionCode;
     if(conditionCode != actualCode){
         return YES;
     }
-    NSString *currentConditionImageName = conditionCode < 3200 ? [WeatherImageLoader conditionImageNameWithConditionIndex:conditionCode] : nil;
-    ConditionImageType currentType = [self.weatherModel conditionImageTypeForString: currentConditionImageName];
+    NSString *conditionLoadedFile = [condition loadedFileName];
+    ConditionImageType currentType = [self.weatherModel conditionImageTypeForString: conditionLoadedFile];
     
     NSString *actualConditionImageName = actualCode < 3200 ? [WeatherImageLoader conditionImageNameWithConditionIndex:actualCode] : nil;
     ConditionImageType actualType = [self.weatherModel conditionImageTypeForString: actualConditionImageName];
     
-    if(currentType != actualType) return YES;
+    if(currentType != ConditionImageTypeDefault && currentType != actualType) return YES;
     else return NO;
 }
 %end
