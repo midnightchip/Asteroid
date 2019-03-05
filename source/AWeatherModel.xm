@@ -95,7 +95,7 @@
     // Creating a refresh timer
     if(!self.refreshTimer){
         double refreshRate = [prefs doubleForKey:@"refreshRate"];
-        if(!refreshRate || refreshRate < 30) refreshRate = 300;
+        if(refreshRate == nil || refreshRate < 30) refreshRate = 300;
         self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:refreshRate
                                                              target:self
                                                            selector:@selector(updateWeather:)
