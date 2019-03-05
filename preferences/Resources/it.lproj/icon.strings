@@ -1,0 +1,14 @@
+{
+    "Enable_Icon" = "Attiva Personalizzazione Delle Icone Del Meteo";
+    "Enables_Theme" = "Attiva Modifiche all'Icona del Meteo";
+    "Enable_Background" = "Attiva Sfondo";
+    "Background_Icon" = "Sfondo per l'Icona del Meteo";
+    "Enable_Live" = "Attiva lo Sfondo con le Condizioni Meteorologiche Attuali";
+    "Weather_Location" = "Condizioni Meteorologiche Attuali invece dell'Icona del Meteo";
+    "Custom_Weather" = "Condizioni Meteorologiche Personalizzate Per l'App Meteo";
+    "Select_Weather" = "Seleziona Condizioni Meteorologiche Personalizzate";
+    "Overides_Current" = "Questo Sostituirà l'Animazione Meteorologica nello Sfondo.";
+    "Background_Color" = "Imposta Il Colore Di Sfondo Dell'App Meteo";
+    "Select_Color" = "Seleziona Il Colore Dell'Icona";
+    "Weather_Icon" = "Icona Del Meteo";
+}

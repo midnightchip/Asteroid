@@ -1,0 +1,20 @@
+{
+    "Editing" = "Modifica";
+    "Edit_Explain" = "I componenti possono essere ridimensionati e spostati nella schermata di blocco attraverso la modalità di modifica. Per entrare nella modalità di modifica, mantieni premuta un'icona qualsiasi nella schermata di blocco. Per salvare tutti i cambiamenti, uscire dalla modalità di modifica schiaccianfo il tasto Fine.";
+    "Pleasantry_Size" = "Dimensione Del Saluto.";
+    "Enable_Pleasantry" = "Attiva Il Saluto";
+    "Weather_Description_Size" = "Dimensione Della Descrizione Del Meteo.";
+    "Enable_Weather_Description" = "Attiva La Descrizione del Meteo";
+    "Current_Temperature_Text_Size" = "Dimensione Della Temperatura Attuale";
+    "Enable_Current_Temperature" = "Attiva Temperatura Attuale";
+    "Dismiss_Button_Size" = "Dimensione Del Tasto Per Uscire";
+    "Enable_Dismiss_Button" = "Attiva Il Tasto Per Uscire";
+    "Enable_Glyph" = "Attiva Glifo";
+    "Enable_Notification_Reminder" = "Attiva Il Contatore Delle Notifiche";
+    "Enable_Blur" = "Attiva Sfocatura";
+    "Hourly_Forecast_Options" = "Previsione Del Meteo Oraria";
+    "Enable_Weather_Preview" = "Attiva Anteprima Del Meteo";
+    "Enable_Weather_Forecast_Info" = "Attiva Informazioni Sul Meteo";
+    "Reset_Components" = "Resetta i Componenti";
+    "Components" = "Componenti";
+}

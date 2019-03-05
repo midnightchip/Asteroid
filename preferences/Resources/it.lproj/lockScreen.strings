@@ -1,0 +1,17 @@
+{
+    "Enable_Greet" = "Attiva Saluto";
+    "Hide_Notif" = "Nascondi il Saluto nelle Notifiche";
+    "Notif_Explain" = "Quando ci sono notifiche, nascondi il meteo";
+    "Lockscreen_Components" = "Componenti della Schermata di Blocco";
+    "Configure_Lockscreen_Components" = "Configura i Componenti della Schermata di Blocco";
+    "Custom_Fonts" = "Font Personalizzati";
+    "Enable_Custom_Font" = "Attiva Font Personalizzato";
+    "Select_Custom_Font" = "Seleziona Font Personalizzato";
+    "Set_Text_Color" = "Imposta Il Colore Del Testo";
+    "Use_Custom_Glyph_Image" = "Usa Glifo Personalizzato";
+    "Select_Weather_Glyph_Type" = "Seleziona il Tipo di Glifo Meteorologico";
+    "Set_Glyph_Color" = "Seleziona Colore Del Glifo";
+    "Blur_Amount" = "Quantità Della Sfocatura";
+    "Lock_Screen" = "Schermata Di Blocco";
+
+}

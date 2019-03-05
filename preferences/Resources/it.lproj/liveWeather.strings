@@ -1,0 +1,12 @@
+{
+    "Enable_Lock" = "Attiva Nella Schermata Di Blocco";
+    "Control_Lock" = "Attiva/Disattiva Il Meteo In Tempo Reale Nella Schermata Di Blocco";
+    "Enable_Home" = "Attiva Nella Schermata Home";
+    "Control_Home" = "Attiva/Disattiva Il Meteo In Tempo Reale Nella Schermata Home";
+    "Custom_Condition" = "Scegli Una Condizione Personalizzata";
+    "Select_Condition" = "Scegli Una Condizione Meteo Personalizzata";
+    "Overide_Animation" = "This overides your weather background animation.";
+    "Hide_Background" = "Nascondi Il Meteo In Tempo Reale Nello Sfondo";
+    "Hide_Explain" = "Nascondi Il Meteo In Tempo Reale Nello Sfondo, Mantieni Le Animazioni";
+    "Live_Weather" = "Meteo In Tempo Reale";
+}

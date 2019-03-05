@@ -1,0 +1,16 @@
+{
+    "Enable_Tweak" = "Attiva";
+    "Custom_Fonts" = " Font Personalizzato";
+    "Use_Custom_Font" = "Usa Un Font Personalizzato";
+    "Custom_Font" = "Seleziona Un Font Personalizzato:";
+    "Font_Sizes" = "Dimensione Del Font";
+    "Greeting_Size" = "Dimensione Del Saluto";
+    "Description_Size" = "Dimensione Della Descrizione";
+    "Current_Temperature_Size" = "Dimensione Della Temperatura Attuale";
+    "Blur_Amount" = "Quantità Della Sfocatura";
+    "Support" = "Supporto, Donazioni e Contatti";
+    "Backup" = "Backup e Ripristino";
+    "ChangeLog" = "ChangeLog";
+    "Version" = "Versione:";
+    "Asteroid" = "Asteroid";
+}
