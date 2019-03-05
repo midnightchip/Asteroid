@@ -298,7 +298,7 @@
         NSDate *currentTime;
         currentTime = [NSDate date];
         
-        NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/Application Support/lockWeather.bundle"];
+        NSBundle *tweakBundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/Asteroid.bundle"];
         switch ([[dateFormat stringFromDate:currentTime] intValue]){
             case 0 ... 4:
                 self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];
