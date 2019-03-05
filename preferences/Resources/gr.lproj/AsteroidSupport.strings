@@ -1,0 +1,29 @@
+{
+    "Developer" = "Προγραμματιστής";
+    "Info" = "Πληροφορίες";
+    "Depiction" = "Απεικόνιση";
+    "Learn_more_about_Asteroid" = "Μάθετε περισσότερα για το Asteroid";
+    "Donations" = "Δωρεές";
+    "Make_a_Donation" = "Κάντε μια δωρεά";
+    "Compensate_Casle" = "Βοηθήστε να αποζημιώσετε τον casle για τις προσπάθειές του";
+    "Compensate_Midnight" = "Βοηθήστε να αποζημιώσετε τον MidnightChips για τις προσπάθειές του";
+    "Support" = "Υποστήριξη";
+    "Submit_an_Issue" = "Αναφέρετε ένα πρόβλημα";
+    "Report_Bug" = "Αναφέρετε ένα σφάλμα στο GitHub και αισθανθείτε ζεστοί και χνουδωτοί";
+    "Email_Support" = "Υποστήριξη απο e-mail";
+    "Email_Me" = "Χρειάζεστε βοήθεια? Στείλτε μου e-mail και θα κάνω όσο καλύτερα μπορώ";
+    "Copy_Tweak_List" = "Αντιγραφή λίστας tweak";
+    "Get_List" = "Χρειάζεστε μια λίστα με όλα τα κατεβασμένα tweak?";
+    "Contact" = "Επικοινωνία";
+    "Special_Thanks" = "Θερμά ευχαριστώ";
+    
+    "Reddit_Casle" = "Μείνετε ενημερωμένοι ακολουθώντας τον thecasle στο reddit";
+    "Reddit_Midnight" = "Μείνετε ενημερωμένοι ακολουθώντας τον MidnightChips στο reddit";
+    "June_Repo" = "Το repo του JunesiPhone";
+    "June_Blurb" = "Υποστηρίξτε τον June δωρίζοντας ώστε να αποκτήσετε πρόσβαση στα καταπληκτικά tweaks και τα themes του.";
+    "Weather_Animations" = "Τα κινούμενα σχέδια του καιρού";
+    "WA_Perms" = "Είχαμε την άδεια να χρησιμοποιήσουμε μέρη των κινουμένων σχεδιών του καιρού για να ξεκινήσουμε το Asteroid.";
+    "License_Information" = "Πληροφορίες άδειας χρήσης";
+    "Asteroid_Support" = "Υποστήριξη για το Asteroid";
+
+}
