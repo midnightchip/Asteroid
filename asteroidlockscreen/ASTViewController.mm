@@ -44,6 +44,8 @@
 @property (nonatomic, retain) UIView *doneButtonView;
 
 @property (nonatomic, retain) ASTGestureHandler *gestureHandler;
+
+-(void) adjustWDescriptionViewsForString:(NSString *) string;
 @end
 
 @implementation ASTViewController{
@@ -314,10 +316,10 @@
                 self.greetingLabel.text = [tweakBundle localizedStringForKey:@"Good_Evening" value:@"" table:nil];
                 break;
         }
-        
-        self.wDescription.text = [self.weatherModel currentConditionOverview];
         self.greetingLabel.textAlignment = NSTextAlignmentCenter;
         
+        [self adjustWDescriptionViewsForString:[self.weatherModel currentConditionOverview]];
+
         if(self.weatherModel.isPopulated){
             self.forecastCont.model = self.weatherModel.todayModel;
             [self.forecastCont.model forecastModel];
@@ -325,6 +327,20 @@
             [self.forecastCont _updateViewContent];
         }
     }
+}
+
+-(void) adjustWDescriptionViewsForString:(NSString *) string{
+    CGSize maximumLabelSize = CGSizeMake(self.wDescriptionComponentView.frame.size.width, 120);
+    CGRect expectedLabelRect = [string boundingRectWithSize:maximumLabelSize
+                                                    options:NSStringDrawingUsesLineFragmentOrigin| NSStringDrawingUsesFontLeading
+                                                 attributes:@{NSFontAttributeName:self.wDescription.font}
+                                                    context:nil];
+    CGRect tempLabelFrame = self.wDescription.frame;
+    tempLabelFrame.size.height = expectedLabelRect.size.height;
+    self.wDescription.frame = tempLabelFrame;
+    self.wDescription.center = self.wDescriptionComponentView.center;
+
+    self.wDescription.text = string;
 }
 
 -(void) updateNotifcationWithText:(NSString *) text{

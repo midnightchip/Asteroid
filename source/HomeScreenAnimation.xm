@@ -20,17 +20,6 @@
 -(id)_accessibilityFrontMostApplication;
 @end
 
-typedef NS_ENUM(NSUInteger, LockState){
-    LockStateIsSpringBoard = 0,
-    LockStateIsNotificationCenter = 1,
-    LockStateIsUnknown = 2,
-    LockStateIsLockScreen = 3
-};
-BOOL isOnLockstate(NSUInteger state){
-    NSUInteger activeState = MSHookIvar<NSUInteger>([objc_getClass("SBLockStateAggregator") sharedInstance], "_lockState");
-    return state == activeState ? YES : NO;
-}
-
 static float deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
 static WUIWeatherCondition* condition = nil;
 static int conditionNumberSet;
