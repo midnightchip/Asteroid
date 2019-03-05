@@ -1,0 +1,29 @@
+{
+    "Developer" = "Geliştirici";
+    "Info" = "Bilgi";
+    "Depiction" = "Açıklama";
+    "Learn_more_about_Asteroid" = "Asteroid hakkında daha çok bilgi";
+    "Donations" = "Bağış";
+    "Make_a_Donation" = "Bağış yap";
+    "Compensate_Casle" = "Emekleri için casle'a destek ol";
+    "Compensate_Midnight" = "Emekleri için MidnightChips'e destek ol";
+    "Support" = "Destek";
+    "Submit_an_Issue" = "Hata Bildir";
+    "Report_Bug" = "GitHub üzerinden hata bildir";
+    "Email_Support" = "Destek ekibine e-posta gönder";
+    "Email_Me" = "Yardıma mı ihtiyacın var?";
+    "Copy_Tweak_List" = "Tweak Listesini Kopyala";
+    "Get_List" = "Yüklü tweaklerinin listesine mi ihtiyacın var?";
+    "Contact" = "İletişim";
+    "Special_Thanks" = "Özel Teşekkürler";
+    
+    "Reddit_Casle" = "Reddit'te casle' takip et";
+    "Reddit_Midnight" = "Reddit'te MidnightChips'i takip et";
+    "June_Repo" = "JunesiPhone Repo";
+    "June_Blurb" = "June'a destek olarak tema ve tweaklerine erken erişim sağla.";
+    "Weather_Animations" = "Hava Durumu Animasyonları";
+    "WA_Perms" = "Hava durumu animasyonlarını kullanmak için gerekli izinlere sahibiz.";
+    "License_Information" = "Lisans Bilgisi";
+    "Asteroid_Support" = "Asteroid Destek";
+
+}

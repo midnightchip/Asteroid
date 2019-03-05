@@ -1,0 +1,20 @@
+{
+    "Editing" = "Düzenleme";
+    "Edit_Explain" = "Kilit ekranı bileşenlerinin boyutları ve konumları düzenlenebilir. Düzenleme modunu etkinleştirmek için kilit ekranında bileşenlerden birinin üzerine basılı tutun. Düzenleme modundan çıkmak için Done düğmesine tıklayın.";
+    "Pleasantry_Size" = "Selamlama Mesajı Yazı Boyutu";
+    "Enable_Pleasantry" = "Selamlama Mesajını Etkinleştir";
+    "Weather_Description_Size" = "Hava Durumu Açıklaması Yazı Boyutu";
+    "Enable_Weather_Description" = "Hava Durumu Açıklamasını Etkinleştir";
+    "Current_Temperature_Text_Size" = "Güncel Hava Sıcaklığı Yazı Boyutu";
+    "Enable_Current_Temperature" = "Güncel Hava Sıcaklığını Etkinleştir";
+    "Dismiss_Button_Size" = "Yoksay Butonu Boyutu";
+    "Enable_Dismiss_Button" = "Yoksay Butonu Boyutu";
+    "Enable_Glyph" = "Hava Durumu Simgesini Etkinleştir";
+    "Enable_Notification_Reminder" = "Bildirim Hatırlatıcıyı Etkinleştir";
+    "Enable_Blur" = "Bulanıklığı Etkinleştir";
+    "Hourly_Forecast_Options" = "Saatlik Hava Durumu Ayarları";
+    "Enable_Weather_Preview" = "Hava Durumu Önizlemesini Etkinleştir";
+    "Enable_Weather_Forecast_Info" = "Hava Durumu Bilgisini Etkinleştir";
+    "Reset_Components" = "Bileşenleri Sıfırla";
+    "Components" = "Bileşenler";
+}
