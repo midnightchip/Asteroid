@@ -464,8 +464,7 @@
 #pragma mark - Menu Controller
 
 // UIMenuController requires that we can become first responder or it won't display
-- (BOOL)canBecomeFirstResponder
-{
+- (BOOL)canBecomeFirstResponder {
     return YES;
 }
 
