@@ -1,6 +1,7 @@
 {
     "Editing" = "Editing";
     "Edit_Explain" = "Components can be resized and moved around the lock screen through editing mode. To enter editing  mode, long press any of the lock screen icons. In order to save all changes, exit editing mode by hitting the Done button.";
+    "Enable_Editing" = "Enable Editing";
     "Pleasantry_Size" = "Pleasantry Text Size.";
     "Enable_Pleasantry" = "Enable Pleasantry";
     "Weather_Description_Size" = "Weather Description Size.";

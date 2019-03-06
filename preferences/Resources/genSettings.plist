@@ -31,8 +31,8 @@
                     <string>1_Minute</string>
                     <string>5_Minutes</string>
                     <string>15_Minutes</string>
-                    <string>1 Hour</string>
-                    <string>2 Hours</string>
+                    <string>1_Hour</string>
+                    <string>2_Hours</string>
                 </array>
                 <key>validValues</key>
                 <array>

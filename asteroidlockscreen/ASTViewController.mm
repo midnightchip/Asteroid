@@ -492,7 +492,7 @@
             [menuController setTargetRect:menuLocation inView:[gestureRecognizer view]];
             
             [menuController setMenuVisible:YES animated:YES];
-        } else if(!self.isEditing){
+        } else if(!self.isEditing && [prefs boolForKey:@"enableEditingMode"]){
             self.editing = YES;
             [[NSNotificationCenter defaultCenter]
              postNotificationName:@"astDisableLock"
