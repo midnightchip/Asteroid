@@ -201,7 +201,11 @@
 }
 
 -(ConditionImageType) conditionImageTypeForString: (NSString *) conditionString{
-    return [conditionString containsString:@"day"] ? ConditionImageTypeDay : [conditionString containsString:@"night"] ? ConditionImageTypeNight : ConditionImageTypeDefault;
+    if([conditionString containsString:@"day"]){
+        return ConditionImageTypeDay;
+    } else if([conditionString containsString:@"night"]){
+        return ConditionImageTypeNight;
+    } else return ConditionImageTypeDefault;
 }
 
 @end

@@ -85,8 +85,7 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
     NSString *conditionLoadedFile = [condition loadedFileName];
     ConditionImageType currentType = [self.weatherModel conditionImageTypeForString: conditionLoadedFile];
     
-    NSString *actualConditionImageName = actualCode < 3200 ? [WeatherImageLoader conditionImageNameWithConditionIndex:actualCode] : nil;
-    ConditionImageType actualType = [self.weatherModel conditionImageTypeForString: actualConditionImageName];
+    ConditionImageType actualType = self.weatherModel.city.isDay ? ConditionImageTypeDay : ConditionImageTypeNight;
     
     if(currentType != ConditionImageTypeDefault && currentType != actualType) return YES;
     else return NO;
