@@ -478,9 +478,7 @@
             [self becomeFirstResponder];
             self.pieceForReset = [gestureRecognizer view];
             
-            /*
-             Set up the reset menu.
-             */
+            //Set up the reset menu.
             NSString *menuItemTitle = NSLocalizedString(@"Reset", @"Reset menu item title");
             UIMenuItem *resetMenuItem = [[UIMenuItem alloc] initWithTitle:menuItemTitle action:@selector(resetPiece:)];
             
