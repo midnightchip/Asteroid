@@ -87,6 +87,7 @@
 
 @interface NCNotificationCombinedListViewController : UIViewController
 -(BOOL) hasContent;
+-(void) collectionUpdate;
 @end
 
 @interface UILabel (lockTweak)

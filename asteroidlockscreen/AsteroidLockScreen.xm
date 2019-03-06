@@ -169,6 +169,7 @@ static BOOL isWeatherLocked = nil;
 -(id) init{
     if((self = %orig)){
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateViewCollectionWhenDismissed:) name:@"weatherStateChanged" object:nil];
+        [self collectionUpdate];
     }
     return self;
 }
@@ -189,6 +190,11 @@ static BOOL isWeatherLocked = nil;
 }
 %new
 -(void) updateViewCollectionWhenDismissed:(NSNotification *)sender{
+    [self collectionUpdate];
+}
+
+%new
+-(void) collectionUpdate{
     if(isDismissed){
         [UIView animateWithDuration:.5
                               delay:0
