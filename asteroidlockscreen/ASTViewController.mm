@@ -109,6 +109,7 @@
     self.wDescription.lineBreakMode = NSLineBreakByWordWrapping;
     self.wDescription.numberOfLines = 0;
     self.wDescription.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.wDescriptionGestureView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.wDescription.preferredMaxLayoutWidth = self.view.frame.size.width;
     [self.wDescriptionComponentView addSubview: self.wDescription];
     [self.wDescriptionGestureView addSubview: self.wDescriptionComponentView];

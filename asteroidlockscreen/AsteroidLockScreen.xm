@@ -8,7 +8,7 @@
 // Statics
 static BOOL isDismissed = NO;
 static SBDashBoardMainPageView *mainPageView;
-static BOOL isWeatherLocked = nil;
+static BOOL isWeatherLocked = NO;
 
 %hook SBDashBoardMainPageView
 %property (nonatomic, retain) UIView *weather;
@@ -21,6 +21,7 @@ static BOOL isWeatherLocked = nil;
     if(!self.weather){
         self.weather=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         [self.weather setUserInteractionEnabled:YES];
+        self.weather.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self addSubview:self.weather];
         
         // Swipe Up to dismiss
