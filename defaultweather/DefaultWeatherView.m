@@ -19,7 +19,7 @@
         
         self.weatherSwitchLabel = [[UILabel alloc] initWithFrame:CGRectMake(-100, 24, 150, 45)];
         self.weatherSwitchLabel.textAlignment = NSTextAlignmentRight;
-        self.weatherSwitchLabel.text = [NSString stringWithFormat:@"City Index: %i", (int)self.index];
+        self.weatherSwitchLabel.text = [NSString stringWithFormat:@"Default City: %i", (int)self.index + 1];
         self.weatherSwitchLabel.numberOfLines = 0;
         self.weatherSwitchLabel.textColor = [UIColor whiteColor];
         self.weatherSwitchLabel.font = [UIFont systemFontOfSize:14];

@@ -16,6 +16,9 @@
                 break;
             } else i++;
         }
+    } else {
+        self.defaultWeatherView.hidden = YES;
+        self.temperatureLabel.hidden = NO;
     }
 }
 %end
