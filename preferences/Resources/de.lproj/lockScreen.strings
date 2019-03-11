@@ -1,0 +1,16 @@
+{
+    "Enable_Greet" = "Begrüssung aktivieren";
+    "Hide_Notif" = "Bei Benachrichtigungen ausblenden";
+    "Notif_Explain" = "Begrüssung bei Benachrichtigungen ausblenden";
+    "Lockscreen_Components" = "Lockscreen Komponenten";
+    "Configure_Lockscreen_Components" = "Lockscreen Komponenten konfigurieren";
+    "Custom_Fonts" = "Eigene Schriftart";
+    "Enable_Custom_Font" = "Eigene Schriftart aktivieren";
+    "Select_Custom_Font" = "Eigene Schriftart auswählen";
+    "Set_Text_Color" = "Textfarbe auswähen";
+    "Use_Custom_Glyph_Image" = "Verwende eigenes Glyph";
+    "Select_Weather_Glyph_Type" = "Wetter Glyph-Typ auswählen";
+    "Set_Glyph_Color" = "Glyph Farbe auswählen";
+    "Blur_Amount" = "Blur Stärke";
+    "Lock_Screen" = "Lockscreen";
+}
