@@ -35,6 +35,7 @@
                 [self.locationProviderModel _willDeliverForecastModel:self.forecastModel];
                 self.locationProviderModel.forecastModel = self.forecastModel;
                 self.city = self.forecastModel.city;
+                [self verifyAndCorrectCondition];
                 self.localWeather = self.city.isLocalWeatherCity;
                 self.populated = YES;
                 self.hasFallenBack = NO;
@@ -48,21 +49,7 @@
             
         } else{
             NSLog(@"lock_TWEAK | didnt work");
-            if(((NSArray *)[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"]).count > 0){
-                NSLog(@"lock_TWEAK | Value for set: %i",[prefs intForKey:@"astDefaultIndex"]);
-                self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][[prefs intForKey:@"astDefaultIndex"]]];
-                self.localWeather = self.city.isLocalWeatherCity;
-                self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.city.wfLocation];
-                [self.todayModel executeModelUpdateWithCompletion:^{nil;}];
-                self.forecastModel = self.todayModel.forecastModel;
-                if([prefs boolForKey:@"customCondition"]){
-                    self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
-                }
-                self.populated = YES;
-                self.hasFallenBack = NO;
-            } else {
-                self.hasFallenBack = YES;
-            }
+            [self handleDefault];
             [self postNotification];
             [self setUpRefreshTimer];
         }
@@ -72,21 +59,28 @@
 
 -(void)updateWeatherDataWithCompletion:(completion) compBlock{
     if(self.isPopulated){
-        if(![self.todayModel isKindOfClass:objc_getClass("WATodayAutoupdatingLocationModel")]){
-            self.todayModel = [objc_getClass("WATodayModel") autoupdatingLocationModelWithPreferences:self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
-        }
-        [self.todayModel setLocationServicesActive:YES];
-        [self.todayModel setIsLocationTrackingEnabled:YES];
-        [self.todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *arg2) {
-            self.forecastModel = self.todayModel.forecastModel;
-            self.city = self.forecastModel.city;
-            if([prefs boolForKey:@"customCondition"]){
-                self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
+        if(self.isLocalWeather){
+            if(![self.todayModel isKindOfClass:objc_getClass("WATodayAutoupdatingLocationModel")]){
+                self.todayModel = [objc_getClass("WATodayModel") autoupdatingLocationModelWithPreferences:self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
             }
-            [self.todayModel setIsLocationTrackingEnabled:NO];
-            [self postNotification];
-            compBlock();
-        }];
+            [self.todayModel setLocationServicesActive:YES];
+            [self.todayModel setIsLocationTrackingEnabled:YES];
+            NSLog(@"lock_TWEAK | before executed Update");
+            [self.todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *arg2) {
+                self.forecastModel = self.todayModel.forecastModel;
+                self.city = self.forecastModel.city;
+                [self verifyAndCorrectCondition];
+                self.localWeather = self.city.isLocalWeatherCity;
+                if([prefs boolForKey:@"customCondition"]){
+                    self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
+                }
+                [self.todayModel setIsLocationTrackingEnabled:NO];
+            }];
+        } else {
+            [self handleDefault];
+        }
+        [self postNotification];
+        compBlock();
     } else if(self.hasFallenBack){
         [self postNotification];
         compBlock();
@@ -120,6 +114,35 @@
          postNotificationName:@"weatherTimerUpdate"
          object:nil];
     });
+}
+
+-(void) handleDefault{
+    if(((NSArray *)[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"]).count > 0){
+        self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][[prefs intForKey:@"astDefaultIndex"]]];
+        [self verifyAndCorrectCondition];
+        self.localWeather = self.city.isLocalWeatherCity;
+        self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.city.wfLocation];
+        [self.todayModel executeModelUpdateWithCompletion:^{nil;}];
+        self.forecastModel = self.todayModel.forecastModel;
+        if([prefs boolForKey:@"customCondition"]){
+            self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
+        }
+        self.populated = YES;
+        self.hasFallenBack = NO;
+    } else {
+        self.hasFallenBack = YES;
+    }
+}
+
+-(void) verifyAndCorrectCondition{
+    NSInteger conditionCode = [self.city conditionCode];
+    NSString *conditionImageName = conditionCode < 3200 ? [WeatherImageLoader conditionImageNameWithConditionIndex:conditionCode] : nil;
+    ConditionImageType type = [self conditionImageTypeForString: conditionImageName];
+    if(self.city.isDay && type == ConditionImageTypeNight){
+        self.city.conditionCode ++; // Day equivalent.
+    }else if(!self.city.isDay && type == ConditionImageTypeDay){
+        self.city.conditionCode --; // Night equivalent.
+    }
 }
 
 // Below methods from https://github.com/CreatureSurvive/CSWeather

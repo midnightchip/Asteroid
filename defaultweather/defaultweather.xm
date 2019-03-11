@@ -32,12 +32,3 @@
     [prefs setObject:indexValue forKey:@"astDefaultIndex"];
     [prefs save];
 }
-%dtor{
-    CPDistributedMessagingCenter *messagingCenter;
-    messagingCenter = [CPDistributedMessagingCenter centerNamed:@"com.midnightchips.AsteroidServer"];
-    rocketbootstrap_distributedmessagingcenter_apply(messagingCenter);
-    
-    NSMutableDictionary *sendIndex = [[NSMutableDictionary alloc]init];
-    sendIndex[@"index"] = @([prefs intForKey:@"astDefaultIndex"]);
-    [messagingCenter sendMessageName:@"returnCityIndex" userInfo:sendIndex];
-}

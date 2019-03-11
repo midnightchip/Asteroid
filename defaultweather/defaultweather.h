@@ -2,7 +2,7 @@
 #import "../source/LWPProvider.h"
 #import "../source/WeatherHeaders.h"
 #import "DefaultWeatherView.h"
-#include <AppSupport/CPDistributedMessagingCenter.h>
+#import <AppSupport/CPDistributedMessagingCenter.h>
 #import <rocketbootstrap/rocketbootstrap.h>
 
 @interface WAPageCollectionViewController

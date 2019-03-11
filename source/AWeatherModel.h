@@ -25,6 +25,7 @@ typedef void(^completion)();
 -(void)updateWeatherDataWithCompletion:(completion) compBlock;
 -(void)setUpRefreshTimer;
 -(void) postNotification;
+-(void) verifyAndCorrectCondition;
 - (UIImage *)imageForKey:(NSString *)key;
 - (NSBundle *)weatherBundle;
 -(NSString *) localeTemperature;

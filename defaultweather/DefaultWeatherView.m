@@ -4,6 +4,8 @@
 @property (nonatomic, retain) UISwitch *defaultWeatherSwitch;
 @property (nonatomic, retain) UILabel *weatherSwitchLabel;
 @property (nonatomic, assign) BOOL selectedCity;
+
+-(void) sendRBSData;
 @end
 
 
@@ -43,10 +45,21 @@
          object:nil];
         [prefs setObject:@(self.index) forKey:@"astDefaultIndex"];
         [prefs save];
+        [self sendRBSData];
     } else {
         aSwitch.on = YES;
     }
     
+}
+
+-(void) sendRBSData{
+    CPDistributedMessagingCenter *messagingCenter;
+    messagingCenter = [CPDistributedMessagingCenter centerNamed:@"com.midnightchips.AsteroidServer"];
+    rocketbootstrap_distributedmessagingcenter_apply(messagingCenter);
+    
+    NSMutableDictionary *sendIndex = [[NSMutableDictionary alloc]init];
+    sendIndex[@"index"] = @([prefs intForKey:@"astDefaultIndex"]);
+    [messagingCenter sendMessageName:@"returnCityIndex" userInfo:sendIndex];
 }
 
 -(void) switchChangedNotification: (NSNotification *) notification{
