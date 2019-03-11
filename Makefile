@@ -23,6 +23,7 @@ SUBPROJECTS += preferences
 SUBPROJECTS += asteroidlockscreen
 SUBPROJECTS += asteroidstatusbar
 #SUBPROJECTS += asteroidserver
+SUBPROJECTS += defaultweather
 include $(THEOS_MAKE_PATH)/aggregate.mk
 
 after-install::

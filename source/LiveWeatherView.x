@@ -56,6 +56,7 @@ static WUIWeatherCondition* condition = nil;
 
 -(void) setupReferenceView{
     self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
+    NSLog(@"lock_TWEAK | just made reference: %f", self.referenceView.background.gradientLayer.bounds.size.height);
     if(![prefs boolForKey:@"appScreenWeather"]){
         self.referenceView.hidesConditions = YES;
     }
@@ -63,11 +64,15 @@ static WUIWeatherCondition* condition = nil;
     self.referenceView.clipsToBounds = YES;
     [self addSubview:self.referenceView];
     [self sendSubviewToBack:self.referenceView];
+    //self.referenceView.background.gradientLayer = nil;
+    //self.referenceView.background.gradientLayer.bounds = self.frame; // Need to work on this.
+    //self.referenceView.background.gradientLayer.position = CGPointMake(0,0);
     
     [self.referenceView.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:4].active = YES;
     [self.referenceView.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:-4].active = YES;
     [self.referenceView.topAnchor constraintEqualToAnchor:self.topAnchor constant:4].active = YES;
     [self.referenceView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4].active = YES;
+    NSLog(@"lock_TWEAK | end of reference: %f", self.referenceView.background.gradientLayer.bounds.size.height);
 }
 
 -(void) weatherNotification: (NSNotification *) notification{
@@ -91,7 +96,6 @@ static WUIWeatherCondition* condition = nil;
         icon = [_weatherModel glyphWithOption:ConditionOptionWhite];
         self.logo.image = icon;
         [self.logo layoutSubviews];
-        
         [self layoutSubviews];
         
         if([prefs boolForKey:@"appScreenWeatherBackground"] && _weatherModel.isPopulated){
@@ -101,12 +105,34 @@ static WUIWeatherCondition* condition = nil;
             [self.referenceView.background setCity:_weatherModel.city];
             
             [[self.referenceView.background condition] resume];
+            self.referenceView.background.gradientLayer.enableExpectedRect = YES;
+            self.referenceView.background.gradientLayer.expectedRect = self.frame;
+            NSLog(@"lock_TWEAK | right after setting condition: %f", self.referenceView.background.gradientLayer.bounds.size.height);
         } else {
             self.referenceView.backgroundColor = [UIColor grayColor];
         }
     }
 }
 @end
+
+%hook WUIGradientLayer
+%property (nonatomic, assign) BOOL enableExpectedRect;
+%property (nonatomic, assign) CGRect expectedRect;
+/*-(void) setBounds:(CGRect) aFrame{
+    if(self.enableExpectedRect){
+        %orig(self.expectedRect);
+    } else %orig;
+}*/
+-(void) setFrame:(CGRect) aFrame{
+    %orig(CGRectMake(0,0,60,60));
+}
+-(CGRect) frame{
+    return self.expectedRect;
+}
+/*-(CGRect) bounds{
+    return self.expectedRect;
+}*/
+%end
 
 %ctor{
     if([prefs boolForKey:@"kLWPEnabled"]){

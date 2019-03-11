@@ -61,6 +61,12 @@
         self.weatherModel = [objc_getClass("AWeatherModel") sharedInstance];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(weatherNotificationPosted:) name:@"weatherTimerUpdate" object:nil];
+        
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self selector:@selector(orientationChanged:)
+         name:@"UIApplicationDidChangeStatusBarOrientationNotification"
+         object: [UIApplication sharedApplication]];
     }
     return self;
 }
@@ -109,7 +115,6 @@
     self.wDescription.lineBreakMode = NSLineBreakByWordWrapping;
     self.wDescription.numberOfLines = 0;
     self.wDescription.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.wDescriptionGestureView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.wDescription.preferredMaxLayoutWidth = self.view.frame.size.width;
     [self.wDescriptionComponentView addSubview: self.wDescription];
     [self.wDescriptionGestureView addSubview: self.wDescriptionComponentView];
@@ -229,6 +234,49 @@
     for(ASTComponentView *view in componentViews){
         view.editing = edit;
     }
+}
+
+- (void) orientationChanged:(NSNotification *)note {
+    /*UIApplication * application = note.object;
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    CGFloat screenHeight = screenRect.size.height;
+    
+    //NSArray *gestureViews = [self arrayOfGestureViews];
+    CGRect adjustedBounds;
+    
+    switch(application.statusBarOrientation){
+        case UIDeviceOrientationPortrait:
+            self.view.backgroundColor = [UIColor blueColor];
+            break;
+            
+        case UIDeviceOrientationLandscapeLeft:
+            self.view.backgroundColor = [UIColor redColor];
+            
+            for(UIView *view in gestureViews){
+                CGFloat ratioHeight = view.center.y / screenHeight;
+                CGFloat ratioWidth = view.center.x / screenWidth;
+                CGFloat adjustedY = ratioHeight * screenWidth;
+                CGFloat adjustedX = ratioWidth * screenHeight;
+                
+                CGPoint adjustedCenter;
+                adjustedCenter.y = adjustedY;
+                adjustedCenter.x = adjustedX;
+                view.center = adjustedCenter;
+            }
+            adjustedBounds = self.view.bounds;
+            adjustedBounds.origin.x = adjustedBounds.origin.x - (screenHeight - screenWidth);
+            adjustedBounds.origin.y = adjustedBounds.origin.y - (screenWidth - screenHeight);
+            self.view.bounds = adjustedBounds;
+            break;
+        
+        case UIDeviceOrientationLandscapeRight:
+            self.view.backgroundColor = [UIColor greenColor];
+            break;
+            
+        default:
+            break;
+    };*/
 }
 
 #pragma mark - Weather Setup

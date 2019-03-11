@@ -34,5 +34,7 @@
 	<string>FFFFFF</string>
     <key>enableEditingMode</key>
     <true/>
+    <key>astDefaultIndex</key>
+    <integer>0</integer>
 </dict>
 </plist>

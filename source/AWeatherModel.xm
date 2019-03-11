@@ -49,7 +49,8 @@
         } else{
             NSLog(@"lock_TWEAK | didnt work");
             if(((NSArray *)[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"]).count > 0){
-                self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][0]];
+                NSLog(@"lock_TWEAK | Value for set: %i",[prefs intForKey:@"astDefaultIndex"]);
+                self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][[prefs intForKey:@"astDefaultIndex"]]];
                 self.localWeather = self.city.isLocalWeatherCity;
                 self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.city.wfLocation];
                 [self.todayModel executeModelUpdateWithCompletion:^{nil;}];

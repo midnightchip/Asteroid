@@ -10,6 +10,14 @@ static void updateWeatherForIconView(SBIconView *iconView) {
 	}
 }
 
+@interface LiveWeatherView ()
+@property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
+@property (nonatomic, retain) UIImageView *logo;
+@property (nonatomic, retain) UILabel *temp;
+@end
+
+
+
 static WUIDynamicWeatherBackground* dynamicBG = nil;
 static WUIWeatherCondition* condition = nil;
 
@@ -49,6 +57,8 @@ static WUIWeatherCondition* condition = nil;
 	mask.frame = CGRectMake(0, 0, maskImage.size.width, maskImage.size.height);
 	self.liveWeatherView.layer.mask = mask;
 	self.liveWeatherView.layer.masksToBounds = YES;
+    
+    NSLog(@"lock_TWEAK | updateMask: %f", self.liveWeatherView.referenceView.background.gradientLayer.bounds.size.height);
 }
 %end
 
