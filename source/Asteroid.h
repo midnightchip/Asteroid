@@ -19,10 +19,8 @@
 -(void)setCondition:(long long)arg1;
 @end;
 
-@interface WUIGradientLayer : UIView
-@property (nonatomic) CGPoint position;
-@property (nonatomic, assign) BOOL enableExpectedRect;
-@property (nonatomic) CGRect expectedRect;
+@interface WUIGradientLayer : CAGradientLayer
+@property CGPoint position;
 @end
 
 @interface WUIDynamicWeatherBackground : UIView

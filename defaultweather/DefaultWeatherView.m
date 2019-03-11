@@ -28,8 +28,6 @@
         
         if(self.index == (NSUInteger)[prefs intForKey:@"astDefaultIndex"]){
             self.defaultWeatherSwitch.on = YES;
-        } else {
-            //self.defaultWeatherSwitch.on = NO;;
         }
         NSLog(@"lock_TWEAK | setUpSwitches Index:%i CurrentIndex:%i",(int)self.index, (int)[prefs intForKey:@"astDefaultIndex"]);
     }

@@ -5,8 +5,11 @@
 
 @interface LiveWeatherView ()
 @property (nonatomic, retain) WUIWeatherConditionBackgroundView *referenceView;
+@property (nonatomic, retain) CAGradientLayer *gradientLayer;
+@property (nonatomic, retain) UIView *gradientView;
 @property (nonatomic, retain) UIImageView *logo;
 @property (nonatomic, retain) UILabel *temp;
+-(CAGradientLayer *) gradientFromWeatherGradient:(WUIGradientLayer *) weatherGradient;
 @end
 
 @implementation LiveWeatherView{
@@ -73,6 +76,17 @@ static WUIWeatherCondition* condition = nil;
     [self.referenceView.topAnchor constraintEqualToAnchor:self.topAnchor constant:4].active = YES;
     [self.referenceView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4].active = YES;
     NSLog(@"lock_TWEAK | end of reference: %f", self.referenceView.background.gradientLayer.bounds.size.height);
+    
+    self.gradientView = [[UIView alloc] initWithFrame:self.frame];
+    self.gradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.gradientView.clipsToBounds = YES;
+    [self addSubview:self.gradientView];
+    [self sendSubviewToBack:self.gradientView];
+    
+    [self.gradientView.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:4].active = YES;
+    [self.gradientView.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:-4].active = YES;
+    [self.gradientView.topAnchor constraintEqualToAnchor:self.topAnchor constant:4].active = YES;
+    [self.gradientView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4].active = YES;
 }
 
 -(void) weatherNotification: (NSNotification *) notification{
@@ -103,36 +117,36 @@ static WUIWeatherCondition* condition = nil;
                 _weatherModel.city.conditionCode = [prefs doubleForKey:@"weatherConditionsIcon"];
             }
             [self.referenceView.background setCity:_weatherModel.city];
-            
-            [[self.referenceView.background condition] resume];
-            self.referenceView.background.gradientLayer.enableExpectedRect = YES;
-            self.referenceView.background.gradientLayer.expectedRect = self.frame;
+            if(![prefs boolForKey:@"appScreenWeather"]){
+                self.gradientLayer.hidden = NO;
+                self.referenceView.hidden = YES;
+                [[self.referenceView.background condition] pause];
+                
+                self.gradientLayer = [self gradientFromWeatherGradient: self.referenceView.background.gradientLayer];
+                self.gradientLayer.frame = self.gradientView.frame;
+                self.gradientView.layer.sublayers = nil;
+                [self.gradientView.layer insertSublayer:self.gradientLayer atIndex:0];
+            } else {
+                self.gradientView.hidden = YES;
+                self.referenceView.hidden = NO;
+                [[self.referenceView.background condition] resume];
+            }
             NSLog(@"lock_TWEAK | right after setting condition: %f", self.referenceView.background.gradientLayer.bounds.size.height);
         } else {
             self.referenceView.backgroundColor = [UIColor grayColor];
         }
     }
 }
+-(CAGradientLayer *) gradientFromWeatherGradient:(WUIGradientLayer *) weatherGradient{
+    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+    gradientLayer.colors = weatherGradient.colors;
+    gradientLayer.locations = weatherGradient.locations;
+    gradientLayer.type = weatherGradient.type;
+    gradientLayer.startPoint = weatherGradient.startPoint;
+    gradientLayer.endPoint = weatherGradient.endPoint;
+    return gradientLayer;
+}
 @end
-
-%hook WUIGradientLayer
-%property (nonatomic, assign) BOOL enableExpectedRect;
-%property (nonatomic, assign) CGRect expectedRect;
-/*-(void) setBounds:(CGRect) aFrame{
-    if(self.enableExpectedRect){
-        %orig(self.expectedRect);
-    } else %orig;
-}*/
--(void) setFrame:(CGRect) aFrame{
-    %orig(CGRectMake(0,0,60,60));
-}
--(CGRect) frame{
-    return self.expectedRect;
-}
-/*-(CGRect) bounds{
-    return self.expectedRect;
-}*/
-%end
 
 %ctor{
     if([prefs boolForKey:@"kLWPEnabled"]){
