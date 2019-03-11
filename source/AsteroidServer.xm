@@ -33,14 +33,16 @@
 		// Register Messages
 		[messagingCenter registerForMessageName:@"weatherIcon" target:self selector:@selector(returnWeatherLogo)];
 		[messagingCenter registerForMessageName:@"weatherTemp" target:self selector:@selector(returnWeatherTemp)];
+        [messagingCenter registerForMessageName:@"cityIndex" target:self selector:@selector(returnCurrentIndex)];
+        [messagingCenter registerForMessageName:@"returnCityIndex" target:self selector:@selector(saveCurrentIndexName:withUserInfo:)];
 	}
-
 	return self;
 }
 
 -(UIImage *)returnWeatherLogo{
 	return nil;
 }
+
 -(NSDictionary *)returnWeatherTemp{
 	HBLogDebug(@"returningWEatherTemp");
 	NSMutableDictionary *sendTemp= [[NSMutableDictionary alloc]init];
@@ -49,6 +51,17 @@
 	return sendTemp;
 }
 
+-(NSDictionary *) returnCurrentIndex{
+    NSMutableDictionary *sendIndex = [[NSMutableDictionary alloc]init];
+    sendIndex[@"index"] = @([prefs intForKey:@"astDefaultIndex"]);
+    return sendIndex;
+}
+
+-(void) saveCurrentIndexName:(NSString *)name withUserInfo:(NSDictionary *)indexDict{
+    NSNumber *indexValue = indexDict[@"index"];
+    [prefs setObject:indexValue forKey:@"astDefaultIndex"];
+    [prefs save];
+}
 @end
 
 %ctor{

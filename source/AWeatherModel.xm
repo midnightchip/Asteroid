@@ -54,6 +54,7 @@
                 self.localWeather = self.city.isLocalWeatherCity;
                 self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.city.wfLocation];
                 [self.todayModel executeModelUpdateWithCompletion:^{nil;}];
+                self.forecastModel = self.todayModel.forecastModel;
                 if([prefs boolForKey:@"customCondition"]){
                     self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
                 }
