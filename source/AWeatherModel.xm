@@ -147,6 +147,10 @@
 
 // Below methods from https://github.com/CreatureSurvive/CSWeather
 - (UIImage *)imageForKey:(NSString *)key {
+    NSArray* myImages = [[self weatherBundle] pathsForResourcesOfType:@"png"
+                                              inDirectory:nil];
+
+    NSLog(@"lock_TWEAK | %d", (int)myImages.count);
     return [UIImage imageNamed:key inBundle:[self weatherBundle] compatibleWithTraitCollection:nil];
 }
 
@@ -193,7 +197,11 @@
         } break;
             
         case ConditionImageTypeDay: {
-            rootName = [[conditionImageName stringByReplacingOccurrencesOfString:@"-day" withString:@""] stringByReplacingOccurrencesOfString:@"_day" withString:@""];
+            if([conditionImageName containsString:@"thunderstorm"]){
+                rootName = [[conditionImageName stringByReplacingOccurrencesOfString:@"-" withString:@"_"] stringByReplacingOccurrencesOfString:@"_day" withString:@""];
+            } else {
+                rootName = [[conditionImageName stringByReplacingOccurrencesOfString:@"-day" withString:@""] stringByReplacingOccurrencesOfString:@"_day" withString:@""];
+            }
             
             if(ConditionOptionDefault){
                 return [self imageForKey:[rootName stringByAppendingString:@"_day-nc"]] ? :
