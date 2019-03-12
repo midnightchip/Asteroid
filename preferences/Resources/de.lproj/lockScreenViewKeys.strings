@@ -1,0 +1,21 @@
+{
+    "Editing" = "Bearbeiten";
+    "Edit_Explain" = "Im Bearbeitungsmodus können Komponenten auf dem Lockscreen in ihrer Grösse verändert und verschoben werden. Der Bearbeitungsmodus wird durch Halten auf einem Lockscreen Icon aktiviert. Klicke auf den Fertig Button um alle Änderungen zu speichern und den Bearbeitungsmodus zu beenden.";
+    "Enable_Editing" = "Bearbeitungsmodus aktivieren";
+    "Pleasantry_Size" = "Pleasantry Textgrösse";
+    "Enable_Pleasantry" = "Pleasantry aktivieren";
+    "Weather_Description_Size" = "Wetter Beschreibungs Grösse";
+    "Enable_Weather_Description" = "Wetter Beschreibung anzeigen";
+    "Current_Temperature_Text_Size" = "Textgrösse Aktuelle Temperatur";
+    "Enable_Current_Temperature" = "Aktuelle Temperatur anzeigen";
+    "Dismiss_Button_Size" = "Dismiss Button Grösse";
+    "Enable_Dismiss_Button" = "Dismiss Button aktivieren";
+    "Enable_Glyph" = "Glyph aktivieren";
+    "Enable_Notification_Reminder" = "Erinnerung aktivieren";
+    "Enable_Blur" = "Blur aktivieren";
+    "Hourly_Forecast_Options" = "Stündliche Wetter Prognose";
+    "Enable_Weather_Preview" = "Wetter Vorschau aktivieren";
+    "Enable_Weather_Forecast_Info" = "Wetter Prognose aktivieren";
+    "Reset_Components" = "Komponenten zurücksetzten";
+    "Components" = "Komponenten";
+}
