@@ -31,7 +31,6 @@
         if(self.index == (NSUInteger)[prefs intForKey:@"astDefaultIndex"]){
             self.defaultWeatherSwitch.on = YES;
         }
-        NSLog(@"lock_TWEAK | setUpSwitches Index:%i CurrentIndex:%i",(int)self.index, (int)[prefs intForKey:@"astDefaultIndex"]);
     }
     return self;
 }
@@ -39,7 +38,6 @@
 -(void) switchFlipped: (UISwitch *) aSwitch {
     if(aSwitch.isOn == YES){
         self.selectedCity = YES;
-        NSLog(@"lock_TWEAK | someone hit a switch, %i", (int) self.index);
         [[NSNotificationCenter defaultCenter]
          postNotificationName:@"astDefaultSwitchChanged"
          object:nil];

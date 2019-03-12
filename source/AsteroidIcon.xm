@@ -30,7 +30,8 @@ static WUIWeatherCondition* condition = nil;
             if(self.liveWeatherView){
                 [self.liveWeatherView removeFromSuperview];
             }
-            
+            NSLog(@"lock_TWEAK | initIcon");
+
             self.liveWeatherView = [[NSClassFromString(@"LiveWeatherView") alloc]initWithFrame:CGRectZero];
             self.liveWeatherView.tag = 55668;
             self.liveWeatherView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -58,7 +59,7 @@ static WUIWeatherCondition* condition = nil;
 	self.liveWeatherView.layer.mask = mask;
 	self.liveWeatherView.layer.masksToBounds = YES;
     
-    NSLog(@"lock_TWEAK | updateMask: %f", self.liveWeatherView.referenceView.background.gradientLayer.bounds.size.height);
+    NSLog(@"lock_TWEAK | updateMask");
 }
 %end
 

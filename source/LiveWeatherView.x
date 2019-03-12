@@ -59,7 +59,6 @@ static WUIWeatherCondition* condition = nil;
 
 -(void) setupReferenceView{
     self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
-    NSLog(@"lock_TWEAK | just made reference: %f", self.referenceView.background.gradientLayer.bounds.size.height);
     if(![prefs boolForKey:@"appScreenWeather"]){
         self.referenceView.hidesConditions = YES;
     }
@@ -67,9 +66,6 @@ static WUIWeatherCondition* condition = nil;
     self.referenceView.clipsToBounds = YES;
     [self addSubview:self.referenceView];
     [self sendSubviewToBack:self.referenceView];
-    //self.referenceView.background.gradientLayer = nil;
-    //self.referenceView.background.gradientLayer.bounds = self.frame; // Need to work on this.
-    //self.referenceView.background.gradientLayer.position = CGPointMake(0,0);
     
     [self.referenceView.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:4].active = YES;
     [self.referenceView.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:-4].active = YES;
