@@ -33,9 +33,10 @@
 		NSDictionary *attribs = @{
                           NSFontAttributeName: self.font
                           };
-		NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:[weatherModel localeTemperature] attributes:attribs];
-		[attributedText appendAttributedString:attachmentString];
-		[self setAttributedText:attributedText];
+		NSMutableAttributedString *image = [[NSMutableAttributedString alloc] initWithAttributedString:attachmentString];
+		NSAttributedString *temp = [[NSMutableAttributedString alloc] initWithString:[weatherModel localeTemperature] attributes:attribs];
+		[image appendAttributedString:temp];
+		[self setAttributedText:image];
 	}else{
 		%orig;
 	}

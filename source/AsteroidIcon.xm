@@ -15,6 +15,11 @@ static void updateWeatherForIconView(SBIconView *iconView) {
 @property (nonatomic, retain) UIImageView *logo;
 @property (nonatomic, retain) UILabel *temp;
 @end
+//Needed for SnowBoard Radius
+@interface SnowBoardThemeLoader : NSObject
++(CGFloat) customCornerRadius;
+@end
+
 
 
 
@@ -50,13 +55,17 @@ static WUIWeatherCondition* condition = nil;
 
 %new
 - (void)updateMask {
-	NSBundle *bundle = [NSBundle bundleWithPath:[NSString stringWithFormat:@"/System/Library/PrivateFrameworks/MobileIcons.framework"]];
-	UIImage *maskImage = [UIImage imageNamed:@"AppIconMask" inBundle:bundle];
+	if([%c(SnowBoardThemeLoader) class]){
+		self.liveWeatherView.layer.cornerRadius = [%c(SnowBoardThemeLoader) customCornerRadius];
+	}else{
+		NSBundle *bundle = [NSBundle bundleWithPath:[NSString stringWithFormat:@"/System/Library/PrivateFrameworks/MobileIcons.framework"]];
+		UIImage *maskImage = [UIImage imageNamed:@"AppIconMask" inBundle:bundle];
 
-	CALayer *mask = [CALayer layer];
-	mask.contents = (id)[maskImage CGImage];
-	mask.frame = CGRectMake(0, 0, maskImage.size.width, maskImage.size.height);
-	self.liveWeatherView.layer.mask = mask;
+		CALayer *mask = [CALayer layer];
+		mask.contents = (id)[maskImage CGImage];
+		mask.frame = CGRectMake(0, 0, maskImage.size.width, maskImage.size.height);
+		self.liveWeatherView.layer.mask = mask;
+	}
 	self.liveWeatherView.layer.masksToBounds = YES;
     
     NSLog(@"lock_TWEAK | updateMask");
