@@ -138,10 +138,23 @@
     NSInteger conditionCode = [self.city conditionCode];
     NSString *conditionImageName = conditionCode < 3200 ? [WeatherImageLoader conditionImageNameWithConditionIndex:conditionCode] : nil;
     ConditionImageType type = [self conditionImageTypeForString: conditionImageName];
-    if(self.city.isDay && type == ConditionImageTypeNight){
-        self.city.conditionCode ++; // Day equivalent.
-    }else if(!self.city.isDay && type == ConditionImageTypeDay){
-        self.city.conditionCode --; // Night equivalent.
+    // These codes are specific to day or night and have to be verified.
+    if(conditionCode == 44 ||
+       conditionCode == 30 ||
+       conditionCode == 29 ||
+       conditionCode == 34 ||
+       conditionCode == 33 ||
+       conditionCode == 28 ||
+       conditionCode == 27){
+        if(self.city.isDay && type == ConditionImageTypeNight){
+            self.city.conditionCode ++;
+        }else if(!self.city.isDay && type == ConditionImageTypeDay){
+            if(conditionCode == 44){ // why are there two PartlyCloudyDay idk.
+                conditionCode = 29;
+            } else {
+                self.city.conditionCode --;
+            }
+        }
     }
 }
 
