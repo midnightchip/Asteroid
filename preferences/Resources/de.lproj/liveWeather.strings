@@ -1,0 +1,12 @@
+{
+    "Enable_Lock" = "Lockscreen aktivieren";
+    "Control_Lock" = "Aktiviert das Live Wetter auf dem Lockscreen";
+    "Enable_Home" = "Homescreen aktivieren";
+    "Control_Home" = "Aktiviert das Live Wetter auf dem Homescreen";
+    "Custom_Condition" = "Benutzerdefinierte Kondition auswählen";
+    "Select_Condition" = "Wetter-Kondition auswählen";
+    "Overide_Animation" = "Dies überschreibt die Hintergrund Animation.";
+    "Hide_Background" = "Live Hintergrund verbergen";
+    "Hide_Explain" = "Verbirgt den Live Hintergrund, jedoch nicht die Animation";
+    "Live_Weather" = "Live Wetter";
+}

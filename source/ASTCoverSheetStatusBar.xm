@@ -26,16 +26,21 @@
 		double aspect = weatherImage.size.width / weatherImage.size.height;
 		weatherImage = [weatherImage scaleImageToSize:CGSizeMake(self.font.lineHeight * aspect, self.font.lineHeight)];
 		[weatherAttach setBounds:CGRectMake(0, roundf(self.font.capHeight - weatherImage.size.height)/2.f, weatherImage.size.width, weatherImage.size.height)];
+		weatherImage = [weatherImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 		weatherAttach.image = weatherImage;
-
-		NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:weatherAttach];
-
+		//Stupid Tint workaround
+    	NSMutableAttributedString *imageFixText = [[NSMutableAttributedString alloc] initWithAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+    	NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:weatherAttach];
+		[imageFixText appendAttributedString:attachmentString];
+    	[imageFixText addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:0] range:NSMakeRange(0, imageFixText.length)]; // Put font size 0 to prevent offset
+    	[imageFixText appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+		//End stupid UIKit workaround
 		NSDictionary *attribs = @{
                           NSFontAttributeName: self.font
                           };
-		NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:[weatherModel localeTemperature] attributes:attribs];
-		[attributedText appendAttributedString:attachmentString];
-		[self setAttributedText:attributedText];
+		NSAttributedString *tempString = [[NSAttributedString alloc] initWithString:[weatherModel localeTemperature] attributes:attribs];
+		[imageFixText appendAttributedString:tempString];
+		[self setAttributedText:imageFixText];
 	}else{
 		%orig;
 	}
