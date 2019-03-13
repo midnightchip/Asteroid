@@ -139,14 +139,14 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 }
 //Thanks iPad_Kid, for whatever reason, the substrate update changed us from being hidden after being displayed once.
 - (void)setWallpaperBackgroundRect:(CGRect)rect forContents:(CGImageRef)contents withFallbackColor:(CGColorRef)fallbackColor {
-    if([prefs boolForKey:@"noFolderInBackground"]){
+    if([prefs boolForKey:@"noFolders"]){
         %orig(CGRectNull, NULL, NULL);
     
         self.backgroundColor = [UIColor clearColor];
     } else %orig;
     
 }
-%end 
+%end
 %end
 
 //Dock 
@@ -222,7 +222,7 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 %hook WUIWeatherCondition
 %property (nonatomic, assign) BOOL hidesConditionBackground;
 	-(CALayer *)layer{
-		if(self.alpha == 982 && self.hidesConditionBackground){
+		if((self.alpha == 982 || self.condition == 3) && self.hidesConditionBackground){
 			CALayer* layer = %orig;
 			for(CALayer* firstLayers in layer.sublayers){
 				if(firstLayers.backgroundColor){
@@ -230,7 +230,6 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 				}
 				for(CALayer* secLayers in firstLayers.sublayers){
 					if(deviceVersion >= 11.1 && deviceVersion < 11.3){
-						//NSLog(@"WTest num  %d", conditionNumberSet);
 						/*
 							11.1.2 (at night)
 							Cold condition number 25 
@@ -267,9 +266,6 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 						if(![thrLayers isKindOfClass:[CAEmitterLayer class]] && ![thrLayers isKindOfClass:[CATransformLayer class]]){
 							if(thrLayers.backgroundColor){
 								thrLayers.backgroundColor = [UIColor clearColor].CGColor;
-							}
-							if([thrLayers isKindOfClass:[CAGradientLayer class]]){
-								thrLayers.hidden = YES;
 							}
 						}
 					}

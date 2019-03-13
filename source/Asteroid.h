@@ -43,3 +43,10 @@
 @property (nonatomic,retain) WATodayModel * todayModel;
 @end
 
+@interface SBFolderBackgroundView : UIView
+
+@end
+
+@interface SBFolderControllerBackgroundView : UIView
+
+@end
