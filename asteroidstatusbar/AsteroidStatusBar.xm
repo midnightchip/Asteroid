@@ -23,13 +23,18 @@ static UIImage *getWeatherImage(){
 	NSDictionary *weatherItem;
 	if(isSB){
 		weatherItem = [[%c(AsteroidServer) sharedInstance] returnWeatherLogo];
-		image = weatherItem[@"image"];
+		//image = weatherItem[@"image"];
+		//NSData *data = [[NSData alloc]initWithBase64EncodedString:weatherItem[@"image"]
+                                                //options:NSDataBase64DecodingIgnoreUnknownCharacters];
+		//NSLog(@"ASTEROIDATAHERE %@", weatherItem[@"image"]);
+		image = [UIImage imageWithData:weatherItem[@"image"]];										
 	}else{
 		CPDistributedMessagingCenter *messagingCenter;
 		messagingCenter = [CPDistributedMessagingCenter centerNamed:@"com.midnightchips.AsteroidServer"];
 		rocketbootstrap_distributedmessagingcenter_apply(messagingCenter);
 		weatherItem = [messagingCenter sendMessageAndReceiveReplyName:@"weatherIcon" userInfo:nil];
-		image = weatherItem[@"image"];
+		image = [UIImage imageWithData:weatherItem[@"image"]];
+		//image = weatherItem[@"image"];
 	}
 	return image;
 }

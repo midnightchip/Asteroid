@@ -46,10 +46,15 @@
 	NSLog(@"ASTEROIDSERVERCALLED");
 	NSMutableDictionary *sendItems= [[NSMutableDictionary alloc]init];
 	sendItems[@"temp"] = [self returnWeatherTempString];
-	sendItems[@"image"] = [self returnWeatherLogoImage];
+	sendItems[@"image"] = [self returnWeatherLogoData];
 	NSLog(@"ASTEROIDSERVERCALLED %@", sendItems);
 	return sendItems;
 }
+-(NSString *)returnWeatherLogoData{
+	NSData *imageData = UIImagePNGRepresentation([self.weatherModel glyphWithOption:ConditionOptionDefault]);
+	return imageData;
+}
+
 -(UIImage *)returnWeatherLogoImage{
 	return [self.weatherModel glyphWithOption:ConditionOptionDefault];
 }
@@ -60,7 +65,10 @@
 
 -(NSDictionary *)returnWeatherLogo{
 	NSMutableDictionary *sendImage = [[NSMutableDictionary alloc]init];
-	sendImage[@"image"] = [self.weatherModel glyphWithOption:ConditionOptionDefault];
+	//sendImage[@"image"] = [[self.weatherModel glyphWithOption:ConditionOptionDefault] copy];
+	NSData *imageData = UIImagePNGRepresentation([self.weatherModel glyphWithOption:ConditionOptionDefault]);
+	NSLog(@"ASTEROIDLOGODATA %@", imageData);
+	sendImage[@"image"] = imageData;
 	return sendImage;
 }
 
