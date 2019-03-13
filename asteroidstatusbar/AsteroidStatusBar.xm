@@ -5,7 +5,13 @@
 
 @interface _UIStatusBarStringView : UILabel
 @property (nonatomic, assign) BOOL isTime;
+@property (nonatomic, assign) BOOL isTapped;
 @property (nonatomic,copy) NSString * originalText; 
+-(void)setText:(id)arg1;
+-(NSString *)originalText;
+-(void)setAlternateText:(NSString *)arg1;
+-(void)setShowsAlternateText:(BOOL)arg1 ;
+-(void)swapTime;
 @end 
 
 
@@ -38,8 +44,23 @@ static NSDictionary *getWeatherItems() {
 
 %hook _UIStatusBarStringView
 %property (nonatomic, assign) BOOL isTime;
+%property (nonatomic, assign) BOOL isTapped;
 -(void)setText:(id)arg1{
+	/*if(self.isTime){
+		UITapGestureRecognizer *tapGesture =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(swapTime)];
+		[self addGestureRecognizer:tapGesture];
+	}*/
+	%orig;
 	if(self.isTime){
+		UITapGestureRecognizer *tapGesture =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(swapTime)];
+		[self addGestureRecognizer:tapGesture];
+
+		
+	} //else{
+	//}
+}
+-(void)setAlternateText:(NSString *)arg1{
+	if(self.isTime && self.isTapped){
 		NSDictionary *weatherItems = getWeatherItems();
 		NSTextAttachment *weatherAttach = [[NSTextAttachment alloc] init];
 		UIImage *weatherImage = weatherItems[@"image"];//weatherItems[@"image"];
@@ -65,6 +86,19 @@ static NSDictionary *getWeatherItems() {
 		%orig;
 	}
 }
+%new 
+-(void)swapTime{
+	if(!self.isTapped){
+		self.isTapped = YES;
+		[self setAlternateText:@""];
+		[self setShowsAlternateText:TRUE];
+	}else{
+		self.isTapped = NO;
+		[self setShowsAlternateText:FALSE];
+	}
+	
+
+}
 
 %end
 
@@ -78,7 +112,17 @@ static NSDictionary *getWeatherItems() {
 -(_UIStatusBarStringView *)shortTimeView{
 	_UIStatusBarStringView *orig = %orig;
 	orig.isTime = TRUE;
+	UITapGestureRecognizer *tapGesture =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(swapTime)];
+	[orig addGestureRecognizer:tapGesture];
 	return orig;
 }
+/*%new
+-(void)swapTime{
+	if(!self.isTapped){
+		self.isTapped = YES;
+		[self 
+	}
+	
 
+}*/
 %end
