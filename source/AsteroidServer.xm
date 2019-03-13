@@ -33,14 +33,35 @@
 		// Register Messages
 		[messagingCenter registerForMessageName:@"weatherIcon" target:self selector:@selector(returnWeatherLogo)];
 		[messagingCenter registerForMessageName:@"weatherTemp" target:self selector:@selector(returnWeatherTemp)];
+		[messagingCenter registerForMessageName:@"weatherItems" target:self selector:@selector(returnWeatherItems)];
         [messagingCenter registerForMessageName:@"cityIndex" target:self selector:@selector(returnCurrentIndex)];
         [messagingCenter registerForMessageName:@"returnCityIndex" target:self selector:@selector(saveCurrentIndexName:withUserInfo:)];
+
 	}
 	return self;
 }
 
--(UIImage *)returnWeatherLogo{
-	return nil;
+
+-(NSDictionary *)returnWeatherItems{
+	NSLog(@"ASTEROIDSERVERCALLED");
+	NSMutableDictionary *sendItems= [[NSMutableDictionary alloc]init];
+	sendItems[@"temp"] = [self returnWeatherTempString];
+	sendItems[@"image"] = [self returnWeatherLogoImage];
+	NSLog(@"ASTEROIDSERVERCALLED %@", sendItems);
+	return sendItems;
+}
+-(UIImage *)returnWeatherLogoImage{
+	return [self.weatherModel glyphWithOption:ConditionOptionDefault];
+}
+
+-(NSString *)returnWeatherTempString{
+	return [self.weatherModel localeTemperature];
+}
+
+-(NSDictionary *)returnWeatherLogo{
+	NSMutableDictionary *sendImage = [[NSMutableDictionary alloc]init];
+	sendImage[@"image"] = [self.weatherModel glyphWithOption:ConditionOptionDefault];
+	return sendImage;
 }
 
 -(NSDictionary *)returnWeatherTemp{
