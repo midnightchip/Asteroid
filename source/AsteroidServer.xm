@@ -50,7 +50,7 @@
 	NSLog(@"ASTEROIDSERVERCALLED %@", sendItems);
 	return sendItems;
 }
--(NSString *)returnWeatherLogoData{
+-(NSData *)returnWeatherLogoData{
 	NSData *imageData = UIImagePNGRepresentation([self.weatherModel glyphWithOption:ConditionOptionDefault]);
 	return imageData;
 }

@@ -12,53 +12,37 @@
 @class AsteroidServer;
 @interface AsteroidServer : NSObject
 +(AsteroidServer *)sharedInstance;
--(NSDictionary *)returnWeatherTemp;
+-(NSString *)returnWeatherTempString;
 -(NSDictionary *)returnWeatherItems;
 -(NSDictionary *)returnWeatherLogo;
+-(UIImage *)returnWeatherLogoImage;
 @end
 
-
-static UIImage *getWeatherImage(){
-	UIImage *image;
-	NSDictionary *weatherItem;
+static NSDictionary *getWeatherItems() {
+	NSMutableDictionary *serverDict = [NSMutableDictionary new];
 	if(isSB){
-		weatherItem = [[%c(AsteroidServer) sharedInstance] returnWeatherLogo];
-		//image = weatherItem[@"image"];
-		//NSData *data = [[NSData alloc]initWithBase64EncodedString:weatherItem[@"image"]
-                                                //options:NSDataBase64DecodingIgnoreUnknownCharacters];
-		//NSLog(@"ASTEROIDATAHERE %@", weatherItem[@"image"]);
-		image = [UIImage imageWithData:weatherItem[@"image"]];										
+		serverDict[@"image"] = [[%c(AsteroidServer) sharedInstance] returnWeatherLogoImage];
+		serverDict[@"temp"] = [[%c(AsteroidServer) sharedInstance] returnWeatherTempString];
 	}else{
+		NSDictionary *weatherItem;
 		CPDistributedMessagingCenter *messagingCenter;
 		messagingCenter = [CPDistributedMessagingCenter centerNamed:@"com.midnightchips.AsteroidServer"];
 		rocketbootstrap_distributedmessagingcenter_apply(messagingCenter);
-		weatherItem = [messagingCenter sendMessageAndReceiveReplyName:@"weatherIcon" userInfo:nil];
-		image = [UIImage imageWithData:weatherItem[@"image"]];
-		//image = weatherItem[@"image"];
+		weatherItem = [messagingCenter sendMessageAndReceiveReplyName:@"weatherItems" userInfo:nil];
+		UIImage *weatherImage = [UIImage imageWithData:weatherItem[@"image"]];
+		serverDict[@"image"] = weatherImage;
+		serverDict[@"temp"] = weatherItem[@"temp"];
 	}
-	return image;
-}
-
-static NSString *weatherTemp() {
-    NSDictionary* serverDict;
-    if (isSB) {
-        serverDict = [[%c(AsteroidServer) sharedInstance] returnWeatherTemp];
-    } else {
-        CPDistributedMessagingCenter *messagingCenter;
-	messagingCenter = [CPDistributedMessagingCenter centerNamed:@"com.midnightchips.AsteroidServer"];
-	rocketbootstrap_distributedmessagingcenter_apply(messagingCenter);
-        serverDict = [messagingCenter sendMessageAndReceiveReplyName:@"weatherTemp" userInfo:nil/* optional dictionary */];
-				NSLog(@"RECIVEDDICT %@", serverDict);
-    }
-    return serverDict[@"temp"];
+	return serverDict;
 }
 
 %hook _UIStatusBarStringView
 %property (nonatomic, assign) BOOL isTime;
 -(void)setText:(id)arg1{
 	if(self.isTime){
+		NSDictionary *weatherItems = getWeatherItems();
 		NSTextAttachment *weatherAttach = [[NSTextAttachment alloc] init];
-		UIImage *weatherImage = getWeatherImage();//weatherItems[@"image"];
+		UIImage *weatherImage = weatherItems[@"image"];//weatherItems[@"image"];
 		double aspect = weatherImage.size.width / weatherImage.size.height;
 		weatherImage = [weatherImage scaleImageToSize:CGSizeMake(self.font.lineHeight * aspect, self.font.lineHeight)];
 		[weatherAttach setBounds:CGRectMake(0, roundf(self.font.capHeight - weatherImage.size.height)/2.f, weatherImage.size.width, weatherImage.size.height)];
@@ -74,7 +58,7 @@ static NSString *weatherTemp() {
 		NSDictionary *attribs = @{
                           NSFontAttributeName: self.font
                           };
-		NSAttributedString *tempString = [[NSAttributedString alloc] initWithString:weatherTemp() attributes:attribs];
+		NSAttributedString *tempString = [[NSAttributedString alloc] initWithString:weatherItems[@"temp"] attributes:attribs];
 		[imageFixText appendAttributedString:tempString];
 		[self setAttributedText:imageFixText];
 	}else{
@@ -93,7 +77,6 @@ static NSString *weatherTemp() {
 
 -(_UIStatusBarStringView *)shortTimeView{
 	_UIStatusBarStringView *orig = %orig;
-	NSLog(@"ASTEROIDTIMEHERE %@", orig.originalText);
 	orig.isTime = TRUE;
 	return orig;
 }
