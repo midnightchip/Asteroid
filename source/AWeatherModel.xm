@@ -77,7 +77,7 @@
                 [self.todayModel setIsLocationTrackingEnabled:NO];
             }];
         } else {
-            [self handleDefault];
+            [self _kickStartWeatherFramework];
         }
         [self postNotification];
         compBlock();
