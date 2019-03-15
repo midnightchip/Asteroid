@@ -1,2 +1,0 @@
-@interface ASTSetupView : UIView
-@end
