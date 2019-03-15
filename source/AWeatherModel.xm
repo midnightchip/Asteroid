@@ -138,6 +138,12 @@
     NSInteger conditionCode = [self.city conditionCode];
     NSString *conditionImageName = conditionCode < 3200 ? [WeatherImageLoader conditionImageNameWithConditionIndex:conditionCode] : nil;
     ConditionImageType type = [self conditionImageTypeForString: conditionImageName];
+    
+    // Handling special conditions that dont return glyphs:
+    if(conditionCode == 7){
+        self.city.conditionCode = 6;
+    }
+    
     // These codes are specific to day or night and have to be verified.
     if(conditionCode == 44 ||
        conditionCode == 30 ||
