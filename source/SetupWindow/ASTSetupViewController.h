@@ -1,0 +1,2 @@
+@interface ASTSetupViewController : UIViewController
+@end
