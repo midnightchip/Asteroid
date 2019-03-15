@@ -109,10 +109,12 @@ static WUIWeatherCondition* condition = nil;
         [self layoutSubviews];
         
         if([prefs boolForKey:@"appScreenWeatherBackground"] && _weatherModel.isPopulated){
+            City *backgroundCity = _weatherModel.city;
             if([prefs boolForKey:@"customConditionIcon"]){
-                _weatherModel.city.conditionCode = [prefs doubleForKey:@"weatherConditionsIcon"];
+                backgroundCity = [_weatherModel.city cityCopy];
+                backgroundCity.conditionCode = [prefs doubleForKey:@"weatherConditionsIcon"];
             }
-            [self.referenceView.background setCity:_weatherModel.city];
+            [self.referenceView.background setCity:backgroundCity];
             if(![prefs boolForKey:@"appScreenWeather"]){
                 self.gradientLayer.hidden = NO;
                 self.referenceView.hidden = YES;
