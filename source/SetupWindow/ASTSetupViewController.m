@@ -14,6 +14,7 @@
     return self;
 }
 - (void)viewDidLoad{
-    
+    self.welcomeView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame];
+    [self.view addSubview: self.welcomeView];
 }
 @end
