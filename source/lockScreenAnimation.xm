@@ -73,19 +73,25 @@ void loadWeatherAnimation(City *city){
 						Loaded = YES;
 			     	}
 				}
-			}
-		}
-	}else{
-		if(city){
+            }
+        }
+    }else{
+        if(city){
             NSLog(@"lock_TWEAK | set city");
-			[dynamicBG setCity: city];
-		}
-	}
+            [dynamicBG setCity: city];
+        }
+    }
 }
 
 void loadCityForView(){
-        AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
-    if(weatherModel.isPopulated)loadWeatherAnimation(weatherModel.city);
+    AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
+    City *backgroundCity = weatherModel.city;
+    if([prefs boolForKey:@"customCondition"]){
+        backgroundCity = [weatherModel.city cityCopy];
+        backgroundCity.conditionCode = [prefs doubleForKey:@"weatherConditions"];
+    }
+    
+    if(weatherModel.isPopulated)loadWeatherAnimation(backgroundCity);
 }
 
 %hook SBLockScreenManager

@@ -1,0 +1,3 @@
+@interface HighlightButton : UIButton
+
+@end

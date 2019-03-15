@@ -40,9 +40,6 @@
                 self.populated = YES;
                 self.hasFallenBack = NO;
                 
-                if([prefs boolForKey:@"customCondition"]){
-                    self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
-                }
                 [self postNotification];
                 [self setUpRefreshTimer];
             }];
@@ -71,13 +68,10 @@
                 self.city = self.forecastModel.city;
                 [self verifyAndCorrectCondition];
                 self.localWeather = self.city.isLocalWeatherCity;
-                if([prefs boolForKey:@"customCondition"]){
-                    self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
-                }
                 [self.todayModel setIsLocationTrackingEnabled:NO];
             }];
         } else {
-            [self handleDefault];
+            [self _kickStartWeatherFramework];
         }
         [self postNotification];
         compBlock();
@@ -124,9 +118,6 @@
         self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.city.wfLocation];
         [self.todayModel executeModelUpdateWithCompletion:^{nil;}];
         self.forecastModel = self.todayModel.forecastModel;
-        if([prefs boolForKey:@"customCondition"]){
-            self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
-        }
         self.populated = YES;
         self.hasFallenBack = NO;
     } else {
@@ -138,6 +129,12 @@
     NSInteger conditionCode = [self.city conditionCode];
     NSString *conditionImageName = conditionCode < 3200 ? [WeatherImageLoader conditionImageNameWithConditionIndex:conditionCode] : nil;
     ConditionImageType type = [self conditionImageTypeForString: conditionImageName];
+    
+    // Handling special conditions that dont return glyphs:
+    if(conditionCode == 7){
+        self.city.conditionCode = 6;
+    }
+    
     // These codes are specific to day or night and have to be verified.
     if(conditionCode == 44 ||
        conditionCode == 30 ||
