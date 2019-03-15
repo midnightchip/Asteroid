@@ -4,9 +4,9 @@
 
 @end
 
-
 @interface NSObject (asteroid)
 - (BOOL)isKindOfClass:(Class)aClass;
++(id) cplAllPropertyNames;
 @end
 
 @interface WFTemperature : NSObject
@@ -28,7 +28,9 @@
 @property (assign,nonatomic) BOOL isDay;                                                 
 -(void) update;
 -(NSDate*) updateTime;
-@property (nonatomic,copy) NSString * name;  
+@property (nonatomic,copy) NSString * name;
+
+-(id) cityCopy;
 
 @end
 

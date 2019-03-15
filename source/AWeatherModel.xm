@@ -40,9 +40,6 @@
                 self.populated = YES;
                 self.hasFallenBack = NO;
                 
-                if([prefs boolForKey:@"customCondition"]){
-                    self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
-                }
                 [self postNotification];
                 [self setUpRefreshTimer];
             }];
@@ -71,9 +68,6 @@
                 self.city = self.forecastModel.city;
                 [self verifyAndCorrectCondition];
                 self.localWeather = self.city.isLocalWeatherCity;
-                if([prefs boolForKey:@"customCondition"]){
-                    self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
-                }
                 [self.todayModel setIsLocationTrackingEnabled:NO];
             }];
         } else {
@@ -124,9 +118,6 @@
         self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.city.wfLocation];
         [self.todayModel executeModelUpdateWithCompletion:^{nil;}];
         self.forecastModel = self.todayModel.forecastModel;
-        if([prefs boolForKey:@"customCondition"]){
-            self.city.conditionCode = [prefs doubleForKey:@"weatherConditions"];
-        }
         self.populated = YES;
         self.hasFallenBack = NO;
     } else {

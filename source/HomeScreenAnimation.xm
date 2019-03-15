@@ -62,7 +62,13 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
             self.referenceView.background.condition.hidesConditionBackground = YES;
         }
         
-        [self.referenceView.background setCity:self.weatherModel.city];
+        City *backgroundCity = self.weatherModel.city;
+        if([prefs boolForKey:@"customCondition"]){
+            backgroundCity = [self.weatherModel.city cityCopy];
+            backgroundCity.conditionCode = [prefs doubleForKey:@"weatherConditions"];
+        }
+        
+        [self.referenceView.background setCity:backgroundCity];
         [self.referenceView.background setTag:123];
         
         [[self.referenceView.background condition] resume];
@@ -177,6 +183,26 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
     } 
 }
 %end 
+
+%hook City
+%new
+-(id) cityCopy{
+    City *city = [[City alloc] init];
+    NSArray *prpArray = [[City cplAllPropertyNames] allObjects];
+    for(NSString *prpString in prpArray){
+        objc_property_t property = class_getProperty([City class], [prpString UTF8String]);
+        if(property){
+            const char *propertyAttributes = property_getAttributes(property);
+            NSArray *attributes = [[NSString stringWithUTF8String:propertyAttributes]
+                                   componentsSeparatedByString:@","];
+            if(![attributes containsObject:@"R"]){ // Not readonly
+                [city setValue: [self valueForKey:prpString] forKey:prpString];
+            }
+        }
+    }
+    return city;
+}
+%end
 
 //Hide background accross views
 //Thanks June
