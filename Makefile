@@ -9,7 +9,7 @@ GO_EASY_ON_ME = 0
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Asteroid
-Asteroid_FILES = $(wildcard source/*.m source/*.xm source/*.mm source/*.x source/SetupWindow/*.m)
+Asteroid_FILES = $(wildcard source/*.m source/*.xm source/*.mm source/*.x source/SetupWindow/*.m source/SetupWindow/*.xm)
 Asteroid_FRAMEWORKS = CoreLocation 
 Asteroid_LIBRARIES = rocketbootstrap
 Asteroid_PRIVATE_FRAMEWORKS = Weather WeatherUI AppSupport
