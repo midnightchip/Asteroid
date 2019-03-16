@@ -21,28 +21,31 @@
     self.welcomeView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame];
     [self.welcomeView setHeaderText:@"Asteroid" andDescription: @"the casle & midnightchips"];
     [self.welcomeView setupVideoWithPathToFile:@"insertPathToFile"];
-    [self.welcomeView setNextButtonTarget:self withAction:@selector(transitionToNextPage)];
-    [self.view addSubview: self.welcomeView];
-    
-    self.welcomeView.pageIndex = self.allPages.count;
-    [self.allPages addObject:self.welcomeView];
-    
-    
+    self.welcomeView.backButton.hidden = YES;
+    [self indexPage: self.welcomeView];
+
     self.secondView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame];
     [self.secondView setHeaderText:@"Next Page" andDescription: @"Cool!"];
     [self.secondView setupVideoWithPathToFile:@"insertPathToFile"];
-    [self.secondView setNextButtonTarget:self withAction:@selector(transitionToNextPage)];
-    [self.view addSubview: self.secondView];
+    [self indexPage: self.secondView];
     
-    self.secondView.pageIndex = self.allPages.count;
-    [self.allPages addObject:self.secondView];
     
+    for(ASTSetupPageView *page in self.allPages){
+        [page setNextButtonTarget:self withAction:@selector(transitionToNextPage)];
+        [page setBackButtonTarget:self withAction:@selector(transitionToBackPage)];
+        [self.view addSubview: page];
+    }
     
     self.visiblePage = self.allPages[0];
     [self adjustForVisiblePage];
 }
 
 #pragma mark - Utility
+-(void) indexPage:(ASTSetupPageView *) page{
+    page.pageIndex = self.allPages.count;
+    [self.allPages addObject:page];
+}
+
 -(void) transitionToNextPage{
     self.visiblePage = [self nextPageForPage:self.visiblePage];
     
@@ -58,6 +61,7 @@
 }
 
 -(void) transitionToBackPage{
+    NSLog(@"lock_TWEAK | go back");
     self.visiblePage = [self backPageForPage:self.visiblePage];
     
     [self.view bringSubviewToFront:self.visiblePage];

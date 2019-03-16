@@ -39,6 +39,35 @@
         self.nextButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [self addSubview:self.nextButton];
         
+        //Create navigation bar
+        self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 20, self.frame.size.width, 50)];
+        //Make navigation bar background transparent
+        [self.navBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+        self.navBar.shadowImage = [UIImage new];
+        self.navBar.translucent = YES;
+        UINavigationItem *navItem = [[UINavigationItem alloc] init];
+        
+        //Create the back button view
+        UIView* leftButtonView = [[UIView alloc]initWithFrame:CGRectMake(-12, 0, 75, 50)];
+        
+        self.backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.backButton.backgroundColor = [UIColor clearColor];
+        self.backButton.frame = leftButtonView.frame;
+        [self.backButton setImage:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/HomeGesture.bundle/quickSetup/back.png"] forState:UIControlStateNormal];
+        [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
+        self.backButton.tintColor = [UIColor colorWithRed:10 / 255.0 green:106 / 255.0 blue:255 / 255.0 alpha:1.0];
+        self.backButton.autoresizesSubviews = YES;
+        self.backButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
+        self.backButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        [leftButtonView addSubview:self.backButton];
+        
+        //Add back button to navigation bar
+        UIBarButtonItem* leftBarButton = [[UIBarButtonItem alloc]initWithCustomView:leftButtonView];
+        navItem.leftBarButtonItem = leftBarButton;
+        
+        self.navBar.items = @[ navItem ];
+        [self addSubview:self.navBar];
+        
     }
     return self;
 }
@@ -75,4 +104,10 @@
 -(void) setNextButtonTarget: (id) object withAction:(SEL) selector{
     [self.nextButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
 }
+
+-(void) setBackButtonTarget: (id) object withAction:(SEL) selector{
+    [self.backButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
+}
+
+
 @end
