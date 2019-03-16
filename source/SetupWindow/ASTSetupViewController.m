@@ -1,5 +1,7 @@
 #import "ASTSetupViewController.h"
 
+#define PATH_TO_SNOW @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Snow.mov"
+
 @interface ASTSetupViewController ()
 @property (nonatomic, retain) NSMutableArray *allPages;
 @property (nonatomic, retain) ASTSetupPageView *visiblePage;
@@ -20,7 +22,7 @@
 - (void)viewDidLoad{
     self.welcomeView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame];
     [self.welcomeView setHeaderText:@"Asteroid" andDescription: @"the casle & midnightchips"];
-    [self.welcomeView setupVideoWithPathToFile:@"insertPathToFile"];
+    [self.welcomeView setupVideoWithPathToFile:PATH_TO_SNOW];
     self.welcomeView.backButton.hidden = YES;
     [self indexPage: self.welcomeView];
 
@@ -107,6 +109,7 @@
 
 -(void) adjustForVisiblePage{
     [self.view bringSubviewToFront:self.visiblePage];
+    [self.visiblePage.videoPlayer play];
 }
 
 @end

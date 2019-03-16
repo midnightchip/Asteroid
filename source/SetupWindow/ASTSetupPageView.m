@@ -53,7 +53,7 @@
         self.backButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.backButton.backgroundColor = [UIColor clearColor];
         self.backButton.frame = leftButtonView.frame;
-        [self.backButton setImage:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/HomeGesture.bundle/quickSetup/back.png"] forState:UIControlStateNormal];
+        [self.backButton setImage:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/BackArrow.png"] forState:UIControlStateNormal];
         [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
         self.backButton.tintColor = [UIColor colorWithRed:10 / 255.0 green:106 / 255.0 blue:255 / 255.0 alpha:1.0];
         self.backButton.autoresizesSubviews = YES;
@@ -88,6 +88,7 @@
         self.playerLayer.videoGravity = AVLayerVideoGravityResize;
         self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
         
+        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(playerItemDidReachEnd:)
                                                      name:AVPlayerItemDidPlayToEndTimeNotification
@@ -107,6 +108,11 @@
 
 -(void) setBackButtonTarget: (id) object withAction:(SEL) selector{
     [self.backButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)playerItemDidReachEnd:(NSNotification *)notification {
+    AVPlayerItem *p = [notification object];
+    [p seekToTime:kCMTimeZero];
 }
 
 
