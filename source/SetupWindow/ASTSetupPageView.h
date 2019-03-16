@@ -8,7 +8,6 @@
 @property (nonatomic, retain) AVPlayer *videoPlayer;
 @property (nonatomic, retain) AVPlayerLayer *playerLayer;
 @property (nonatomic, retain) HighlightButton *nextButton;
-@property (nonatomic, retain) UIButton *skipButton;
 @property (nonatomic) NSUInteger pageIndex;
 
 -(void) setupVideoWithPathToFile:(NSString *) pathToFile;
