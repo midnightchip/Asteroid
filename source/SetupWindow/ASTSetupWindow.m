@@ -4,13 +4,8 @@
 -(void) _setSecure:(BOOL)arg1;
 @end
 
-@interface ASTSetupWindow ()
-@end
 
-@implementation ASTSetupWindow{
-    
-}
-
+@implementation ASTSetupWindow
 - (instancetype)initWithFrame:(CGRect)frame {
     if(self = [super initWithFrame:frame]) {
         self.setupViewController = [[ASTSetupViewController alloc] init];

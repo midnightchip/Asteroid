@@ -27,17 +27,25 @@
     self.secondView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame];
     [self.secondView setHeaderText:@"Next Page" andDescription: @"Cool!"];
     [self.secondView setupVideoWithPathToFile:@"insertPathToFile"];
+    [self.secondView setNextButtonTarget:self withAction:@selector(exitSetup)];
+    [self.secondView.nextButton setTitle:@"Finish" forState:UIControlStateNormal];
     [self indexPage: self.secondView];
     
     
     for(ASTSetupPageView *page in self.allPages){
-        [page setNextButtonTarget:self withAction:@selector(transitionToNextPage)];
+        if(page.nextButton.allTargets.count == 0){
+            [page setNextButtonTarget:self withAction:@selector(transitionToNextPage)];
+        }
         [page setBackButtonTarget:self withAction:@selector(transitionToBackPage)];
         [self.view addSubview: page];
     }
     
     self.visiblePage = self.allPages[0];
     [self adjustForVisiblePage];
+}
+
+-(void) exitSetup{
+    self.view.superview.hidden = YES; // could make this fancier later
 }
 
 #pragma mark - Utility
@@ -61,7 +69,6 @@
 }
 
 -(void) transitionToBackPage{
-    NSLog(@"lock_TWEAK | go back");
     self.visiblePage = [self backPageForPage:self.visiblePage];
     
     [self.view bringSubviewToFront:self.visiblePage];

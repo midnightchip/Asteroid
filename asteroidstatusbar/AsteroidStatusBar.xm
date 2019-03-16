@@ -57,7 +57,7 @@ static NSDictionary *getWeatherItems() {
 %property (nonatomic, assign) BOOL isTime;
 %property (nonatomic, assign) BOOL isTapped;
 %property (nonatomic, assign) BOOL foundBlocks;
-%property (nonatomic, retain) CGRect timeFrame;
+%property (nonatomic, assign) CGRect timeFrame;
 %property (nonatomic, retain) UITapGestureRecognizer *tapGesture;
 -(void)didMoveToWindow{
     %orig;
