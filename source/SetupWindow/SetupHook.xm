@@ -18,10 +18,10 @@
 @property (nonatomic, retain) UIColor *foregroundColor;
 @end
 
-/*%hook UIStatusBar
+%hook UIStatusBar
 -(UIColor *)foregroundColor{
     return [UIColor blackColor];
 }
 
 %end
-*/
+

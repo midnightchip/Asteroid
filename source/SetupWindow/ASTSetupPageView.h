@@ -9,8 +9,10 @@
 @property (nonatomic, retain) AVPlayerLayer *playerLayer;
 @property (nonatomic, retain) HighlightButton *nextButton;
 @property (nonatomic, retain) UIButton *skipButton;
+@property (nonatomic) NSUInteger pageIndex;
 
 -(void) setupVideoWithPathToFile:(NSString *) pathToFile;
+-(void) setHeaderText:(NSString *) headerText andDescription: (NSString *) desText;
 -(void) setNextButtonTarget: (id) object withAction:(SEL) selector;
 @end
 

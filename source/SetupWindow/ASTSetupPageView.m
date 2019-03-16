@@ -67,6 +67,11 @@
     }
 }
 
+-(void) setHeaderText:(NSString *) headerText andDescription: (NSString *) desText{
+    self.bigTitle.text = headerText;
+    self.titleDescription.text = desText;
+}
+
 -(void) setNextButtonTarget: (id) object withAction:(SEL) selector{
     [self.nextButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
 }
