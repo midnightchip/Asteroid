@@ -13,15 +13,3 @@
 }
 %end
 
-
-@interface UIStatusBar : UIView
-@property (nonatomic, retain) UIColor *foregroundColor;
-@end
-
-%hook UIStatusBar
--(UIColor *)foregroundColor{
-    return [UIColor blackColor];
-}
-
-%end
-
