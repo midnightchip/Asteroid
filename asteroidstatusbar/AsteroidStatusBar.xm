@@ -63,7 +63,6 @@ static NSDictionary *getWeatherItems() {
     %orig;
 	NSLog(@"ASTEROIDGESTURECOMINGONLINE");
 	if(self.isTime && !self.tapGesture){
-		NSLog(@"ASTEROIDGESTURECOMINGONLINEADDED");
 		self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(swapTime:)];
         self.tapGesture.numberOfTapsRequired = 1; 
 		[self.tapGesture setCancelsTouchesInView: NO];
@@ -116,7 +115,7 @@ static NSDictionary *getWeatherItems() {
 	NSLog(@"ASTEROIDGESTURE WAS CALLED");
 	CGPoint location = [sender locationInView:self];
 	
-	if(CGRectContainsPoint(CGRectMake(self.timeFrame.origin.x, 0, self.timeFrame.size.width, self.bounds.size.height), location)){
+	if(CGRectContainsPoint(CGRectMake(0, 0, self.timeFrame.size.width, self.bounds.size.height), location)){
 
 		if(!self.isTapped){
 			self.isTapped = YES;
