@@ -45,7 +45,12 @@
 }
 
 -(void) exitSetup{
-    self.view.superview.hidden = YES; // could make this fancier later
+    [UIView animateWithDuration:0.5 delay:0 options: UIViewAnimationOptionCurveEaseInOut  animations:^{
+        self.view.center = CGPointMake(self.view.center.x, - (2 * self.view.frame.size.height));
+    } completion:^(BOOL finished){
+        self.view.superview.hidden = YES;
+        self.view.center = self.view.superview.center;
+    }];
 }
 
 #pragma mark - Utility
