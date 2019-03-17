@@ -2,6 +2,9 @@
 
 #define PATH_TO_SNOW @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Snow.mov"
 #define PATH_TO_IMAGE @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Image.PNG"
+#define PATH_TO_BANNER @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Asteroid.png"
+#define PATH_TO_HORIZANTAL_VIDEO @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Hor.MP4"
+
 
 @interface ASTSetupViewController ()
 @property (nonatomic, retain) NSMutableArray *allPages;
@@ -23,20 +26,21 @@
 - (void)viewDidLoad{
     self.welcomeView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleBasic];
     [self.welcomeView setHeaderText:@"Asteroid" andDescription: @"the casle & midnightchips"];
+    [self.randomPage setNextButtonText:SETUP_MANUALLY andOtherButton:nil];
     [self.welcomeView setupMediaWithPathToFile:PATH_TO_SNOW];
     self.welcomeView.backButton.hidden = YES;
     [self indexPage: self.welcomeView];
     
     self.randomPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
     [self.randomPage setHeaderText:@"Woo another page" andDescription: @"more tests cooc"];
-    [self.randomPage setNextButtonText:@"Enable" andOtherButton:nil];
+    [self.randomPage setNextButtonText:CONTINUE andOtherButton:nil];
     [self.randomPage setupMediaWithPathToFile:PATH_TO_IMAGE];
     [self indexPage: self.randomPage];
 
-    self.secondView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleBasic];
+    self.secondView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleHeaderTwoButtons];
     [self.secondView setHeaderText:@"Next Page" andDescription: @"Cool!"];
-    [self.secondView setNextButtonText:@"Finish" andOtherButton:nil];
-    [self.secondView setupMediaWithPathToFile:PATH_TO_IMAGE];
+    [self.secondView setNextButtonText:GET_STARTED andOtherButton:nil];
+    [self.secondView setupMediaWithPathToFile:PATH_TO_HORIZANTAL_VIDEO];
     [self indexPage: self.secondView];
     
     

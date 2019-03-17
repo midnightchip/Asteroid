@@ -1,5 +1,9 @@
 #import "ASTSetupPageView.h"
 
+@interface AVPlayer (setup)
+-(id) _items;
+@end
+
 @interface ASTSetupPageView ()
 
 @end
@@ -10,22 +14,38 @@
 
 - (instancetype)initWithFrame:(CGRect)frame style:(ASTSetupPageStyle)setupStyle{
     if(self = [super initWithFrame:frame]) {
+        self.style = setupStyle;
         [self setBackgroundColor: [UIColor whiteColor]];
         [self setUserInteractionEnabled:TRUE];
         
-        //Big Title at the top
-        self.bigTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, self.frame.size.width, 100)];
-        self.bigTitle.textAlignment = NSTextAlignmentCenter;
-        self.bigTitle.font = [UIFont boldSystemFontOfSize:35];
-        [self addSubview:self.bigTitle];
-        
-        //Description below Big Title
-        self.titleDescription = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width*0.1, 75, self.frame.size.width*0.8, 100)];
-        self.titleDescription.textAlignment = NSTextAlignmentCenter;
-        self.titleDescription.lineBreakMode = NSLineBreakByWordWrapping;
-        self.titleDescription.numberOfLines = 0;
-        self.titleDescription.font = [UIFont systemFontOfSize:20];
-        [self addSubview: self.titleDescription];
+        // Player layer
+        switch (setupStyle) {
+            case ASTSetupStyleBasic:
+                [self formatMediaPlayerStyleBasic];
+                [self formatForSingleButton];
+                [self formatHeaderAndDescriptionTop];
+                break;
+            case ASTSetupStyleTwoButtons:
+                [self formatMediaPlayerStyleShort];
+                [self formatForTwoButtons];
+                [self formatHeaderAndDescriptionTop];
+                break;
+            case ASTSetupStyleHeaderBasic:
+                [self formatForSingleButton];
+                [self unformattedMediaForHeader];
+                [self unformattedTextForHeader];
+                break;
+            case ASTSetupStyleHeaderTwoButtons:
+                [self formatForTwoButtons];
+                [self unformattedMediaForHeader];
+                [self unformattedTextForHeader];
+                break;
+            default:
+                [self formatMediaPlayerStyleBasic];
+                [self formatForSingleButton];
+                [self formatHeaderAndDescriptionTop];
+                break;
+        }
         
         //Create navigation bar
         self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 20, self.frame.size.width, 50)];
@@ -55,21 +75,7 @@
         
         self.navBar.items = @[ navItem ];
         [self addSubview:self.navBar];
-        
-        // Player layer
-        switch (setupStyle) {
-            case ASTSetupStyleBasic:
-                [self formatMediaPlayerStyleBasic];
-                [self formatForSingleButton];
-                break;
-            case ASTSetupStyleTwoButtons:
-                [self formatMediaPlayerStyleShort];
-                [self formatForTwoButtons];
-                break;
-            default:
-                [self formatMediaPlayerStyleBasic];
-                break;
-        }
+        [self bringSubviewToFront:self.navBar];
     }
     return self;
 }
@@ -103,10 +109,43 @@
     [self.layer addSublayer:self.playerLayer];
 }
 
+-(void) unformattedMediaForHeader{
+    CGFloat width = self.frame.size.width;
+    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, 10)];
+    [self addSubview:self.imageView];
+    [self sendSubviewToBack:self.imageView];
+    
+    self.playerLayer = [AVPlayerLayer layer];
+    self.playerLayer.backgroundColor = [UIColor blackColor].CGColor;
+    self.playerLayer.videoGravity = AVLayerVideoGravityResize;
+    [self.layer addSublayer:self.playerLayer];
+    
+}
+    
+-(void) formatImageViewStyleHeader {
+    CGFloat ratio = self.imageView.image.size.height / self.imageView.image.size.width;
+    CGFloat newHeight = self.frame.size.width * ratio;
+    self.imageView.frame = CGRectMake(0, 0, self.frame.size.width, newHeight);
+    [self formatHeaderAndDescriptionToMedia];
+}
+
+-(void) formatVideoPlayerStyleHeader {
+    AVAsset *asset = [((NSArray *)[self.videoPlayer _items])[0] asset];
+    NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+    AVAssetTrack *track = [tracks objectAtIndex:0];
+    CGSize mediaSize = track.naturalSize;
+    
+    CGFloat ratio = mediaSize.height / mediaSize.width;
+    CGFloat newHeight = self.frame.size.width * (1 / ratio);
+    self.playerLayer.frame = CGRectMake(0,0, self.frame.size.width, newHeight);
+    
+    [self formatHeaderAndDescriptionToMedia];
+}
+
 #pragma mark - Button for Style
 -(void) formatForSingleButton{
     self.nextButton = [[HighlightButton alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
-    [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
+    [self.nextButton setTitle: CONTINUE forState:UIControlStateNormal];
     [self.nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.nextButton.backgroundColor = [UIColor colorWithRed:10 / 255.0 green:106 / 255.0 blue:255 / 255.0 alpha:1.0];
     self.nextButton.layer.cornerRadius = 7.5;
@@ -118,7 +157,7 @@
 }
 -(void) formatForTwoButtons{
     self.nextButton = [[HighlightButton alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
-    [self.nextButton setTitle:@"Continue" forState:UIControlStateNormal];
+    [self.nextButton setTitle:CONTINUE forState:UIControlStateNormal];
     [self.nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.nextButton.backgroundColor = [UIColor colorWithRed:10 / 255.0 green:106 / 255.0 blue:255 / 255.0 alpha:1.0];
     self.nextButton.layer.cornerRadius = 7.5;
@@ -129,7 +168,7 @@
     [self addSubview:self.nextButton];
     
     self.otherButton = [[HighlightButton alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
-    [self.otherButton setTitle:@"Setup Up Later in Settings" forState:UIControlStateNormal];
+    [self.otherButton setTitle:SET_UP_LATER_IN_SETTINGS forState:UIControlStateNormal];
     [self.otherButton setTitleColor:[UIColor colorWithRed:10 / 255.0 green:106 / 255.0 blue:255 / 255.0 alpha:1.0] forState:UIControlStateNormal];
     self.otherButton.backgroundColor = [UIColor clearColor];
     self.otherButton.layer.cornerRadius = 7.5;
@@ -140,6 +179,44 @@
     [self addSubview:self.otherButton];
 }
 
+#pragma mark - Title and Descrition
+-(void) formatHeaderAndDescriptionTop{
+    self.bigTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, self.frame.size.width, 100)];
+    self.bigTitle.textAlignment = NSTextAlignmentCenter;
+    self.bigTitle.font = [UIFont boldSystemFontOfSize:35];
+    [self addSubview:self.bigTitle];
+    
+    self.titleDescription = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width*0.1, 75, self.frame.size.width*0.8, 100)];
+    self.titleDescription.textAlignment = NSTextAlignmentCenter;
+    self.titleDescription.lineBreakMode = NSLineBreakByWordWrapping;
+    self.titleDescription.numberOfLines = 0;
+    self.titleDescription.font = [UIFont systemFontOfSize:20];
+    [self addSubview: self.titleDescription];
+}
+
+-(void) unformattedTextForHeader {
+    self.bigTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, self.frame.size.width, 100)];
+    self.bigTitle.textAlignment = NSTextAlignmentCenter;
+    self.bigTitle.font = [UIFont boldSystemFontOfSize:35];
+    [self addSubview:self.bigTitle];
+    
+    self.titleDescription = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width*0.1, 75, self.frame.size.width*0.8, 100)];
+    self.titleDescription.textAlignment = NSTextAlignmentCenter;
+    self.titleDescription.lineBreakMode = NSLineBreakByWordWrapping;
+    self.titleDescription.numberOfLines = 0;
+    self.titleDescription.font = [UIFont systemFontOfSize:20];
+    [self addSubview: self.titleDescription];
+}
+
+-(void) formatHeaderAndDescriptionToMedia{
+    CGFloat height = self.videoPlayer ? self.playerLayer.frame.size.height : self.imageView.frame.size.height;
+    height = height - 10;
+    
+    self.bigTitle.frame = CGRectMake(0, height, self.frame.size.width, 100);
+    
+    self.titleDescription.frame = CGRectMake(self.frame.size.width*0.1, height + (self.bigTitle.frame.size.height / 2), self.frame.size.width*0.8, 100);
+}
+
 -(void) setupMediaWithPathToFile:(NSString *) pathToFile{
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if ([fileManager fileExistsAtPath:pathToFile]){
@@ -147,9 +224,15 @@
         UIImage *image = [UIImage imageNamed:mediaPath];
         if (image) {
             self.imageView.image = [UIImage imageWithContentsOfFile:mediaPath];
+            if(self.style == ASTSetupStyleHeaderBasic || self.style == ASTSetupStyleHeaderTwoButtons){
+                [self formatImageViewStyleHeader];
+            }
             self.playerLayer.hidden = YES;
         } else {
             self.videoPlayer = [AVPlayer playerWithURL:[NSURL fileURLWithPath:mediaPath]];
+            if(self.style == ASTSetupStyleHeaderBasic || self.style == ASTSetupStyleHeaderTwoButtons){
+                [self formatVideoPlayerStyleHeader];
+            }
             self.playerLayer.player = self.videoPlayer;
             self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
             

@@ -12,4 +12,3 @@
     [self.setupWindow makeKeyAndVisible];
 }
 %end
-

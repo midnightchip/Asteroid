@@ -2,6 +2,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "HighlightButton.h"
 #import "ASTSetupPageStyles.h"
+#import "LocalizedSetupStrings.h"
 
 @interface ASTSetupPageView : UIView
 @property (nonatomic, retain) UILabel *bigTitle;
@@ -14,6 +15,7 @@
 @property (nonatomic, retain) UINavigationBar *navBar;
 @property (nonatomic, retain) UIButton *backButton;
 @property (nonatomic) NSUInteger pageIndex;
+@property (nonatomic, assign) ASTSetupPageStyle style;
 
 - (instancetype)initWithFrame:(CGRect)frame style:(ASTSetupPageStyle)setupStyle;
 
