@@ -23,35 +23,37 @@
     }
     return self;
 }
-- (void)viewDidLoad{
-    self.welcomeView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleBasic];
-    [self.welcomeView setHeaderText:@"Asteroid" andDescription: @"the casle & midnightchips"];
-    [self.randomPage setNextButtonText:SETUP_MANUALLY andOtherButton:nil];
-    [self.welcomeView setupMediaWithPathToFile:PATH_TO_SNOW];
-    self.welcomeView.backButton.hidden = YES;
-    [self indexPage: self.welcomeView];
-    
-    self.randomPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
-    [self.randomPage setHeaderText:@"Woo another page" andDescription: @"more tests cooc"];
-    [self.randomPage setNextButtonText:CONTINUE andOtherButton:nil];
-    [self.randomPage setupMediaWithPathToFile:PATH_TO_IMAGE];
-    [self indexPage: self.randomPage];
 
-    self.secondView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleHeaderTwoButtons];
-    [self.secondView setHeaderText:@"Next Page" andDescription: @"Cool!"];
-    [self.secondView setNextButtonText:GET_STARTED andOtherButton:nil];
-    [self.secondView setupMediaWithPathToFile:PATH_TO_HORIZANTAL_VIDEO];
-    [self indexPage: self.secondView];
+-(void) generatePages {
+    ASTSetupPageView *welcomeView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleBasic];
+    [welcomeView setHeaderText:@"Asteroid" andDescription: @"the casle & midnightchips"];
+    [welcomeView setNextButtonText:SETUP_MANUALLY andOtherButton:nil];
+    [welcomeView setupMediaWithPathToFile:PATH_TO_SNOW];
+    welcomeView.backButton.hidden = YES;
+    [self indexPage: welcomeView];
     
+    ASTSetupPageView *randomPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
+    [randomPage setHeaderText:@"Woo another page" andDescription: @"more tests cooc"];
+    [randomPage setNextButtonText:CONTINUE andOtherButton:nil];
+    [randomPage setupMediaWithPathToFile:PATH_TO_IMAGE];
+    [self indexPage: randomPage];
     
+    ASTSetupPageView *secondView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleHeaderBasic];
+    [secondView setHeaderText:@"New Header Style" andDescription: @"This is the description text underneath the header!"];
+    [secondView setNextButtonText:GET_STARTED andOtherButton:nil];
+    [secondView setupMediaWithPathToFile:PATH_TO_BANNER];
+    [self indexPage: secondView];
+}
+
+- (void)viewDidLoad{
+    [self generatePages];
     for(ASTSetupPageView *page in self.allPages){
         [page setNextButtonTarget:self withAction:@selector(transitionToNextPage)];
         [page setOtherButtonTarget:self withAction:@selector(transitionToNextPage)];
         [page setBackButtonTarget:self withAction:@selector(transitionToBackPage)];
         [self.view addSubview: page];
     }
-    
-    self.visiblePage = self.allPages[0];
+    if(self.allPages.count >= 0) self.visiblePage = self.allPages[0];
     [self adjustForVisiblePage];
 }
 
