@@ -8,7 +8,7 @@
     
 }
 
-- (instancetype)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame style:(ASTSetupPageStyle)setupStyle{
     if(self = [super initWithFrame:frame]) {
         [self setBackgroundColor: [UIColor whiteColor]];
         [self setUserInteractionEnabled:TRUE];

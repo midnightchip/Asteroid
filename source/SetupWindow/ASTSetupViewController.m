@@ -20,13 +20,18 @@
     return self;
 }
 - (void)viewDidLoad{
-    self.welcomeView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame];
+    self.welcomeView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleBasic];
     [self.welcomeView setHeaderText:@"Asteroid" andDescription: @"the casle & midnightchips"];
     [self.welcomeView setupVideoWithPathToFile:PATH_TO_SNOW];
     self.welcomeView.backButton.hidden = YES;
     [self indexPage: self.welcomeView];
+    
+    self.randomPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleBasic];
+    [self.randomPage setHeaderText:@"Woo another page" andDescription: @"more tests cooc"];
+    [self.randomPage setupVideoWithPathToFile:@"nope"];
+    [self indexPage: self.randomPage];
 
-    self.secondView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame];
+    self.secondView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleBasic];
     [self.secondView setHeaderText:@"Next Page" andDescription: @"Cool!"];
     [self.secondView setupVideoWithPathToFile:@"insertPathToFile"];
     [self.secondView setNextButtonTarget:self withAction:@selector(exitSetup)];
@@ -47,6 +52,9 @@
 }
 
 -(void) exitSetup{
+    for(ASTSetupPageView *page in self.allPages){
+        [page.videoPlayer pause];
+    }
     [UIView animateWithDuration:0.5 delay:0 options: UIViewAnimationOptionCurveEaseInOut  animations:^{
         self.view.center = CGPointMake(self.view.center.x, - (2 * self.view.frame.size.height));
     } completion:^(BOOL finished){

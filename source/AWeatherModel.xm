@@ -141,6 +141,8 @@
        conditionCode == 29 ||
        conditionCode == 34 ||
        conditionCode == 33 ||
+       conditionCode == 32 ||
+       conditionCode == 31 ||
        conditionCode == 28 ||
        conditionCode == 27){
         if(self.city.isDay && type == ConditionImageTypeNight){

@@ -1,6 +1,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 #import "HighlightButton.h"
+#import "ASTSetupPageStyles.h"
 
 @interface ASTSetupPageView : UIView
 @property (nonatomic, retain) UILabel *bigTitle;
@@ -12,6 +13,7 @@
 @property (nonatomic, retain) UIButton *backButton;
 @property (nonatomic) NSUInteger pageIndex;
 
+- (instancetype)initWithFrame:(CGRect)frame style:(ASTSetupPageStyle)setupStyle;
 -(void) setupVideoWithPathToFile:(NSString *) pathToFile;
 -(void) setHeaderText:(NSString *) headerText andDescription: (NSString *) desText;
 -(void) setNextButtonTarget: (id) object withAction:(SEL) selector;
