@@ -1,9 +1,5 @@
 #import "ASTSetupPageView.h"
 
-@interface AVPlayer (setup)
--(id) _items;
-@end
-
 @interface ASTSetupPageView ()
 @property (nonatomic) ButtonBlock nextBlock;
 @property (nonatomic) ButtonBlock otherBlock;
@@ -132,13 +128,15 @@
 }
 
 -(void) formatVideoPlayerStyleHeader {
-    AVAsset *asset = [((NSArray *)[self.videoPlayer _items])[0] asset];
+    AVAsset *asset = self.videoPlayer.currentItem.asset;
     NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
     AVAssetTrack *track = [tracks objectAtIndex:0];
     CGSize mediaSize = track.naturalSize;
-    
-    CGFloat ratio = mediaSize.height / mediaSize.width;
-    CGFloat newHeight = self.frame.size.width * (1 / ratio);
+    mediaSize = CGSizeApplyAffineTransform(mediaSize, track.preferredTransform);
+    NSLog(@"lock_TWEAK | %f, %f", mediaSize.width, mediaSize.height);
+
+    CGFloat ratio = fabs(mediaSize.height) / fabs(mediaSize.width);
+    CGFloat newHeight = self.frame.size.width * ratio;
     self.playerLayer.frame = CGRectMake(0,0, self.frame.size.width, newHeight);
     
     [self formatHeaderAndDescriptionToMedia];
