@@ -26,6 +26,3 @@
 -(void) setBackButtonTarget: (id) object withAction:(SEL) selector;
 
 @end
-
-
-// back button and nav bar properties, might be controller might be page

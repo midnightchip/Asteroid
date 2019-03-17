@@ -27,18 +27,6 @@
         self.titleDescription.font = [UIFont systemFontOfSize:20];
         [self addSubview: self.titleDescription];
         
-        // Next button
-        self.nextButton = [[HighlightButton alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
-        [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
-        [self.nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        self.nextButton.backgroundColor = [UIColor colorWithRed:10 / 255.0 green:106 / 255.0 blue:255 / 255.0 alpha:1.0];
-        self.nextButton.layer.cornerRadius = 7.5;
-        self.nextButton.titleLabel.textAlignment = NSTextAlignmentCenter;
-        self.nextButton.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height/1.09);
-        self.nextButton.titleLabel.textColor = [UIColor whiteColor];
-        self.nextButton.titleLabel.font = [UIFont systemFontOfSize:18];
-        [self addSubview:self.nextButton];
-        
         //Create navigation bar
         self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 20, self.frame.size.width, 50)];
         //Make navigation bar background transparent
@@ -72,10 +60,11 @@
         switch (setupStyle) {
             case ASTSetupStyleBasic:
                 [self formatMediaPlayerStyleBasic];
+                [self formatForSingleButton];
                 break;
             case ASTSetupStyleTwoButtons:
                 [self formatMediaPlayerStyleShort];
-                [self formatOtherButton];
+                [self formatForTwoButtons];
                 break;
             default:
                 [self formatMediaPlayerStyleBasic];
@@ -101,28 +90,51 @@
 }
 
 -(void) formatMediaPlayerStyleShort {
-    CGFloat width = (self.frame.size.height*0.52)/1.777777777;
-    CGFloat height = self.frame.size.height*0.52;
+    CGFloat width = (self.frame.size.height*0.54)/1.777777777;
+    CGFloat height = self.frame.size.height*0.54;
     
-    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width/2-((self.frame.size.height*0.52)/1.777777777)/2, 150, width, height)];
+    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width/2-((self.frame.size.height*0.54)/1.777777777)/2, 150, width, height)];
     [self addSubview:self.imageView];
     
     self.playerLayer = [AVPlayerLayer layer];
-    self.playerLayer.frame = CGRectMake(self.frame.size.width/2-((self.frame.size.height*0.52)/1.777777777)/2, 150, width, height);
+    self.playerLayer.frame = CGRectMake(self.frame.size.width/2-((self.frame.size.height*0.54)/1.777777777)/2, 150, width, height);
     self.playerLayer.backgroundColor = [UIColor blackColor].CGColor;
     self.playerLayer.videoGravity = AVLayerVideoGravityResize;
     [self.layer addSublayer:self.playerLayer];
 }
 
-#pragma mark - No Button
--(void) formatOtherButton{
+#pragma mark - Button for Style
+-(void) formatForSingleButton{
+    self.nextButton = [[HighlightButton alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
+    [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
+    [self.nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.nextButton.backgroundColor = [UIColor colorWithRed:10 / 255.0 green:106 / 255.0 blue:255 / 255.0 alpha:1.0];
+    self.nextButton.layer.cornerRadius = 7.5;
+    self.nextButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.nextButton.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height/1.09);
+    self.nextButton.titleLabel.textColor = [UIColor whiteColor];
+    self.nextButton.titleLabel.font = [UIFont systemFontOfSize:18];
+    [self addSubview:self.nextButton];
+}
+-(void) formatForTwoButtons{
+    self.nextButton = [[HighlightButton alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
+    [self.nextButton setTitle:@"Continue" forState:UIControlStateNormal];
+    [self.nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.nextButton.backgroundColor = [UIColor colorWithRed:10 / 255.0 green:106 / 255.0 blue:255 / 255.0 alpha:1.0];
+    self.nextButton.layer.cornerRadius = 7.5;
+    self.nextButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.nextButton.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height/1.16);
+    self.nextButton.titleLabel.textColor = [UIColor whiteColor];
+    self.nextButton.titleLabel.font = [UIFont systemFontOfSize:18];
+    [self addSubview:self.nextButton];
+    
     self.otherButton = [[HighlightButton alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
-    [self.otherButton setTitle:@"Not Now" forState:UIControlStateNormal];
-    [self.otherButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.otherButton.backgroundColor = [UIColor colorWithRed: .7 green:.7 blue:.7 alpha:1.0];
+    [self.otherButton setTitle:@"Setup Up Later in Settings" forState:UIControlStateNormal];
+    [self.otherButton setTitleColor:[UIColor colorWithRed:10 / 255.0 green:106 / 255.0 blue:255 / 255.0 alpha:1.0] forState:UIControlStateNormal];
+    self.otherButton.backgroundColor = [UIColor clearColor];
     self.otherButton.layer.cornerRadius = 7.5;
     self.otherButton.titleLabel.textAlignment = NSTextAlignmentCenter;
-    self.otherButton.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height/1.22);
+    self.otherButton.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height/1.06);
     self.otherButton.titleLabel.textColor = [UIColor whiteColor];
     self.otherButton.titleLabel.font = [UIFont systemFontOfSize:18];
     [self addSubview:self.otherButton];
