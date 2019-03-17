@@ -25,32 +25,37 @@
 }
 
 -(void) generatePages {
+    // ASTSetupPageStyles.h contains styles.
+    
     ASTSetupPageView *welcomeView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleBasic];
     [welcomeView setHeaderText:@"Asteroid" andDescription: @"the casle & midnightchips"];
     [welcomeView setNextButtonText:SETUP_MANUALLY andOtherButton:nil];
     [welcomeView setupMediaWithPathToFile:PATH_TO_SNOW];
     welcomeView.backButton.hidden = YES;
+    [welcomeView setNextButtonTarget:self withAction:@selector(transitionToNextPage) block:nil];
     [self indexPage: welcomeView];
     
     ASTSetupPageView *randomPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
     [randomPage setHeaderText:@"Woo another page" andDescription: @"more tests cooc"];
     [randomPage setNextButtonText:CONTINUE andOtherButton:nil];
     [randomPage setupMediaWithPathToFile:PATH_TO_IMAGE];
+    [randomPage setNextButtonTarget:self withAction:@selector(transitionToNextPage) block:nil];
+    [randomPage setOtherButtonTarget:self withAction:@selector(transitionToNextPage) block:nil];
+    [randomPage setBackButtonTarget:self withAction:@selector(transitionToBackPage) block:nil];
     [self indexPage: randomPage];
     
     ASTSetupPageView *secondView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleHeaderBasic];
     [secondView setHeaderText:@"New Header Style" andDescription: @"This is the description text underneath the header!"];
     [secondView setNextButtonText:GET_STARTED andOtherButton:nil];
     [secondView setupMediaWithPathToFile:PATH_TO_BANNER];
+    [secondView setNextButtonTarget:self withAction:@selector(transitionToNextPage) block:nil];
+    [secondView setBackButtonTarget:self withAction:@selector(transitionToBackPage) block:nil];
     [self indexPage: secondView];
 }
 
 - (void)viewDidLoad{
     [self generatePages];
     for(ASTSetupPageView *page in self.allPages){
-        [page setNextButtonTarget:self withAction:@selector(transitionToNextPage)];
-        [page setOtherButtonTarget:self withAction:@selector(transitionToNextPage)];
-        [page setBackButtonTarget:self withAction:@selector(transitionToBackPage)];
         [self.view addSubview: page];
     }
     if(self.allPages.count >= 0) self.visiblePage = self.allPages[0];

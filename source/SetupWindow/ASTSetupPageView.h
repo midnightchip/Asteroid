@@ -4,6 +4,8 @@
 #import "ASTSetupPageStyles.h"
 #import "LocalizedSetupStrings.h"
 
+typedef void(^ButtonBlock)();
+
 @interface ASTSetupPageView : UIView
 @property (nonatomic, retain) UILabel *bigTitle;
 @property (nonatomic, retain) UILabel *titleDescription;
@@ -23,8 +25,7 @@
 -(void) setHeaderText:(NSString *) headerText andDescription:(NSString *) desText;
 -(void) setNextButtonText:(NSString *) nextText andOtherButton:(NSString *) otherText;
 
--(void) setNextButtonTarget: (id) object withAction:(SEL) selector;
--(void) setOtherButtonTarget: (id) object withAction:(SEL) selector;
--(void) setBackButtonTarget: (id) object withAction:(SEL) selector;
-
+-(void) setNextButtonTarget: (id) object withAction:(SEL) selector block:(ButtonBlock)block;
+-(void) setOtherButtonTarget: (id) object withAction:(SEL) selector block:(ButtonBlock)block;
+-(void) setBackButtonTarget: (id) object withAction:(SEL) selector block:(ButtonBlock)block;
 @end

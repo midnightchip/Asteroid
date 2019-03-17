@@ -5,7 +5,9 @@
 @end
 
 @interface ASTSetupPageView ()
-
+@property (nonatomic) ButtonBlock nextBlock;
+@property (nonatomic) ButtonBlock otherBlock;
+@property (nonatomic) ButtonBlock backBlock;
 @end
 
 @implementation ASTSetupPageView{
@@ -217,6 +219,8 @@
     self.titleDescription.frame = CGRectMake(self.frame.size.width*0.1, height + (self.bigTitle.frame.size.height / 2), self.frame.size.width*0.8, 100);
 }
 
+#pragma mark - Utility
+
 -(void) setupMediaWithPathToFile:(NSString *) pathToFile{
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if ([fileManager fileExistsAtPath:pathToFile]){
@@ -255,16 +259,40 @@
     if(otherText)[self.otherButton setTitle:otherText forState:UIControlStateNormal];
 }
 
--(void) setNextButtonTarget: (id) object withAction:(SEL) selector{
+-(void) setNextButtonTarget: (id) object withAction:(SEL) selector block:(ButtonBlock) block{
     [self.nextButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
+    if(block){
+        [self.otherButton addTarget:self action:@selector(executeNextButtonBlock) forControlEvents:UIControlEventTouchUpInside];
+        self.nextBlock = block;
+    }
 }
 
--(void) setOtherButtonTarget: (id) object withAction:(SEL) selector{
+-(void) setOtherButtonTarget: (id) object withAction:(SEL) selector block:(ButtonBlock) block{
     [self.otherButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
+    if(block){
+        [self.otherButton addTarget:self action:@selector(executeOtherButtonBlock) forControlEvents:UIControlEventTouchUpInside];
+        self.otherBlock = block;
+    }
 }
 
--(void) setBackButtonTarget: (id) object withAction:(SEL) selector{
+-(void) setBackButtonTarget: (id) object withAction:(SEL) selector block:(ButtonBlock)block{
     [self.backButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
+    if(block){
+        [self.otherButton addTarget:self action:@selector(executeBackButtonBlock) forControlEvents:UIControlEventTouchUpInside];
+        self.backBlock = block;
+    }
+}
+
+-(void) executeNextButtonBlock{
+    self.nextBlock();
+}
+
+-(void) executeOtherButtonBlock{
+    self.otherBlock();
+}
+
+-(void) executeBackButtonBlock{
+    self.backBlock();
 }
 
 - (void)playerItemDidReachEnd:(NSNotification *)notification {
