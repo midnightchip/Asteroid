@@ -1,6 +1,7 @@
 #include <AppSupport/CPDistributedMessagingCenter.h>
 #import <rocketbootstrap/rocketbootstrap.h>
 #import "../source/UIImage+ScaledImage.h"
+#import "../source/LWPProvider.h"
 #define isSB [[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.apple.springboard"]
 
 @interface _UIStatusBarStringView : UILabel
