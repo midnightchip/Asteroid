@@ -1,6 +1,7 @@
 #import "ASTSetupViewController.h"
 
 #define PATH_TO_SNOW @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Snow.mov"
+#define PATH_TO_IMAGE @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Image.PNG"
 
 @interface ASTSetupViewController ()
 @property (nonatomic, retain) NSMutableArray *allPages;
@@ -22,27 +23,26 @@
 - (void)viewDidLoad{
     self.welcomeView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleBasic];
     [self.welcomeView setHeaderText:@"Asteroid" andDescription: @"the casle & midnightchips"];
-    [self.welcomeView setupVideoWithPathToFile:PATH_TO_SNOW];
+    [self.welcomeView setupMediaWithPathToFile:PATH_TO_SNOW];
     self.welcomeView.backButton.hidden = YES;
     [self indexPage: self.welcomeView];
     
-    self.randomPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleBasic];
+    self.randomPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
     [self.randomPage setHeaderText:@"Woo another page" andDescription: @"more tests cooc"];
-    [self.randomPage setupVideoWithPathToFile:@"nope"];
+    [self.randomPage setNextButtonText:@"Enable" andOtherButton:nil];
+    [self.randomPage setupMediaWithPathToFile:PATH_TO_IMAGE];
     [self indexPage: self.randomPage];
 
     self.secondView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleBasic];
     [self.secondView setHeaderText:@"Next Page" andDescription: @"Cool!"];
-    [self.secondView setupVideoWithPathToFile:@"insertPathToFile"];
-    [self.secondView setNextButtonTarget:self withAction:@selector(exitSetup)];
-    [self.secondView.nextButton setTitle:@"Finish" forState:UIControlStateNormal];
+    [self.secondView setNextButtonText:@"Finish" andOtherButton:nil];
+    [self.secondView setupMediaWithPathToFile:PATH_TO_IMAGE];
     [self indexPage: self.secondView];
     
     
     for(ASTSetupPageView *page in self.allPages){
-        if(page.nextButton.allTargets.count == 0){
-            [page setNextButtonTarget:self withAction:@selector(transitionToNextPage)];
-        }
+        [page setNextButtonTarget:self withAction:@selector(transitionToNextPage)];
+        [page setOtherButtonTarget:self withAction:@selector(transitionToNextPage)];
         [page setBackButtonTarget:self withAction:@selector(transitionToBackPage)];
         [self.view addSubview: page];
     }
@@ -70,17 +70,21 @@
 }
 
 -(void) transitionToNextPage{
-    self.visiblePage = [self nextPageForPage:self.visiblePage];
-    
-    [self.view bringSubviewToFront:self.visiblePage];
-    self.visiblePage.center = CGPointMake(self.view.frame.size.width/2 + 350, self.view.center.y);
-    [UIView animateWithDuration:0.3 delay:0 options: UIViewAnimationOptionCurveEaseInOut  animations:^{
-        ///Move new view into frame and above old view
-        self.visiblePage.center = self.view.center;
+    if(self.visiblePage == [self nextPageForPage:self.visiblePage]){ // Last page.
+        [self exitSetup];
+    } else {
+        self.visiblePage = [self nextPageForPage:self.visiblePage];
+        
+        [self.view bringSubviewToFront:self.visiblePage];
+        self.visiblePage.center = CGPointMake(self.view.frame.size.width/2 + 350, self.view.center.y);
+        [UIView animateWithDuration:0.3 delay:0 options: UIViewAnimationOptionCurveEaseInOut  animations:^{
+            ///Move new view into frame and above old view
+            self.visiblePage.center = self.view.center;
+        }
+                         completion:^(BOOL finished){
+                             [self.visiblePage.videoPlayer play];
+                         }];
     }
-                     completion:^(BOOL finished){
-                         [self.visiblePage.videoPlayer play];
-                     }];
 }
 
 -(void) transitionToBackPage{

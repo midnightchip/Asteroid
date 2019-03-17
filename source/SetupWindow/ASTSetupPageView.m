@@ -68,32 +68,85 @@
         self.navBar.items = @[ navItem ];
         [self addSubview:self.navBar];
         
+        // Player layer
+        switch (setupStyle) {
+            case ASTSetupStyleBasic:
+                [self formatMediaPlayerStyleBasic];
+                break;
+            case ASTSetupStyleTwoButtons:
+                [self formatMediaPlayerStyleShort];
+                [self formatOtherButton];
+                break;
+            default:
+                [self formatMediaPlayerStyleBasic];
+                break;
+        }
     }
     return self;
 }
 
--(void) setupVideoWithPathToFile:(NSString *) pathToFile{
-    //Center Video
+#pragma mark - Video Player For Style
+-(void) formatMediaPlayerStyleBasic {
     CGFloat width = (self.frame.size.height*0.59)/1.777777777;
     CGFloat height = self.frame.size.height*0.59;
     
+    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width/2-((self.frame.size.height*0.59)/1.777777777)/2, 150, width, height)];
+    [self addSubview:self.imageView];
+    
+    self.playerLayer = [AVPlayerLayer layer];
+    self.playerLayer.frame = CGRectMake(self.frame.size.width/2-((self.frame.size.height*0.59)/1.777777777)/2, 150, width, height);
+    self.playerLayer.backgroundColor = [UIColor blackColor].CGColor;
+    self.playerLayer.videoGravity = AVLayerVideoGravityResize;
+    [self.layer addSublayer:self.playerLayer];
+}
+
+-(void) formatMediaPlayerStyleShort {
+    CGFloat width = (self.frame.size.height*0.52)/1.777777777;
+    CGFloat height = self.frame.size.height*0.52;
+    
+    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width/2-((self.frame.size.height*0.52)/1.777777777)/2, 150, width, height)];
+    [self addSubview:self.imageView];
+    
+    self.playerLayer = [AVPlayerLayer layer];
+    self.playerLayer.frame = CGRectMake(self.frame.size.width/2-((self.frame.size.height*0.52)/1.777777777)/2, 150, width, height);
+    self.playerLayer.backgroundColor = [UIColor blackColor].CGColor;
+    self.playerLayer.videoGravity = AVLayerVideoGravityResize;
+    [self.layer addSublayer:self.playerLayer];
+}
+
+#pragma mark - No Button
+-(void) formatOtherButton{
+    self.otherButton = [[HighlightButton alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
+    [self.otherButton setTitle:@"Not Now" forState:UIControlStateNormal];
+    [self.otherButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.otherButton.backgroundColor = [UIColor colorWithRed: .7 green:.7 blue:.7 alpha:1.0];
+    self.otherButton.layer.cornerRadius = 7.5;
+    self.otherButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.otherButton.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height/1.22);
+    self.otherButton.titleLabel.textColor = [UIColor whiteColor];
+    self.otherButton.titleLabel.font = [UIFont systemFontOfSize:18];
+    [self addSubview:self.otherButton];
+}
+
+-(void) setupMediaWithPathToFile:(NSString *) pathToFile{
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if ([fileManager fileExistsAtPath:pathToFile]){
-        NSString *moviePath = pathToFile;
-        self.videoPlayer = [AVPlayer playerWithURL:[NSURL fileURLWithPath:moviePath]];
-        self.playerLayer = [AVPlayerLayer layer];
-        self.playerLayer.player = self.videoPlayer;
-        self.playerLayer.frame = CGRectMake(self.frame.size.width/2-((self.frame.size.height*0.59)/1.777777777)/2, 150, width, height);
-        self.playerLayer.backgroundColor = [UIColor blackColor].CGColor;
-        self.playerLayer.videoGravity = AVLayerVideoGravityResize;
-        self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
-        
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(playerItemDidReachEnd:)
-                                                     name:AVPlayerItemDidPlayToEndTimeNotification
-                                                   object:[self.videoPlayer currentItem]];
-        [self.layer addSublayer:self.playerLayer];
+        NSString *mediaPath = pathToFile;
+        UIImage *image = [UIImage imageNamed:mediaPath];
+        if (image) {
+            self.imageView.image = [UIImage imageWithContentsOfFile:mediaPath];
+            self.playerLayer.hidden = YES;
+        } else {
+            self.videoPlayer = [AVPlayer playerWithURL:[NSURL fileURLWithPath:mediaPath]];
+            self.playerLayer.player = self.videoPlayer;
+            self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+            
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(playerItemDidReachEnd:)
+                                                         name:AVPlayerItemDidPlayToEndTimeNotification
+                                                       object:[self.videoPlayer currentItem]];
+            self.imageView.hidden = YES;
+        }
     }
 }
 
@@ -102,8 +155,17 @@
     self.titleDescription.text = desText;
 }
 
+-(void) setNextButtonText:(NSString *) nextText andOtherButton:(NSString *) otherText{
+    if(nextText)[self.nextButton setTitle:nextText forState:UIControlStateNormal];
+    if(otherText)[self.otherButton setTitle:otherText forState:UIControlStateNormal];
+}
+
 -(void) setNextButtonTarget: (id) object withAction:(SEL) selector{
     [self.nextButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
+}
+
+-(void) setOtherButtonTarget: (id) object withAction:(SEL) selector{
+    [self.otherButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
 }
 
 -(void) setBackButtonTarget: (id) object withAction:(SEL) selector{
