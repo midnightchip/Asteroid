@@ -13,4 +13,17 @@
     "ChangeLog" = "ChangeLog";
     "Version" = "Version:";
     "Asteroid" = "Asteroid";
+    "Status_Settings" = "Status Bar Settings";
+    "Weather_in_Statusbar" = "Add Weather to your Status Bar";
+    "General_Settings" = "General Settings";
+    "Config_General" = "Configure general options";
+    "Lock_Screen" = "Lock Screen";
+    "Config_Lock" = "Configure Greeting View and Glyphs";
+    "Home_Screen" = "Home Screen";
+    "Hide_Dock" = "Hide Dock and Folder Icons";
+    "Live_Weather" = "Live Weather";
+    "Config_Live" = "Configure Live Weather Background Settings";
+    "Weather_App" = "Weather App Icon";
+    "Config_Icon" = "Configure Weather App Icon";
+    
 }

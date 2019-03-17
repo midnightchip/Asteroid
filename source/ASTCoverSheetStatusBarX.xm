@@ -60,3 +60,9 @@
 }
 %end 
 
+%ctor{
+	if([prefs boolForKey:@"enableCoverStatusX"]){
+		%init();
+	}
+}
+

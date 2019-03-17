@@ -61,6 +61,8 @@ static NSDictionary *getWeatherItems() {
 %property (nonatomic, retain) UITapGestureRecognizer *tapGesture;
 -(void)didMoveToWindow{
     %orig;
+	self.isTapped = NO;
+	[self setText:[self returnDateString]];
 	NSLog(@"ASTEROIDGESTURECOMINGONLINE");
 	if(self.isTime && !self.tapGesture){
 		self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(swapTime:)];
@@ -168,3 +170,9 @@ static NSDictionary *getWeatherItems() {
 
 }*/
 %end
+
+%ctor{
+	if([prefs boolForKey:@"enableTimeStatusX"]){
+		%init();
+	}
+}

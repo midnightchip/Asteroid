@@ -58,11 +58,26 @@
                 <key>pushToPlist</key>
                 <string>genSettings</string>
                 <key>label</key>
-                <string>General Settings</string>
+                <string>General_Settings</string>
                 <key>sublabel</key>
-                <string>Configure general options</string>
+                <string>Config_General</string>
                 <key>key</key>
                 <string>genSettings</string>
+            </dict>
+
+			<dict>
+                <key>action</key>
+                <string>pushToView:</string>
+                <key>cell</key>
+                <string>PSLinkCell</string>
+                <key>pushToPlist</key>
+                <string>statusBar</string>
+                <key>label</key>
+                <string>Status_Settings</string>
+                <key>sublabel</key>
+                <string>Weather_in_Statusbar</string>
+                <key>key</key>
+                <string>statusBar</string>
             </dict>
             
 			<dict>
@@ -73,9 +88,9 @@
 				<key>pushToPlist</key>
 				<string>lockScreen</string>
 				<key>label</key>
-				<string>Lock Screen</string>
+				<string>Lock_Screen</string>
 				<key>sublabel</key>
-				<string>Configure Greeting View and Glyphs</string>
+				<string>Config_Lock</string>
 				<key>key</key>
 				<string>lockScreen</string>
 			</dict>	
@@ -88,9 +103,9 @@
 				<key>pushToPlist</key>
 				<string>homeScreen</string>
 				<key>label</key>
-				<string>Home Screen</string>
+				<string>Home_Screen</string>
 				<key>sublabel</key>
-				<string>Hide Dock and Folder Icons</string>
+				<string>Hide_Dock</string>
 				<key>key</key>
 				<string>homeScreen</string>
 			</dict>	
@@ -103,9 +118,9 @@
 				<key>pushToPlist</key>
 				<string>liveWeather</string>
 				<key>label</key>
-				<string>Live Weather</string>
+				<string>Live_Weather</string>
 				<key>sublabel</key>
-				<string>Configure Live Weather Background Settings</string>
+				<string>Config_Live</string>
 				<key>key</key>
 				<string>liveWeather</string>
 			</dict>
@@ -119,9 +134,9 @@
 				<key>pushToPlist</key>
 				<string>icon</string>
 				<key>label</key>
-				<string>Weather App Icon</string>
+				<string>Weather_App</string>
 				<key>sublabel</key>
-				<string>Configure Weather App Icon</string>
+				<string>Config_Icon</string>
 				<key>key</key>
 				<string>iconConfig</string>
 			</dict>
