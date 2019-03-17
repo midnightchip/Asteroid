@@ -25,7 +25,7 @@ static WUIWeatherCondition* condition = nil;
 static int conditionNumberSet;
 
 static void updateAnimation(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-    if([[UIApplication sharedApplication] _accessibilityFrontMostApplication] == 0 && MSHookIvar<BOOL>([%c(SBLockScreenManager) sharedInstance], "_isScreenOn")){
+    if([[UIApplication sharedApplication] _accessibilityFrontMostApplication] == 0 && MSHookIvar<BOOL>([%c(SBLockScreenManager) sharedInstance], "_isScreenOn") && ![prefs boolForKey:@"freezeCondition"]){
         [condition resume];
     } else{
         [condition pause];
@@ -57,9 +57,13 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
         [self.referenceView removeFromSuperview];
         
         self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
-        if([prefs boolForKey:@"hideWeatherBackground"]){
+        [self.referenceView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
+        if([prefs intForKey:@"hideHomeWeatherBackground"] == 1){
             self.referenceView.background.hidesBackground = YES;
             self.referenceView.background.condition.hidesConditionBackground = YES;
+        } else if([prefs intForKey:@"hideHomeWeatherBackground"] == 2){
+            self.referenceView.background.hidesBackground = NO;
+            self.referenceView.hidesConditions = YES;
         }
         
         City *backgroundCity = self.weatherModel.city;
@@ -71,7 +75,11 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
         [self.referenceView.background setCity:backgroundCity];
         [self.referenceView.background setTag:123];
         
-        [[self.referenceView.background condition] resume];
+        if([prefs boolForKey:@"freezeCondition"]){
+            [[self.referenceView.background condition] pause];
+        } else {
+            [[self.referenceView.background condition] resume];
+        }
         condition = [self.referenceView.background condition];
         self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.referenceView.clipsToBounds = YES;
@@ -115,7 +123,7 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 }
 
 %end
-
+%end
 
 @interface SBIconBlurryBackgroundView : UIView
 @end 
@@ -140,7 +148,9 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 -(void)layoutSubviews{
     %orig;
     if([prefs boolForKey:@"noFolders"]){
-        self.hidden = TRUE;
+        self.hidden = YES;
+    } else {
+        self.hidden = NO;
     }
 }
 //Thanks iPad_Kid, for whatever reason, the substrate update changed us from being hidden after being displayed once.
@@ -152,7 +162,6 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
     } else %orig;
     
 }
-%end
 %end
 
 //Dock 
@@ -206,7 +215,6 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 
 //Hide background accross views
 //Thanks June
-%group WeatherBackground
 %hook WUIDynamicWeatherBackground
 %property (nonatomic, assign) BOOL hidesBackground;
 -(id)gradientLayer{
@@ -302,15 +310,10 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 	}
 %end
 
-%end 
-
 %ctor{
     if ([[NSBundle mainBundle].bundleIdentifier isEqualToString:@"com.apple.springboard"] && [prefs boolForKey:@"kLWPEnabled"]) {
         if([prefs boolForKey:@"homeScreenWeather"]){
             %init(LiveWeather);
-            }
-        if([prefs boolForKey:@"hideWeatherBackground"]){
-            %init(WeatherBackground);
             }
         %init(_ungrouped);
     }

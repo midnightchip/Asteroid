@@ -42,6 +42,7 @@
 @property (nonatomic, retain) AWeatherModel *weatherModel;
 @property (nonatomic, getter=isEditing) BOOL editing;
 @property (nonatomic, retain) UIView *doneButtonView;
+@property (nonatomic, assign) UIInterfaceOrientation previousRotation;
 
 @property (nonatomic, retain) ASTGestureHandler *gestureHandler;
 
@@ -66,6 +67,10 @@
         [[NSNotificationCenter defaultCenter]
          addObserver:self selector:@selector(orientationChanged:)
          name:@"UIApplicationDidChangeStatusBarOrientationNotification"
+         object: [UIApplication sharedApplication]];
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self selector:@selector(orientationWillChange:)
+         name:@"UIApplicationWillChangeStatusBarOrientationNotification"
          object: [UIApplication sharedApplication]];
     }
     return self;
@@ -122,14 +127,14 @@
         [self.view addSubview:self.wDescriptionGestureView];
     }
     
-    self.forecastGestureView = [[UIView alloc] initWithFrame:CGRectMake(0, (self.view.frame.size.height / 2), self.view.frame.size.width, self.view.frame.size.height/3)];
+    self.forecastGestureView = [[UIView alloc] initWithFrame:CGRectMake(0, (self.view.frame.size.height / 2), self.view.frame.size.width, [prefs intForKey:@"foreHeight"])];
     self.forecastComponentView = [[ASTComponentView alloc] initWithFrame:CGRectMake(0, 0, self.forecastGestureView.frame.size.width, self.forecastGestureView.frame.size.height)];
     self.forecastCont = [[objc_getClass("WAWeatherPlatterViewController") alloc] initWithLocation:self.weatherModel.city];
     ((UIView *)((NSArray *)self.forecastCont.view.layer.sublayers)[0]).hidden = YES; // Visual Effect view to hidden
     self.forecastCont.view.frame = CGRectMake(0, 0, self.forecastComponentView.frame.size.width, self.forecastComponentView.frame.size.height);
     [self.forecastComponentView addSubview:self.forecastCont.view];
     [self.forecastGestureView addSubview: self.forecastComponentView];
-    if([prefs boolForKey:@"enableForeHeader"] && [prefs boolForKey:@"enableForeTable"]){
+    if([prefs boolForKey:@"enableForeHeader"] || [prefs boolForKey:@"enableForeTable"]){
         [self.view addSubview: self.forecastGestureView];
     }
     
@@ -138,7 +143,7 @@
     self.dismissButtonView = [[UIView alloc] initWithFrame:CGRectMake(0,0,110,50)];
     self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
     SBDashBoardQuickActionsButton *actionButton = [[objc_getClass("SBDashBoardQuickActionsButton") alloc] initWithType:2];
-    UIVisualEffectView *effectView = MSHookIvar<UIVisualEffectView *>(actionButton, "_backgroundEffectView");
+    UIVisualEffectView *effectView = actionButton ? MSHookIvar<UIVisualEffectView *>(actionButton, "_backgroundEffectView") : nil;
     effectView.frame = self.dismissButtonView.bounds;
     [self.dismissButton addTarget:self
                            action:@selector(buttonPressed:)
@@ -207,6 +212,7 @@
     
     [self creatingTagsForGestures];
     [self setupViewStyle];
+    [self updateViewForWeatherData];
     self.editing = NO;
 }
 
@@ -235,48 +241,50 @@
         view.editing = edit;
     }
 }
+-(void) orientationWillChange:(NSNotification *)note {
+    UIApplication *application = note.object;
+    self.previousRotation = application.statusBarOrientation;
+}
 
 - (void) orientationChanged:(NSNotification *)note {
-    /*UIApplication * application = note.object;
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenRect.size.width;
-    CGFloat screenHeight = screenRect.size.height;
-    
-    //NSArray *gestureViews = [self arrayOfGestureViews];
-    CGRect adjustedBounds;
-    
-    switch(application.statusBarOrientation){
-        case UIDeviceOrientationPortrait:
-            self.view.backgroundColor = [UIColor blueColor];
-            break;
-            
-        case UIDeviceOrientationLandscapeLeft:
-            self.view.backgroundColor = [UIColor redColor];
-            
-            for(UIView *view in gestureViews){
-                CGFloat ratioHeight = view.center.y / screenHeight;
-                CGFloat ratioWidth = view.center.x / screenWidth;
-                CGFloat adjustedY = ratioHeight * screenWidth;
-                CGFloat adjustedX = ratioWidth * screenHeight;
-                
-                CGPoint adjustedCenter;
-                adjustedCenter.y = adjustedY;
-                adjustedCenter.x = adjustedX;
-                view.center = adjustedCenter;
+    UIApplication *application = note.object;
+    CGRect screenRect = [application keyWindow].bounds;
+    if(application.statusBarOrientation == UIDeviceOrientationPortrait){
+        if(self.previousRotation == UIDeviceOrientationLandscapeLeft || self.previousRotation == UIDeviceOrientationLandscapeRight){
+            for(UIView *view in [self arrayOfGestureViews]){
+                view.frame = [self rotateFrame:view.frame withContext:screenRect];
+                if(view.frame.origin.x >= screenRect.size.width || view.frame.origin.y >= screenRect.size.height){ // Something went wrong with the rotation.
+                    [self readingValuesFromFile];
+                    break;
+                }
             }
-            adjustedBounds = self.view.bounds;
-            adjustedBounds.origin.x = adjustedBounds.origin.x - (screenHeight - screenWidth);
-            adjustedBounds.origin.y = adjustedBounds.origin.y - (screenWidth - screenHeight);
-            self.view.bounds = adjustedBounds;
-            break;
-        
-        case UIDeviceOrientationLandscapeRight:
-            self.view.backgroundColor = [UIColor greenColor];
-            break;
-            
-        default:
-            break;
-    };*/
+        }
+    } else if(application.statusBarOrientation == UIDeviceOrientationPortraitUpsideDown){
+        if(self.previousRotation == UIDeviceOrientationLandscapeLeft || self.previousRotation == UIDeviceOrientationLandscapeRight){
+            for(UIView *view in [self arrayOfGestureViews]){
+                view.frame = [self rotateFrame:view.frame withContext:screenRect];
+            }
+        }
+    } else if(application.statusBarOrientation == UIDeviceOrientationLandscapeLeft){
+        if(self.previousRotation == UIDeviceOrientationPortrait || self.previousRotation == UIDeviceOrientationLandscapeRight){
+            for(UIView *view in [self arrayOfGestureViews]){
+                view.frame = [self rotateFrame:view.frame withContext:screenRect];
+            }
+        }
+    } else if(application.statusBarOrientation == UIDeviceOrientationLandscapeRight){
+        if(self.previousRotation == UIDeviceOrientationPortrait || self.previousRotation == UIDeviceOrientationLandscapeRight){
+            for(UIView *view in [self arrayOfGestureViews]){
+                view.frame = [self rotateFrame:view.frame withContext:screenRect];
+            }
+        }
+    }
+}
+
+-(CGRect) rotateFrame:(CGRect) frame withContext:(CGRect) context {
+    CGRect adjustedFrame = frame;
+    adjustedFrame.origin.x = ((frame.origin.x + (frame.size.width / 2)) / context.size.height) * context.size.width - (frame.size.width / 2);
+    adjustedFrame.origin.y = ((frame.origin.y + (frame.size.height / 2)) / context.size.width) * context.size.height - (frame.size.height / 2);
+    return adjustedFrame;
 }
 
 #pragma mark - Weather Setup
@@ -321,24 +329,30 @@
 
 -(void) updateViewForWeatherData {
     if(self.weatherModel.isPopulated || self.weatherModel.hasFallenBack){
-        UIImage *icon;
-        BOOL setColor = FALSE;
-        if(![prefs boolForKey:@"customImage"]){
-            icon = [self.weatherModel glyphWithOption:ConditionOptionDefault];
-        }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
-            icon = [self.weatherModel glyphWithOption:ConditionOptionDefault];
-            setColor = TRUE;
-        }else{
-            icon = [self.weatherModel glyphWithOption:ConditionOptionBlack];
-            setColor = TRUE;
+        if(!self.weatherModel.hasFallenBack){
+            UIImage *icon;
+            BOOL setColor = FALSE;
+            if(![prefs boolForKey:@"customImage"]){
+                icon = [self.weatherModel glyphWithOption:ConditionOptionDefault];
+            }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
+                icon = [self.weatherModel glyphWithOption:ConditionOptionDefault];
+                setColor = TRUE;
+            }else{
+                icon = [self.weatherModel glyphWithOption:ConditionOptionBlack];
+                setColor = TRUE;
+            }
+            self.logo.image = icon;
+            if(setColor){
+                self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                [self.logo setTintColor:[prefs colorForKey:@"glyphColor"]];
+            }
+            self.logo.contentMode = UIViewContentModeScaleAspectFit;
+            
+            self.forecastCont.model = self.weatherModel.todayModel;
+            [self.forecastCont.model forecastModel];
+            [self.forecastCont.headerView _updateContent];
+            [self.forecastCont _updateViewContent];
         }
-        self.logo.image = icon;
-        if(setColor){
-            self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            [self.logo setTintColor:[prefs colorForKey:@"glyphColor"]];
-        }
-        self.logo.contentMode = UIViewContentModeScaleAspectFit;
-        
         self.currentTemp.text = [self.weatherModel localeTemperature];
         
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -368,13 +382,7 @@
         self.greetingLabel.textAlignment = NSTextAlignmentCenter;
         
         [self adjustWDescriptionViewsForString:[self.weatherModel currentConditionOverview]];
-
-        if(self.weatherModel.isPopulated){
-            self.forecastCont.model = self.weatherModel.todayModel;
-            [self.forecastCont.model forecastModel];
-            [self.forecastCont.headerView _updateContent];
-            [self.forecastCont _updateViewContent];
-        }
+       
     }
 }
 
@@ -445,12 +453,26 @@
 
 #pragma mark - Handling Gestures
 - (void) doneButtonPressed: (UIButton*)sender{
-    self.editing = NO;
-    [self removeASTGesturesAndHideButton];
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"astEnableLock"
-     object:self];
-    [self saveValuesToFile];
+    // Only edit in portrait so values match up right.
+    if([UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationPortrait || [UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationPortraitUpsideDown){
+        self.editing = NO;
+        [self removeASTGesturesAndHideButton];
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"astEnableLock"
+         object:self];
+        [self saveValuesToFile];
+    } else {
+        UIAlertController * alert = [UIAlertController
+                                     alertControllerWithTitle:@"Asteroid"
+                                     message:@"Please rotate to portrait to save values."
+                                     preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* okButton = [UIAlertAction
+                                   actionWithTitle:@"Ok"
+                                   style:UIAlertActionStyleDefault
+                                   handler:nil];
+        [alert addAction:okButton];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 -(void) addASTGesturesAndRevealButton{
@@ -544,6 +566,7 @@
              postNotificationName:@"astDisableLock"
              object:self];
             [self addASTGesturesAndRevealButton];
+                
         }
     }
 }

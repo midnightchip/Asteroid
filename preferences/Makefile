@@ -1,6 +1,3 @@
-ARCHS = armv7 armv7s arm64
-TARGET = iphone:clang:11.2:10.0
-
 include $(THEOS)/makefiles/common.mk
 
 BUNDLE_NAME = Asteroid

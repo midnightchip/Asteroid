@@ -20,65 +20,29 @@
     return sharedInstance;
 }
 
--(void) _kickStartWeatherFramework{
-    self.weatherPreferences = [objc_getClass("WeatherPreferences") sharedPreferences];
-    self.locationProviderModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
-    [self.locationProviderModel setLocationServicesActive:YES];
-    [self.locationProviderModel setIsLocationTrackingEnabled:YES];
-
-    [self.locationProviderModel _executeLocationUpdateForLocalWeatherCityWithCompletion:^{
-        if(self.locationProviderModel.geocodeRequest.geocodedResult){
-            self.geoLocation = self.locationProviderModel.geocodeRequest.geocodedResult;
-            self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.locationProviderModel.geocodeRequest.geocodedResult];
-            [self.todayModel executeModelUpdateWithCompletion:^{
-                self.forecastModel = self.todayModel.forecastModel;
-                [self.locationProviderModel _willDeliverForecastModel:self.forecastModel];
-                self.locationProviderModel.forecastModel = self.forecastModel;
-                self.city = self.forecastModel.city;
-                [self verifyAndCorrectCondition];
-                self.localWeather = self.city.isLocalWeatherCity;
-                self.populated = YES;
-                self.hasFallenBack = NO;
-                
-                [self postNotification];
-                [self setUpRefreshTimer];
-            }];
-            
-        } else{
-            NSLog(@"lock_TWEAK | didnt work");
-            [self handleDefault];
-            [self postNotification];
-            [self setUpRefreshTimer];
-        }
-    }];
-    [self.locationProviderModel setIsLocationTrackingEnabled:NO];
-}
-
 -(void)updateWeatherDataWithCompletion:(completion) compBlock{
-    if(self.isPopulated){
-        if(self.isLocalWeather){
-            if(![self.todayModel isKindOfClass:objc_getClass("WATodayAutoupdatingLocationModel")]){
-                self.todayModel = [objc_getClass("WATodayModel") autoupdatingLocationModelWithPreferences:self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
-            }
-            [self.todayModel setLocationServicesActive:YES];
-            [self.todayModel setIsLocationTrackingEnabled:YES];
-            NSLog(@"lock_TWEAK | before executed Update");
-            [self.todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *arg2) {
-                self.forecastModel = self.todayModel.forecastModel;
-                self.city = self.forecastModel.city;
-                [self verifyAndCorrectCondition];
-                self.localWeather = self.city.isLocalWeatherCity;
-                [self.todayModel setIsLocationTrackingEnabled:NO];
-            }];
+    FLOG(@"updateWeatherDataWithCompletion");
+    
+    self.weatherPreferences = [WeatherPreferences sharedPreferences];
+    self.todayModel = [objc_getClass("WATodayModel") autoupdatingLocationModelWithPreferences:self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
+    if([self.todayModel respondsToSelector:@selector(setLocationServicesActive:)])[self.todayModel setLocationServicesActive:YES];
+    if([self.todayModel respondsToSelector:@selector(setIsLocationTrackingEnabled:)])[self.todayModel setIsLocationTrackingEnabled:YES];
+    [self.todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *error) {
+        if(!error){
+            FLOG(@"successfully, no error when updating");
+            self.forecastModel = self.todayModel.forecastModel;
+            self.city = self.forecastModel.city;
+            [self verifyAndCorrectCondition];
+            self.localWeather = self.city.isLocalWeatherCity;
+            self.populated = YES;
+            self.hasFallenBack = NO;
         } else {
-            [self _kickStartWeatherFramework];
+            [self handleDefault];
         }
         [self postNotification];
-        compBlock();
-    } else if(self.hasFallenBack){
-        [self postNotification];
-        compBlock();
-    }
+        if(compBlock) compBlock();
+        if([self.todayModel respondsToSelector:@selector(setIsLocationTrackingEnabled:)])[self.todayModel setIsLocationTrackingEnabled:NO];
+    }];
 }
 
 -(void)setUpRefreshTimer{
@@ -96,31 +60,29 @@
     }
 }
 -(void) updateWeather: (NSTimer *) sender {
-    if(self.hasFallenBack == YES){
-        [self _kickStartWeatherFramework];
-    } else {
-        [self updateWeatherDataWithCompletion:^{nil;}];
-    }
+    [self updateWeatherDataWithCompletion:nil];
 }
 -(void) postNotification{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"weatherTimerUpdate"
-         object:nil];
-    });
+    FLOG(@"Populated: %lu Fallback: %lu City: %@", self.isPopulated, self.hasFallenBack, self.city);
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"weatherTimerUpdate"
+     object:nil];
 }
 
 -(void) handleDefault{
-    if(((NSArray *)[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"]).count > 0){
+    if(((NSArray *)[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"]).count > [prefs intForKey:@"astDefaultIndex"]){
+        FLOG(@"Defaulted, count is greater than 0");
         self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][[prefs intForKey:@"astDefaultIndex"]]];
         [self verifyAndCorrectCondition];
         self.localWeather = self.city.isLocalWeatherCity;
         self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.city.wfLocation];
-        [self.todayModel executeModelUpdateWithCompletion:^{nil;}];
-        self.forecastModel = self.todayModel.forecastModel;
+        [self.todayModel executeModelUpdateWithCompletion:^{
+            self.forecastModel = self.todayModel.forecastModel;
+        }];
         self.populated = YES;
         self.hasFallenBack = NO;
     } else {
+        FLOG(@"FallenBack within handleDefault method");
         self.hasFallenBack = YES;
     }
 }
@@ -257,5 +219,10 @@
 
 %ctor{
     // Used to kickstart AWeatherModel.
-    [[%c(AWeatherModel) sharedInstance] _kickStartWeatherFramework];
+    dlopen("/Library/MobileSubstrate/DynamicLibraries/Cr4shedSB.dylib", RTLD_NOW);
+           
+    AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
+    [weatherModel updateWeatherDataWithCompletion:^{
+        [weatherModel setUpRefreshTimer];
+    }];
 }

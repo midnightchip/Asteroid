@@ -32,9 +32,13 @@
 	<real>1</real>
 	<key>customAppColor</key>
 	<string>FFFFFF</string>
-    <key>enableEditingMode</key>
-    <true/>
-    <key>astDefaultIndex</key>
-    <integer>0</integer>
+	<key>enableEditingMode</key>
+	<true/>
+	<key>astDefaultIndex</key>
+	<integer>0</integer>
+	<key>foreHeight</key>
+	<real>220</real>
+	<key>freezeCondition</key>
+	<false/>
 </dict>
 </plist>

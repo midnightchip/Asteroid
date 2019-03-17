@@ -1,7 +1,10 @@
 {
     "StatusBar_Settings" = "Status Bar Settings";
-    "Enable_Cover_Carrier" = "Enable Weather Condition and Temperature instead of the Carrier text";
+    "Enable_Cover_Carrier" = "Carrier Text";
     "Carrier_NameX" = "Status Bar";
-    "Enable_Time_Weather" = "Tap the to show weather condition (iPhone X or Fluid Tweaks only)";
+    "Enable_Time_Weather_Description" = "This section is iPhone X or Fluid Tweaks only";
+    "Enable_Time_Weather" = "Tap to Reveal Temperature";
     "Time_NameX" = "Status Bar Time";
+   "Enable_Glyph_Time" = "Weather Glyph";
+    "Enable_Cover_Carrier_Description" = "Enable Weather Condition and Temperature instead of the Carrier text";
 }

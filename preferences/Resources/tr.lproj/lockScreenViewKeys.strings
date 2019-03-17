@@ -17,4 +17,8 @@
     "Enable_Weather_Forecast_Info" = "Hava Durumu Bilgisini Etkinleştir";
     "Reset_Components" = "Bileşenleri Sıfırla";
     "Components" = "Bileşenler";
+    "Use_Custom_Glyph_Image" = "Özel Hava Durumu Simgesi Kullan";
+    "Select_Weather_Glyph_Type" = "Özel Hava Durumu Simgesini Seç";
+    "Set_Glyph_Color" = "Hava Durumu Simgesi Rengini Ayarla";
+    "Blur_Amount" = "Arka Plan Bulanıklık Seviyesi";
 }

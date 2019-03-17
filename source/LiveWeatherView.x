@@ -71,7 +71,6 @@ static WUIWeatherCondition* condition = nil;
     [self.referenceView.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:-4].active = YES;
     [self.referenceView.topAnchor constraintEqualToAnchor:self.topAnchor constant:4].active = YES;
     [self.referenceView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4].active = YES;
-    NSLog(@"lock_TWEAK | end of reference: %f", self.referenceView.background.gradientLayer.bounds.size.height);
     
     self.gradientView = [[UIView alloc] initWithFrame:self.frame];
     self.gradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -102,13 +101,16 @@ static WUIWeatherCondition* condition = nil;
         self.temp.text = [_weatherModel localeTemperature];
         [self.temp layoutSubviews];
         
-        UIImage *icon;
-        icon = [_weatherModel glyphWithOption:ConditionOptionWhite];
-        self.logo.image = icon;
-        [self.logo layoutSubviews];
-        [self layoutSubviews];
+        if(_weatherModel.isPopulated){
+            UIImage *icon;
+            icon = [_weatherModel glyphWithOption:ConditionOptionWhite];
+            self.logo.image = icon;
+            [self.logo layoutSubviews];
+            [self layoutSubviews];
+        }
         
         if([prefs boolForKey:@"appScreenWeatherBackground"] && _weatherModel.isPopulated){
+            self.referenceView.background.hidesBackground = NO;
             City *backgroundCity = _weatherModel.city;
             if([prefs boolForKey:@"customConditionIcon"]){
                 backgroundCity = [_weatherModel.city cityCopy];
@@ -117,19 +119,18 @@ static WUIWeatherCondition* condition = nil;
             [self.referenceView.background setCity:backgroundCity];
             if(![prefs boolForKey:@"appScreenWeather"]){
                 self.gradientLayer.hidden = NO;
-                self.referenceView.hidden = YES;
-                [[self.referenceView.background condition] pause];
                 
                 self.gradientLayer = [self gradientFromWeatherGradient: self.referenceView.background.gradientLayer];
                 self.gradientLayer.frame = self.gradientView.frame;
                 self.gradientView.layer.sublayers = nil;
                 [self.gradientView.layer insertSublayer:self.gradientLayer atIndex:0];
+                self.referenceView.hidden = YES;
+                [[self.referenceView.background condition] pause];
             } else {
                 self.gradientView.hidden = YES;
                 self.referenceView.hidden = NO;
                 [[self.referenceView.background condition] resume];
             }
-            NSLog(@"lock_TWEAK | right after setting condition: %f", self.referenceView.background.gradientLayer.bounds.size.height);
         } else {
             self.referenceView.backgroundColor = [UIColor grayColor];
         }

@@ -20,6 +20,7 @@
 %hook _UIStatusBarStringView
 %property (nonatomic, assign) BOOL isServiceView;
 -(void)setText:(id)arg1{
+    %orig(@"");
 	if(self.isServiceView){
 		[self generateWeatherView];
 	}else{
@@ -61,7 +62,7 @@
 %end 
 
 %ctor{
-	if([prefs boolForKey:@"enableCoverStatusX"]){
+	if([prefs boolForKey:@"enableCoverStatusX"] && [prefs boolForKey:@"kLWPEnabled"]){
 		%init();
 	}
 }

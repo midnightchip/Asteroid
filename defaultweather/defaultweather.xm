@@ -29,6 +29,11 @@
     rocketbootstrap_distributedmessagingcenter_apply(messagingCenter);
     NSDictionary *serverDict = [messagingCenter sendMessageAndReceiveReplyName:@"cityIndex" userInfo:nil/* optional dictionary */];
     NSNumber *indexValue = serverDict[@"index"];
-    [prefs setObject:indexValue forKey:@"astDefaultIndex"];
+    if(indexValue){
+        [prefs setObject:indexValue forKey:@"astDefaultIndex"];
+    } else if(((NSArray *)[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"]).count > 0){
+         [prefs setObject:@(0) forKey:@"astDefaultIndex"];
+    }
+    
     [prefs save];
 }

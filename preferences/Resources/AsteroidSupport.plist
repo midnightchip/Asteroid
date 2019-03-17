@@ -402,6 +402,27 @@
 				<key>devSubtitle</key>
 				<string>Creates our Amazing Artwork</string>
 			</dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSLinkCell</string>
+                <key>cellClass</key>
+                <string>CSPDeveloperCell</string>
+                <key>action</key>
+                <string>openInBrowser:</string>
+                <key>username</key>
+                <string>logictester</string>
+                <key>provider</key>
+                <string>1</string>
+                <key>height</key>
+                <string>81</string>
+                <key>devName</key>
+                <string></string>
+                <key>devTitle</key>
+                <string>logictester</string>
+                <key>devSubtitle</key>
+                <string>Tested so many debs</string>
+            </dict>
 
 			
 			<dict>

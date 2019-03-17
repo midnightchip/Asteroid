@@ -1,0 +1,13 @@
+{
+    "Enable_Greet" = "تفعيل عرض التحية";
+    "Hide_Notif" = "إخفاء عرض التحية عند وجود إشعار";
+    "Notif_Explain" = "إخفاء عرض الطقس عند وجود إشعارات";
+    "Lockscreen_Components" = "مكونات شاشة القفل";
+    "Configure_Lockscreen_Components" = "إعداد مكونات شاشة القفل";
+    "Custom_Fonts" = "خطوط مخصصة";
+    "Enable_Custom_Font" = "تفعيل خط مخصص";
+    "Select_Custom_Font" = "تحديد خط مخصص";
+    "Set_Text_Color" = "تعيين لون النص";
+    "Lock_Screen" = "شاشة القفل";
+
+}

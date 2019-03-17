@@ -8,10 +8,6 @@
     "Enable_Custom_Font" = "Özel Yazı Tipini Etkinleştir";
     "Select_Custom_Font" = "Özel Yazı Tipini Seç";
     "Set_Text_Color" = "Yazı Rengini Ayarla";
-    "Use_Custom_Glyph_Image" = "Özel Hava Durumu Simgesi Kullan";
-    "Select_Weather_Glyph_Type" = "Özel Hava Durumu Simgesini Seç";
-    "Set_Glyph_Color" = "Hava Durumu Simgesi Rengini Ayarla";
-    "Blur_Amount" = "Arka Plan Bulanıklık Seviyesi";
     "Lock_Screen" = "Kilit Ekranı";
 
 }

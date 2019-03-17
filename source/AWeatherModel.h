@@ -4,14 +4,13 @@
 #import "WeatherHeaders.h"
 #import "ConditionOption.h"
 #import "ConditionImageType.h"
+#import "DGLogging.h"
 #define prefs [LWPProvider sharedProvider]
 
 typedef void(^completion)();
 
 @interface AWeatherModel : NSObject
 @property (nonatomic, retain) WeatherPreferences *weatherPreferences;
-@property (nonatomic, retain) WFLocation *geoLocation;
-@property (nonatomic, retain) WATodayAutoupdatingLocationModel *locationProviderModel;
 @property (nonatomic, retain) WATodayAutoupdatingLocationModel *todayModel;
 @property (nonatomic, retain) WAForecastModel *forecastModel;
 @property (nonatomic, retain) City *city;
@@ -21,7 +20,6 @@ typedef void(^completion)();
 @property (nonatomic) BOOL hasFallenBack;
 
 + (instancetype)sharedInstance;
--(void) _kickStartWeatherFramework;
 -(void)updateWeatherDataWithCompletion:(completion) compBlock;
 -(void)setUpRefreshTimer;
 -(void) postNotification;

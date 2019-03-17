@@ -31,7 +31,7 @@ static UIView* weatherAnimation = nil;
 static bool Loaded = NO;
 
 static void updateAnimation(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-    if(MSHookIvar<BOOL>([%c(SBLockScreenManager) sharedInstance], "_isScreenOn")){
+    if(MSHookIvar<BOOL>([%c(SBLockScreenManager) sharedInstance], "_isScreenOn") && ![prefs boolForKey:@"freezeCondition"]){
         if(MSHookIvar<NSUInteger>([objc_getClass("SBLockStateAggregator") sharedInstance], "_lockState") == 3 || MSHookIvar<NSUInteger>([objc_getClass("SBLockStateAggregator") sharedInstance], "_lockState") == 1){
             [condition resume];
         } else{
@@ -48,16 +48,24 @@ void loadWeatherAnimation(City *city){
 	    if(city){
             NSLog(@"lock_TWEAK | setup");
 		    weatherAnimation = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+            [weatherAnimation setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
 				weatherAnimation.clipsToBounds = YES;
 			WUIWeatherConditionBackgroundView *referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-            if([prefs boolForKey:@"hideWeatherBackground"]){
+            if([prefs intForKey:@"hideLockWeatherBackground"] == 1){
                 referenceView.background.hidesBackground = YES;
                 referenceView.background.condition.hidesConditionBackground = YES;
+            } else if([prefs intForKey:@"hideLockWeatherBackground"] == 2){
+                referenceView.background.hidesBackground = NO;
+                referenceView.hidesConditions = YES;
             }
 
 			dynamicBG = [referenceView background];
 			condition = [dynamicBG condition];
-			[condition resume];
+            if([prefs boolForKey:@"freezeCondition"]){
+                [condition pause];
+            } else {
+                [condition resume];
+            }
 			[weatherAnimation addSubview:dynamicBG];
 			[dynamicBG setCity: city];
 			SBLockScreenManager *manager = [%c(SBLockScreenManager) sharedInstance];
@@ -85,13 +93,14 @@ void loadWeatherAnimation(City *city){
 
 void loadCityForView(){
     AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
-    City *backgroundCity = weatherModel.city;
-    if([prefs boolForKey:@"customCondition"]){
-        backgroundCity = [weatherModel.city cityCopy];
-        backgroundCity.conditionCode = [prefs doubleForKey:@"weatherConditions"];
+    if(weatherModel.isPopulated){
+        City *backgroundCity = weatherModel.city;
+        if([prefs boolForKey:@"customCondition"]){
+            backgroundCity = [weatherModel.city cityCopy];
+            backgroundCity.conditionCode = [prefs doubleForKey:@"weatherConditions"];
+        }
+        loadWeatherAnimation(backgroundCity);
     }
-    
-    if(weatherModel.isPopulated)loadWeatherAnimation(backgroundCity);
 }
 
 %hook SBLockScreenManager
@@ -111,7 +120,7 @@ void loadCityForView(){
 -(void)applicationDidFinishLaunching:(id)application{
     %orig;
 	//thank you june
-	dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 4);
+	dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 2);
         dispatch_after(delay, dispatch_get_main_queue(), ^(void){
 			loadCityForView();
 		});

@@ -7,6 +7,9 @@
     "Select_Condition" = "Select Custom Weather Conditions";
     "Overide_Animation" = "This overides your weather background animation.";
     "Hide_Background" = "Hide Live Weather Background";
-    "Hide_Explain" = "Hides Background of Live Weather, Keeps the Animation";
+    "Hide_Lock_Explain" = "Disable Layers of Lockscreen Live Weather";
+    "Hide_Home_Explain" = "Disable Layers of Homescreen Live Weather";
     "Live_Weather" = "Live Weather";
+    "Freeze_Animations" = "Freeze Animations";
+    "Freeze_Explain" = "Prevent animations from moving.";
 }

@@ -64,9 +64,7 @@
                 <key>max</key>
                 <real>60</real>
                 <key>isSegmented</key>
-                <true/>
-                <key>segmentCount</key>
-                <real>48</real>
+                <false/>
                 <key>PostNotification</key>
                 <string>com.midnightchips.asteroid.prefschanged</string>
                 <key>defaults</key>
@@ -109,9 +107,7 @@
                 <key>max</key>
                 <real>60</real>
                 <key>isSegmented</key>
-                <true/>
-                <key>segmentCount</key>
-                <real>48</real>
+                <false/>
                 <key>PostNotification</key>
                 <string>com.midnightchips.asteroid.prefschanged</string>
                 <key>defaults</key>
@@ -154,9 +150,7 @@
                 <key>max</key>
                 <real>60</real>
                 <key>isSegmented</key>
-                <true/>
-                <key>segmentCount</key>
-                <real>48</real>
+                <false/>
                 <key>PostNotification</key>
                 <string>com.midnightchips.asteroid.prefschanged</string>
                 <key>defaults</key>
@@ -199,9 +193,50 @@
                 <key>max</key>
                 <real>60</real>
                 <key>isSegmented</key>
+                <false/>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSGroupCell</string>
+                <key>footerText</key>
+                <string>Blur_Amount</string>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSSwitchCell</string>
+                <key>label</key>
+                <string>Enable_Blur</string>
+                <key>key</key>
+                <string>addBlur</string>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSSliderCell</string>
+                <key>key</key>
+                <string>blurAmount</string>
+                <key>showValue</key>
                 <true/>
-                <key>segmentCount</key>
-                <real>48</real>
+                <key>min</key>
+                <real>0</real>
+                <key>max</key>
+                <real>30</real>
+                <key>isSegmented</key>
+                <false/>
                 <key>PostNotification</key>
                 <string>com.midnightchips.asteroid.prefschanged</string>
                 <key>defaults</key>
@@ -229,6 +264,68 @@
 				<key>defaultsPath</key>
 				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
 			</dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSSwitchCell</string>
+                <key>label</key>
+                <string>Use_Custom_Glyph_Image</string>
+                <key>key</key>
+                <string>customImage</string>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+                <key>enableSpecifiers</key>
+                <array>
+                    <string>setImageType</string>
+                    <string>glyphColor</string>
+                </array>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSLinkListCell</string>
+                <key>detail</key>
+                <string>CSListItemsController</string>
+                <key>label</key>
+                <string>Select_Weather_Glyph_Type</string>
+                <key>key</key>
+                <string>setImageType</string>
+                <key>titlesDataSource</key>
+                <string>getImageType</string>
+                <key>valuesDataSource</key>
+                <string>getImageType</string>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSLinkCell</string>
+                <key>cellClass</key>
+                <string>CSColorDisplayCell</string>
+                <key>key</key>
+                <string>glyphColor</string>
+                <key>label</key>
+                <string>Set_Glyph_Color</string>
+                <key>fallback</key>
+                <string>FFFFFF</string>
+                <key>alpha</key>
+                <false/>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+            </dict>
 
 			<dict>
 				<key>cell</key>
@@ -245,26 +342,13 @@
 				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
 			</dict>
 
-			<dict>
-				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>label</key>
-				<string>Enable_Blur</string>
-				<key>key</key>
-				<string>addBlur</string>
-				<key>PostNotification</key>
-				<string>com.midnightchips.asteroid.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.asteroid</string>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
-			</dict>
-
             <dict>
                 <key>cell</key>
                 <string>PSGroupCell</string>
                 <key>label</key>
                 <string>Hourly_Forecast_Options</string>
+                <key>footerText</key>
+                <string>Forecast_Height</string>
             </dict>
             
 			<dict>
@@ -296,11 +380,32 @@
 				<key>defaultsPath</key>
 				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
 			</dict>
+            <dict>
+                <key>cell</key>
+                <string>PSSliderCell</string>
+                <key>key</key>
+                <string>foreHeight</string>
+                <key>showValue</key>
+                <true/>
+                <key>min</key>
+                <real>0</real>
+                <key>max</key>
+                <real>500</real>
+                <key>isSegmented</key>
+                <false/>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+            </dict>
             
             <dict>
                 <key>cell</key>
                 <string>PSGroupCell</string>
             </dict>
+            
             
             <dict>
                 <key>action</key>

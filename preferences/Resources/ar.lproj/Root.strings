@@ -1,0 +1,16 @@
+{
+    "Enable_Tweak" = "تفعيل";
+    "Custom_Fonts" = " خطوط مخصصة";
+    "Use_Custom_Font" = "استخدام خط مخصص";
+    "Custom_Font" = "حدد نوع الخط:";
+    "Font_Sizes" = "أحجام الخط";
+    "Greeting_Size" = "حجم التحية";
+    "Description_Size" = "حجم الوصف";
+    "Current_Temperature_Size" = "حجم درجة الحرارة الحالية";
+    "Blur_Amount" = "مقدار الضبابية";
+    "Support" = "التواصل والدعم والتبرع!";
+    "Backup" = "النسخ الاحتياطي والاستعادة";
+    "ChangeLog" = "سجل التغييرات";
+    "Version" = "الإصدار:";
+    "Asteroid" = "Asteroid";
+}

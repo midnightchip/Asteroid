@@ -5,6 +5,14 @@
 
 		<key>items</key>
 		<array>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSGroupCell</string>
+                <key>footerText</key>
+                <string>Hide_Lock_Explain</string>
+            </dict>
+            
 			<dict>
 				<key>cell</key>
 				<string>PSSwitchCell</string>
@@ -21,6 +29,38 @@
 				<key>defaultsPath</key>
 				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
 			</dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSSegmentCell</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>detail</key>
+                <string>CSListItemsController</string>
+                <key>key</key>
+                <string>hideLockWeatherBackground</string>
+                <key>default</key>
+                <real>0</real>
+                <key>validTitles</key>
+                <array>
+                    <string>None</string>
+                    <string>Background</string>
+                    <string>Animation</string>
+                </array>
+                <key>validValues</key>
+                <array>
+                    <real>0</real>
+                    <real>1</real>
+                    <real>2</real>
+                </array>
+            </dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSGroupCell</string>
+                <key>footerText</key>
+                <string>Hide_Home_Explain</string>
+            </dict>
 
 			<dict>
 				<key>cell</key>
@@ -38,6 +78,35 @@
 				<key>defaultsPath</key>
 				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
 			</dict>
+            
+            <dict>
+                <key>cell</key>
+                <string>PSSegmentCell</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>detail</key>
+                <string>CSListItemsController</string>
+                <key>key</key>
+                <string>hideHomeWeatherBackground</string>
+                <key>default</key>
+                <real>0</real>
+                <key>validTitles</key>
+                <array>
+                    <string>None</string>
+                    <string>Background</string>
+                    <string>Animation</string>
+                </array>
+                <key>validValues</key>
+                <array>
+                    <real>0</real>
+                    <real>1</real>
+                    <real>2</real>
+                </array>
+            </dict>
+            <dict>
+                <key>cell</key>
+                <string>PSGroupCell</string>
+            </dict>
 
 			<dict>
 				<key>cell</key>
@@ -80,26 +149,25 @@
 			</dict>
 
 
-			
-
-			<dict>
-				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>label</key>
-				<string>Hide_Background</string>
-				<key>sublabel</key>
-				<string>Hide_Explain</string>
-				<key>key</key>
-				<string>hideWeatherBackground</string>
-				<key>PostNotification</key>
-				<string>com.midnightchips.asteroid.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.asteroid</string>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
-			</dict>
-
-
+            <dict>
+                <key>cell</key>
+                <string>PSGroupCell</string>
+                <key>footerText</key>
+                <string>Freeze_Explain</string>
+            </dict>
+            <dict>
+                <key>cell</key>
+                <string>PSSwitchCell</string>
+                <key>label</key>
+                <string>Freeze_Animations</string>
+                <key>key</key>
+                <string>freezeCondition</string>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+            </dict>
+            
 			
 			<dict>
 				<key>cell</key>

@@ -91,17 +91,15 @@ static BOOL isWeatherLocked = NO;
 }
 %end
 
+
 // hacky way to catch the city name not matching with rest of forecast
 %hook WATodayHeaderView
 -(NSString *)locationName{
-    // Checking to make sure the city name matches with the actual content
-    if(![((NSString *)((WAWeatherPlatterViewController *)self._viewControllerForAncestor).model.forecastModel.city.name) isEqualToString: ((NSString *)((AWeatherModel *)[%c(AWeatherModel) sharedInstance]).city.name)]){
-        // something is fucked up, force everything to update
-        [[%c(AWeatherModel) sharedInstance] updateWeatherDataWithCompletion:^{nil;}];
-     }
-    return ((AWeatherModel *)[%c(AWeatherModel) sharedInstance]).city.name;
+    NSString *realName = ((AWeatherModel *)[%c(AWeatherModel) sharedInstance]).city.name;
+    ((WAWeatherPlatterViewController *)self._viewControllerForAncestor).model.forecastModel.city.name = realName;
+    return realName;
 }
-%end 
+%end
 
 // Making sure the forecast view is the right color
 %hook WAWeatherPlatterViewController
@@ -141,6 +139,10 @@ static BOOL isWeatherLocked = NO;
 
 %hook SBDashBoardWallpaperEffectView
 // removes the wallpaper view when opening camera
+-(void)layoutSubviews{
+    BOOL transitioning = ((SBDashBoardMainPageContentViewController *)mainPageView._viewControllerForAncestor).isTransitioning;
+    [self setHidden:transitioning];
+}
 -(void)setHidden:(BOOL) arg1 {
     BOOL transitioning = ((SBDashBoardMainPageContentViewController *)mainPageView._viewControllerForAncestor).isTransitioning;
     %orig(transitioning);
@@ -177,9 +179,10 @@ static BOOL isWeatherLocked = NO;
 -(BOOL)hasContent{
     BOOL content = %orig;
     //This is some black magic, I wrote this and I have no idea whats going on. -Midnightchips & the casle 2018
-    if(content && [prefs boolForKey:@"hideOnNotif"] && !isDismissed){
+    SBDashBoardViewController *dashBoardViewCont = ((SBLockScreenManager *)[%c(SBLockScreenManager) sharedInstance]).dashBoardViewController;
+    if((content && [prefs boolForKey:@"hideOnNotif"] && !isDismissed) || [[%c(SBMediaController) sharedInstance] isPlaying] == YES){
         [mainPageView hideWeather];
-    } else if(!isWeatherLocked && isDismissed && ((MediaControlsPanelViewController *)[%c(MediaControlsPanelViewController) panelViewControllerForCoverSheet]).isOnScreen == NO && [[%c(SBMediaController) sharedInstance] isPlaying] == NO){
+    } else if(!isWeatherLocked && isDismissed && dashBoardViewCont.isShowingMediaControls == NO && [[%c(SBMediaController) sharedInstance] isPlaying] == NO){
         if([prefs boolForKey:@"hideOnNotif"] && !content){ // Will make check hideOnNotif and content before revealing lock
             [mainPageView updateWeatherReveal];
         } else if(![prefs boolForKey:@"hideOnNotif"]){ // Do as normally would if hideOnNotif not enabled
@@ -215,6 +218,15 @@ static BOOL isWeatherLocked = NO;
     }
 }
 %end
+/*
+%hook NCNotificationCombinedListViewController
+-(BOOL)hasContent{
+    MediaControlsPanelViewController *mediaCont = [%c(MediaControlsPanelViewController) respondsToSelector:@selector(coverSheetPlatterViewController)] ? [%c(MediaControlsPanelViewController) coverSheetPlatterViewController] : [%c(MediaControlsPanelViewController) panelViewControllerForCoverSheet];
+    
+    mediaCont = nil;
+    return %orig;
+}
+%end*/
 
 //Blur
 %hook SBDashBoardViewController

@@ -17,11 +17,15 @@
 @end
 
 
-@interface MediaControlsPanelViewController
+@interface MediaControlsPanelViewController // iOS 12.1
 @property (nonatomic) BOOL isOnScreen;
 +(id)panelViewControllerForCoverSheet;
 @end
 
+@interface MRPlatterViewController // iOS 12.4
+@property (nonatomic) BOOL isOnScreen;
++(id)coverSheetPlatterViewController;
+@end
 
 //help from the_casle on the blur
 @interface SBUIBackgroundView : UIView
@@ -32,6 +36,7 @@
 
 @interface SBDashBoardViewController : UIViewController 
 @property (nonatomic, retain) UIVisualEffectView *blurEffectView;
+@property (nonatomic, getter=isShowingMediaControls) BOOL showingMediaControls;
 @end 
 
 @interface SBDashBoardView : UIView
@@ -101,6 +106,7 @@
 @property (readonly) BOOL isUILocked;
 -(BOOL)isUIUnlocking;
 -(BOOL)hasUIEverBeenLocked;
+@property (nonatomic,readonly) SBDashBoardViewController * dashBoardViewController;
 @end
 
 @interface SBCoverSheetSlidingViewController
@@ -127,4 +133,8 @@
 
 @interface SBMediaController
 -(BOOL) isPlaying;
+@end
+
+@interface SBDashBoardComponent
+@property (nonatomic, assign) CGPoint offset;
 @end
