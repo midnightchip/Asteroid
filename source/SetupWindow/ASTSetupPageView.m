@@ -29,13 +29,13 @@
                 [self formatHeaderAndDescriptionTop];
                 break;
             case ASTSetupStyleHeaderBasic:
-                [self formatForSingleButton];
                 [self unformattedMediaForHeader];
+                [self formatForSingleButton];
                 [self unformattedTextForHeader];
                 break;
             case ASTSetupStyleHeaderTwoButtons:
-                [self formatForTwoButtons];
                 [self unformattedMediaForHeader];
+                [self formatForTwoButtons];
                 [self unformattedTextForHeader];
                 break;
             default:
@@ -133,7 +133,6 @@
     AVAssetTrack *track = [tracks objectAtIndex:0];
     CGSize mediaSize = track.naturalSize;
     mediaSize = CGSizeApplyAffineTransform(mediaSize, track.preferredTransform);
-    NSLog(@"lock_TWEAK | %f, %f", mediaSize.width, mediaSize.height);
 
     CGFloat ratio = fabs(mediaSize.height) / fabs(mediaSize.width);
     CGFloat newHeight = self.frame.size.width * ratio;
