@@ -35,24 +35,24 @@
     [welcomeView setNextButtonText:SETUP_MANUALLY andOtherButton:nil];
     [welcomeView setupMediaWithPathToFile:PATH_TO_BANNER];
     welcomeView.backButton.hidden = YES;
-    [welcomeView setNextButtonTarget:self withAction:@selector(transitionToNextPage:) index:@2 block:nil];
+    [welcomeView setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
     [self indexPage: welcomeView];
     
     ASTSetupPageView *lockPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
     [lockPage setHeaderText:@"Lockscreen" andDescription: @"Enable the Asteroid Lockscreen"];
     [lockPage setNextButtonText:CONTINUE andOtherButton:nil];
     [lockPage setupMediaWithPathToFile:PATH_TO_IMAGE];
-    [lockPage setNextButtonTarget:self withAction:@selector(transitionToNextPage:) index:nil block:nil];
-    [lockPage setOtherButtonTarget:self withAction:@selector(transitionToNextPage:) index:nil block:nil];
-    [lockPage setBackButtonTarget:self withAction:@selector(transitionToBackPage:) index:nil block:nil];
+    [lockPage setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
+    [lockPage setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
+    [lockPage setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overrideIndex:nil completion:nil];
     [self indexPage: lockPage];
     
     ASTSetupPageView *secondView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleHeaderBasic];
     [secondView setHeaderText:@"New Header Style" andDescription: @"This is the description text underneath the header!"];
     [secondView setNextButtonText:GET_STARTED andOtherButton:nil];
     [secondView setupMediaWithPathToFile:PATH_TO_BANNER];
-    [secondView setNextButtonTarget:self withAction:@selector(transitionToNextPage:) index:nil block:nil];
-    [secondView setBackButtonTarget:self withAction:@selector(transitionToBackPage:) index:nil block:nil];
+    [secondView setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
+    [secondView setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overrideIndex:nil completion:nil];
     [self indexPage: secondView];
 }
 
@@ -87,7 +87,7 @@
     [self.allPages addObject:page];
 }
 
--(void) transitionToNextPage:(HighlightButton *) sender{
+-(void) transitionToRight:(HighlightButton *) sender{
     if(sender.targetIndex){ // Specified Page
         self.visiblePage = [self pageForIndex:sender.targetIndex.intValue];
         [self animateForwardsForPage:self.visiblePage];
@@ -101,7 +101,7 @@
     }
 }
 
--(void) transitionToBackPage:(HighlightButton *) sender{
+-(void) transitionToLeft:(HighlightButton *) sender{
     if(sender.targetIndex){ // Specified Page
         self.visiblePage = [self pageForIndex:sender.targetIndex.intValue];
         [self animateBackwardsForPage:self.visiblePage];

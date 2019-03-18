@@ -262,7 +262,7 @@
     if(otherText)[self.otherButton setTitle:otherText forState:UIControlStateNormal];
 }
 
--(void) setNextButtonTarget: (id) object withAction:(SEL) selector index:(NSNumber *) index block:(ButtonBlock) block{
+-(void) setNextButtonTarget: (id) object withTransition:(SEL) selector overrideIndex:(NSNumber *) index completion:(ButtonBlock) block{
     [self.nextButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
     if(block){
         [self.otherButton addTarget:self action:@selector(executeNextButtonBlock) forControlEvents:UIControlEventTouchUpInside];
@@ -273,7 +273,7 @@
     }
 }
 
--(void) setOtherButtonTarget: (id) object withAction:(SEL) selector index:(NSNumber *) index block:(ButtonBlock) block{
+-(void) setOtherButtonTarget: (id) object withTransition:(SEL) selector overrideIndex:(NSNumber *) index completion:(ButtonBlock) block{
     [self.otherButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
     if(block){
         [self.otherButton addTarget:self action:@selector(executeOtherButtonBlock) forControlEvents:UIControlEventTouchUpInside];
@@ -284,7 +284,7 @@
     }
 }
 
--(void) setBackButtonTarget: (id) object withAction:(SEL) selector index:(NSNumber *) index block:(ButtonBlock)block{
+-(void) setBackButtonTarget: (id) object withTransition:(SEL) selector overrideIndex:(NSNumber *) index completion:(ButtonBlock)block{
     [self.backButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
     if(block){
         [self.otherButton addTarget:self action:@selector(executeBackButtonBlock) forControlEvents:UIControlEventTouchUpInside];
