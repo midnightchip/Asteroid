@@ -8,7 +8,7 @@
 
 #define PATH_TO_TWELVE_LOCK @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/twelveLock.png"
 #define PATH_TO_EDITING @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/EditingMode.m4v"
-#define PATH_TO_LOCK_VID @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/LockScreen.m4v"
+
 
 
 @interface ASTSetupViewController ()
@@ -45,10 +45,10 @@
     [self indexPage: welcomeView];
     
     // 1
-    ASTSetupPageView *lockPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleHeaderTwoButtons];
+    ASTSetupPageView *lockPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
     [lockPage setHeaderText:@"Lockscreen" andDescription: @"Enable the Asteroid Lockscreen."];
     [lockPage setNextButtonText:CONTINUE andOtherButton:SET_UP_LATER_IN_SETTINGS];
-    [lockPage setupMediaWithPathToFile:PATH_TO_LOCK_VID];
+    [lockPage setupMediaWithPathToFile:PATH_TO_TWELVE_LOCK];
     [lockPage setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
     [lockPage setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:@5 completion:nil];
     [lockPage setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overrideIndex:nil completion:nil];
@@ -67,7 +67,7 @@
     ASTSetupPageView *twelveLock = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
     [twelveLock setHeaderText:@"Stock iOS 12 Style" andDescription: @"Stock-styled components are enabled."];
     [twelveLock setNextButtonText:CONTINUE andOtherButton:OTHER_OPTIONS];
-    [twelveLock setupMediaWithPathToFile:PATH_TO_TWELVE_LOCK];
+    [twelveLock setupMediaWithPathToFile:PATH_TO_BANNER];
     [twelveLock setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:@5 completion:nil];
     [twelveLock setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
     [twelveLock setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overrideIndex:nil completion:nil];
