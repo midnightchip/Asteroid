@@ -20,36 +20,39 @@
 - (instancetype)init{
     if(self = [super init]) {
         self.allPages = [[NSMutableArray alloc] init];
+        
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"astDisableLock"
+         object:self];
     }
     return self;
 }
 
 -(void) generatePages {
-    // ASTSetupPageStyles.h contains styles.
-    
     ASTSetupPageView *welcomeView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleHeaderBasic];
-    [welcomeView setHeaderText:@"Asteroid" andDescription: @"the casle & midnightchips"];
+    NSString *welcomeDescription = @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.";
+    [welcomeView setHeaderText:@"Asteroid" andDescription: welcomeDescription];
     [welcomeView setNextButtonText:SETUP_MANUALLY andOtherButton:nil];
     [welcomeView setupMediaWithPathToFile:PATH_TO_BANNER];
     welcomeView.backButton.hidden = YES;
-    [welcomeView setNextButtonTarget:self withAction:@selector(transitionToNextPage) block:nil];
+    [welcomeView setNextButtonTarget:self withAction:@selector(transitionToNextPage:) index:@2 block:nil];
     [self indexPage: welcomeView];
     
-    ASTSetupPageView *randomPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
-    [randomPage setHeaderText:@"Woo another page" andDescription: @"more tests cooc"];
-    [randomPage setNextButtonText:CONTINUE andOtherButton:nil];
-    [randomPage setupMediaWithPathToFile:PATH_TO_IMAGE];
-    [randomPage setNextButtonTarget:self withAction:@selector(transitionToNextPage) block:nil];
-    [randomPage setOtherButtonTarget:self withAction:@selector(transitionToNextPage) block:nil];
-    [randomPage setBackButtonTarget:self withAction:@selector(transitionToBackPage) block:nil];
-    [self indexPage: randomPage];
+    ASTSetupPageView *lockPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
+    [lockPage setHeaderText:@"Lockscreen" andDescription: @"Enable the Asteroid Lockscreen"];
+    [lockPage setNextButtonText:CONTINUE andOtherButton:nil];
+    [lockPage setupMediaWithPathToFile:PATH_TO_IMAGE];
+    [lockPage setNextButtonTarget:self withAction:@selector(transitionToNextPage:) index:nil block:nil];
+    [lockPage setOtherButtonTarget:self withAction:@selector(transitionToNextPage:) index:nil block:nil];
+    [lockPage setBackButtonTarget:self withAction:@selector(transitionToBackPage:) index:nil block:nil];
+    [self indexPage: lockPage];
     
     ASTSetupPageView *secondView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleHeaderBasic];
     [secondView setHeaderText:@"New Header Style" andDescription: @"This is the description text underneath the header!"];
     [secondView setNextButtonText:GET_STARTED andOtherButton:nil];
     [secondView setupMediaWithPathToFile:PATH_TO_BANNER];
-    [secondView setNextButtonTarget:self withAction:@selector(transitionToNextPage) block:nil];
-    [secondView setBackButtonTarget:self withAction:@selector(transitionToBackPage) block:nil];
+    [secondView setNextButtonTarget:self withAction:@selector(transitionToNextPage:) index:nil block:nil];
+    [secondView setBackButtonTarget:self withAction:@selector(transitionToBackPage:) index:nil block:nil];
     [self indexPage: secondView];
 }
 
@@ -71,6 +74,9 @@
     } completion:^(BOOL finished){
         self.view.superview.hidden = YES;
         self.view.center = self.view.superview.center;
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"astEnableLock"
+         object:self];
         //[self startRespring]; // MAKE SURE TO ENABLE THIS WHEN DONE MAKING!!!!!!!!!!!!!!!!!
     }];
 }
@@ -81,51 +87,67 @@
     [self.allPages addObject:page];
 }
 
--(void) transitionToNextPage{
-    if(self.visiblePage == [self nextPageForPage:self.visiblePage]){ // Last page.
-        [self exitSetup];
+-(void) transitionToNextPage:(HighlightButton *) sender{
+    if(sender.targetIndex){ // Specified Page
+        self.visiblePage = [self pageForIndex:sender.targetIndex.intValue];
+        [self animateForwardsForPage:self.visiblePage];
     } else {
-        self.visiblePage = [self nextPageForPage:self.visiblePage];
-        
-        [self.view bringSubviewToFront:self.visiblePage];
-        self.visiblePage.center = CGPointMake(self.view.frame.size.width/2 + 350, self.view.center.y);
-        [UIView animateWithDuration:0.3 delay:0 options: UIViewAnimationOptionCurveEaseInOut  animations:^{
-            ///Move new view into frame and above old view
-            self.visiblePage.center = self.view.center;
+        if(self.visiblePage == [self nextPageForPage:self.visiblePage]){ // Last page.
+            [self exitSetup];
+        } else {
+            self.visiblePage = [self nextPageForPage:self.visiblePage];
+            [self animateForwardsForPage:self.visiblePage];
         }
-                         completion:^(BOOL finished){
-                             [self.visiblePage.videoPlayer play];
-                         }];
     }
 }
 
--(void) transitionToBackPage{
-    self.visiblePage = [self backPageForPage:self.visiblePage];
-    
-    [self.view bringSubviewToFront:self.visiblePage];
-    self.visiblePage.center = CGPointMake(self.view.frame.size.width/2 - 350, self.view.center.y);
+-(void) transitionToBackPage:(HighlightButton *) sender{
+    if(sender.targetIndex){ // Specified Page
+        self.visiblePage = [self pageForIndex:sender.targetIndex.intValue];
+        [self animateBackwardsForPage:self.visiblePage];
+    } else {
+        self.visiblePage = [self backPageForPage:self.visiblePage];
+        [self animateBackwardsForPage:self.visiblePage];
+    }
+}
+
+-(void) animateForwardsForPage:(ASTSetupPageView *) page{
+    [self.view bringSubviewToFront:page];
+    page.center = CGPointMake(self.view.frame.size.width/2 + 350, self.view.center.y);
     [UIView animateWithDuration:0.3 delay:0 options: UIViewAnimationOptionCurveEaseInOut  animations:^{
         ///Move new view into frame and above old view
-        self.visiblePage.center = self.view.center;
+        page.center = self.view.center;
     }
                      completion:^(BOOL finished){
-                         [self.visiblePage.videoPlayer play];
+                         [page.videoPlayer play];
+                     }];
+}
+
+-(void) animateBackwardsForPage:(ASTSetupPageView *) page{
+    [self.view bringSubviewToFront:page];
+    page.center = CGPointMake(self.view.frame.size.width/2 - 350, self.view.center.y);
+    [UIView animateWithDuration:0.3 delay:0 options: UIViewAnimationOptionCurveEaseInOut  animations:^{
+        ///Move new view into frame and above old view
+        page.center = self.view.center;
+    }
+                     completion:^(BOOL finished){
+                         [page.videoPlayer play];
                      }];
 }
 
 -(ASTSetupPageView *) nextPageForPage:(ASTSetupPageView *) currentPage{
     int newIndex = currentPage.pageIndex + 1;
-    if(self.allPages.count > newIndex){
-        return self.allPages[newIndex];
-    } else {
-        return self.visiblePage;
-    }
+    return [self pageForIndex:newIndex];
 }
 
 -(ASTSetupPageView *) backPageForPage:(ASTSetupPageView *) currentPage{
     int newIndex = currentPage.pageIndex - 1;
-    if(0 <= newIndex){
-        return self.allPages[newIndex];
+    return [self pageForIndex:newIndex];
+}
+
+-(ASTSetupPageView *)pageForIndex:(NSUInteger) index{
+    if(index < self.allPages.count && index >= 0){
+        return self.allPages[index];
     } else {
         return self.visiblePage;
     }

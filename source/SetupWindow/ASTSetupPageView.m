@@ -56,7 +56,7 @@
         //Create the back button view
         UIView* leftButtonView = [[UIView alloc]initWithFrame:CGRectMake(-12, 0, 75, 50)];
         
-        self.backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.backButton = [HighlightButton buttonWithType:UIButtonTypeSystem];
         self.backButton.backgroundColor = [UIColor clearColor];
         self.backButton.frame = leftButtonView.frame;
         [self.backButton setImage:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/BackArrow.png"] forState:UIControlStateNormal];
@@ -213,7 +213,13 @@
     
     self.bigTitle.frame = CGRectMake(0, height, self.frame.size.width, 100);
     
-    self.titleDescription.frame = CGRectMake(self.frame.size.width*0.1, height + (self.bigTitle.frame.size.height / 2), self.frame.size.width*0.8, 100);
+    self.titleDescription.frame = CGRectMake(self.frame.size.width*0.1, height + (self.bigTitle.frame.size.height /1.35), self.frame.size.width*0.8, 100);
+    [self.titleDescription sizeToFit];
+    
+    // Centering after adjusting size
+    CGRect centerDescriptionFrame = self.titleDescription.frame;
+    centerDescriptionFrame = CGRectMake(centerDescriptionFrame.origin.x, centerDescriptionFrame.origin.y, self.frame.size.width*0.8, centerDescriptionFrame.size.height);
+    self.titleDescription.frame = centerDescriptionFrame;
 }
 
 #pragma mark - Utility
@@ -256,27 +262,36 @@
     if(otherText)[self.otherButton setTitle:otherText forState:UIControlStateNormal];
 }
 
--(void) setNextButtonTarget: (id) object withAction:(SEL) selector block:(ButtonBlock) block{
+-(void) setNextButtonTarget: (id) object withAction:(SEL) selector index:(NSNumber *) index block:(ButtonBlock) block{
     [self.nextButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
     if(block){
         [self.otherButton addTarget:self action:@selector(executeNextButtonBlock) forControlEvents:UIControlEventTouchUpInside];
         self.nextBlock = block;
     }
+    if(index){
+        self.nextButton.targetIndex = index;
+    }
 }
 
--(void) setOtherButtonTarget: (id) object withAction:(SEL) selector block:(ButtonBlock) block{
+-(void) setOtherButtonTarget: (id) object withAction:(SEL) selector index:(NSNumber *) index block:(ButtonBlock) block{
     [self.otherButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
     if(block){
         [self.otherButton addTarget:self action:@selector(executeOtherButtonBlock) forControlEvents:UIControlEventTouchUpInside];
         self.otherBlock = block;
     }
+    if(index){
+        self.otherButton.targetIndex = index;
+    }
 }
 
--(void) setBackButtonTarget: (id) object withAction:(SEL) selector block:(ButtonBlock)block{
+-(void) setBackButtonTarget: (id) object withAction:(SEL) selector index:(NSNumber *) index block:(ButtonBlock)block{
     [self.backButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
     if(block){
         [self.otherButton addTarget:self action:@selector(executeBackButtonBlock) forControlEvents:UIControlEventTouchUpInside];
         self.backBlock = block;
+    }
+    if(index){
+        self.backButton.targetIndex = index;
     }
 }
 

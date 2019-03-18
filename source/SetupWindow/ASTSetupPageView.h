@@ -15,7 +15,7 @@ typedef void(^ButtonBlock)();
 @property (nonatomic, retain) HighlightButton *otherButton;
 @property (nonatomic, retain) HighlightButton *nextButton;
 @property (nonatomic, retain) UINavigationBar *navBar;
-@property (nonatomic, retain) UIButton *backButton;
+@property (nonatomic, retain) HighlightButton *backButton;
 @property (nonatomic) NSUInteger pageIndex;
 @property (nonatomic, assign) ASTSetupPageStyle style;
 
@@ -25,7 +25,7 @@ typedef void(^ButtonBlock)();
 -(void) setHeaderText:(NSString *) headerText andDescription:(NSString *) desText;
 -(void) setNextButtonText:(NSString *) nextText andOtherButton:(NSString *) otherText;
 
--(void) setNextButtonTarget: (id) object withAction:(SEL) selector block:(ButtonBlock)block;
--(void) setOtherButtonTarget: (id) object withAction:(SEL) selector block:(ButtonBlock)block;
--(void) setBackButtonTarget: (id) object withAction:(SEL) selector block:(ButtonBlock)block;
+-(void) setNextButtonTarget: (id) object withAction:(SEL) selector index:(NSNumber *) index block:(ButtonBlock)block;
+-(void) setOtherButtonTarget: (id) object withAction:(SEL) selector index:(NSNumber *) index block:(ButtonBlock)block;
+-(void) setBackButtonTarget: (id) object withAction:(SEL) selector index:(NSNumber *) index block:(ButtonBlock)block;
 @end
