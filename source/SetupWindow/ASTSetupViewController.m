@@ -158,7 +158,7 @@
     for(ASTSetupPageView *page in self.allPages){
         [self.view addSubview: page];
     }
-    if(self.allPages.count >= 0) self.visiblePage = self.allPages[0];
+    if(self.allPages.count > 0) self.visiblePage = self.allPages[0];
     [self adjustForVisiblePage];
 }
 
@@ -243,7 +243,7 @@
 }
 
 -(ASTSetupPageView *)pageForIndex:(NSUInteger) index{
-    if(index < self.allPages.count && index >= 0){
+    if(index < self.allPages.count && self.allPages.count > 0){
         return self.allPages[index];
     } else {
         return self.visiblePage;
