@@ -14,7 +14,7 @@
 + (instancetype)sharedInstance {
     static AWeatherModel *sharedInstance = nil;
     static dispatch_once_t onceToken; // onceToken = 0
-    dispatch_once(&onceToken, ^{
+dispatch_once(&onceToken, ^{
         sharedInstance = [[AWeatherModel alloc] init];
     });
     return sharedInstance;
