@@ -16,6 +16,20 @@
 @property (nonatomic, retain) ASTSetupPageView *visiblePage;
 -(ASTSetupPageView *) nextPageForPage:(ASTSetupPageView *) currentPage;
 -(ASTSetupPageView *) backPageForPage:(ASTSetupPageView *) currentPage;
+
+
+@property (nonatomic, retain) ASTSetupPageView *welcomeView;
+@property (nonatomic, retain) ASTSetupPageView *lockPage;
+@property (nonatomic, retain) ASTSetupPageView *lockInfo;
+@property (nonatomic, retain) ASTSetupPageView *twelveLock;
+@property (nonatomic, retain) ASTSetupPageView *hourlyLock;
+@property (nonatomic, retain) ASTSetupPageView *animationPage;
+@property (nonatomic, retain) ASTSetupPageView *lockAnimation;
+@property (nonatomic, retain) ASTSetupPageView *homeAnimation;
+@property (nonatomic, retain) ASTSetupPageView *iconPage;
+@property (nonatomic, retain) ASTSetupPageView *basicIcon;
+@property (nonatomic, retain) ASTSetupPageView *liveIcon;
+@property (nonatomic, retain) ASTSetupPageView *statusPage;
 @end
 
 @implementation ASTSetupViewController {
@@ -34,123 +48,111 @@
 }
 
 -(void) generatePages {
-    // 0
-    ASTSetupPageView *welcomeView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleHeaderBasic];
+    self.welcomeView = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleHeaderBasic];
     NSString *welcomeDescription = @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.";
-    [welcomeView setHeaderText:@"Asteroid" andDescription: welcomeDescription];
-    [welcomeView setNextButtonText:SETUP_MANUALLY andOtherButton:nil];
-    [welcomeView setupMediaWithPathToFile:PATH_TO_BANNER];
-    welcomeView.backButton.hidden = YES;
-    [welcomeView setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
-    [self indexPage: welcomeView];
+    [self.welcomeView setHeaderText:@"Asteroid" andDescription: welcomeDescription];
+    [self.welcomeView setNextButtonText:SETUP_MANUALLY andOtherButton:nil];
+    [self.welcomeView setupMediaWithPathToFile:PATH_TO_BANNER];
+    self.welcomeView.backButton.hidden = YES;
+    [self.welcomeView setNextButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:nil completion:nil];
+    [self indexPage: self.welcomeView];
     
-    // 1
-    ASTSetupPageView *lockPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleHeaderTwoButtons];
-    [lockPage setHeaderText:@"Lockscreen" andDescription: @"Enable the Asteroid Lockscreen."];
-    [lockPage setNextButtonText:CONTINUE andOtherButton:SET_UP_LATER_IN_SETTINGS];
-    [lockPage setupMediaWithPathToFile:PATH_TO_LOCK_VID];
-    [lockPage setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
-    [lockPage setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:@5 completion:nil];
-    [lockPage setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overrideIndex:nil completion:nil];
-    [self indexPage: lockPage];
+    self.lockPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleHeaderTwoButtons];
+    [self.lockPage setHeaderText:@"Lockscreen" andDescription: @"Enable the Asteroid Lockscreen."];
+    [self.lockPage setNextButtonText:CONTINUE andOtherButton:SET_UP_LATER_IN_SETTINGS];
+    [self.lockPage setupMediaWithPathToFile:PATH_TO_LOCK_VID];
+    [self.lockPage setNextButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:nil completion:nil];
+    [self.lockPage setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:self.animationPage completion:nil];
+    [self.lockPage setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overridePage:nil completion:nil];
+    [self indexPage: self.lockPage];
     
-    //2
-    ASTSetupPageView *lockInfo = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleBasic];
-    [lockInfo setHeaderText:@"Lockscreen" andDescription: @"Long press on component to edit."];
-    [lockInfo setNextButtonText:CONTINUE andOtherButton:nil];
-    [lockInfo setupMediaWithPathToFile:PATH_TO_EDITING];
-    [lockInfo setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
-    [lockInfo setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overrideIndex:nil completion:nil];
-    [self indexPage: lockInfo];
+    self.lockInfo = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleBasic];
+    [self.lockInfo setHeaderText:@"Lockscreen" andDescription: @"Long press on component to edit."];
+    [self.lockInfo setNextButtonText:CONTINUE andOtherButton:nil];
+    [self.lockInfo setupMediaWithPathToFile:PATH_TO_EDITING];
+    [self.lockInfo setNextButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:nil completion:nil];
+    [self.lockInfo setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overridePage:nil completion:nil];
+    [self indexPage: self.lockInfo];
     
-    // 3
-    ASTSetupPageView *twelveLock = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
-    [twelveLock setHeaderText:@"Stock iOS 12 Style" andDescription: @"Stock-styled components are enabled."];
-    [twelveLock setNextButtonText:CONTINUE andOtherButton:OTHER_OPTIONS];
-    [twelveLock setupMediaWithPathToFile:PATH_TO_TWELVE_LOCK];
-    [twelveLock setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:@5 completion:nil];
-    [twelveLock setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
-    [twelveLock setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overrideIndex:nil completion:nil];
-    [self indexPage: twelveLock];
+    self.twelveLock = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
+    [self.twelveLock setHeaderText:@"Stock iOS 12 Style" andDescription: @"Stock-styled components are enabled."];
+    [self.twelveLock setNextButtonText:CONTINUE andOtherButton:OTHER_OPTIONS];
+    [self.twelveLock setupMediaWithPathToFile:PATH_TO_TWELVE_LOCK];
+    [self.twelveLock setNextButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:self.animationPage  completion:nil];
+    [self.twelveLock setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:nil completion:nil];
+    [self.twelveLock setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overridePage:nil completion:nil];
+    [self indexPage: self.twelveLock];
     
-    // 4
-    ASTSetupPageView *hourlyLock = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleBasic];
-    [hourlyLock setHeaderText:@"Hourly Style" andDescription: @"Only the hourly components are enabled."];
-    [hourlyLock setNextButtonText:CONTINUE andOtherButton:nil];
-    [hourlyLock setupMediaWithPathToFile:PATH_TO_BANNER];
-    [hourlyLock setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
-    [hourlyLock setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overrideIndex:nil completion:nil];
-    [self indexPage: hourlyLock];
+    self.hourlyLock = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleBasic];
+    [self.hourlyLock setHeaderText:@"Hourly Style" andDescription: @"Only the hourly components are enabled."];
+    [self.hourlyLock setNextButtonText:CONTINUE andOtherButton:nil];
+    [self.hourlyLock setupMediaWithPathToFile:PATH_TO_BANNER];
+    [self.hourlyLock setNextButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:nil completion:nil];
+    [self.hourlyLock setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overridePage:nil completion:nil];
+    [self indexPage: self.hourlyLock];
     
-    // 5
-    ASTSetupPageView *animationPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
-    [animationPage setHeaderText:@"Weather Animations" andDescription: @"Enable weather animations."];
-    [animationPage setNextButtonText:CONTINUE andOtherButton:SET_UP_LATER_IN_SETTINGS];
-    [animationPage setupMediaWithPathToFile:PATH_TO_IMAGE];
-    [animationPage setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
-    [animationPage setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:@8 completion:nil];
-    [animationPage setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overrideIndex:@1 completion:nil];
-    [self indexPage: animationPage];
+    self.animationPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
+    [self.animationPage setHeaderText:@"Weather Animations" andDescription: @"Enable weather animations."];
+    [self.animationPage setNextButtonText:CONTINUE andOtherButton:SET_UP_LATER_IN_SETTINGS];
+    [self.animationPage setupMediaWithPathToFile:PATH_TO_IMAGE];
+    [self.animationPage setNextButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:nil completion:nil];
+    [self.animationPage setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:self.iconPage completion:nil];
+    [self.animationPage setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overridePage:self.lockInfo completion:nil];
+    [self indexPage: self.animationPage];
     
-    // 6
-    ASTSetupPageView *lockAnimation = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
-    [lockAnimation setHeaderText:@"Lock Animations" andDescription: @"Enable weather animations on lockscreen."];
-    [lockAnimation setNextButtonText:CONTINUE andOtherButton:SKIP];
-    [lockAnimation setupMediaWithPathToFile:PATH_TO_BANNER];
-    [lockAnimation setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
-    [lockAnimation setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
-    [lockAnimation setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overrideIndex:nil completion:nil];
-    [self indexPage: lockAnimation];
+    self.lockAnimation = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
+    [self.lockAnimation setHeaderText:@"Lock Animations" andDescription: @"Enable weather animations on lockscreen."];
+    [self.lockAnimation setNextButtonText:CONTINUE andOtherButton:SKIP];
+    [self.lockAnimation setupMediaWithPathToFile:PATH_TO_BANNER];
+    [self.lockAnimation setNextButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:nil completion:nil];
+    [self.lockAnimation setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:nil completion:nil];
+    [self.lockAnimation setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overridePage:nil completion:nil];
+    [self indexPage: self.lockAnimation];
     
-    // 7
-    ASTSetupPageView *homeAnimation = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
-    [homeAnimation setHeaderText:@"Home Animations" andDescription: @"Enable weather animations on homescreen."];
-    [homeAnimation setNextButtonText:CONTINUE andOtherButton:SKIP];
-    [homeAnimation setupMediaWithPathToFile:PATH_TO_BANNER];
-    [homeAnimation setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
-    [homeAnimation setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
-    [homeAnimation setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overrideIndex:nil completion:nil];
-    [self indexPage: homeAnimation];
+    self.homeAnimation = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
+    [self.homeAnimation setHeaderText:@"Home Animations" andDescription: @"Enable weather animations on homescreen."];
+    [self.homeAnimation setNextButtonText:CONTINUE andOtherButton:SKIP];
+    [self.homeAnimation setupMediaWithPathToFile:PATH_TO_BANNER];
+    [self.homeAnimation setNextButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:nil completion:nil];
+    [self.homeAnimation setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:nil completion:nil];
+    [self.homeAnimation setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overridePage:nil completion:nil];
+    [self indexPage: self.homeAnimation];
     
-    // 8
-    ASTSetupPageView *iconPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
-    [iconPage setHeaderText:@"Weather Icon" andDescription: @"Enable live weather app icon."];
-    [iconPage setNextButtonText:CONTINUE andOtherButton:SET_UP_LATER_IN_SETTINGS];
-    [iconPage setupMediaWithPathToFile:PATH_TO_IMAGE];
-    [iconPage setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
-    [iconPage setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:@11 completion:nil];
-    [iconPage setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overrideIndex:@5 completion:nil];
-    [self indexPage: iconPage];
+    self.iconPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
+    [self.iconPage setHeaderText:@"Weather Icon" andDescription: @"Enable live weather app icon."];
+    [self.iconPage setNextButtonText:CONTINUE andOtherButton:SET_UP_LATER_IN_SETTINGS];
+    [self.iconPage setupMediaWithPathToFile:PATH_TO_IMAGE];
+    [self.iconPage setNextButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:nil completion:nil];
+    [self.iconPage setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:self.statusPage completion:nil];
+    [self.iconPage setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overridePage:self.animationPage completion:nil];
+    [self indexPage: self.iconPage];
     
-    // 9
-    ASTSetupPageView *basicIcon = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
-    [basicIcon setHeaderText:@"Basic Icon" andDescription: @"Icon and background update."];
-    [basicIcon setNextButtonText:CONTINUE andOtherButton:SKIP];
-    [basicIcon setupMediaWithPathToFile:PATH_TO_BANNER];
-    [basicIcon setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
-    [basicIcon setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:@11 completion:nil];
-    [basicIcon setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overrideIndex:nil completion:nil];
-    [self indexPage: basicIcon];
+    self.basicIcon = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
+    [self.basicIcon setHeaderText:@"Basic Icon" andDescription: @"Icon and background update."];
+    [self.basicIcon setNextButtonText:CONTINUE andOtherButton:SKIP];
+    [self.basicIcon setupMediaWithPathToFile:PATH_TO_BANNER];
+    [self.basicIcon setNextButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:nil completion:nil];
+    [self.basicIcon setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:self.statusPage completion:nil];
+    [self.basicIcon setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overridePage:nil completion:nil];
+    [self indexPage: self.basicIcon];
     
-    // 10
-    ASTSetupPageView *liveIcon = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
-    [liveIcon setHeaderText:@"Live Weather" andDescription: @"Icon background includes live weather."];
-    [liveIcon setNextButtonText:CONTINUE andOtherButton:SKIP];
-    [liveIcon setupMediaWithPathToFile:PATH_TO_BANNER];
-    [liveIcon setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
-    [liveIcon setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
-    [liveIcon setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overrideIndex:nil completion:nil];
-    [self indexPage: liveIcon];
+    self.liveIcon = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
+    [self.liveIcon setHeaderText:@"Live Weather" andDescription: @"Icon background includes live weather."];
+    [self.liveIcon setNextButtonText:CONTINUE andOtherButton:SKIP];
+    [self.liveIcon setupMediaWithPathToFile:PATH_TO_BANNER];
+    [self.liveIcon setNextButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:nil completion:nil];
+    [self.liveIcon setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:nil completion:nil];
+    [self.liveIcon setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overridePage:nil completion:nil];
+    [self indexPage: self.liveIcon];
     
-    // 11
-    ASTSetupPageView *statusPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
-    [statusPage setHeaderText:@"Status Bar" andDescription: @"Enable weather in status bar."];
-    [statusPage setNextButtonText:CONTINUE andOtherButton:SET_UP_LATER_IN_SETTINGS];
-    [statusPage setupMediaWithPathToFile:PATH_TO_IMAGE];
-    [statusPage setNextButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
-    [statusPage setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overrideIndex:nil completion:nil];
-    [statusPage setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overrideIndex:@8 completion:nil];
-    [self indexPage: statusPage];
+    self.statusPage = [[ASTSetupPageView alloc] initWithFrame: self.view.frame style:ASTSetupStyleTwoButtons];
+    [self.statusPage setHeaderText:@"Status Bar" andDescription: @"Enable weather in status bar."];
+    [self.statusPage setNextButtonText:CONTINUE andOtherButton:SET_UP_LATER_IN_SETTINGS];
+    [self.statusPage setupMediaWithPathToFile:PATH_TO_IMAGE];
+    [self.statusPage setNextButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:nil completion:nil];
+    [self.statusPage setOtherButtonTarget:self withTransition:@selector(transitionToRight:) overridePage:nil completion:nil];
+    [self.statusPage setBackButtonTarget:self withTransition:@selector(transitionToLeft:) overridePage:self.iconPage completion:nil];
+    [self indexPage: self.statusPage];
 }
 
 - (void)viewDidLoad{

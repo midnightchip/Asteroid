@@ -262,36 +262,36 @@
     if(otherText)[self.otherButton setTitle:otherText forState:UIControlStateNormal];
 }
 
--(void) setNextButtonTarget: (id) object withTransition:(SEL) selector overrideIndex:(NSNumber *) index completion:(ButtonBlock) block{
+-(void) setNextButtonTarget: (id) object withTransition:(SEL) selector overridePage:(ASTSetupPageView *) page completion:(ButtonBlock) block{
     [self.nextButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
     if(block){
         [self.otherButton addTarget:self action:@selector(executeNextButtonBlock) forControlEvents:UIControlEventTouchUpInside];
         self.nextBlock = block;
     }
-    if(index){
-        self.nextButton.targetIndex = index;
+    if(page){
+        self.nextButton.targetIndex = @(page.pageIndex);
     }
 }
 
--(void) setOtherButtonTarget: (id) object withTransition:(SEL) selector overrideIndex:(NSNumber *) index completion:(ButtonBlock) block{
+-(void) setOtherButtonTarget: (id) object withTransition:(SEL) selector overridePage:(ASTSetupPageView *) page completion:(ButtonBlock) block{
     [self.otherButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
     if(block){
         [self.otherButton addTarget:self action:@selector(executeOtherButtonBlock) forControlEvents:UIControlEventTouchUpInside];
         self.otherBlock = block;
     }
-    if(index){
-        self.otherButton.targetIndex = index;
+    if(page){
+        self.otherButton.targetIndex = @(page.pageIndex);
     }
 }
 
--(void) setBackButtonTarget: (id) object withTransition:(SEL) selector overrideIndex:(NSNumber *) index completion:(ButtonBlock)block{
+-(void) setBackButtonTarget: (id) object withTransition:(SEL) selector overridePage:(ASTSetupPageView *) page completion:(ButtonBlock)block{
     [self.backButton addTarget:object action:selector forControlEvents:UIControlEventTouchUpInside];
     if(block){
         [self.otherButton addTarget:self action:@selector(executeBackButtonBlock) forControlEvents:UIControlEventTouchUpInside];
         self.backBlock = block;
     }
-    if(index){
-        self.backButton.targetIndex = index;
+    if(page){
+        self.backButton.targetIndex = @(page.pageIndex);
     }
 }
 
