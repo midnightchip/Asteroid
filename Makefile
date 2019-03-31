@@ -18,7 +18,7 @@ Asteroid_LDFLAGS += -lCSPreferencesProvider
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
-#SUBPROJECTS += preferences
+SUBPROJECTS += preferences
 SUBPROJECTS += asteroidlockscreen
 SUBPROJECTS += asteroidstatusbar
 SUBPROJECTS += defaultweather
