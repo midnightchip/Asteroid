@@ -10,7 +10,6 @@ typedef void(^completion)();
 
 @interface AWeatherModel : NSObject
 @property (nonatomic, retain) WeatherPreferences *weatherPreferences;
-@property (nonatomic, retain) WFLocation *geoLocation;
 @property (nonatomic, retain) WATodayAutoupdatingLocationModel *locationProviderModel;
 @property (nonatomic, retain) WATodayAutoupdatingLocationModel *todayModel;
 @property (nonatomic, retain) WAForecastModel *forecastModel;
