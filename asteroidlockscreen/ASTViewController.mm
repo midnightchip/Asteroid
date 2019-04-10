@@ -42,6 +42,7 @@
 @property (nonatomic, retain) AWeatherModel *weatherModel;
 @property (nonatomic, getter=isEditing) BOOL editing;
 @property (nonatomic, retain) UIView *doneButtonView;
+@property (nonatomic, assign) UIDeviceOrientation previousRotation;
 
 @property (nonatomic, retain) ASTGestureHandler *gestureHandler;
 
@@ -237,46 +238,43 @@
 }
 
 - (void) orientationChanged:(NSNotification *)note {
-    /*UIApplication * application = note.object;
+    UIApplication * application = note.object;
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;
     
-    //NSArray *gestureViews = [self arrayOfGestureViews];
-    CGRect adjustedBounds;
-    
-    switch(application.statusBarOrientation){
-        case UIDeviceOrientationPortrait:
-            self.view.backgroundColor = [UIColor blueColor];
-            break;
-            
-        case UIDeviceOrientationLandscapeLeft:
-            self.view.backgroundColor = [UIColor redColor];
-            
-            for(UIView *view in gestureViews){
-                CGFloat ratioHeight = view.center.y / screenHeight;
-                CGFloat ratioWidth = view.center.x / screenWidth;
-                CGFloat adjustedY = ratioHeight * screenWidth;
-                CGFloat adjustedX = ratioWidth * screenHeight;
-                
-                CGPoint adjustedCenter;
-                adjustedCenter.y = adjustedY;
-                adjustedCenter.x = adjustedX;
-                view.center = adjustedCenter;
+    if(application.statusBarOrientation == UIDeviceOrientationPortrait){
+        if(self.previousRotation == UIDeviceOrientationLandscapeLeft || self.previousRotation == UIDeviceOrientationLandscapeRight || !self.previousRotation){
+            for(UIView *view in [self arrayOfGestureViews]){
+                CGRect adjustedFrame = view.frame;
+                adjustedFrame.origin.x = ((view.frame.origin.x + (view.frame.size.width / 2)) / screenHeight) * screenWidth - (view.frame.size.width / 2);
+                adjustedFrame.origin.y = ((view.frame.origin.y + (view.frame.size.height / 2)) / screenWidth) * screenHeight - (view.frame.size.height / 2);
+                view.frame = adjustedFrame;
             }
-            adjustedBounds = self.view.bounds;
-            adjustedBounds.origin.x = adjustedBounds.origin.x - (screenHeight - screenWidth);
-            adjustedBounds.origin.y = adjustedBounds.origin.y - (screenWidth - screenHeight);
-            self.view.bounds = adjustedBounds;
-            break;
+            self.previousRotation = UIDeviceOrientationPortrait;
+        }
         
-        case UIDeviceOrientationLandscapeRight:
-            self.view.backgroundColor = [UIColor greenColor];
-            break;
-            
-        default:
-            break;
-    };*/
+    } else if(application.statusBarOrientation == UIDeviceOrientationLandscapeLeft){
+        if(self.previousRotation == UIDeviceOrientationPortrait || !self.previousRotation){
+            for(UIView *view in [self arrayOfGestureViews]){
+                CGRect adjustedFrame = view.frame;
+                adjustedFrame.origin.x = ((view.frame.origin.x + (view.frame.size.width / 2)) / screenWidth) * screenHeight - (view.frame.size.width / 2);
+                adjustedFrame.origin.y = ((view.frame.origin.y + (view.frame.size.height / 2)) / screenHeight) * screenWidth - (view.frame.size.height / 2);
+                view.frame = adjustedFrame;
+            }
+            self.previousRotation = UIDeviceOrientationLandscapeLeft;
+        }
+    } else if(application.statusBarOrientation == UIDeviceOrientationLandscapeRight){
+        if(self.previousRotation == UIDeviceOrientationPortrait || !self.previousRotation){
+            for(UIView *view in [self arrayOfGestureViews]){
+                CGRect adjustedFrame = view.frame;
+                adjustedFrame.origin.x = ((view.frame.origin.x + (view.frame.size.width / 2)) / screenWidth) * screenHeight - (view.frame.size.width / 2);
+                adjustedFrame.origin.y = ((view.frame.origin.y + (view.frame.size.height / 2)) / screenHeight) * screenWidth - (view.frame.size.height / 2);
+                view.frame = adjustedFrame;
+            }
+            self.previousRotation = UIDeviceOrientationLandscapeRight;
+        }
+    }
 }
 
 #pragma mark - Weather Setup
