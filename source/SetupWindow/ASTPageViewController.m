@@ -9,42 +9,69 @@
 
 - (instancetype)init{
     if(self = [super init]) {
-        self.styleSettings = [[ASTPageViewSettings alloc] init];
+        
     }
     return self;
 }
--(void) viewDidLoad{
-    [self.view setBackgroundColor: [UIColor whiteColor]];
-    [self.view setUserInteractionEnabled:TRUE];
+
+- (void)viewDidLoad {
     
-    //Create navigation bar
-    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 50)];
-    //Make navigation bar background transparent
-    [self.navBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-    self.navBar.shadowImage = [UIImage new];
-    self.navBar.translucent = YES;
-    UINavigationItem *navItem = [[UINavigationItem alloc] init];
+    [super viewDidLoad];
     
-    //Create the back button view
-    UIView* leftButtonView = [[UIView alloc]initWithFrame:CGRectMake(-12, 0, 75, 50)];
+    self.astPageSources = @[@{@"astStyle":@(ASTSetupStyleTwoButtons)}];
     
-    self.backButton = [HighlightButton buttonWithType:UIButtonTypeSystem];
-    self.backButton.backgroundColor = [UIColor clearColor];
-    self.backButton.frame = leftButtonView.frame;
-    [self.backButton setImage:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/BackArrow.png"] forState:UIControlStateNormal];
-    [self.backButton setTitle:BACK forState:UIControlStateNormal];
-    self.backButton.tintColor = [UIColor colorWithRed:10 / 255.0 green:106 / 255.0 blue:255 / 255.0 alpha:1.0];
-    self.backButton.autoresizesSubviews = YES;
-    self.backButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
-    self.backButton.titleLabel.font = [UIFont systemFontOfSize:18];
-    [leftButtonView addSubview:self.backButton];
+    self.pageController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
     
-    //Add back button to navigation bar
-    UIBarButtonItem* leftBarButton = [[UIBarButtonItem alloc]initWithCustomView:leftButtonView];
-    navItem.leftBarButtonItem = leftBarButton;
+    [[self.pageController view] setFrame:[[self view] bounds]];
     
-    self.navBar.items = @[ navItem ];
-    [self.view addSubview:self.navBar];
-    [self.view bringSubviewToFront:self.navBar];
+    ASTChildViewController *initialViewController = [self viewControllerAtIndex:0];
+    initialViewController.delegate = self;
+    
+    NSArray *viewControllers = [NSArray arrayWithObject:initialViewController];
+    
+    [self.pageController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+    
+    [self addChildViewController:self.pageController];
+    [[self view] addSubview:[self.pageController view]];
+    [self.pageController didMoveToParentViewController:self];
+}
+
+- (void)changePage:(UIPageViewControllerNavigationDirection)direction {
+    NSUInteger pageIndex = ((ASTChildViewController *) [self.pageController.viewControllers objectAtIndex:0]).index;
+    if (direction == UIPageViewControllerNavigationDirectionForward){
+        pageIndex++;
+    }else {
+        pageIndex--;
+    }
+    if(pageIndex >= self.astPageSources.count){
+        for(ASTChildViewController *page in self.pageController.viewControllers){
+            [page.videoPlayer pause];
+        }
+        [UIView animateWithDuration:0.5 delay:0 options: UIViewAnimationOptionCurveEaseInOut  animations:^{
+            self.view.center = CGPointMake(self.view.center.x, - (2 * self.view.frame.size.height));
+        } completion:^(BOOL finished){
+            self.view.superview.hidden = YES;
+            self.view.center = self.view.superview.center;
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"astEnableLock"
+             object:self];
+            //[self startRespring]; // MAKE SURE TO ENABLE THIS WHEN DONE MAKING!!!!!!!!!!!!!!!!!
+        }];
+        return;
+    }
+    
+    ASTChildViewController *viewController = [self  viewControllerAtIndex:pageIndex];
+    if (viewController == nil) {
+        return;
+    }
+    [self.pageController setViewControllers:@[viewController] direction:direction animated:YES completion:nil];
+}
+
+- (ASTChildViewController *)viewControllerAtIndex:(NSUInteger)index {
+    ASTChildViewController *childViewController = [[ASTChildViewController alloc] initWithSource:self.astPageSources[0]];
+    childViewController.index = index;
+    childViewController.delegate = self;
+    
+    return childViewController;
 }
 @end

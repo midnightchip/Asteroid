@@ -1,6 +1,6 @@
 typedef NS_ENUM(NSUInteger, ASTSetupPageStyle) {
-    ASTSetupStyleBasic,
-    ASTSetupStyleTwoButtons,
-    ASTSetupStyleHeaderBasic,
-    ASTSetupStyleHeaderTwoButtons
+    ASTSetupStyleBasic = 0,
+    ASTSetupStyleTwoButtons = 1,
+    ASTSetupStyleHeaderBasic = 2,
+    ASTSetupStyleHeaderTwoButtons = 3
 };

@@ -538,6 +538,7 @@
             
             [menuController setMenuVisible:YES animated:YES];
         } else if(!self.isEditing && [prefs boolForKey:@"enableEditingMode"]){
+            // Only edit in portrait so values match up right.
             if([UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationPortrait || [UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationPortraitUpsideDown){
                 self.editing = YES;
                 [[NSNotificationCenter defaultCenter]

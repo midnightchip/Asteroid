@@ -1,7 +1,7 @@
 #import "ASTSetupViewController.h"
-#import "ASTPageManager.h"
+#import "ASTPageViewController.h"
 
 @interface ASTSetupWindow : UIWindow
 @property (nonatomic, retain) ASTSetupViewController *setupViewController;
-@property (nonatomic, retain) ASTPageManager *pageManager;
+@property (nonatomic, retain) ASTPageViewController *pageManager;
 @end
