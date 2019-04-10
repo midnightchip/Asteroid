@@ -538,11 +538,24 @@
             
             [menuController setMenuVisible:YES animated:YES];
         } else if(!self.isEditing && [prefs boolForKey:@"enableEditingMode"]){
-            self.editing = YES;
-            [[NSNotificationCenter defaultCenter]
-             postNotificationName:@"astDisableLock"
-             object:self];
-            [self addASTGesturesAndRevealButton];
+            if([UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationPortrait || [UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationPortraitUpsideDown){
+                self.editing = YES;
+                [[NSNotificationCenter defaultCenter]
+                 postNotificationName:@"astDisableLock"
+                 object:self];
+                [self addASTGesturesAndRevealButton];
+            } else {
+                UIAlertController * alert = [UIAlertController
+                                             alertControllerWithTitle:@"Asteroid"
+                                             message:@"Please rotate to portrait before editing."
+                                             preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction* okButton = [UIAlertAction
+                                           actionWithTitle:@"Ok"
+                                           style:UIAlertActionStyleDefault
+                                           handler:nil];
+                [alert addAction:okButton];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
         }
     }
 }
