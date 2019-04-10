@@ -241,30 +241,28 @@
     UIApplication *application = note.object;
     CGRect screenRect = [application keyWindow].bounds;
     if(application.statusBarOrientation == UIDeviceOrientationPortrait){
-        if(self.previousRotation == UIDeviceOrientationLandscapeLeft || self.previousRotation == UIDeviceOrientationLandscapeRight || !self.previousRotation){
+        if(self.previousRotation != UIDeviceOrientationPortrait || self.previousRotation != UIDeviceOrientationPortraitUpsideDown){
             for(UIView *view in [self arrayOfGestureViews]){
                 view.frame = [self rotateFrame:view.frame withContext:screenRect];
             }
             self.previousRotation = UIDeviceOrientationPortrait;
         }
-        
     } else if(application.statusBarOrientation == UIDeviceOrientationPortraitUpsideDown){
-        if(self.previousRotation == UIDeviceOrientationLandscapeLeft || self.previousRotation == UIDeviceOrientationLandscapeRight || !self.previousRotation){
+        if(self.previousRotation != UIDeviceOrientationPortrait || self.previousRotation != UIDeviceOrientationPortraitUpsideDown){
             for(UIView *view in [self arrayOfGestureViews]){
                 view.frame = [self rotateFrame:view.frame withContext:screenRect];
             }
-            self.previousRotation = UIDeviceOrientationPortrait;
+            self.previousRotation = UIDeviceOrientationPortraitUpsideDown;
         }
-        
     } else if(application.statusBarOrientation == UIDeviceOrientationLandscapeLeft){
-        if(self.previousRotation == UIDeviceOrientationPortrait || !self.previousRotation){
+        if(self.previousRotation != UIDeviceOrientationLandscapeLeft || self.previousRotation != UIDeviceOrientationLandscapeRight){
             for(UIView *view in [self arrayOfGestureViews]){
                 view.frame = [self rotateFrame:view.frame withContext:screenRect];
             }
             self.previousRotation = UIDeviceOrientationLandscapeLeft;
         }
     } else if(application.statusBarOrientation == UIDeviceOrientationLandscapeRight){
-        if(self.previousRotation == UIDeviceOrientationPortrait || !self.previousRotation){
+        if(self.previousRotation != UIDeviceOrientationLandscapeLeft || self.previousRotation != UIDeviceOrientationLandscapeRight){
             for(UIView *view in [self arrayOfGestureViews]){
                 view.frame = [self rotateFrame:view.frame withContext:screenRect];
             }
