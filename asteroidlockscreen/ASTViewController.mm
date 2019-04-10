@@ -129,7 +129,7 @@
     self.forecastCont.view.frame = CGRectMake(0, 0, self.forecastComponentView.frame.size.width, self.forecastComponentView.frame.size.height);
     [self.forecastComponentView addSubview:self.forecastCont.view];
     [self.forecastGestureView addSubview: self.forecastComponentView];
-    if([prefs boolForKey:@"enableForeHeader"] && [prefs boolForKey:@"enableForeTable"]){
+    if([prefs boolForKey:@"enableForeHeader"] || [prefs boolForKey:@"enableForeTable"]){
         [self.view addSubview: self.forecastGestureView];
     }
     

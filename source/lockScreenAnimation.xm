@@ -50,9 +50,11 @@ void loadWeatherAnimation(City *city){
 		    weatherAnimation = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
 				weatherAnimation.clipsToBounds = YES;
 			WUIWeatherConditionBackgroundView *referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-            if([prefs boolForKey:@"hideWeatherBackground"]){
+            if([prefs intForKey:@"hideWeatherBackground"] == 1){
                 referenceView.background.hidesBackground = YES;
                 referenceView.background.condition.hidesConditionBackground = YES;
+            } else if([prefs intForKey:@"hideWeatherBackground"] == 2){
+                referenceView.hidesConditions = YES;
             }
 
 			dynamicBG = [referenceView background];

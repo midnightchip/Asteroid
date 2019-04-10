@@ -71,7 +71,6 @@ static WUIWeatherCondition* condition = nil;
     [self.referenceView.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:-4].active = YES;
     [self.referenceView.topAnchor constraintEqualToAnchor:self.topAnchor constant:4].active = YES;
     [self.referenceView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4].active = YES;
-    NSLog(@"lock_TWEAK | end of reference: %f", self.referenceView.background.gradientLayer.bounds.size.height);
     
     self.gradientView = [[UIView alloc] initWithFrame:self.frame];
     self.gradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -129,7 +128,6 @@ static WUIWeatherCondition* condition = nil;
                 self.referenceView.hidden = NO;
                 [[self.referenceView.background condition] resume];
             }
-            NSLog(@"lock_TWEAK | right after setting condition: %f", self.referenceView.background.gradientLayer.bounds.size.height);
         } else {
             self.referenceView.backgroundColor = [UIColor grayColor];
         }
