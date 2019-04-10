@@ -238,18 +238,20 @@
 }
 
 - (void) orientationChanged:(NSNotification *)note {
-    UIApplication * application = note.object;
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenRect.size.width;
-    CGFloat screenHeight = screenRect.size.height;
-    
+    UIApplication *application = note.object;
+    CGRect screenRect = [application keyWindow].bounds;
     if(application.statusBarOrientation == UIDeviceOrientationPortrait){
         if(self.previousRotation == UIDeviceOrientationLandscapeLeft || self.previousRotation == UIDeviceOrientationLandscapeRight || !self.previousRotation){
             for(UIView *view in [self arrayOfGestureViews]){
-                CGRect adjustedFrame = view.frame;
-                adjustedFrame.origin.x = ((view.frame.origin.x + (view.frame.size.width / 2)) / screenHeight) * screenWidth - (view.frame.size.width / 2);
-                adjustedFrame.origin.y = ((view.frame.origin.y + (view.frame.size.height / 2)) / screenWidth) * screenHeight - (view.frame.size.height / 2);
-                view.frame = adjustedFrame;
+                view.frame = [self rotateFrame:view.frame withContext:screenRect];
+            }
+            self.previousRotation = UIDeviceOrientationPortrait;
+        }
+        
+    } else if(application.statusBarOrientation == UIDeviceOrientationPortraitUpsideDown){
+        if(self.previousRotation == UIDeviceOrientationLandscapeLeft || self.previousRotation == UIDeviceOrientationLandscapeRight || !self.previousRotation){
+            for(UIView *view in [self arrayOfGestureViews]){
+                view.frame = [self rotateFrame:view.frame withContext:screenRect];
             }
             self.previousRotation = UIDeviceOrientationPortrait;
         }
@@ -257,24 +259,25 @@
     } else if(application.statusBarOrientation == UIDeviceOrientationLandscapeLeft){
         if(self.previousRotation == UIDeviceOrientationPortrait || !self.previousRotation){
             for(UIView *view in [self arrayOfGestureViews]){
-                CGRect adjustedFrame = view.frame;
-                adjustedFrame.origin.x = ((view.frame.origin.x + (view.frame.size.width / 2)) / screenWidth) * screenHeight - (view.frame.size.width / 2);
-                adjustedFrame.origin.y = ((view.frame.origin.y + (view.frame.size.height / 2)) / screenHeight) * screenWidth - (view.frame.size.height / 2);
-                view.frame = adjustedFrame;
+                view.frame = [self rotateFrame:view.frame withContext:screenRect];
             }
             self.previousRotation = UIDeviceOrientationLandscapeLeft;
         }
     } else if(application.statusBarOrientation == UIDeviceOrientationLandscapeRight){
         if(self.previousRotation == UIDeviceOrientationPortrait || !self.previousRotation){
             for(UIView *view in [self arrayOfGestureViews]){
-                CGRect adjustedFrame = view.frame;
-                adjustedFrame.origin.x = ((view.frame.origin.x + (view.frame.size.width / 2)) / screenWidth) * screenHeight - (view.frame.size.width / 2);
-                adjustedFrame.origin.y = ((view.frame.origin.y + (view.frame.size.height / 2)) / screenHeight) * screenWidth - (view.frame.size.height / 2);
-                view.frame = adjustedFrame;
+                view.frame = [self rotateFrame:view.frame withContext:screenRect];
             }
             self.previousRotation = UIDeviceOrientationLandscapeRight;
         }
     }
+}
+
+-(CGRect) rotateFrame:(CGRect) frame withContext:(CGRect) context {
+    CGRect adjustedFrame = frame;
+    adjustedFrame.origin.x = ((frame.origin.x + (frame.size.width / 2)) / context.size.height) * context.size.width - (frame.size.width / 2);
+    adjustedFrame.origin.y = ((frame.origin.y + (frame.size.height / 2)) / context.size.width) * context.size.height - (frame.size.height / 2);
+    return adjustedFrame;
 }
 
 #pragma mark - Weather Setup
