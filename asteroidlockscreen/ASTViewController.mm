@@ -68,6 +68,10 @@
          addObserver:self selector:@selector(orientationChanged:)
          name:@"UIApplicationDidChangeStatusBarOrientationNotification"
          object: [UIApplication sharedApplication]];
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self selector:@selector(orientationWillChange:)
+         name:@"UIApplicationWillChangeStatusBarOrientationNotification"
+         object: [UIApplication sharedApplication]];
     }
     return self;
 }
@@ -236,37 +240,37 @@
         view.editing = edit;
     }
 }
+-(void) orientationWillChange:(NSNotification *)note {
+    UIApplication *application = note.object;
+    self.previousRotation = application.statusBarOrientation;
+}
 
 - (void) orientationChanged:(NSNotification *)note {
     UIApplication *application = note.object;
     CGRect screenRect = [application keyWindow].bounds;
     if(application.statusBarOrientation == UIDeviceOrientationPortrait){
-        if(self.previousRotation != UIDeviceOrientationPortrait && self.previousRotation != UIDeviceOrientationPortraitUpsideDown){
+        if(self.previousRotation == UIDeviceOrientationLandscapeLeft || self.previousRotation == UIDeviceOrientationLandscapeRight){
             for(UIView *view in [self arrayOfGestureViews]){
                 view.frame = [self rotateFrame:view.frame withContext:screenRect];
             }
-            self.previousRotation = UIDeviceOrientationPortrait;
         }
     } else if(application.statusBarOrientation == UIDeviceOrientationPortraitUpsideDown){
-        if(self.previousRotation != UIDeviceOrientationPortrait && self.previousRotation != UIDeviceOrientationPortraitUpsideDown){
+        if(self.previousRotation == UIDeviceOrientationLandscapeLeft || self.previousRotation == UIDeviceOrientationLandscapeRight){
             for(UIView *view in [self arrayOfGestureViews]){
                 view.frame = [self rotateFrame:view.frame withContext:screenRect];
             }
-            self.previousRotation = UIDeviceOrientationPortraitUpsideDown;
         }
     } else if(application.statusBarOrientation == UIDeviceOrientationLandscapeLeft){
-        if(self.previousRotation != UIDeviceOrientationLandscapeLeft && self.previousRotation != UIDeviceOrientationLandscapeRight){
+        if(self.previousRotation == UIDeviceOrientationPortrait || self.previousRotation == UIDeviceOrientationLandscapeRight){
             for(UIView *view in [self arrayOfGestureViews]){
                 view.frame = [self rotateFrame:view.frame withContext:screenRect];
             }
-            self.previousRotation = UIDeviceOrientationLandscapeLeft;
         }
     } else if(application.statusBarOrientation == UIDeviceOrientationLandscapeRight){
-        if(self.previousRotation != UIDeviceOrientationLandscapeLeft && self.previousRotation != UIDeviceOrientationLandscapeRight){
+        if(self.previousRotation == UIDeviceOrientationPortrait || self.previousRotation == UIDeviceOrientationLandscapeRight){
             for(UIView *view in [self arrayOfGestureViews]){
                 view.frame = [self rotateFrame:view.frame withContext:screenRect];
             }
-            self.previousRotation = UIDeviceOrientationLandscapeRight;
         }
     }
 }
