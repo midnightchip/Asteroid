@@ -22,7 +22,7 @@
 - (instancetype)initWithSource:(NSDictionary *) aSource{
     if(self = [super init]) {
         self.source = aSource;
-        self.style = [[self.source objectForKey:@"astStyle"] intValue];
+        self.style = [[self.source objectForKey:@"style"] intValue];
     }
     return self;
 }
@@ -240,9 +240,19 @@
 }
 
 -(void) registerForSettings{
+    self.bigTitle.text = self.source[@"title"];
+    self.titleDescription.text = self.source[@"description"];
     
+    [self.nextButton setTitle: self.source[@"primaryLabel"] forState:UIControlStateNormal];
+    [self.otherButton setTitle: self.source[@"secondaryLabel"] forState:UIControlStateNormal];
     
-    // read the dict
+    [self setupMediaWithPathToFile:self.source[@"mediaPath"]];
+    
+    self.key = self.source[@"prefKey"];
+    
+    if(self.source[@"disableBack"]){
+        self.backButton.hidden = YES;
+    }
 }
 
 -(void) setupMediaWithPathToFile:(NSString *) pathToFile{
@@ -276,10 +286,18 @@
     if(delegateRespondsTo.changePage){
         [self.delegate changePage: UIPageViewControllerNavigationDirectionForward];
     }
+    NSString *key = self.source[@"key"];
+    if(key){
+        [prefs setObject:@(YES) forKey:key];
+    }
 }
 -(void) backButtonPressed{
     if(delegateRespondsTo.changePage){
         [self.delegate changePage: UIPageViewControllerNavigationDirectionReverse];
+    }
+    NSString *key = self.source[@"key"];
+    if(key){
+        [prefs setObject:@(NO) forKey:key];
     }
 }
 

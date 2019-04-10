@@ -1,4 +1,5 @@
 #import <UIKit/UIKit.h>
+#import <spawn.h>
 #import "ASTChildViewController.h"
 #import "ASTSourceDelegate.h"
 
