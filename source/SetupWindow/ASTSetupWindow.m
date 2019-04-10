@@ -10,13 +10,9 @@
     if(self = [super initWithFrame:frame]) {
         self.pageManager = [[ASTPageViewController alloc] init];
         [self addSubview: self.pageManager.view];
-        
-        
-        self.setupViewController = [[ASTSetupViewController alloc] init];
         self.backgroundColor = [UIColor clearColor];
-        self.windowLevel = 1070; // This needs to be worked on. 1070
+        self.windowLevel = 1070; // This overlaps status bar. 1070
         [self _setSecure:YES];
-        //[self addSubview: self.setupViewController.view];
     }
     return self;
 }

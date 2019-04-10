@@ -1,5 +1,7 @@
 #import "ASTPageViewController.h"
 
+#define PATH_TO_BANNER @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Asteroid.png"
+
 @interface ASTPageViewController ()
 @end
 
@@ -15,13 +17,14 @@
 }
 
 -(void) generatePageSource{
-    NSDictionary *page1 = @{@"style": @(ASTSetupStyleTwoButtons),
-                            @"title": @"Temp Title",
-                            @"description": @"Description",
-                            @"primaryLabel": @"cool",
-                            @"secondaryLabel": @"nice",
-                            @"mediaPath": @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/twelveLock.png",
-                            @"prefKey": @"key",
+    NSDictionary *page1 = @{@"style": @(ASTSetupStyleHeaderBasic),
+                            @"title": @"Asteroid",
+                            @"description": @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.",
+                            @"primaryButton": SETUP_MANUALLY,
+                            //@"secondaryButton": nil,
+                            @"mediaPath": PATH_TO_BANNER,
+                            @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
+                            //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
                             @"disableBack": @(YES)
                             };
     

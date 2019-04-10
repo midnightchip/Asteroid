@@ -5,7 +5,6 @@
 #import "LocalizedSetupStrings.h"
 
 #import "ASTSourceDelegate.h"
-#import "../source/LWPProvider.h"
 
 @interface ASTChildViewController : UIViewController
 @property (nonatomic, retain) UILabel *bigTitle;
@@ -22,7 +21,6 @@
 @property (nonatomic, assign) NSInteger index;
 @property (nonatomic, weak) id <ASTSourceDelegate> delegate;
 @property (nonatomic, retain) NSDictionary *source;
-@property (nonatomic, retain) NSString *key;
 
 - (instancetype)initWithSource:(NSDictionary *) source;
 @end

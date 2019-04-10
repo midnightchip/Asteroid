@@ -1,5 +1,7 @@
 #import "ASTChildViewController.h"
 
+typedef void(^block)();
+
 @interface ASTChildViewController ()
 @end
 
@@ -243,12 +245,10 @@
     self.bigTitle.text = self.source[@"title"];
     self.titleDescription.text = self.source[@"description"];
     
-    [self.nextButton setTitle: self.source[@"primaryLabel"] forState:UIControlStateNormal];
-    [self.otherButton setTitle: self.source[@"secondaryLabel"] forState:UIControlStateNormal];
+    [self.nextButton setTitle: self.source[@"primaryButton"] forState:UIControlStateNormal];
+    [self.otherButton setTitle: self.source[@"secondaryButton"] forState:UIControlStateNormal];
     
     [self setupMediaWithPathToFile:self.source[@"mediaPath"]];
-    
-    self.key = self.source[@"prefKey"];
     
     if(self.source[@"disableBack"]){
         self.backButton.hidden = YES;
@@ -286,19 +286,15 @@
     if(delegateRespondsTo.changePage){
         [self.delegate changePage: UIPageViewControllerNavigationDirectionForward];
     }
-    NSString *key = self.source[@"key"];
-    if(key){
-        [prefs setObject:@(YES) forKey:key];
-    }
+    block primary = self.source[@"primaryBlock"];
+    if(primary) primary();
 }
 -(void) backButtonPressed{
     if(delegateRespondsTo.changePage){
         [self.delegate changePage: UIPageViewControllerNavigationDirectionReverse];
     }
-    NSString *key = self.source[@"key"];
-    if(key){
-        [prefs setObject:@(NO) forKey:key];
-    }
+    block second = self.source[@"secondaryBlock"];
+    if(second) second();
 }
 
 - (void)playerItemDidReachEnd:(NSNotification *)notification {
