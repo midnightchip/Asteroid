@@ -128,3 +128,7 @@
 @interface SBMediaController
 -(BOOL) isPlaying;
 @end
+
+@interface SBDashBoardComponent
+@property (nonatomic, assign) CGPoint offset;
+@end
