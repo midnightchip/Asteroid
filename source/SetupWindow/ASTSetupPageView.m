@@ -1,3 +1,9 @@
+/*
+ ======OUTDATED=====
+ Will remove after transfering anything useful.
+ */
+
+
 #import "ASTSetupPageView.h"
 
 @interface ASTSetupPageView ()

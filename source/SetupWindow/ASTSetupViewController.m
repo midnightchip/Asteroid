@@ -1,3 +1,8 @@
+/*
+ ======OUTDATED=====
+ Will remove after transfering anything useful.
+ */
+
 #import "ASTSetupViewController.h"
 
 #define PATH_TO_SNOW @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Snow.mov"

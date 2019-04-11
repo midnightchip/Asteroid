@@ -1,3 +1,8 @@
+/*
+ ======OUTDATED=====
+ Will remove after transfering anything useful.
+ */
+
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 #import "HighlightButton.h"

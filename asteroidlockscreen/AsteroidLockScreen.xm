@@ -16,10 +16,6 @@ static BOOL isWeatherLocked = NO;
 %property (nonatomic, retain) ASTViewController *gestureViewController;
 
 - (void)layoutSubviews {
-    SBDashBoardMainPageContentViewController *contentCont = [self _viewControllerForAncestor];
-    SBDashBoardComponent *component = MSHookIvar<SBDashBoardComponent *>(contentCont.combinedListViewController, "_dateViewComponent");
-    
-    NSLog(@"lock_TWEAK | %f", component.offset.y);
     %orig;
     // This is basically an init lol
     if(!self.weather){

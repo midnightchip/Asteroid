@@ -27,8 +27,18 @@
                             //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
                             @"disableBack": @(YES)
                             };
+    NSDictionary *page2 = @{@"style": @(ASTSetupStyleHeaderBasic),
+                            @"title": @"Cool",
+                            @"description": @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.",
+                            @"primaryButton": SETUP_MANUALLY,
+                            //@"secondaryButton": nil,
+                            @"mediaPath": PATH_TO_BANNER,
+                            @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
+                            //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
+                            @"disableBack": @(NO)
+                            };
     
-    self.astPageSources = @[page1];
+    self.astPageSources = @[page1, page2];
 }
 
 - (void)viewDidLoad {
@@ -85,7 +95,7 @@
 }
 
 - (ASTChildViewController *)viewControllerAtIndex:(NSUInteger)index {
-    ASTChildViewController *childViewController = [[ASTChildViewController alloc] initWithSource:self.astPageSources[0]];
+    ASTChildViewController *childViewController = [[ASTChildViewController alloc] initWithSource:self.astPageSources[index]];
     childViewController.index = index;
     childViewController.delegate = self;
     

@@ -250,7 +250,7 @@ typedef void(^block)();
     
     [self setupMediaWithPathToFile:self.source[@"mediaPath"]];
     
-    if(self.source[@"disableBack"]){
+    if([self.source[@"disableBack"] boolValue]){
         self.backButton.hidden = YES;
     }
 }
