@@ -248,10 +248,15 @@
 - (void) orientationChanged:(NSNotification *)note {
     UIApplication *application = note.object;
     CGRect screenRect = [application keyWindow].bounds;
+    NSLog(@"lock_TWEAK | %ld", (long) application.statusBarOrientation);
     if(application.statusBarOrientation == UIDeviceOrientationPortrait){
         if(self.previousRotation == UIDeviceOrientationLandscapeLeft || self.previousRotation == UIDeviceOrientationLandscapeRight){
             for(UIView *view in [self arrayOfGestureViews]){
                 view.frame = [self rotateFrame:view.frame withContext:screenRect];
+                if(view.frame.origin.x >= screenRect.size.width){
+                    [self readingValuesFromFile];
+                    break;
+                }
             }
         }
     } else if(application.statusBarOrientation == UIDeviceOrientationPortraitUpsideDown){
