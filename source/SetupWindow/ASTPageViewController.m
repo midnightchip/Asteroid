@@ -18,7 +18,7 @@
 
 -(void) generatePageSource{
     NSDictionary *page1 = @{@"style": @(ASTSetupStyleHeaderBasic),
-                            @"title": @"Asteroid",
+                            @"title": @"Asteroidfkfljsadfjlsadl;fhsad;lfsjfa;fsafas;fksa",
                             @"description": @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.",
                             @"primaryButton": SETUP_MANUALLY,
                             //@"secondaryButton": nil,
@@ -27,12 +27,12 @@
                             //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
                             @"disableBack": @(YES)
                             };
-    NSDictionary *page2 = @{@"style": @(ASTSetupStyleHeaderBasic),
+    NSDictionary *page2 = @{@"style": @(ASTSetupStyleHeaderTwoButtons),
                             @"title": @"Cool",
                             @"description": @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.",
                             @"primaryButton": SETUP_MANUALLY,
-                            //@"secondaryButton": nil,
-                            @"mediaPath": PATH_TO_BANNER,
+                            @"secondaryButton": @"Second",
+                            @"mediaPath": @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Hor.MP4",
                             @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
                             //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
                             @"disableBack": @(NO)
