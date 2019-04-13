@@ -57,6 +57,7 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
         [self.referenceView removeFromSuperview];
         
         self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
+        [self.referenceView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
         if([prefs intForKey:@"hideWeatherBackground"] == 1){
             self.referenceView.background.hidesBackground = YES;
             self.referenceView.background.condition.hidesConditionBackground = YES;

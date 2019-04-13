@@ -48,6 +48,7 @@ void loadWeatherAnimation(City *city){
 	    if(city){
             NSLog(@"lock_TWEAK | setup");
 		    weatherAnimation = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+            [weatherAnimation setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
 				weatherAnimation.clipsToBounds = YES;
 			WUIWeatherConditionBackgroundView *referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
             if([prefs intForKey:@"hideWeatherBackground"] == 1){

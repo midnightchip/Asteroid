@@ -252,7 +252,7 @@
         if(self.previousRotation == UIDeviceOrientationLandscapeLeft || self.previousRotation == UIDeviceOrientationLandscapeRight){
             for(UIView *view in [self arrayOfGestureViews]){
                 view.frame = [self rotateFrame:view.frame withContext:screenRect];
-                if(view.frame.origin.x >= screenRect.size.width){ // Something went wrong with the rotation.
+                if(view.frame.origin.x >= screenRect.size.width || view.frame.origin.y >= screenRect.size.height){ // Something went wrong with the rotation.
                     [self readingValuesFromFile];
                     break;
                 }
@@ -452,12 +452,26 @@
 
 #pragma mark - Handling Gestures
 - (void) doneButtonPressed: (UIButton*)sender{
-    self.editing = NO;
-    [self removeASTGesturesAndHideButton];
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"astEnableLock"
-     object:self];
-    [self saveValuesToFile];
+    // Only edit in portrait so values match up right.
+    if([UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationPortrait || [UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationPortraitUpsideDown){
+        self.editing = NO;
+        [self removeASTGesturesAndHideButton];
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"astEnableLock"
+         object:self];
+        [self saveValuesToFile];
+    } else {
+        UIAlertController * alert = [UIAlertController
+                                     alertControllerWithTitle:@"Asteroid"
+                                     message:@"Please rotate to portrait to save values."
+                                     preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* okButton = [UIAlertAction
+                                   actionWithTitle:@"Ok"
+                                   style:UIAlertActionStyleDefault
+                                   handler:nil];
+        [alert addAction:okButton];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 -(void) addASTGesturesAndRevealButton{
@@ -546,25 +560,12 @@
             
             [menuController setMenuVisible:YES animated:YES];
         } else if(!self.isEditing && [prefs boolForKey:@"enableEditingMode"]){
-            // Only edit in portrait so values match up right.
-            if([UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationPortrait || [UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationPortraitUpsideDown){
-                self.editing = YES;
-                [[NSNotificationCenter defaultCenter]
-                 postNotificationName:@"astDisableLock"
-                 object:self];
-                [self addASTGesturesAndRevealButton];
-            } else {
-                UIAlertController * alert = [UIAlertController
-                                             alertControllerWithTitle:@"Asteroid"
-                                             message:@"Please rotate to portrait before editing."
-                                             preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction* okButton = [UIAlertAction
-                                           actionWithTitle:@"Ok"
-                                           style:UIAlertActionStyleDefault
-                                           handler:nil];
-                [alert addAction:okButton];
-                [self presentViewController:alert animated:YES completion:nil];
-            }
+            self.editing = YES;
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"astDisableLock"
+             object:self];
+            [self addASTGesturesAndRevealButton];
+                
         }
     }
 }
