@@ -506,21 +506,24 @@ typedef void(^block)();
                 [self formatImageViewStyleHeader];
             }
             self.playerLayer.hidden = YES;
-        } else {
+        } else{
             self.videoPlayer = [AVPlayer playerWithURL:[NSURL fileURLWithPath:filePath]];
-            
-            if(self.style == ASTSetupStyleHeaderBasic || self.style == ASTSetupStyleHeaderTwoButtons){
-                [self formatVideoPlayerStyleHeader];
+            AVAsset *asset = self.videoPlayer.currentItem.asset;
+            NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+            if(tracks.count > 0){
+                if(self.style == ASTSetupStyleHeaderBasic || self.style == ASTSetupStyleHeaderTwoButtons){
+                    [self formatVideoPlayerStyleHeader];
+                }
+                self.playerLayer.player = self.videoPlayer;
+                self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+                
+                [[NSNotificationCenter defaultCenter] addObserver:self
+                                                         selector:@selector(playerItemDidReachEnd:)
+                                                             name:AVPlayerItemDidPlayToEndTimeNotification
+                                                           object:[self.videoPlayer currentItem]];
+                [self.videoPlayer play];
+                self.imageView.hidden = YES;
             }
-            self.playerLayer.player = self.videoPlayer;
-            self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
-            
-            [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(playerItemDidReachEnd:)
-                                                         name:AVPlayerItemDidPlayToEndTimeNotification
-                                                       object:[self.videoPlayer currentItem]];
-            [self.videoPlayer play];
-            self.imageView.hidden = YES;
         }
     }
 }
