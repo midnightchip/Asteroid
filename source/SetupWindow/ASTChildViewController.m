@@ -35,12 +35,14 @@ typedef void(^block)();
     [self formatButtons];
     switch (self.style) {
         case ASTSetupStyleBasic:
-            [self formatMediaPlayerStyleBasic];
+            [self unformattedTextForHeader];
             [self formatHeaderAndDescriptionTop];
+            [self formatMediaPlayerStyleBasic];
             break;
         case ASTSetupStyleTwoButtons:
-            [self formatMediaPlayerStyleShort];
+            [self unformattedTextForHeader];
             [self formatHeaderAndDescriptionTop];
+            [self formatMediaPlayerStyleShort];
             break;
         case ASTSetupStyleHeaderBasic:
             [self unformattedMediaForHeader];
@@ -51,8 +53,8 @@ typedef void(^block)();
             [self unformattedTextForHeader];
             break;
         default:
-            [self formatMediaPlayerStyleBasic];
             [self formatHeaderAndDescriptionTop];
+            [self formatMediaPlayerStyleBasic];
             break;
     }
     
@@ -90,13 +92,68 @@ typedef void(^block)();
     [self registerForSettings];
 }
 
+- (void) viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    //self.playerLayer.frame = self.mediaView.bounds; // Make sure sublayer matches up the media.
+    NSLog(@"lock_TWEAK | %@", NSStringFromCGRect(self.mediaView.bounds));
+}
+
 #pragma mark - Video Player For Style
 -(void) formatMediaPlayerStyleBasic {
+    self.imageView = [[UIImageView alloc] init];
+    self.mediaView = [[UIView alloc] init];
+    [self.mediaView addSubview:self.imageView];
+    [self.view addSubview: self.mediaView];
+    
+    self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.mediaView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [[NSLayoutConstraint constraintWithItem: self.mediaView
+                                  attribute: NSLayoutAttributeTop
+                                  relatedBy: NSLayoutRelationEqual
+                                     toItem: self.titleDescription
+                                  attribute: NSLayoutAttributeBottom
+                                 multiplier: 1
+                                   constant: 10] setActive:true];
+    [[NSLayoutConstraint constraintWithItem: self.mediaView
+                                  attribute: NSLayoutAttributeWidth
+                                  relatedBy: NSLayoutRelationEqual
+                                     toItem: self.view
+                                  attribute: NSLayoutAttributeWidth
+                                 multiplier: 1
+                                   constant: 0] setActive:true];
+    [[NSLayoutConstraint constraintWithItem: self.mediaView
+                                  attribute: NSLayoutAttributeBottom
+                                  relatedBy: NSLayoutRelationLessThanOrEqual
+                                     toItem: self.nextButton
+                                  attribute: NSLayoutAttributeTop
+                                 multiplier: 1
+                                   constant: -20] setActive:true];
+    [[NSLayoutConstraint constraintWithItem: self.mediaView
+                                  attribute: NSLayoutAttributeHeight
+                                  relatedBy: NSLayoutRelationLessThanOrEqual
+                                     toItem: self.view
+                                  attribute: NSLayoutAttributeHeight
+                                 multiplier: 1
+                                   constant: 0] setActive:true];
+    
+    [[NSLayoutConstraint constraintWithItem: self.imageView
+                                  attribute: NSLayoutAttributeWidth
+                                  relatedBy: NSLayoutRelationEqual
+                                     toItem: self.mediaView
+                                  attribute: NSLayoutAttributeWidth
+                                 multiplier: 1
+                                   constant: 0] setActive:true];
+    [[NSLayoutConstraint constraintWithItem: self.imageView
+                                  attribute: NSLayoutAttributeHeight
+                                  relatedBy: NSLayoutRelationEqual
+                                     toItem: self.mediaView
+                                  attribute: NSLayoutAttributeHeight
+                                 multiplier: 1
+                                   constant: 0] setActive:true];
+    
     CGFloat width = (self.view.frame.size.height*0.59)/1.777777777;
     CGFloat height = self.view.frame.size.height*0.59;
-    
-    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-((self.view.frame.size.height*0.59)/1.777777777)/2, 150, width, height)];
-    [self.view addSubview:self.imageView];
     
     self.playerLayer = [AVPlayerLayer layer];
     self.playerLayer.frame = CGRectMake(self.view.frame.size.width/2-((self.view.frame.size.height*0.59)/1.777777777)/2, 150, width, height);
@@ -106,15 +163,64 @@ typedef void(^block)();
 }
 
 -(void) formatMediaPlayerStyleShort {
-    CGFloat width = (self.view.frame.size.height*0.54)/1.777777777;
-    CGFloat height = self.view.frame.size.height*0.54;
+    self.imageView = [[UIImageView alloc] init];
+    self.mediaView = [[UIView alloc] init];
+    [self.mediaView addSubview:self.imageView];
+    [self.view addSubview: self.mediaView];
     
-    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-((self.view.frame.size.height*0.54)/1.777777777)/2, 150, width, height)];
-    [self.view addSubview:self.imageView];
+    self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.mediaView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [[NSLayoutConstraint constraintWithItem: self.mediaView
+                                  attribute: NSLayoutAttributeTop
+                                  relatedBy: NSLayoutRelationEqual
+                                     toItem: self.titleDescription
+                                  attribute: NSLayoutAttributeBottom
+                                 multiplier: 1
+                                   constant: 10] setActive:true];
+    [[NSLayoutConstraint constraintWithItem: self.mediaView
+                                  attribute: NSLayoutAttributeWidth
+                                  relatedBy: NSLayoutRelationEqual
+                                     toItem: self.view
+                                  attribute: NSLayoutAttributeWidth
+                                 multiplier: 1
+                                   constant: 0] setActive:true];
+    [[NSLayoutConstraint constraintWithItem: self.mediaView
+                                  attribute: NSLayoutAttributeBottom
+                                  relatedBy: NSLayoutRelationLessThanOrEqual
+                                     toItem: self.nextButton
+                                  attribute: NSLayoutAttributeTop
+                                 multiplier: 1
+                                   constant: -20] setActive:true];
+    [[NSLayoutConstraint constraintWithItem: self.mediaView
+                                  attribute: NSLayoutAttributeHeight
+                                  relatedBy: NSLayoutRelationLessThanOrEqual
+                                     toItem: self.view
+                                  attribute: NSLayoutAttributeHeight
+                                 multiplier: 1
+                                   constant: 0] setActive:true];
+    
+    [[NSLayoutConstraint constraintWithItem: self.imageView
+                                  attribute: NSLayoutAttributeWidth
+                                  relatedBy: NSLayoutRelationEqual
+                                     toItem: self.mediaView
+                                  attribute: NSLayoutAttributeWidth
+                                 multiplier: 1
+                                   constant: 0] setActive:true];
+    [[NSLayoutConstraint constraintWithItem: self.imageView
+                                  attribute: NSLayoutAttributeHeight
+                                  relatedBy: NSLayoutRelationEqual
+                                     toItem: self.mediaView
+                                  attribute: NSLayoutAttributeHeight
+                                 multiplier: 1
+                                   constant: 0] setActive:true];
+
+    CGFloat width = (self.view.frame.size.height*0.56)/1.777777777;
+    CGFloat height = self.view.frame.size.height*0.56;
     
     self.playerLayer = [AVPlayerLayer layer];
-    self.playerLayer.frame = CGRectMake(self.view.frame.size.width/2-((self.view.frame.size.height*0.54)/1.777777777)/2, 150, width, height);
-    self.playerLayer.backgroundColor = [UIColor blackColor].CGColor;
+    self.playerLayer.frame = CGRectMake(self.view.frame.size.width/2-((self.view.frame.size.height*0.56)/1.777777777)/2, 150, width, height);
+    self.playerLayer.backgroundColor = [UIColor clearColor].CGColor;
     self.playerLayer.videoGravity = AVLayerVideoGravityResize;
     [self.view.layer addSublayer:self.playerLayer];
 }
@@ -276,6 +382,7 @@ typedef void(^block)();
                                       attribute: NSLayoutAttributeBottom
                                      multiplier: 1
                                        constant: -10] setActive:true];
+        
         [[NSLayoutConstraint constraintWithItem: self.nextButton
                                       attribute: NSLayoutAttributeBottom
                                       relatedBy: NSLayoutRelationEqual
@@ -288,17 +395,53 @@ typedef void(^block)();
 
 #pragma mark - Title and Descrition
 -(void) formatHeaderAndDescriptionTop{
-    self.bigTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, 100)];
-    self.bigTitle.textAlignment = NSTextAlignmentCenter;
-    self.bigTitle.font = [UIFont boldSystemFontOfSize:35];
-    [self.view addSubview:self.bigTitle];
+    [self.bigTitle sizeToFit];
+    [self.titleDescription sizeToFit];
+    self.bigTitle.translatesAutoresizingMaskIntoConstraints = NO;
+    [[NSLayoutConstraint constraintWithItem: self.bigTitle
+                                  attribute: NSLayoutAttributeTop
+                                  relatedBy: NSLayoutRelationEqual
+                                     toItem: self.view
+                                  attribute: NSLayoutAttributeTop
+                                 multiplier: 1
+                                   constant: 30] setActive:true];
+    [[NSLayoutConstraint constraintWithItem: self.bigTitle
+                                  attribute: NSLayoutAttributeWidth
+                                  relatedBy: NSLayoutRelationEqual
+                                     toItem: self.view
+                                  attribute: NSLayoutAttributeWidth
+                                 multiplier: .9
+                                   constant: 1] setActive:true];
+    [[NSLayoutConstraint constraintWithItem: self.bigTitle
+                                  attribute: NSLayoutAttributeCenterX
+                                  relatedBy: NSLayoutRelationEqual
+                                     toItem: self.view
+                                  attribute: NSLayoutAttributeCenterX
+                                 multiplier: 1
+                                   constant: 0] setActive:true];
     
-    self.titleDescription = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width*0.1, 75, self.view.frame.size.width*0.8, 100)];
-    self.titleDescription.textAlignment = NSTextAlignmentCenter;
-    self.titleDescription.lineBreakMode = NSLineBreakByWordWrapping;
-    self.titleDescription.numberOfLines = 0;
-    self.titleDescription.font = [UIFont systemFontOfSize:20];
-    [self.view addSubview: self.titleDescription];
+    self.titleDescription.translatesAutoresizingMaskIntoConstraints = NO;
+    [[NSLayoutConstraint constraintWithItem: self.titleDescription
+                                  attribute: NSLayoutAttributeTop
+                                  relatedBy: NSLayoutRelationEqual
+                                     toItem: self.bigTitle
+                                  attribute: NSLayoutAttributeBottom
+                                 multiplier: 1
+                                   constant: 10] setActive:true];
+    [[NSLayoutConstraint constraintWithItem: self.titleDescription
+                                  attribute: NSLayoutAttributeWidth
+                                  relatedBy: NSLayoutRelationEqual
+                                     toItem: self.view
+                                  attribute: NSLayoutAttributeWidth
+                                 multiplier: .8
+                                   constant: 1] setActive:true];
+    [[NSLayoutConstraint constraintWithItem: self.titleDescription
+                                  attribute: NSLayoutAttributeCenterX
+                                  relatedBy: NSLayoutRelationEqual
+                                     toItem: self.view
+                                  attribute: NSLayoutAttributeCenterX
+                                 multiplier: 1
+                                   constant: 0] setActive:true];
 }
 
 -(void) unformattedTextForHeader {

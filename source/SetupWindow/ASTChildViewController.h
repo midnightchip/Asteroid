@@ -1,5 +1,6 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
+#import <AVKit/AVKit.h>
 #import "HighlightButton.h"
 #import "ASTSetupPageStyles.h"
 #import "LocalizedSetupStrings.h"

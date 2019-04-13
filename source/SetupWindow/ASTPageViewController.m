@@ -17,12 +17,12 @@
 }
 
 -(void) generatePageSource{
-    NSDictionary *page1 = @{@"style": @(ASTSetupStyleHeaderBasic),
+    NSDictionary *page1 = @{@"style": @(ASTSetupStyleBasic),
                             @"title": @"Asteroidfkfljsadfjlsadl;fhsad;lfsjfa;fsafas;fksa",
                             @"description": @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.",
                             @"primaryButton": SETUP_MANUALLY,
                             //@"secondaryButton": nil,
-                            @"mediaPath": PATH_TO_BANNER,
+                            @"mediaPath": @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/twelveLock.png",
                             @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
                             //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
                             @"disableBack": @(YES)
@@ -37,8 +37,18 @@
                             //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
                             @"disableBack": @(NO)
                             };
+    NSDictionary *page3 = @{@"style": @(ASTSetupStyleTwoButtons),
+                            @"title": @"Cool",
+                            @"description": @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.",
+                            @"primaryButton": SETUP_MANUALLY,
+                            @"secondaryButton": @"Second",
+                            @"mediaPath": @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Snow.mov",
+                            @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
+                            //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
+                            @"disableBack": @(NO)
+                            };
     
-    self.astPageSources = @[page1, page2];
+    self.astPageSources = @[page1, page2, page3];
 }
 
 - (void)viewDidLoad {
