@@ -51,11 +51,11 @@
                             @"title": @"Asteroidfkfljsadfjlsadl;fhsad;lfsjfa;fsafas;fksa",
                             @"description": @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.",
                             @"primaryButton": SETUP_MANUALLY,
-                            //@"secondaryButton": nil,
+                            @"secondaryButton": @"something",
                             @"mediaPath": @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Snow.mov",
                             @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
                             //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
-                            @"disableBack": @(YES)
+                            @"disableBack": @(NO)
                             };
     
     self.astPageSources = @[page1, page2, page3, page4];
@@ -81,6 +81,10 @@
     [self addChildViewController:self.pageController];
     [[self view] addSubview:[self.pageController view]];
     [self.pageController didMoveToParentViewController:self];
+    
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"astDisableLock"
+     object:self];
 }
 
 - (void)changePage:(UIPageViewControllerNavigationDirection)direction {

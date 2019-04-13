@@ -60,7 +60,7 @@ typedef void(^block)();
     }
     
     //Create navigation bar
-    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 50)];
+    self.navBar = [[UINavigationBar alloc]init];
     //Make navigation bar background transparent
     [self.navBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
     self.navBar.shadowImage = [UIImage new];
@@ -89,6 +89,22 @@ typedef void(^block)();
     self.navBar.items = @[ navItem ];
     [self.view addSubview:self.navBar];
     [self.view bringSubviewToFront:self.navBar];
+    
+    self.navBar.translatesAutoresizingMaskIntoConstraints = NO;
+    [[NSLayoutConstraint constraintWithItem: self.navBar
+                                  attribute: NSLayoutAttributeWidth
+                                  relatedBy: NSLayoutRelationEqual
+                                     toItem: self.view
+                                  attribute: NSLayoutAttributeWidth
+                                 multiplier: 1
+                                   constant: 0] setActive:true];
+    [[NSLayoutConstraint constraintWithItem: self.navBar
+                                  attribute: NSLayoutAttributeHeight
+                                  relatedBy: NSLayoutRelationEqual
+                                     toItem: nil
+                                  attribute: NSLayoutAttributeNotAnAttribute
+                                 multiplier: 1
+                                   constant: 50] setActive:true];
     
     [self registerForSettings];
 }
