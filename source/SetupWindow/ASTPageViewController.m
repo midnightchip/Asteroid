@@ -1,6 +1,6 @@
 #import "ASTPageViewController.h"
 
-#define PATH_TO_BANNER @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Asteroid.png"
+#define PATH_TO_CACHE @"/var/mobile/Library/Caches/Asteroid"
 
 @interface ASTPageViewController ()
 @end
@@ -11,7 +11,9 @@
 
 - (instancetype)init{
     if(self = [super init]) {
-        
+        [self createDirectory];
+        [self generatePageSource];
+        [self loadCache];
     }
     return self;
 }
@@ -21,7 +23,7 @@
                             @"title": @"Asteroid",
                             @"description": @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.",
                             @"primaryButton": @"Setup",
-                            @"mediaPath": @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Asteroid.png",
+                            @"mediaURL": @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Asteroid.ng",
                             @"disableBack": @(YES)
                             };
     NSDictionary *page2 = @{@"style": @(ASTSetupStyleTwoButtons),
@@ -29,7 +31,7 @@
                             @"description": @"Basic iOS 12 lockscreen.",
                             @"primaryButton": @"Enable",
                             @"secondaryButton": @"Other Options",
-                            @"mediaPath": @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/twelveLock.png",
+                            @"mediaURL": @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/twelveLock.pg",
                             @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy]
                             };
     NSDictionary *page3 = @{@"style": @(ASTSetupStyleTwoButtons),
@@ -37,16 +39,16 @@
                             @"description": @"Hourly Forecast lockscreen.",
                             @"primaryButton": @"Enable",
                             @"secondaryButton": @"Setup Later In Settings",
-                            @"mediaPath": @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Snow.mov",
+                            @"mediaURL": @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Snow.mov",
                             @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
                             //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
                             @"disableBack": @(NO)
                             };
-    NSDictionary *page4 = @{@"style": @(ASTSetupStyleBasic),
+    NSDictionary *page4 = @{@"style": @(ASTSetupStyleHeaderBasic),
                             @"title": @"Editing Mode",
                             @"description": @"Move components and resize them.",
                             @"primaryButton": @"Neat",
-                            @"mediaPath": @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Snow.mov",
+                            @"mediaURL": @"https://the-casle.github.io/TweakResources/lockscreenVideo.m4v",
                             @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
                             //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
                             @"disableBack": @(NO)
@@ -55,11 +57,45 @@
     self.astPageSources = @[page1, page2, page3, page4];
 }
 
+-(void) createDirectory{
+    BOOL isDir;
+    NSFileManager *fileManager= [NSFileManager defaultManager];
+    if(![fileManager fileExistsAtPath:PATH_TO_CACHE isDirectory:&isDir]){
+        [fileManager createDirectoryAtPath:PATH_TO_CACHE withIntermediateDirectories:YES attributes:nil error:NULL];
+    }
+}
+
+-(void) loadCache{
+    NSMutableArray *urlArray = [[NSMutableArray alloc]init];
+    for(NSDictionary *page in self.astPageSources){
+        NSString *url = page[@"mediaURL"];
+        [urlArray addObject:[NSURL URLWithString:url]];
+    }
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    dispatch_async(queue, ^{
+        for(NSURL *url in urlArray){
+            NSData *urlData = [NSData dataWithContentsOfURL:url];
+            if (urlData){
+                NSString  *filePath = [NSString stringWithFormat:@"%@/%@", PATH_TO_CACHE, url.lastPathComponent];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [urlData writeToFile:filePath atomically:YES];
+                });
+            }
+        }
+    });
+}
+
+-(void) clearCache{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *fileArray = [fileManager contentsOfDirectoryAtPath:PATH_TO_CACHE error:nil];
+    for (NSString *filename in fileArray)  {
+        [fileManager removeItemAtPath:[PATH_TO_CACHE stringByAppendingPathComponent:filename] error:NULL];
+    }
+}
+
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    
-    [self generatePageSource];
     
     self.pageController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
     
@@ -100,6 +136,7 @@
             [[NSNotificationCenter defaultCenter]
              postNotificationName:@"astEnableLock"
              object:self];
+            //[self clearCache];
             //[self startRespring]; // MAKE SURE TO ENABLE THIS WHEN DONE MAKING!!!!!!!!!!!!!!!!!
         }];
         return;

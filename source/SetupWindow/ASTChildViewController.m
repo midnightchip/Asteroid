@@ -1,5 +1,7 @@
 #import "ASTChildViewController.h"
 
+#define PATH_TO_CACHE @"/var/mobile/Library/Caches/Asteroid"
+
 typedef void(^block)();
 
 @interface ASTChildViewController ()
@@ -115,6 +117,8 @@ typedef void(^block)();
         CGRect playerFrame = self.mediaView.bounds;
         playerFrame.size.height = self.nextButton.frame.origin.y - self.mediaView.frame.origin.y - 15;
         self.playerLayer.frame = playerFrame;
+    } else if(self.style == ASTSetupStyleHeaderBasic || self.style == ASTSetupStyleHeaderTwoButtons){
+        self.mediaView.frame = self.playerLayer.frame;
     }
 }
 
@@ -484,26 +488,27 @@ typedef void(^block)();
     [self.nextButton setTitle: self.source[@"primaryButton"] forState:UIControlStateNormal];
     [self.otherButton setTitle: self.source[@"secondaryButton"] forState:UIControlStateNormal];
     
-    [self setupMediaWithPathToFile:self.source[@"mediaPath"]];
+    [self setupMediaWithUrl:self.source[@"mediaURL"]];
     
     if([self.source[@"disableBack"] boolValue]){
         self.backButton.hidden = YES;
     }
 }
 
--(void) setupMediaWithPathToFile:(NSString *) pathToFile{
+-(void) setupMediaWithUrl:(NSString *) pathToUrl{
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    if ([fileManager fileExistsAtPath:pathToFile]){
-        NSString *mediaPath = pathToFile;
-        UIImage *image = [UIImage imageNamed:mediaPath];
+    NSString *filePath = [NSString stringWithFormat:@"%@/%@", PATH_TO_CACHE, [NSURL URLWithString:pathToUrl].lastPathComponent];
+    if ([fileManager fileExistsAtPath:filePath]){
+        UIImage *image = [UIImage imageNamed:filePath];
         if (image) {
-            self.imageView.image = [UIImage imageWithContentsOfFile:mediaPath];
+            self.imageView.image = [UIImage imageWithContentsOfFile:filePath];
             if(self.style == ASTSetupStyleHeaderBasic || self.style == ASTSetupStyleHeaderTwoButtons){
                 [self formatImageViewStyleHeader];
             }
             self.playerLayer.hidden = YES;
         } else {
-            self.videoPlayer = [AVPlayer playerWithURL:[NSURL fileURLWithPath:mediaPath]];
+            self.videoPlayer = [AVPlayer playerWithURL:[NSURL fileURLWithPath:filePath]];
+            
             if(self.style == ASTSetupStyleHeaderBasic || self.style == ASTSetupStyleHeaderTwoButtons){
                 [self formatVideoPlayerStyleHeader];
             }
