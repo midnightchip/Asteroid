@@ -25,4 +25,5 @@
 @property (nonatomic, retain) NSDictionary *source;
 
 - (instancetype)initWithSource:(NSDictionary *) source;
+-(void) sessionLoaded;
 @end

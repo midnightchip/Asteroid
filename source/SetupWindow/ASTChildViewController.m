@@ -495,6 +495,14 @@ typedef void(^block)();
     }
 }
 
+-(void) sessionLoaded{
+    AVAsset *asset = self.videoPlayer.currentItem.asset;
+    NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+    if(!self.imageView.image && tracks.count == 0){
+        [self setupMediaWithUrl:self.source[@"mediaURL"]];
+    }
+}
+
 -(void) setupMediaWithUrl:(NSString *) pathToUrl{
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", PATH_TO_CACHE, [NSURL URLWithString:pathToUrl].lastPathComponent];
@@ -506,7 +514,7 @@ typedef void(^block)();
                 [self formatImageViewStyleHeader];
             }
             self.playerLayer.hidden = YES;
-        } else{
+        } else {
             self.videoPlayer = [AVPlayer playerWithURL:[NSURL fileURLWithPath:filePath]];
             AVAsset *asset = self.videoPlayer.currentItem.asset;
             NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
