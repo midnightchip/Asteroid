@@ -17,7 +17,7 @@
 }
 
 -(void) generatePageSource{
-    NSDictionary *page1 = @{@"style": @(ASTSetupStyleBasic),
+    NSDictionary *page1 = @{@"style": @(ASTSetupStyleTwoButtons),
                             @"title": @"Asteroidfkfljsadfjlsadl;fhsad;lfsjfa;fsafas;fksa",
                             @"description": @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.",
                             @"primaryButton": SETUP_MANUALLY,
@@ -37,7 +37,7 @@
                             //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
                             @"disableBack": @(NO)
                             };
-    NSDictionary *page3 = @{@"style": @(ASTSetupStyleTwoButtons),
+    NSDictionary *page3 = @{@"style": @(ASTSetupStyleBasic),
                             @"title": @"Cool",
                             @"description": @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.",
                             @"primaryButton": SETUP_MANUALLY,
@@ -47,8 +47,18 @@
                             //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
                             @"disableBack": @(NO)
                             };
+    NSDictionary *page4 = @{@"style": @(ASTSetupStyleTwoButtons),
+                            @"title": @"Asteroidfkfljsadfjlsadl;fhsad;lfsjfa;fsafas;fksa",
+                            @"description": @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.",
+                            @"primaryButton": SETUP_MANUALLY,
+                            //@"secondaryButton": nil,
+                            @"mediaPath": @"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/Snow.mov",
+                            @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
+                            //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
+                            @"disableBack": @(YES)
+                            };
     
-    self.astPageSources = @[page1, page2, page3];
+    self.astPageSources = @[page1, page2, page3, page4];
 }
 
 - (void)viewDidLoad {

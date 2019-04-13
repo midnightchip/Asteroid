@@ -30,6 +30,7 @@ typedef void(^block)();
 }
 -(void) viewDidLoad{
     [self.view setBackgroundColor: [UIColor whiteColor]];
+    [self.view setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
     [self.view setUserInteractionEnabled:TRUE];
     
     [self formatButtons];
@@ -37,12 +38,12 @@ typedef void(^block)();
         case ASTSetupStyleBasic:
             [self unformattedTextForHeader];
             [self formatHeaderAndDescriptionTop];
-            [self formatMediaPlayerStyleBasic];
+            [self formatMediaPlayerStyleCenter];
             break;
         case ASTSetupStyleTwoButtons:
             [self unformattedTextForHeader];
             [self formatHeaderAndDescriptionTop];
-            [self formatMediaPlayerStyleShort];
+            [self formatMediaPlayerStyleCenter];
             break;
         case ASTSetupStyleHeaderBasic:
             [self unformattedMediaForHeader];
@@ -54,7 +55,7 @@ typedef void(^block)();
             break;
         default:
             [self formatHeaderAndDescriptionTop];
-            [self formatMediaPlayerStyleBasic];
+            [self formatMediaPlayerStyleCenter];
             break;
     }
     
@@ -94,12 +95,15 @@ typedef void(^block)();
 
 - (void) viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    //self.playerLayer.frame = self.mediaView.bounds; // Make sure sublayer matches up the media.
-    NSLog(@"lock_TWEAK | %@", NSStringFromCGRect(self.mediaView.bounds));
+    if(self.style == ASTSetupStyleBasic || self.style == ASTSetupStyleTwoButtons){
+        CGRect playerFrame = self.mediaView.bounds;
+        playerFrame.size.height = self.nextButton.frame.origin.y - self.mediaView.frame.origin.y - 15;
+        self.playerLayer.frame = playerFrame;
+    }
 }
 
 #pragma mark - Video Player For Style
--(void) formatMediaPlayerStyleBasic {
+-(void) formatMediaPlayerStyleCenter {
     self.imageView = [[UIImageView alloc] init];
     self.mediaView = [[UIView alloc] init];
     [self.mediaView addSubview:self.imageView];
@@ -152,77 +156,9 @@ typedef void(^block)();
                                  multiplier: 1
                                    constant: 0] setActive:true];
     
-    CGFloat width = (self.view.frame.size.height*0.59)/1.777777777;
-    CGFloat height = self.view.frame.size.height*0.59;
-    
     self.playerLayer = [AVPlayerLayer layer];
-    self.playerLayer.frame = CGRectMake(self.view.frame.size.width/2-((self.view.frame.size.height*0.59)/1.777777777)/2, 150, width, height);
-    self.playerLayer.backgroundColor = [UIColor blackColor].CGColor;
-    self.playerLayer.videoGravity = AVLayerVideoGravityResize;
-    [self.view.layer addSublayer:self.playerLayer];
-}
-
--(void) formatMediaPlayerStyleShort {
-    self.imageView = [[UIImageView alloc] init];
-    self.mediaView = [[UIView alloc] init];
-    [self.mediaView addSubview:self.imageView];
-    [self.view addSubview: self.mediaView];
-    
-    self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.mediaView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [[NSLayoutConstraint constraintWithItem: self.mediaView
-                                  attribute: NSLayoutAttributeTop
-                                  relatedBy: NSLayoutRelationEqual
-                                     toItem: self.titleDescription
-                                  attribute: NSLayoutAttributeBottom
-                                 multiplier: 1
-                                   constant: 10] setActive:true];
-    [[NSLayoutConstraint constraintWithItem: self.mediaView
-                                  attribute: NSLayoutAttributeWidth
-                                  relatedBy: NSLayoutRelationEqual
-                                     toItem: self.view
-                                  attribute: NSLayoutAttributeWidth
-                                 multiplier: 1
-                                   constant: 0] setActive:true];
-    [[NSLayoutConstraint constraintWithItem: self.mediaView
-                                  attribute: NSLayoutAttributeBottom
-                                  relatedBy: NSLayoutRelationLessThanOrEqual
-                                     toItem: self.nextButton
-                                  attribute: NSLayoutAttributeTop
-                                 multiplier: 1
-                                   constant: -20] setActive:true];
-    [[NSLayoutConstraint constraintWithItem: self.mediaView
-                                  attribute: NSLayoutAttributeHeight
-                                  relatedBy: NSLayoutRelationLessThanOrEqual
-                                     toItem: self.view
-                                  attribute: NSLayoutAttributeHeight
-                                 multiplier: 1
-                                   constant: 0] setActive:true];
-    
-    [[NSLayoutConstraint constraintWithItem: self.imageView
-                                  attribute: NSLayoutAttributeWidth
-                                  relatedBy: NSLayoutRelationEqual
-                                     toItem: self.mediaView
-                                  attribute: NSLayoutAttributeWidth
-                                 multiplier: 1
-                                   constant: 0] setActive:true];
-    [[NSLayoutConstraint constraintWithItem: self.imageView
-                                  attribute: NSLayoutAttributeHeight
-                                  relatedBy: NSLayoutRelationEqual
-                                     toItem: self.mediaView
-                                  attribute: NSLayoutAttributeHeight
-                                 multiplier: 1
-                                   constant: 0] setActive:true];
-
-    CGFloat width = (self.view.frame.size.height*0.56)/1.777777777;
-    CGFloat height = self.view.frame.size.height*0.56;
-    
-    self.playerLayer = [AVPlayerLayer layer];
-    self.playerLayer.frame = CGRectMake(self.view.frame.size.width/2-((self.view.frame.size.height*0.56)/1.777777777)/2, 150, width, height);
     self.playerLayer.backgroundColor = [UIColor clearColor].CGColor;
-    self.playerLayer.videoGravity = AVLayerVideoGravityResize;
-    [self.view.layer addSublayer:self.playerLayer];
+    [self.mediaView.layer addSublayer:self.playerLayer];
 }
 
 -(void) unformattedMediaForHeader{
@@ -442,6 +378,13 @@ typedef void(^block)();
                                   attribute: NSLayoutAttributeCenterX
                                  multiplier: 1
                                    constant: 0] setActive:true];
+    [[NSLayoutConstraint constraintWithItem: self.titleDescription
+                                  attribute: NSLayoutAttributeLastBaseline
+                                  relatedBy: NSLayoutRelationLessThanOrEqual
+                                     toItem: self.nextButton
+                                  attribute: NSLayoutAttributeTop
+                                 multiplier: 1
+                                   constant: -10] setActive:true];
 }
 
 -(void) unformattedTextForHeader {
