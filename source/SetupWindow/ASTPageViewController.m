@@ -75,10 +75,15 @@
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
         for(NSURL *url in urlArray){
+            BOOL isDir;
+            NSString *filePath = [NSString stringWithFormat:@"%@/%@", PATH_TO_CACHE, url.lastPathComponent];
+            NSFileManager *fileManager= [NSFileManager defaultManager];
+            if([fileManager fileExistsAtPath:filePath isDirectory:&isDir]){
+                continue;
+            }
             NSURLSession *session = [NSURLSession sharedSession];
             [[session dataTaskWithURL:url
                     completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                        NSString *filePath = [NSString stringWithFormat:@"%@/%@", PATH_TO_CACHE, url.lastPathComponent];
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [data writeToFile:filePath atomically:YES];
                             for(ASTChildViewController *cont in self.pageController.viewControllers){
