@@ -66,12 +66,12 @@ static NSDictionary *getWeatherItems() {
 		self.isTapped = NO;
 		[self setText:[self returnDateString]];
 	}
-	NSLog(@"ASTEROIDGESTURECOMINGONLINE");
 	if(self.isTime && !self.tapGesture){
 		self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(swapTime:)];
         self.tapGesture.numberOfTapsRequired = 1; 
 		[self.tapGesture setCancelsTouchesInView: NO];
         [self.superview.superview addGestureRecognizer:self.tapGesture];
+        
 	}
 }
 -(void)setText:(id)arg1{
@@ -117,17 +117,14 @@ static NSDictionary *getWeatherItems() {
 }
 %new 
 -(void)swapTime:(UIGestureRecognizer *)sender{
-	NSLog(@"ASTEROIDGESTURE WAS CALLED");
-	CGPoint location = [sender locationInView:self];
-	
-	if(CGRectContainsPoint(CGRectMake(0, 0, self.timeFrame.size.width, self.bounds.size.height), location)){
-
+	CGPoint location = [sender locationInView:sender.view];
+    CGRect newFrame = [self.superview.superview convertRect:self.frame fromView:self.superview];
+	if(CGRectContainsPoint(CGRectMake(newFrame.origin.x, 0 , newFrame.size.width, newFrame.size.height + newFrame.origin.y), location)){ // Extend test frame to top of screen.
 		if(!self.isTapped){
 			self.isTapped = YES;
 			[self setText:@"RUN"];
 			[self performSelector:@selector(resetTime) withObject:nil afterDelay:10];
-		}
-		/*}else{
+		} /*else{
 			[self resetTime];
 		}*/
 	}
