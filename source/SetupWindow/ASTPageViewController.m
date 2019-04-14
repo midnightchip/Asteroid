@@ -39,22 +39,70 @@
                             @"description": @"Hourly Forecast lockscreen.",
                             @"primaryButton": @"Enable",
                             @"secondaryButton": @"Setup Later In Settings",
-                            @"mediaURL": @"https://the-casle.github.io/TweakResources/twelveLock.png",
+                            @"mediaURL": @"https://the-casle.github.io/TweakResources/forecast.jpg",
                             @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
                             //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
                             @"disableBack": @(NO)
                             };
-    NSDictionary *page4 = @{@"style": @(ASTSetupStyleHeaderBasic),
+    NSDictionary *page4 = @{@"style": @(ASTSetupStyleBasic),
                             @"title": @"Editing Mode",
                             @"description": @"Move components and resize them.",
-                            @"primaryButton": @"Neat",
-                            @"mediaURL": @"https://the-casle.github.io/TweakResources/lockscreenVideo.m4v",
+                            @"primaryButton": @"Continue",
+                            @"mediaURL": @"https://the-casle.github.io/TweakResources/editing.m4v",
                             @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
                             //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
                             @"disableBack": @(NO)
                             };
-    
-    self.astPageSources = @[page1, page2, page3, page4];
+    NSDictionary *page5 = @{@"style": @(ASTSetupStyleTwoButtons),
+                            @"title": @"Live Weather",
+                            @"description": @"Live weather on the homescreen and lockscreen.",
+                            @"primaryButton": @"Enable",
+                            @"secondaryButton": @"Setup Later In Settings",
+                            @"mediaURL": @"https://the-casle.github.io/TweakResources/liveWeather.mov",
+                            @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
+                            //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
+                            @"disableBack": @(NO)
+                            };
+    NSDictionary *page6 = @{@"style": @(ASTSetupStyleHeaderTwoButtons),
+                            @"title": @"Live Weather Layers",
+                            @"description": @"Enable all layers of live weather. This includes the animation and the background.",
+                            @"primaryButton": @"Enable",
+                            @"secondaryButton": @"Setup Later In Settings",
+                            @"mediaURL": @"https://the-casle.github.io/TweakResources/LiveWall.jpg",
+                            @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
+                            //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
+                            @"disableBack": @(NO)
+                            };
+    NSDictionary *page7 = @{@"style": @(ASTSetupStyleHeaderTwoButtons),
+                            @"title": @"Weather Icon",
+                            @"description": @"Live weather on the weather app icon.",
+                            @"primaryButton": @"Enable",
+                            @"secondaryButton": @"Setup Later In Settings",
+                            @"mediaURL": @"https://the-casle.github.io/TweakResources/Icon.PNG",
+                            @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
+                            //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
+                            @"disableBack": @(NO)
+                            };
+    NSDictionary *page8 = @{@"style": @(ASTSetupStyleBasic),
+                            @"title": @"Default Weather",
+                            @"description": @"Selecting Asteroid's default weather.",
+                            @"primaryButton": @"Continue",
+                            @"mediaURL": @"https://the-casle.github.io/TweakResources/DefaultWeather.m4v",
+                            @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
+                            //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
+                            @"disableBack": @(NO)
+                            };
+    NSDictionary *page9 = @{@"style": @(ASTSetupStyleHeaderBasic),
+                            @"title": @"Default Weather",
+                            @"description": @"Asteroid will use local weather when location services for the weather app is set to \"always\". Otherwise, it will use the selected default within the weather app.",
+                            @"primaryButton": @"Continue",
+                            @"mediaURL": @"https://the-casle.github.io/TweakResources/locationService.jpg",
+                            @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
+                            //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
+                            @"disableBack": @(NO)
+                            };
+
+    self.astPageSources = @[page1, page2, page3, page4, page5, page6, page7, page8, page9];
 }
 
 -(void) createDirectory{
