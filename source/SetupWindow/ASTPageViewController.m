@@ -23,15 +23,15 @@
                             @"title": @"Asteroid",
                             @"description": @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.",
                             @"primaryButton": @"Setup",
-                            @"mediaURL": @"https://the-casle.github.io/TweakResources/twelveLock.png",
+                            @"mediaURL": @"https://the-casle.github.io/TweakResources/Asteroid.png",
                             @"disableBack": @(YES)
                             };
-    NSDictionary *page2 = @{@"style": @(ASTSetupStyleTwoButtons),
+    NSDictionary *page2 = @{@"style": @(ASTSetupStyleHeaderTwoButtons),
                             @"title": @"Lockscreen",
                             @"description": @"Basic iOS 12 lockscreen.",
                             @"primaryButton": @"Enable",
                             @"secondaryButton": @"Other Options",
-                            @"mediaURL": @"https://the-casle.github.io/TweakResources/twelveLock.png",
+                            @"mediaURL": @"https://the-casle.github.io/TweakResources/lockScene.jpg",
                             @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy]
                             };
     NSDictionary *page3 = @{@"style": @(ASTSetupStyleTwoButtons),

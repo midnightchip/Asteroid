@@ -507,32 +507,40 @@ typedef void(^block)();
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", PATH_TO_CACHE, [NSURL URLWithString:pathToUrl].lastPathComponent];
     if ([fileManager fileExistsAtPath:filePath]){
-        UIImage *image = [UIImage imageNamed:filePath];
-        if (image) {
-            self.imageView.image = [UIImage imageWithContentsOfFile:filePath];
-            if(self.style == ASTSetupStyleHeaderBasic || self.style == ASTSetupStyleHeaderTwoButtons){
-                [self formatImageViewStyleHeader];
-            }
-            self.playerLayer.hidden = YES;
-        } else {
-            self.videoPlayer = [AVPlayer playerWithURL:[NSURL fileURLWithPath:filePath]];
-            AVAsset *asset = self.videoPlayer.currentItem.asset;
-            NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
-            if(tracks.count > 0){
-                if(self.style == ASTSetupStyleHeaderBasic || self.style == ASTSetupStyleHeaderTwoButtons){
-                    [self formatVideoPlayerStyleHeader];
-                }
-                self.playerLayer.player = self.videoPlayer;
-                self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            UIImage *image = [UIImage imageNamed:filePath];
+            if (image) {
+                self.imageView.image = image;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(self.style == ASTSetupStyleHeaderBasic || self.style == ASTSetupStyleHeaderTwoButtons){
+                        [self formatImageViewStyleHeader];
+                    }
+                    self.playerLayer.hidden = YES;
+                });
                 
-                [[NSNotificationCenter defaultCenter] addObserver:self
-                                                         selector:@selector(playerItemDidReachEnd:)
-                                                             name:AVPlayerItemDidPlayToEndTimeNotification
-                                                           object:[self.videoPlayer currentItem]];
-                [self.videoPlayer play];
-                self.imageView.hidden = YES;
+            } else {
+                self.videoPlayer = [AVPlayer playerWithURL:[NSURL fileURLWithPath:filePath]];
+                AVAsset *asset = self.videoPlayer.currentItem.asset;
+                NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+                if(tracks.count > 0){
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if(self.style == ASTSetupStyleHeaderBasic || self.style == ASTSetupStyleHeaderTwoButtons){
+                            [self formatVideoPlayerStyleHeader];
+                        }
+                        self.playerLayer.player = self.videoPlayer;
+                        self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+                        
+                        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                                 selector:@selector(playerItemDidReachEnd:)
+                                                                     name:AVPlayerItemDidPlayToEndTimeNotification
+                                                                   object:[self.videoPlayer currentItem]];
+                        [self.videoPlayer play];
+                        self.imageView.hidden = YES;
+                    });
+                    
+                }
             }
-        }
+        });
     }
 }
 -(void) nextButtonPressed{
