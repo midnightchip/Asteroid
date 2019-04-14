@@ -3,9 +3,9 @@
     "Control_Lock" = "تفعيل/تعطيل الطقس الحي على شاشة القفل";
     "Enable_Home" = "تفعيل الشاشة الرئيسية";
     "Control_Home" = "تفعيل/تعطيل الطقس الحي على الشاشة الرئيسية";
-    "Custom_Condition" = "Choose Custom Conditions";
-    "Select_Condition" = "Select Custom Weather Conditions";
-    "Overide_Animation" = "This overides your weather background animation.";
+    "Custom_Condition" = "اختر الظروف المخصصة";
+    "Select_Condition" = "حدد الظروف الجوية المخصصة";
+    "Overide_Animation" = "سيتخطى هذا التأثيرات الحركية الخلفية للطقس.";
     "Hide_Background" = "إخفاء خلفية الطقس الحي";
     "Hide_Explain" = "إخفاء الخلفية للطقس الحي، وإبقاء التأثيرات الحركية";
     "Live_Weather" = "الطقس الحي";
