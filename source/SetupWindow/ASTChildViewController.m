@@ -507,11 +507,17 @@ typedef void(^block)();
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", PATH_TO_CACHE, [NSURL URLWithString:pathToUrl].lastPathComponent];
     if ([fileManager fileExistsAtPath:filePath]){
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-            UIImage *image = [UIImage imageNamed:filePath];
+        dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+            NSLog(@"lock_TWEAK | holding image");
+            UIImage *image = [[UIImage alloc] initWithContentsOfFile:filePath];
             if (image) {
-                self.imageView.image = image;
+                UIGraphicsBeginImageContextWithOptions(image.size, NO, image.scale);
+                [image drawAtPoint:CGPointZero];
+                image = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    NSLog(@"lock_TWEAK | setting image");
+                    self.imageView.image = image;
                     if(self.style == ASTSetupStyleHeaderBasic || self.style == ASTSetupStyleHeaderTwoButtons){
                         [self formatImageViewStyleHeader];
                     }
