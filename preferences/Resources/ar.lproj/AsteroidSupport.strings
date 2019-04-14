@@ -1,29 +1,29 @@
 {
-    "Developer" = "Developer";
-    "Info" = "Info";
-    "Depiction" = "Depiction";
-    "Learn_more_about_Asteroid" = "Learn more about Asteroid";
-    "Donations" = "Donations";
-    "Make_a_Donation" = "Make a Donation";
-    "Compensate_Casle" = "Help compensate the casle for his efforts";
-    "Compensate_Midnight" = "Help compensate MidnightChips for his efforts";
-    "Support" = "Support";
-    "Submit_an_Issue" = "Submit an Issue";
-    "Report_Bug" = "Report a bug on GitHub and feel warm and fuzzy";
-    "Email_Support" = "Email Support";
-    "Email_Me" = "Need help? Send me an email and I'll do my best.";
-    "Copy_Tweak_List" = "Copy Tweak List";
-    "Get_List" = "Needing a list of all installed tweaks?";
-    "Contact" = "Contact";
-    "Special_Thanks" = "Special Thanks";
+    "Developer" = "مطور";
+    "Info" = "معلومات";
+    "Depiction" = "الوصف";
+    "Learn_more_about_Asteroid" = "اعرف أكثر عن Asteroid";
+    "Donations" = "التبرعات";
+    "Make_a_Donation" = "قم بالتبرع";
+    "Compensate_Casle" = "عبر عن مدى تقديرك لـ the casle ولجهوده..";
+    "Compensate_Midnight" = "عبر عن مدى تقديرك لـ MidnightChips ولجهوده..";
+    "Support" = "الدعم";
+    "Submit_an_Issue" = "تقديم خطأ";
+    "Report_Bug" = "التبليغ عن خطأ عبر GitHub";
+    "Email_Support" = "الدعم عبر البريد";
+    "Email_Me" = "أتحتاج لمساعدة؟ أرسل لنا رسالة عبر البريد وسنبذل قصارى جهدنا.";
+    "Copy_Tweak_List" = "نسخ قائمة الأدوات";
+    "Get_List" = "هل تحتاج إلى قائمة بجميع أدواتك المثبتة؟";
+    "Contact" = "حساباتنا على مواقع التواصل";
+    "Special_Thanks" = "شكر خاص";
     
-    "Reddit_Casle" = "Stay informed by following the casle on Reddit";
-    "Reddit_Midnight" = "Stay informed by following MidnightChips on Reddit";
-    "June_Repo" = "JunesiPhone Repo";
-    "June_Blurb" = "Support June by donating to get access to his amazing tweaks and themes.";
+    "Reddit_Casle" = "تابع the casle على ريديت لتبقى على اطلاع بكل ماهو جديد";
+    "Reddit_Midnight" = "تابع MidnightChips على ريديت لتبقى على اطلاع بكل ماهو جديد";
+    "June_Repo" = "سورس JunesiPhone";
+    "June_Blurb" = "ادعم June عن طريق التبرع له وامتلك حق الوصول إلى جميع أدواته وثيماته الرائعة.";
     "Weather_Animations" = "Weather Animations";
-    "WA_Perms" = "We had permission to use portions of Weather Animations to start Asteroid.";
-    "License_Information" = "License Information";
-    "Asteroid_Support" = "Asteroid Support";
+    "WA_Perms" = "كان لدينا إذن باستخدام WeatherAnimations لبدء Asteroid";
+    "License_Information" = "معلومات الترخيص";
+    "Asteroid_Support" = "الدعم الخاص بـ Asteroid";
 
 }
