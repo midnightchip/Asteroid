@@ -1,0 +1,29 @@
+{
+    "Developer" = "Developer";
+    "Info" = "Info";
+    "Depiction" = "Depiction";
+    "Learn_more_about_Asteroid" = "Learn more about Asteroid";
+    "Donations" = "Donations";
+    "Make_a_Donation" = "Make a Donation";
+    "Compensate_Casle" = "Help compensate the casle for his efforts";
+    "Compensate_Midnight" = "Help compensate MidnightChips for his efforts";
+    "Support" = "Support";
+    "Submit_an_Issue" = "Submit an Issue";
+    "Report_Bug" = "Report a bug on GitHub and feel warm and fuzzy";
+    "Email_Support" = "Email Support";
+    "Email_Me" = "Need help? Send me an email and I'll do my best.";
+    "Copy_Tweak_List" = "Copy Tweak List";
+    "Get_List" = "Needing a list of all installed tweaks?";
+    "Contact" = "Contact";
+    "Special_Thanks" = "Special Thanks";
+    
+    "Reddit_Casle" = "Stay informed by following the casle on Reddit";
+    "Reddit_Midnight" = "Stay informed by following MidnightChips on Reddit";
+    "June_Repo" = "JunesiPhone Repo";
+    "June_Blurb" = "Support June by donating to get access to his amazing tweaks and themes.";
+    "Weather_Animations" = "Weather Animations";
+    "WA_Perms" = "We had permission to use portions of Weather Animations to start Asteroid.";
+    "License_Information" = "License Information";
+    "Asteroid_Support" = "Asteroid Support";
+
+}
