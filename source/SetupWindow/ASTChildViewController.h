@@ -19,6 +19,7 @@
 @property (nonatomic, retain) UINavigationBar *navBar;
 @property (nonatomic, retain) HighlightButton *backButton;
 @property (nonatomic, assign) ASTSetupPageStyle style;
+@property (nonatomic, retain) UIColor *colorTheme;
 
 @property (nonatomic, assign) NSInteger index;
 @property (nonatomic, weak) id <ASTSourceDelegate> delegate;

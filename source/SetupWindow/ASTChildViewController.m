@@ -31,6 +31,9 @@ typedef void(^block)();
     return self;
 }
 -(void) viewDidLoad{
+    UIColor *sourceColor = self.source[@"colorTheme"];
+    self.colorTheme = sourceColor ? sourceColor : [UIColor colorWithRed:10 / 255.0 green:106 / 255.0 blue:255 / 255.0 alpha:1.0];
+    
     [self.view setBackgroundColor: [UIColor whiteColor]];
     [self.view setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
     [self.view setUserInteractionEnabled:TRUE];
@@ -75,10 +78,14 @@ typedef void(^block)();
     self.backButton = [HighlightButton buttonWithType:UIButtonTypeSystem];
     self.backButton.backgroundColor = [UIColor clearColor];
     self.backButton.frame = leftButtonView.frame;
-    [self.backButton setImage:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/BackArrow.png"] forState:UIControlStateNormal];
+    if([UIScreen mainScreen].scale == 3){
+        [self.backButton setImage:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/ic_arrow_back_ios@3x.png"] forState:UIControlStateNormal];
+    } else {
+        [self.backButton setImage:[UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/Asteroid.bundle/SetupResources/ic_arrow_back_ios@2x.png"] forState:UIControlStateNormal];
+    }
     [self.backButton setTitle:BACK forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    self.backButton.tintColor = [UIColor colorWithRed:10 / 255.0 green:106 / 255.0 blue:255 / 255.0 alpha:1.0];
+    self.backButton.tintColor = self.colorTheme;
     self.backButton.autoresizesSubviews = YES;
     self.backButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
     self.backButton.titleLabel.font = [UIFont systemFontOfSize:18];
@@ -259,7 +266,7 @@ typedef void(^block)();
     self.nextButton = [[HighlightButton alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
     [self.nextButton setTitle: CONTINUE forState:UIControlStateNormal];
     [self.nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.nextButton.backgroundColor = [UIColor colorWithRed:10 / 255.0 green:106 / 255.0 blue:255 / 255.0 alpha:1.0];
+    self.nextButton.backgroundColor = self.colorTheme;
     self.nextButton.layer.cornerRadius = 7.5;
     self.nextButton.titleLabel.textAlignment = NSTextAlignmentCenter;
     self.nextButton.titleLabel.textColor = [UIColor whiteColor];
@@ -300,7 +307,7 @@ typedef void(^block)();
     } else {
         self.otherButton = [[HighlightButton alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
         [self.otherButton setTitle:SET_UP_LATER_IN_SETTINGS forState:UIControlStateNormal];
-        [self.otherButton setTitleColor:[UIColor colorWithRed:10 / 255.0 green:106 / 255.0 blue:255 / 255.0 alpha:1.0] forState:UIControlStateNormal];
+        [self.otherButton setTitleColor:self.colorTheme forState:UIControlStateNormal];
         self.otherButton.backgroundColor = [UIColor clearColor];
         self.otherButton.layer.cornerRadius = 7.5;
         self.otherButton.titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -487,9 +494,9 @@ typedef void(^block)();
     
     [self.nextButton setTitle: self.source[@"primaryButton"] forState:UIControlStateNormal];
     [self.otherButton setTitle: self.source[@"secondaryButton"] forState:UIControlStateNormal];
+    [self.backButton setTitle: self.source[@"backButton"] forState:UIControlStateNormal];
     
     [self setupMediaWithUrl:self.source[@"mediaURL"]];
-    
     if([self.source[@"disableBack"] boolValue]){
         self.backButton.hidden = YES;
     }
