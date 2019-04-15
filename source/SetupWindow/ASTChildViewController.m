@@ -507,29 +507,23 @@ typedef void(^block)();
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", PATH_TO_CACHE, [NSURL URLWithString:pathToUrl].lastPathComponent];
     if ([fileManager fileExistsAtPath:filePath]){
-        dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        //dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
             NSLog(@"lock_TWEAK | holding image");
             UIImage *image = [[UIImage alloc] initWithContentsOfFile:filePath];
             if (image) {
-                UIGraphicsBeginImageContextWithOptions(image.size, NO, image.scale);
-                [image drawAtPoint:CGPointZero];
-                image = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSLog(@"lock_TWEAK | setting image");
-                    self.imageView.image = image;
-                    if(self.style == ASTSetupStyleHeaderBasic || self.style == ASTSetupStyleHeaderTwoButtons){
-                        [self formatImageViewStyleHeader];
-                    }
-                    self.playerLayer.hidden = YES;
-                });
+                NSLog(@"lock_TWEAK | setting image");
+                self.imageView.image = image;
+                if(self.style == ASTSetupStyleHeaderBasic || self.style == ASTSetupStyleHeaderTwoButtons){
+                    [self formatImageViewStyleHeader];
+                }
+                self.playerLayer.hidden = YES;
                 
             } else {
                 self.videoPlayer = [AVPlayer playerWithURL:[NSURL fileURLWithPath:filePath]];
                 AVAsset *asset = self.videoPlayer.currentItem.asset;
                 NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
                 if(tracks.count > 0){
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                    //dispatch_async(dispatch_get_main_queue(), ^{
                         if(self.style == ASTSetupStyleHeaderBasic || self.style == ASTSetupStyleHeaderTwoButtons){
                             [self formatVideoPlayerStyleHeader];
                         }
@@ -542,11 +536,11 @@ typedef void(^block)();
                                                                    object:[self.videoPlayer currentItem]];
                         [self.videoPlayer play];
                         self.imageView.hidden = YES;
-                    });
+                    //});
                     
                 }
             }
-        });
+        //});
     }
 }
 -(void) nextButtonPressed{

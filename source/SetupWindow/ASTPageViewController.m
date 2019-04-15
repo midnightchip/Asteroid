@@ -31,7 +31,7 @@
                             @"description": @"Basic iOS 12 lockscreen.",
                             @"primaryButton": @"Enable",
                             @"secondaryButton": @"Other Options",
-                            @"mediaURL": @"https://the-casle.github.io/TweakResources/lockScene.jpg",
+                            @"mediaURL": @"https://the-casle.github.io/TweakResources/white.png",
                             @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy]
                             };
     NSDictionary *page3 = @{@"style": @(ASTSetupStyleTwoButtons),
@@ -68,7 +68,7 @@
                             @"description": @"Enable all layers of live weather. This includes the animation and the background.",
                             @"primaryButton": @"Enable",
                             @"secondaryButton": @"Setup Later In Settings",
-                            @"mediaURL": @"https://the-casle.github.io/TweakResources/LiveWall.jpg",
+                            @"mediaURL": @"https://the-casle.github.io/TweakResources/yellow.png",
                             @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
                             //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
                             @"disableBack": @(NO)
@@ -117,21 +117,29 @@
     for (NSDictionary *page in self.astPageSources) {
         NSURL *url = [NSURL URLWithString:page[@"mediaURL"]];
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
-            BOOL isDir;
-            NSString * filePath = [NSString stringWithFormat:@"%@/%@", PATH_TO_CACHE, url.lastPathComponent];
-            NSFileManager * fileManager = [NSFileManager defaultManager];
-            if ([fileManager fileExistsAtPath:filePath isDirectory:&isDir]) {
-                return;
-            }
-            
+            NSString *filePath = [NSString stringWithFormat:@"%@/%@", PATH_TO_CACHE, url.lastPathComponent];
+            NSURL *scaledUrl = [self scaledUrlFromUrl:url];
             [[[NSURLSession sharedSession] dataTaskWithURL:url
                                          completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
-                                             dispatch_async(dispatch_get_main_queue(), ^{
-                                                 [data writeToFile:filePath atomically:YES];
-                                                 for (ASTChildViewController * cont in self.pageController.viewControllers) {
-                                                     [cont sessionLoaded];
-                                                 }
-                                             });
+                                             NSInteger httpStatus = [((NSHTTPURLResponse *)response) statusCode];
+                                             if(httpStatus != 404){
+                                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                                     [data writeToFile:filePath atomically:YES];
+                                                     for (ASTChildViewController * cont in self.pageController.viewControllers) {
+                                                         [cont sessionLoaded];
+                                                     }
+                                                 });
+                                             } else {
+                                                 [[[NSURLSession sharedSession] dataTaskWithURL:scaledUrl
+                                                                              completionHandler:^(NSData * data, NSURLResponse * response, NSError * error) {
+                                                                                  dispatch_async(dispatch_get_main_queue(), ^{
+                                                                                      [data writeToFile:filePath atomically:YES];
+                                                                                      for (ASTChildViewController * cont in self.pageController.viewControllers) {
+                                                                                          [cont sessionLoaded];
+                                                                                      }
+                                                                                  });
+                                                                              }] resume];
+                                             }
                                          }] resume];
         });
     }
@@ -143,6 +151,17 @@
     for (NSString *filename in fileArray)  {
         [fileManager removeItemAtPath:[PATH_TO_CACHE stringByAppendingPathComponent:filename] error:NULL];
     }
+}
+
+-(NSURL *) scaledUrlFromUrl:(NSURL *)url{
+    NSString *scaledUrl = url.absoluteString;
+    float endLgth = url.pathExtension.length;
+    endLgth ++; // including the "."
+    NSMutableString *mu = [NSMutableString stringWithString:scaledUrl];
+    NSString *insert = [UIScreen mainScreen].scale == 2 ? @"@2x" : @"@3x";
+    [mu insertString:insert atIndex:scaledUrl.length - endLgth];
+    scaledUrl = mu;
+    return [NSURL URLWithString:scaledUrl];
 }
 
 - (void)viewDidLoad {
