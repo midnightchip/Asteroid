@@ -10,11 +10,12 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Asteroid
 Asteroid_FILES = $(wildcard source/*.m source/*.xm source/*.mm source/*.x source/SetupWindow/*.m source/SetupWindow/*.xm source/SetupWindow/*.x)
-Asteroid_FRAMEWORKS = CoreLocation 
-Asteroid_LIBRARIES = rocketbootstrap
-Asteroid_PRIVATE_FRAMEWORKS = Weather WeatherUI AppSupport
-Asteroid_CFLAGS += -fobjc-arc -I$(THEOS_PROJECT_DIR)/source
-Asteroid_LDFLAGS += -lCSPreferencesProvider 
+$(TWEAK_NAME)_FRAMEWORKS = CoreLocation 
+$(TWEAK_NAME)_LIBRARIES = rocketbootstrap
+$(TWEAK_NAME)_EXTRA_FRAMEWORKS = astSetup
+$(TWEAK_NAME)_PRIVATE_FRAMEWORKS = Weather WeatherUI AppSupport
+$(TWEAK_NAME)_CFLAGS += -fobjc-arc -I$(THEOS_PROJECT_DIR)/source
+$(TWEAK_NAME)_LDFLAGS += -lCSPreferencesProvider 
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 

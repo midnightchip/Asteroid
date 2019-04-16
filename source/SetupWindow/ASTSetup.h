@@ -4,3 +4,7 @@ typedef NS_ENUM(NSUInteger, ASTSetupPageStyle) {
     ASTSetupStyleHeaderBasic = 2,
     ASTSetupStyleHeaderTwoButtons = 3
 };
+
+@interface ASTSetup : NSObject
+- (instancetype)initWithPages:(NSArray *)pages;
+@end
