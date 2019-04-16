@@ -17,6 +17,7 @@
     page1.primaryButtonLabel = @"Setup";
     page1.backButtonLabel = @"Skip";
     page1.mediaURL = @"https://the-casle.github.io/TweakResources/Asteroid.png";
+    page1.primaryBlock= [^{ NSLog(@"lock_TWEAK | block 1");} copy];
 /*
     NSDictionary *page2 = @{@"style": @(ASTSetupStyleHeaderTwoButtons),
         @"title": @"Lockscreen",
