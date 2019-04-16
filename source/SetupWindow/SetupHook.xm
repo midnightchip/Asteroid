@@ -9,14 +9,15 @@
 %property (nonatomic, retain) ASTSetup *setup;
 -(void)viewDidLoad {
     %orig;
-    NSDictionary *page1 = @{@"style": @(ASTSetupStyleHeaderBasic),
-        @"title": @"Asteroid",
-        @"description": @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.",
-        @"primaryButton": @"Setup",
-        @"backButton" : @"Skip",
-        @"mediaURL": @"https://the-casle.github.io/TweakResources/Asteroid.png",
-        @"disableBack": @(NO)
-    };
+    
+    ASTSetupSettings *page1 = [[ASTSetupSettings alloc] init];
+    page1.style = ASTSetupStyleHeaderBasic;
+    page1.title = @"Asteroid";
+    page1.titleDescription = @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.";
+    page1.primaryButtonLabel = @"Setup";
+    page1.backButtonLabel = @"Skip";
+    page1.mediaURL = @"https://the-casle.github.io/TweakResources/Asteroid.png";
+/*
     NSDictionary *page2 = @{@"style": @(ASTSetupStyleHeaderTwoButtons),
         @"title": @"Lockscreen",
         @"description": @"Basic iOS 12 lockscreen.",
@@ -92,9 +93,9 @@
         @"primaryBlock": [^{ NSLog(@"lock_TWEAK | block 1");} copy],
         //@"secondaryBlock": [^{ NSLog(@"lock_TWEAK | block 2");} copy],
         @"disableBack": @(NO)
-    };
+    };*/
     
-    NSArray *pages = @[page1, page2, page3, page4, page5, page6, page7, page8, page9];
+    NSArray *pages = @[page1];
     self.setup = [[ASTSetup alloc] initWithPages:pages];
 }
 %end
