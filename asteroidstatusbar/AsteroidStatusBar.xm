@@ -4,6 +4,26 @@
 #import "../source/LWPProvider.h"
 #define isSB [[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.apple.springboard"]
 
+@interface _UIStatusBarDataStringEntry
+@property (nonatomic, retain) NSString *stringValue;
+@end
+
+@interface _UIStatusBarData
+@property (nonatomic, retain) _UIStatusBarDataStringEntry *timeEntry;
+@end
+
+@interface _UIStatusBar
+@property (nonatomic, retain) _UIStatusBarData *currentData;
+@end
+
+@interface UIStatusBar_Modern
+@property (nonatomic, retain) _UIStatusBar *statusBar;
+@end
+
+@interface UIApplication (asteroid)
+-(id)statusBar;
+@end
+
 @interface _UIStatusBarStringView : UILabel
 @property (nonatomic, assign) BOOL isTime;
 @property (nonatomic, assign) BOOL isTapped;
@@ -124,9 +144,9 @@ static NSDictionary *getWeatherItems() {
 			self.isTapped = YES;
 			[self setText:@"RUN"];
 			[self performSelector:@selector(resetTime) withObject:nil afterDelay:10];
-		} /*else{
+		} else{
 			[self resetTime];
-		}*/
+		}
 	}
 }
 %new 
@@ -136,13 +156,11 @@ static NSDictionary *getWeatherItems() {
 }
 %new 
 -(NSString *)returnDateString{
-	NSDateFormatter *date = [[NSDateFormatter alloc] init];
-	date.dateStyle = NSDateFormatterNoStyle;
-	date.timeStyle = NSDateFormatterShortStyle;
-	NSString *dateString = [date stringFromDate:[NSDate date]];
-	dateString = [dateString stringByTrimmingCharactersInSet:[NSCharacterSet letterCharacterSet]];
-	dateString = [dateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	return dateString;
+    UIStatusBar_Modern *modernStat = [[UIApplication sharedApplication] statusBar];
+    NSString *timeString = modernStat.statusBar.currentData.timeEntry.stringValue;
+    timeString = [timeString stringByTrimmingCharactersInSet:[NSCharacterSet letterCharacterSet]];
+    timeString = [timeString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    return timeString;
 }
 
 %end

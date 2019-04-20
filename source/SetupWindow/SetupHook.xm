@@ -75,7 +75,7 @@
     page4.title = @"Editing Mode";
     page4.titleDescription = @"Move components and resize them.";
     page4.primaryButtonLabel = @"Continue";
-    page4.mediaURL = @"https://the-casle.github.io/TweakResources/forecast.jpg";
+    page4.mediaURL = @"https://the-casle.github.io/TweakResources/editing.m4v";
     
     ASTSetupSettings *page5 = [[ASTSetupSettings alloc] init];
     page5.style = [ASTTwoButtonsController class];
