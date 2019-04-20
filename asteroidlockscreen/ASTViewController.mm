@@ -42,7 +42,7 @@
 @property (nonatomic, retain) AWeatherModel *weatherModel;
 @property (nonatomic, getter=isEditing) BOOL editing;
 @property (nonatomic, retain) UIView *doneButtonView;
-@property (nonatomic, assign) UIDeviceOrientation previousRotation;
+@property (nonatomic, assign) UIInterfaceOrientation previousRotation;
 
 @property (nonatomic, retain) ASTGestureHandler *gestureHandler;
 
