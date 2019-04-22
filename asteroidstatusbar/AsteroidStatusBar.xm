@@ -176,6 +176,7 @@ static NSDictionary *getWeatherItems() {
 	_UIStatusBarStringView *orig = %orig;
 	orig.isTime = TRUE;
 	orig.timeFrame = orig.frame;
+    orig.isTime = YES;
 	return orig;
 }
 /*%new
