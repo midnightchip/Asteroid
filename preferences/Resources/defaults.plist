@@ -38,5 +38,7 @@
     <integer>0</integer>
     <key>foreHeight</key>
     <real>220</real>
+    <key>freezeCondition</key>
+    <false/>
 </dict>
 </plist>

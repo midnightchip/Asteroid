@@ -25,7 +25,7 @@ static WUIWeatherCondition* condition = nil;
 static int conditionNumberSet;
 
 static void updateAnimation(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-    if([[UIApplication sharedApplication] _accessibilityFrontMostApplication] == 0 && MSHookIvar<BOOL>([%c(SBLockScreenManager) sharedInstance], "_isScreenOn")){
+    if([[UIApplication sharedApplication] _accessibilityFrontMostApplication] == 0 && MSHookIvar<BOOL>([%c(SBLockScreenManager) sharedInstance], "_isScreenOn") && ![prefs boolForKey:@"freezeCondition"]){
         [condition resume];
     } else{
         [condition pause];
@@ -74,7 +74,11 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
         [self.referenceView.background setCity:backgroundCity];
         [self.referenceView.background setTag:123];
         
-        [[self.referenceView.background condition] resume];
+        if([prefs boolForKey:@"freezeCondition"]){
+            [[self.referenceView.background condition] pause];
+        } else {
+            [[self.referenceView.background condition] resume];
+        }
         condition = [self.referenceView.background condition];
         self.referenceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.referenceView.clipsToBounds = YES;

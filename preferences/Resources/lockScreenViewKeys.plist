@@ -257,6 +257,8 @@
                 <string>PSGroupCell</string>
                 <key>label</key>
                 <string>Hourly_Forecast_Options</string>
+                <key>footerText</key>
+                <string>Forecast_Height</string>
             </dict>
             
 			<dict>

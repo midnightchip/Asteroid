@@ -31,7 +31,7 @@ static UIView* weatherAnimation = nil;
 static bool Loaded = NO;
 
 static void updateAnimation(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-    if(MSHookIvar<BOOL>([%c(SBLockScreenManager) sharedInstance], "_isScreenOn")){
+    if(MSHookIvar<BOOL>([%c(SBLockScreenManager) sharedInstance], "_isScreenOn") && ![prefs boolForKey:@"freezeCondition"]){
         if(MSHookIvar<NSUInteger>([objc_getClass("SBLockStateAggregator") sharedInstance], "_lockState") == 3 || MSHookIvar<NSUInteger>([objc_getClass("SBLockStateAggregator") sharedInstance], "_lockState") == 1){
             [condition resume];
         } else{
@@ -60,7 +60,11 @@ void loadWeatherAnimation(City *city){
 
 			dynamicBG = [referenceView background];
 			condition = [dynamicBG condition];
-			[condition resume];
+            if([prefs boolForKey:@"freezeCondition"]){
+                [condition pause];
+            } else {
+                [condition resume];
+            }
 			[weatherAnimation addSubview:dynamicBG];
 			[dynamicBG setCity: city];
 			SBLockScreenManager *manager = [%c(SBLockScreenManager) sharedInstance];

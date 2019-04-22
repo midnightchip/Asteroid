@@ -86,7 +86,18 @@
                 <key>footerText</key>
                 <string>Hide_Explain</string>
             </dict>
-            
+            <dict>
+                <key>cell</key>
+                <string>PSSwitchCell</string>
+                <key>label</key>
+                <string>Freeze_Animations</string>
+                <key>key</key>
+                <string>freezeCondition</string>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+            </dict>
             <dict>
                 <key>cell</key>
                 <string>PSSegmentCell</string>
