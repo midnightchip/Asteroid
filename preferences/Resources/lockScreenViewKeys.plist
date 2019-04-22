@@ -64,9 +64,7 @@
                 <key>max</key>
                 <real>60</real>
                 <key>isSegmented</key>
-                <true/>
-                <key>segmentCount</key>
-                <real>48</real>
+                <false/>
                 <key>PostNotification</key>
                 <string>com.midnightchips.asteroid.prefschanged</string>
                 <key>defaults</key>
@@ -109,9 +107,7 @@
                 <key>max</key>
                 <real>60</real>
                 <key>isSegmented</key>
-                <true/>
-                <key>segmentCount</key>
-                <real>48</real>
+                <false/>
                 <key>PostNotification</key>
                 <string>com.midnightchips.asteroid.prefschanged</string>
                 <key>defaults</key>
@@ -154,9 +150,7 @@
                 <key>max</key>
                 <real>60</real>
                 <key>isSegmented</key>
-                <true/>
-                <key>segmentCount</key>
-                <real>48</real>
+                <false/>
                 <key>PostNotification</key>
                 <string>com.midnightchips.asteroid.prefschanged</string>
                 <key>defaults</key>
@@ -199,9 +193,7 @@
                 <key>max</key>
                 <real>60</real>
                 <key>isSegmented</key>
-                <true/>
-                <key>segmentCount</key>
-                <real>48</real>
+                <false/>
                 <key>PostNotification</key>
                 <string>com.midnightchips.asteroid.prefschanged</string>
                 <key>defaults</key>
@@ -280,6 +272,10 @@
 				<string>com.midnightchips.asteroid</string>
 				<key>defaultsPath</key>
 				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+                <key>enableSpecifiers</key>
+                <array>
+                    <string>foreHeight</string>
+                </array>
 			</dict>
 
 			<dict>
@@ -296,11 +292,32 @@
 				<key>defaultsPath</key>
 				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
 			</dict>
+            <dict>
+                <key>cell</key>
+                <string>PSSliderCell</string>
+                <key>key</key>
+                <string>foreHeight</string>
+                <key>showValue</key>
+                <true/>
+                <key>min</key>
+                <real>0</real>
+                <key>max</key>
+                <real>500</real>
+                <key>isSegmented</key>
+                <false/>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+            </dict>
             
             <dict>
                 <key>cell</key>
                 <string>PSGroupCell</string>
             </dict>
+            
             
             <dict>
                 <key>action</key>

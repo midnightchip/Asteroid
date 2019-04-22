@@ -36,5 +36,7 @@
     <true/>
     <key>astDefaultIndex</key>
     <integer>0</integer>
+    <key>foreHeight</key>
+    <real>220</real>
 </dict>
 </plist>

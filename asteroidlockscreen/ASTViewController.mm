@@ -127,7 +127,7 @@
         [self.view addSubview:self.wDescriptionGestureView];
     }
     
-    self.forecastGestureView = [[UIView alloc] initWithFrame:CGRectMake(0, (self.view.frame.size.height / 2), self.view.frame.size.width, self.view.frame.size.height/3)];
+    self.forecastGestureView = [[UIView alloc] initWithFrame:CGRectMake(0, (self.view.frame.size.height / 2), self.view.frame.size.width, [prefs intForKey:@"foreHeight"])];
     self.forecastComponentView = [[ASTComponentView alloc] initWithFrame:CGRectMake(0, 0, self.forecastGestureView.frame.size.width, self.forecastGestureView.frame.size.height)];
     self.forecastCont = [[objc_getClass("WAWeatherPlatterViewController") alloc] initWithLocation:self.weatherModel.city];
     ((UIView *)((NSArray *)self.forecastCont.view.layer.sublayers)[0]).hidden = YES; // Visual Effect view to hidden
