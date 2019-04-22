@@ -1,14 +1,19 @@
 #import "ASTSetup.h"
 #import "../source/LWPProvider.h"
+#import <spawn.h>
+#import <AudioToolbox/AudioToolbox.h>
 
 @interface SBCoverSheetPrimarySlidingViewController
 @property (nonatomic, retain) ASTSetup *setup;
 @end
 
+void startRespring();
+
 %hook SBCoverSheetPrimarySlidingViewController
 %property (nonatomic, retain) ASTSetup *setup;
 -(void)viewDidLoad {
     %orig;
+    if([prefs boolForKey:@"isSetup"]) return;
     
     ASTSetupSettings *page1 = [[ASTSetupSettings alloc] init];
     page1.style = [ASTHeaderBasicController class];
@@ -16,9 +21,9 @@
     page1.titleDescription = @"MidnightChips & the casle © 2019\n\nThank you for installing Asteroid. In order to deliver the best user experience, further setup is required.";
     page1.primaryButtonLabel = @"Setup";
     page1.secondaryButtonLabel = @"second";
-    page1.backButtonLabel = @"Skip";
     page1.mediaURL = @"https://the-casle.github.io/TweakResources/Asteroid.png";
-
+    page1.disableBack = YES;
+    
     ASTSetupSettings *page2 = [[ASTSetupSettings alloc] init];
     page2.style = [ASTHeaderTwoButtonsController class];
     page2.title = @"Lockscreen";
@@ -48,7 +53,7 @@
         [prefs setObject:@(NO) forKey:@"addBlur"];
         [prefs save];
     } copy];
-
+    
     ASTSetupSettings *page3 = [[ASTSetupSettings alloc] init];
     page3.style = [ASTTwoButtonsController class];
     page3.title = @"Lockscreen";
@@ -166,10 +171,84 @@
     page11.primaryButtonLabel = @"Finish";
     page11.mediaURL = @"http://aimra.org/goa_agm_application/img/animated-check.gif";
     page11.primaryBlock = [^{
-         [prefs save];
+        [prefs setObject:@(YES) forKey:@"isSetup"];
+        [prefs save];
+        startRespring();
     } copy];
-
+    
     NSArray *pages = @[page1, page2, page3, page4, page5, page6, page7, page8, page9, page10, page11];
     self.setup = [[ASTSetup alloc] initWithPages:pages];
 }
 %end
+
+#pragma mark - Respring
+void graduallyAdjustBrightnessToValue(CGFloat endValue){
+    CGFloat startValue = [[UIScreen mainScreen] brightness];
+    
+    CGFloat fadeInterval = 0.01;
+    double delayInSeconds = 0.005;
+    if (endValue < startValue)
+        fadeInterval = -fadeInterval;
+        
+        CGFloat brightness = startValue;
+        while (fabs(brightness-endValue)>0) {
+            
+            brightness += fadeInterval;
+            
+            if (fabs(brightness-endValue) < fabs(fadeInterval))
+                brightness = endValue;
+            
+            dispatch_time_t dispatchTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(dispatchTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[UIScreen mainScreen] setBrightness:brightness];
+            });
+        }
+    UIView *finalDarkScreen = [[UIView alloc] initWithFrame:[[UIApplication sharedApplication] keyWindow].bounds];
+    finalDarkScreen.backgroundColor = [UIColor blackColor];
+    finalDarkScreen.alpha = 0.3;
+    
+    //add it to the main window, but with no alpha
+    [[[UIApplication sharedApplication] keyWindow] addSubview:finalDarkScreen];
+    
+    [UIView animateWithDuration:1.0f
+                          delay:0.0f
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         finalDarkScreen.alpha = 1.0f;
+                     }
+                     completion:^(BOOL finished){
+                         if (finished) {
+                             //DIE
+                             AudioServicesPlaySystemSound(1521);
+                             sleep(1);
+                             pid_t pid;
+                             const char* args[] = {"killall", "-9", "backboardd", NULL};
+                             posix_spawn(&pid, "/usr/bin/killall", NULL, NULL, (char* const*)args, NULL);
+                         }
+                     }];
+}
+void startRespring (){
+    UIVisualEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    visualEffectView.frame = [[UIApplication sharedApplication] keyWindow].bounds;
+    visualEffectView.alpha = 0.0;
+    
+    //add it to the main window, but with no alpha
+    [[[UIApplication sharedApplication] keyWindow] addSubview:visualEffectView];
+    
+    //animate in the alpha
+    [UIView animateWithDuration:3.5f
+                          delay:0.0f
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         visualEffectView.alpha = 1.0f;
+                     }
+                     completion:^(BOOL finished){
+                         if (finished) {
+                             NSLog(@"Squiddy says hello");
+                             NSLog(@"Midnight replys with 'where am I?'");
+                             //call the animation here for the screen fade and respring
+                             graduallyAdjustBrightnessToValue(0.0f);
+                         }
+                     }];
+}

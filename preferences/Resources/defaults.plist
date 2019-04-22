@@ -40,5 +40,7 @@
     <real>220</real>
     <key>freezeCondition</key>
     <false/>
+    <key>isSetup</key>
+    <false/>
 </dict>
 </plist>
