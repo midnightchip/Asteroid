@@ -3,6 +3,10 @@
 #import <spawn.h>
 #import <AudioToolbox/AudioToolbox.h>
 
+#define DIRECTORY_PATH @"/var/mobile/Library/Asteroid"
+#define FILE_PATH @"/var/mobile/Library/Asteroid/Setup"
+
+
 @interface SBCoverSheetPrimarySlidingViewController
 @property (nonatomic, retain) ASTSetup *setup;
 @end
@@ -13,8 +17,7 @@ void startRespring();
 %property (nonatomic, retain) ASTSetup *setup;
 -(void)viewDidLoad {
     %orig;
-    if([prefs boolForKey:@"isSetup"]) return;
-    
+
     ASTSetupSettings *page1 = [[ASTSetupSettings alloc] init];
     page1.style = [ASTHeaderBasicController class];
     page1.title = @"Asteroid";
@@ -171,8 +174,14 @@ void startRespring();
     page11.primaryButtonLabel = @"Finish";
     page11.mediaURL = @"http://aimra.org/goa_agm_application/img/animated-check.gif";
     page11.primaryBlock = [^{
-        [prefs setObject:@(YES) forKey:@"isSetup"];
-        [prefs save];
+        BOOL isDir;
+        NSFileManager *fileManager= [NSFileManager defaultManager];
+        if(![fileManager fileExistsAtPath:DIRECTORY_PATH isDirectory:&isDir]){
+            [fileManager createDirectoryAtPath:DIRECTORY_PATH withIntermediateDirectories:YES attributes:nil error:NULL];
+        }
+        if(![fileManager fileExistsAtPath:FILE_PATH isDirectory:&isDir]){
+            [fileManager createFileAtPath:FILE_PATH contents:nil attributes:nil];
+        }
         startRespring();
     } copy];
     
@@ -251,4 +260,12 @@ void startRespring (){
                              graduallyAdjustBrightnessToValue(0.0f);
                          }
                      }];
+}
+
+%ctor{
+    BOOL isDir;
+    NSFileManager *fileManager= [NSFileManager defaultManager];
+    if(![fileManager fileExistsAtPath:FILE_PATH isDirectory:&isDir]){
+        %init;
+    }
 }
