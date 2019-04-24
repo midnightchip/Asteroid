@@ -1,0 +1,17 @@
+{
+    "Enable_Greet" = "تفعيل عرض التحية";
+    "Hide_Notif" = "إخفاء عرض التحية عند وجود إشعار";
+    "Notif_Explain" = "إخفاء عرض الطقس عند وجود إشعارات";
+    "Lockscreen_Components" = "مكونات شاشة القفل";
+    "Configure_Lockscreen_Components" = "إعداد مكونات شاشة القفل";
+    "Custom_Fonts" = "خطوط مخصصة";
+    "Enable_Custom_Font" = "تفعيل خط مخصص";
+    "Select_Custom_Font" = "تحديد خط مخصص";
+    "Set_Text_Color" = "تعيين لون النص";
+    "Use_Custom_Glyph_Image" = "استخدام الصورة الرمزية المخصصة";
+    "Select_Weather_Glyph_Type" = "حدد نوع صورة الطقس الرمزية";
+    "Set_Glyph_Color" = "تعيين لون الصورة الرمزية";
+    "Blur_Amount" = "مقدار الضبابية";
+    "Lock_Screen" = "شاشة القفل";
+
+}

@@ -1,0 +1,21 @@
+{
+    "Editing" = "وضع التحرير";
+    "Edit_Explain" = "يمكنك تغيير حجم العناصر وتغيير مكانها في شاشة القفل عبر الدخول إلى وضع التحرير. وللدخول إليه قم بالضغط مطولًا على أي عنصر من العناصر، وبعد الإنتهاء من التعديل اضغط على زر 'تم' الذي ستجده في الأعلى.";
+    "Enable_Editing" = "تفعيل وضع التحرير";
+    "Pleasantry_Size" = "حجم نص التحية.";
+    "Enable_Pleasantry" = "تفعيل التحية";
+    "Weather_Description_Size" = "حجم وصف الطقس.";
+    "Enable_Weather_Description" = "تفعيل وصف الطقس";
+    "Current_Temperature_Text_Size" = "حجم نص درجة الحرارة الحالية";
+    "Enable_Current_Temperature" = "تفعيل درجة الحرارة الحالية";
+    "Dismiss_Button_Size" = "حجم زر التجاهل";
+    "Enable_Dismiss_Button" = "تفعيل زر التجاهل";
+    "Enable_Glyph" = "تفعيل الصورة الرمزية";
+    "Enable_Notification_Reminder" = "تفعيل التذكير بالإشعارات";
+    "Enable_Blur" = "تفعيل الضبابية";
+    "Hourly_Forecast_Options" = "خيارات التوقعات";
+    "Enable_Weather_Preview" = "تفعيل معاينة الطقس";
+    "Enable_Weather_Forecast_Info" = "تفعيل معلومات التنبؤ بالطقس";
+    "Reset_Components" = "إعادة تعيين إعدادات العناصر إلى الافتراضية";
+    "Components" = "العناصر";
+}
