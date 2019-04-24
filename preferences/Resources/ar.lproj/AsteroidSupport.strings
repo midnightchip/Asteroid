@@ -1,0 +1,29 @@
+{
+    "Developer" = "مطور";
+    "Info" = "معلومات";
+    "Depiction" = "الوصف";
+    "Learn_more_about_Asteroid" = "اعرف أكثر عن Asteroid";
+    "Donations" = "التبرعات";
+    "Make_a_Donation" = "قم بالتبرع";
+    "Compensate_Casle" = "عبر عن مدى تقديرك لـ the casle ولجهوده..";
+    "Compensate_Midnight" = "عبر عن مدى تقديرك لـ MidnightChips ولجهوده..";
+    "Support" = "الدعم";
+    "Submit_an_Issue" = "تقديم خطأ";
+    "Report_Bug" = "التبليغ عن خطأ عبر GitHub";
+    "Email_Support" = "الدعم عبر البريد";
+    "Email_Me" = "أتحتاج لمساعدة؟ أرسل لنا رسالة عبر البريد وسنبذل قصارى جهدنا.";
+    "Copy_Tweak_List" = "نسخ قائمة الأدوات";
+    "Get_List" = "هل تحتاج إلى قائمة بجميع أدواتك المثبتة؟";
+    "Contact" = "حساباتنا على مواقع التواصل";
+    "Special_Thanks" = "شكر خاص";
+    
+    "Reddit_Casle" = "تابع the casle على ريديت لتبقى على اطلاع بكل ماهو جديد";
+    "Reddit_Midnight" = "تابع MidnightChips على ريديت لتبقى على اطلاع بكل ماهو جديد";
+    "June_Repo" = "سورس JunesiPhone";
+    "June_Blurb" = "ادعم June عن طريق التبرع له وامتلك حق الوصول إلى جميع أدواته وثيماته الرائعة.";
+    "Weather_Animations" = "Weather Animations";
+    "WA_Perms" = "كان لدينا إذن باستخدام WeatherAnimations لبدء Asteroid";
+    "License_Information" = "معلومات الترخيص";
+    "Asteroid_Support" = "الدعم الخاص بـ Asteroid";
+
+}
