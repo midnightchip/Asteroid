@@ -10,4 +10,5 @@
     "Hide_Explain" = "Disable Layers of Live Weather";
     "Live_Weather" = "Live Weather";
     "Freeze_Animations" = "Freeze Animations";
+    "Freeze_Explain" = "Prevent animations from moving.";
 }

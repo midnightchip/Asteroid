@@ -84,7 +84,7 @@
                 <key>cell</key>
                 <string>PSGroupCell</string>
                 <key>footerText</key>
-                <string>Hide_Explain</string>
+                <string>Freeze_Explain</string>
             </dict>
             <dict>
                 <key>cell</key>
@@ -97,6 +97,12 @@
                 <string>com.midnightchips.asteroid.prefschanged</string>
                 <key>defaults</key>
                 <string>com.midnightchips.asteroid</string>
+            </dict>
+            <dict>
+                <key>cell</key>
+                <string>PSGroupCell</string>
+                <key>footerText</key>
+                <string>Hide_Explain</string>
             </dict>
             <dict>
                 <key>cell</key>
