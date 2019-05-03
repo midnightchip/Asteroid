@@ -36,6 +36,7 @@
 -(void)setAlternateText:(NSString *)arg1;
 -(void)setShowsAlternateText:(BOOL)arg1 ;
 -(void)generateWeatherData;
+-(void)generateWeatherWithTime:(NSString *)currentTime;
 -(void)swapTime:(UIGestureRecognizer *)sender;
 -(void)resetTime;
 -(NSString *)returnDateString;
@@ -95,21 +96,26 @@ static NSDictionary *getWeatherItems() {
 	}
 }
 -(void)setText:(id)arg1{
-	if(self.isTime && self.isTapped){
-		[UIView transitionWithView:self
+	if(self.isTime){
+		if([prefs boolForKey:@"enableGlyphTime"]){
+			[self generateWeatherWithTime:arg1];
+		}
+		if(self.isTapped){
+			[UIView transitionWithView:self
                 duration:0.15f
                 options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
                 animations:^{
 					[self generateWeatherData];
-		} completion:nil];
-	}else{
-		[UIView transitionWithView:self
-                duration:0.15f
-                options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
-                animations:^{
-					%orig;
-		} completion:nil];
-	}
+			} completion:nil];
+		}else{
+			[UIView transitionWithView:self
+                	duration:0.15f
+                	options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
+                	animations:^{
+						%orig;
+			} completion:nil];
+		}
+	}	
 }
 %new
 -(void)generateWeatherData{
@@ -132,6 +138,30 @@ static NSDictionary *getWeatherItems() {
                         NSFontAttributeName: self.font
                         };
 	NSAttributedString *tempString = [[NSAttributedString alloc] initWithString:weatherItems[@"temp"] attributes:attribs];
+	[imageFixText appendAttributedString:tempString];
+	[self setAttributedText:imageFixText];
+}
+%new
+-(void)generateWeatherWithTime:(NSString *)currentTime{
+    NSDictionary *weatherItems = getWeatherItems();
+	NSTextAttachment *weatherAttach = [[NSTextAttachment alloc] init];
+	UIImage *weatherImage = weatherItems[@"image"];//weatherItems[@"image"];
+	double aspect = weatherImage.size.width / weatherImage.size.height;
+	weatherImage = [weatherImage scaleImageToSize:CGSizeMake(self.font.lineHeight * aspect, self.font.lineHeight)];
+	[weatherAttach setBounds:CGRectMake(0, roundf(self.font.capHeight - weatherImage.size.height)/2.f, weatherImage.size.width, weatherImage.size.height)];
+	weatherImage = [weatherImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	weatherAttach.image = weatherImage;
+	//Stupid Tint workaround
+    NSMutableAttributedString *imageFixText = [[NSMutableAttributedString alloc] initWithAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+    NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:weatherAttach];
+	[imageFixText appendAttributedString:attachmentString];
+    [imageFixText addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:0] range:NSMakeRange(0, imageFixText.length)]; // Put font size 0 to prevent offset
+    [imageFixText appendAttributedString:[[NSAttributedString alloc] initWithString:@""]];
+	//End stupid UIKit workaround
+	NSDictionary *attribs = @{
+                        NSFontAttributeName: self.font
+                        };
+	NSAttributedString *tempString = [[NSAttributedString alloc] initWithString:currentTime attributes:attribs];
 	[imageFixText appendAttributedString:tempString];
 	[self setAttributedText:imageFixText];
 }

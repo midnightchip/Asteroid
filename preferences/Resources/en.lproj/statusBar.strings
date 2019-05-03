@@ -4,4 +4,5 @@
     "Carrier_NameX" = "Status Bar";
     "Enable_Time_Weather" = "Tap the to show weather condition (iPhone X or Fluid Tweaks only)";
     "Time_NameX" = "Status Bar Time";
+    "Enable_Glyph_Time" = "Have the weather glyph next to the time";
 }

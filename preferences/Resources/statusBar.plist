@@ -48,6 +48,20 @@
 				<key>defaultsPath</key>
 				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
 			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>label</key>
+				<string>Enable_Glyph_Time</string>
+				<key>key</key>
+				<string>enableGlyphTimeX</string>
+				<key>PostNotification</key>
+				<string>com.midnightchips.asteroid.prefschanged</string>
+				<key>defaults</key>
+				<string>com.midnightchips.asteroid</string>
+				<key>defaultsPath</key>
+				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
+			</dict>
 
 
         
