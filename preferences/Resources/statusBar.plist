@@ -10,6 +10,8 @@
 				<string>PSGroupCell</string>
 				<key>label</key>
 				<string>Carrier_NameX</string>
+                <key>footerText</key>
+                <string>Enable_Cover_Carrier_Description</string>
 			</dict>
 
 			<dict>
@@ -32,22 +34,11 @@
 				<string>PSGroupCell</string>
 				<key>label</key>
 				<string>Time_NameX</string>
+                <key>footerText</key>
+                <string>Enable_Time_Weather_Description</string>
 			</dict>
 
-			<dict>
-				<key>cell</key>
-				<string>PSSwitchCell</string>
-				<key>label</key>
-				<string>Enable_Time_Weather</string>
-				<key>key</key>
-				<string>enableTimeStatusX</string>
-				<key>PostNotification</key>
-				<string>com.midnightchips.asteroid.prefschanged</string>
-				<key>defaults</key>
-				<string>com.midnightchips.asteroid</string>
-				<key>defaultsPath</key>
-				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
-			</dict>
+			
 			<dict>
 				<key>cell</key>
 				<string>PSSwitchCell</string>
@@ -63,6 +54,20 @@
 				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
 			</dict>
 
+            <dict>
+                <key>cell</key>
+                <string>PSSwitchCell</string>
+                <key>label</key>
+                <string>Enable_Time_Weather</string>
+                <key>key</key>
+                <string>enableTimeStatusX</string>
+                <key>PostNotification</key>
+                <string>com.midnightchips.asteroid.prefschanged</string>
+                <key>defaults</key>
+                <string>com.midnightchips.asteroid</string>
+                <key>defaultsPath</key>
+                <string>/Library/PreferenceBundles/Asteroid.bundle</string>
+            </dict>
 
         
             

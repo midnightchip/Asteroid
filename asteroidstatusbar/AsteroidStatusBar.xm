@@ -95,26 +95,29 @@ static NSDictionary *getWeatherItems() {
         
 	}
 }
+
 -(void)setText:(id)arg1{
 	if(self.isTime){
-		if([prefs boolForKey:@"enableGlyphTime"]){
-			[self generateWeatherWithTime:arg1];
-		}
-		if(self.isTapped){
-			[UIView transitionWithView:self
-                duration:0.15f
-                options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
-                animations:^{
-					[self generateWeatherData];
-			} completion:nil];
-		}else{
-			[UIView transitionWithView:self
-                	duration:0.15f
-                	options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
-                	animations:^{
-						%orig;
-			} completion:nil];
-		}
+        %orig(@""); // Make sure the font properties are all there
+        if(self.isTapped){
+            [UIView transitionWithView:self
+                              duration:0.15f
+                               options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
+                            animations:^{
+                                [self generateWeatherData];
+                            } completion:nil];
+        }else{
+            if([prefs boolForKey:@"enableGlyphTimeX"]){
+                [self generateWeatherWithTime:arg1];
+            } else {
+                [UIView transitionWithView:self
+                                  duration:0.15f
+                                   options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
+                                animations:^{
+                                    %orig;
+                                } completion:nil];
+            }
+        }
 	}else{
 		%orig;
 	}	
