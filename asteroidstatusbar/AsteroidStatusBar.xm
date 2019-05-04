@@ -115,6 +115,8 @@ static NSDictionary *getWeatherItems() {
 						%orig;
 			} completion:nil];
 		}
+	}else{
+		%orig;
 	}	
 }
 %new
