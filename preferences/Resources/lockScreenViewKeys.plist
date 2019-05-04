@@ -274,10 +274,6 @@
 				<string>com.midnightchips.asteroid</string>
 				<key>defaultsPath</key>
 				<string>/Library/PreferenceBundles/Asteroid.bundle</string>
-                <key>enableSpecifiers</key>
-                <array>
-                    <string>foreHeight</string>
-                </array>
 			</dict>
 
 			<dict>
