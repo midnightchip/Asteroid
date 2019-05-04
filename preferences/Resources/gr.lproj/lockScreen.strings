@@ -8,10 +8,7 @@
     "Enable_Custom_Font" = "Ενεργοποίηση προσαρμοσμένης γραμματοσειράς";
     "Select_Custom_Font" = "Επιλέξτε προσαρμοσμένη γραμματοσειρά";
     "Set_Text_Color" = "Ορισμός χρώματος κειμένου";
-    "Use_Custom_Glyph_Image" = "Χρησιμοποιήστε την προσαρμοσμένη εικόνα Glyph";
-    "Select_Weather_Glyph_Type" = "Επιλέξτε τύπο Glyph για τον καιρό";
-    "Set_Glyph_Color" = "Ορίστε το χρώμα Glyph";
-    "Blur_Amount" = "Ποσό θολώματος";
+    
     "Lock_Screen" = "Οθόνη Κλειδώματος";
 
 }

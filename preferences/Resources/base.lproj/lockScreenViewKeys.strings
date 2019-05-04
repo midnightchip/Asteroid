@@ -19,4 +19,8 @@
     "Reset_Components" = "Reset Components";
     "Components" = "Components";
     "Forecast_Height" = "Forecast Height";
+    "Blur_Amount" = "Blur Amount";
+    "Use_Custom_Glyph_Image" = "Use Custom Glyph Image";
+    "Select_Weather_Glyph_Type" = "Select Weather Glyph Type";
+    "Set_Glyph_Color" = "Set Glyph Color";
 }

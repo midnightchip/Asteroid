@@ -8,9 +8,5 @@
     "Enable_Custom_Font" = "Enable Custom Font";
     "Select_Custom_Font" = "Select Custom Font";
     "Set_Text_Color" = "Set Text Color";
-    "Use_Custom_Glyph_Image" = "Use Custom Glyph Image";
-    "Select_Weather_Glyph_Type" = "Select Weather Glyph Type";
-    "Set_Glyph_Color" = "Set Glyph Color";
-    "Blur_Amount" = "Blur Amount";
     "Lock_Screen" = "Lock Screen";
 }

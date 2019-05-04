@@ -18,4 +18,8 @@
     "Enable_Weather_Forecast_Info" = "تفعيل معلومات التنبؤ بالطقس";
     "Reset_Components" = "إعادة تعيين إعدادات العناصر إلى الافتراضية";
     "Components" = "العناصر";
+    "Use_Custom_Glyph_Image" = "استخدام الصورة الرمزية المخصصة";
+    "Select_Weather_Glyph_Type" = "حدد نوع صورة الطقس الرمزية";
+    "Set_Glyph_Color" = "تعيين لون الصورة الرمزية";
+    "Blur_Amount" = "مقدار الضبابية";
 }

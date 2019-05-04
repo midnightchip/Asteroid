@@ -18,4 +18,8 @@
     "Enable_Weather_Forecast_Info" = "Wetter Prognose aktivieren";
     "Reset_Components" = "Komponenten zurücksetzten";
     "Components" = "Komponenten";
+    "Use_Custom_Glyph_Image" = "Verwende eigenes Glyph";
+    "Select_Weather_Glyph_Type" = "Wetter Glyph-Typ auswählen";
+    "Set_Glyph_Color" = "Glyph Farbe auswählen";
+    "Blur_Amount" = "Blur Stärke";
 }

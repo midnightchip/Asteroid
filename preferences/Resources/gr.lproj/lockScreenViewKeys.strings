@@ -17,4 +17,8 @@
     "Enable_Weather_Forecast_Info" = "Ενεργοποιήστε τις πληροφορίες πρόγνωσης καιρού";
     "Reset_Components" = "Επαναφορά στοιχείων";
     "Components" = "Στοιχεία/Μέρη";
+    "Use_Custom_Glyph_Image" = "Χρησιμοποιήστε την προσαρμοσμένη εικόνα Glyph";
+    "Select_Weather_Glyph_Type" = "Επιλέξτε τύπο Glyph για τον καιρό";
+    "Set_Glyph_Color" = "Ορίστε το χρώμα Glyph";
+    "Blur_Amount" = "Ποσό θολώματος";
 }

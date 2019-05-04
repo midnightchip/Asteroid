@@ -17,4 +17,8 @@
     "Enable_Weather_Forecast_Info" = "Attiva Informazioni Sul Meteo";
     "Reset_Components" = "Resetta i Componenti";
     "Components" = "Componenti";
+    "Use_Custom_Glyph_Image" = "Usa Glifo Personalizzato";
+    "Select_Weather_Glyph_Type" = "Seleziona il Tipo di Glifo Meteorologico";
+    "Set_Glyph_Color" = "Seleziona Colore Del Glifo";
+    "Blur_Amount" = "Quantità Della Sfocatura";
 }
