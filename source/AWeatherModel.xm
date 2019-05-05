@@ -90,11 +90,7 @@
 
 -(void) handleDefault{
     if(((NSArray *)[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"]).count > 0){
-        if(![prefs intForKey:@"astDefaultIndex"] && [[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults].count > 0){
-            self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][([[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults].count - 1)]];
-        }else if([prefs intForKey:@"astDefaultIndex"]){
-            self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][[prefs intForKey:@"astDefaultIndex"]]];
-        }
+        self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][[prefs intForKey:@"astDefaultIndex"]]];
         [self verifyAndCorrectCondition];
         self.localWeather = self.city.isLocalWeatherCity;
         self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.city.wfLocation];
