@@ -29,6 +29,9 @@
     rocketbootstrap_distributedmessagingcenter_apply(messagingCenter);
     NSDictionary *serverDict = [messagingCenter sendMessageAndReceiveReplyName:@"cityIndex" userInfo:nil/* optional dictionary */];
     NSNumber *indexValue = serverDict[@"index"];
-    [prefs setObject:indexValue forKey:@"astDefaultIndex"];
+    if(indexValue){
+        [prefs setObject:indexValue forKey:@"astDefaultIndex"];
+    }
+    
     [prefs save];
 }
