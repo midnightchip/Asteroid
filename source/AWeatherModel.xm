@@ -27,9 +27,18 @@
     [self.locationProviderModel setIsLocationTrackingEnabled:YES];
     
     [self.locationProviderModel _executeLocationUpdateForLocalWeatherCityWithCompletion:^{
-        [self updateWeatherDataWithCompletion:^{
-            [self setUpRefreshTimer];
-        }];
+        if(self.locationProviderModel.geocodeRequest.geocodedResult){
+            [self updateWeatherDataWithCompletion:^{
+                [self setUpRefreshTimer];
+            }];
+        } else{
+            NSLog(@"lock_TWEAK | didnt work");
+            [self handleDefault];
+            [self postNotification];
+            [self updateWeatherDataWithCompletion:^{
+                [self setUpRefreshTimer];
+            }];
+        }
     }];
     [self.locationProviderModel setIsLocationTrackingEnabled:NO];
 }
