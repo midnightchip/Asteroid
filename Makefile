@@ -1,7 +1,7 @@
-ARCHS = arm64 arm64e
-TARGET = iphone:clang:11.2:10.0
+export ARCHS = arm64 arm64e
+export TARGET = iphone:clang:11.2:10.0
 
-DEBUG = 0
+DEBUG = 1
 FINALPACKAGE = 0
 GO_EASY_ON_ME = 0
 
@@ -10,12 +10,11 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Asteroid
 Asteroid_FILES = $(wildcard source/*.m source/*.xm source/*.mm source/*.x source/SetupWindow/*.m source/SetupWindow/*.xm source/SetupWindow/*.x)
-$(TWEAK_NAME)_FRAMEWORKS = CoreLocation 
-$(TWEAK_NAME)_LIBRARIES = rocketbootstrap
-$(TWEAK_NAME)_EXTRA_FRAMEWORKS = AsteroidSetup
-$(TWEAK_NAME)_PRIVATE_FRAMEWORKS = Weather WeatherUI AppSupport
-$(TWEAK_NAME)_CFLAGS += -fobjc-arc -I$(THEOS_PROJECT_DIR)/source
-$(TWEAK_NAME)_LDFLAGS += -lCSPreferencesProvider 
+Asteroid_FRAMEWORKS = CoreLocation 
+Asteroid_LIBRARIES = rocketbootstrap CSPreferencesProvider 
+Asteroid_EXTRA_FRAMEWORKS = AsteroidSetup
+Asteroid_PRIVATE_FRAMEWORKS = Weather WeatherUI AppSupport
+Asteroid_CFLAGS += -fobjc-arc -I$(THEOS_PROJECT_DIR)/source
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 

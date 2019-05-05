@@ -4,6 +4,7 @@
 #import "WeatherHeaders.h"
 #import "ConditionOption.h"
 #import "ConditionImageType.h"
+#import "DGLogging.h"
 #define prefs [LWPProvider sharedProvider]
 
 typedef void(^completion)();

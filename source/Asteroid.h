@@ -3,6 +3,7 @@
 #import "AWeatherModel.h"
 #import <substrate.h>
 #import <CoreLocation/CoreLocation.h>
+#import "DGLogging.h"
 
 /* weather background */
 @interface WUIWeatherCondition : NSObject

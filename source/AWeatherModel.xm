@@ -27,34 +27,26 @@
     [self.locationProviderModel setIsLocationTrackingEnabled:YES];
     
     [self.locationProviderModel _executeLocationUpdateForLocalWeatherCityWithCompletion:^{
-        if(self.locationProviderModel.geocodeRequest.geocodedResult){
-            [self updateWeatherDataWithCompletion:^{
-                [self setUpRefreshTimer];
-            }];
-        } else{
-            NSLog(@"lock_TWEAK | didnt work");
-            [self handleDefault];
-            [self postNotification];
+        [self updateWeatherDataWithCompletion:^{
             [self setUpRefreshTimer];
-        }
+        }];
     }];
     [self.locationProviderModel setIsLocationTrackingEnabled:NO];
 }
 
 -(void)updateWeatherDataWithCompletion:(completion) compBlock{
+    FLOG(@"updateWeatherDataWithCompletion");
     self.todayModel = [objc_getClass("WATodayModel") autoupdatingLocationModelWithPreferences:self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
     [self.todayModel setLocationServicesActive:YES];
-    [self.todayModel setIsLocationTrackingEnabled:YES];
     [self.todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *error) {
         if(!error){
+            FLOG(@"successfully, no error when updating");
             self.forecastModel = self.todayModel.forecastModel;
             self.city = self.forecastModel.city;
             [self verifyAndCorrectCondition];
             self.localWeather = self.city.isLocalWeatherCity;
-            [self.todayModel setIsLocationTrackingEnabled:NO];
             self.populated = YES;
             self.hasFallenBack = NO;
-            
         } else {
             [self handleDefault];
         }
@@ -90,6 +82,7 @@
 
 -(void) handleDefault{
     if(((NSArray *)[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"]).count > 0){
+        FLOG(@"Defaulted, count is greater than 0");
         self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][[prefs intForKey:@"astDefaultIndex"]]];
         [self verifyAndCorrectCondition];
         self.localWeather = self.city.isLocalWeatherCity;
@@ -99,6 +92,7 @@
         self.populated = YES;
         self.hasFallenBack = NO;
     } else {
+        FLOG(@"FallenBack within handleDefault method");
         self.hasFallenBack = YES;
     }
 }
