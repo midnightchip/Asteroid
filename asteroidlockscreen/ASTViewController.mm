@@ -328,24 +328,30 @@
 
 -(void) updateViewForWeatherData {
     if(self.weatherModel.isPopulated || self.weatherModel.hasFallenBack){
-        UIImage *icon;
-        BOOL setColor = FALSE;
-        if(![prefs boolForKey:@"customImage"]){
-            icon = [self.weatherModel glyphWithOption:ConditionOptionDefault];
-        }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
-            icon = [self.weatherModel glyphWithOption:ConditionOptionDefault];
-            setColor = TRUE;
-        }else{
-            icon = [self.weatherModel glyphWithOption:ConditionOptionBlack];
-            setColor = TRUE;
+        if(!self.weatherModel.hasFallenBack){
+            UIImage *icon;
+            BOOL setColor = FALSE;
+            if(![prefs boolForKey:@"customImage"]){
+                icon = [self.weatherModel glyphWithOption:ConditionOptionDefault];
+            }else if ([[prefs stringForKey:@"setImageType"] isEqualToString:@"Filled Solid Color"]){
+                icon = [self.weatherModel glyphWithOption:ConditionOptionDefault];
+                setColor = TRUE;
+            }else{
+                icon = [self.weatherModel glyphWithOption:ConditionOptionBlack];
+                setColor = TRUE;
+            }
+            self.logo.image = icon;
+            if(setColor){
+                self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                [self.logo setTintColor:[prefs colorForKey:@"glyphColor"]];
+            }
+            self.logo.contentMode = UIViewContentModeScaleAspectFit;
+            
+            self.forecastCont.model = self.weatherModel.todayModel;
+            [self.forecastCont.model forecastModel];
+            [self.forecastCont.headerView _updateContent];
+            [self.forecastCont _updateViewContent];
         }
-        self.logo.image = icon;
-        if(setColor){
-            self.logo.image = [self.logo.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            [self.logo setTintColor:[prefs colorForKey:@"glyphColor"]];
-        }
-        self.logo.contentMode = UIViewContentModeScaleAspectFit;
-        
         self.currentTemp.text = [self.weatherModel localeTemperature];
         
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -375,13 +381,7 @@
         self.greetingLabel.textAlignment = NSTextAlignmentCenter;
         
         [self adjustWDescriptionViewsForString:[self.weatherModel currentConditionOverview]];
-
-        if(self.weatherModel.isPopulated){
-            self.forecastCont.model = self.weatherModel.todayModel;
-            [self.forecastCont.model forecastModel];
-            [self.forecastCont.headerView _updateContent];
-            [self.forecastCont _updateViewContent];
-        }
+       
     }
 }
 

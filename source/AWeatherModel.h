@@ -21,7 +21,6 @@ typedef void(^completion)();
 @property (nonatomic) BOOL hasFallenBack;
 
 + (instancetype)sharedInstance;
--(void) _kickStartWeatherFramework;
 -(void)updateWeatherDataWithCompletion:(completion) compBlock;
 -(void)setUpRefreshTimer;
 -(void) postNotification;

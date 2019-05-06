@@ -62,7 +62,7 @@
 %end 
 
 %ctor{
-	if([prefs boolForKey:@"enableCoverStatusX"]){
+	if([prefs boolForKey:@"enableCoverStatusX"] && [prefs boolForKey:@"kLWPEnabled"]){
 		%init();
 	}
 }

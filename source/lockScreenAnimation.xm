@@ -92,13 +92,14 @@ void loadWeatherAnimation(City *city){
 
 void loadCityForView(){
     AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
-    City *backgroundCity = weatherModel.city;
-    if([prefs boolForKey:@"customCondition"]){
-        backgroundCity = [weatherModel.city cityCopy];
-        backgroundCity.conditionCode = [prefs doubleForKey:@"weatherConditions"];
+    if(weatherModel.isPopulated){
+        City *backgroundCity = weatherModel.city;
+        if([prefs boolForKey:@"customCondition"]){
+            backgroundCity = [weatherModel.city cityCopy];
+            backgroundCity.conditionCode = [prefs doubleForKey:@"weatherConditions"];
+        }
+        loadWeatherAnimation(backgroundCity);
     }
-    
-    if(weatherModel.isPopulated)loadWeatherAnimation(backgroundCity);
 }
 
 %hook SBLockScreenManager

@@ -101,13 +101,13 @@ static WUIWeatherCondition* condition = nil;
         self.temp.text = [_weatherModel localeTemperature];
         [self.temp layoutSubviews];
         
-        UIImage *icon;
-        icon = [_weatherModel glyphWithOption:ConditionOptionWhite];
-        self.logo.image = icon;
-        [self.logo layoutSubviews];
-        [self layoutSubviews];
-        
         if([prefs boolForKey:@"appScreenWeatherBackground"] && _weatherModel.isPopulated){
+            UIImage *icon;
+            icon = [_weatherModel glyphWithOption:ConditionOptionWhite];
+            self.logo.image = icon;
+            [self.logo layoutSubviews];
+            [self layoutSubviews];
+            
             City *backgroundCity = _weatherModel.city;
             if([prefs boolForKey:@"customConditionIcon"]){
                 backgroundCity = [_weatherModel.city cityCopy];

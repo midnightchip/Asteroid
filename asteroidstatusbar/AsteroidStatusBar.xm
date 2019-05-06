@@ -226,7 +226,7 @@ static NSDictionary *getWeatherItems() {
 %end
 
 %ctor{
-	if([prefs boolForKey:@"enableTimeStatusX"]){
+	if([prefs boolForKey:@"enableTimeStatusX"] && [prefs boolForKey:@"kLWPEnabled"]){
 		%init();
 	}
 }

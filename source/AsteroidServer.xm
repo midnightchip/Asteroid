@@ -94,6 +94,8 @@
 @end
 
 %ctor{
-	HBLogDebug(@"Loaded");
-	[AsteroidServer load];
+    if([prefs boolForKey:@"kLWPEnabled"]){
+        HBLogDebug(@"Loaded");
+        [AsteroidServer load];
+    }
 }

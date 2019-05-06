@@ -20,33 +20,11 @@
     return sharedInstance;
 }
 
--(void) _kickStartWeatherFramework{
-    self.weatherPreferences = [objc_getClass("WeatherPreferences") sharedPreferences];
-    self.locationProviderModel = [NSClassFromString(@"WATodayModel") autoupdatingLocationModelWithPreferences: self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
-    [self.locationProviderModel setLocationServicesActive:YES];
-    [self.locationProviderModel setIsLocationTrackingEnabled:YES];
-    
-    [self.locationProviderModel _executeLocationUpdateForLocalWeatherCityWithCompletion:^{
-        if(self.locationProviderModel.geocodeRequest.geocodedResult){
-            [self updateWeatherDataWithCompletion:^{
-                [self setUpRefreshTimer];
-            }];
-        } else{
-            NSLog(@"lock_TWEAK | didnt work");
-            [self handleDefault];
-            [self postNotification];
-            [self updateWeatherDataWithCompletion:^{
-                [self setUpRefreshTimer];
-            }];
-        }
-    }];
-    [self.locationProviderModel setIsLocationTrackingEnabled:NO];
-}
-
 -(void)updateWeatherDataWithCompletion:(completion) compBlock{
     FLOG(@"updateWeatherDataWithCompletion");
     self.todayModel = [objc_getClass("WATodayModel") autoupdatingLocationModelWithPreferences:self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
     [self.todayModel setLocationServicesActive:YES];
+    [self.locationProviderModel setIsLocationTrackingEnabled:YES];
     [self.todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *error) {
         if(!error){
             FLOG(@"successfully, no error when updating");
@@ -61,6 +39,7 @@
         }
         [self postNotification];
         if(compBlock) compBlock();
+        [self.locationProviderModel setIsLocationTrackingEnabled:NO];
     }];
 }
 
@@ -238,5 +217,8 @@
 
 %ctor{
     // Used to kickstart AWeatherModel.
-    [[%c(AWeatherModel) sharedInstance] _kickStartWeatherFramework];
+    AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
+    [weatherModel updateWeatherDataWithCompletion:^{
+        [weatherModel setUpRefreshTimer];
+    }];
 }
