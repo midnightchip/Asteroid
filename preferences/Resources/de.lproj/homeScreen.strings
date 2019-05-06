@@ -1,7 +1,7 @@
 {
-    "Hide_Dock" = "Dock verbergen";
-    "Make_Transparent" = "Transparenter Homescreen Dock";
-    "Hide_Folders" = "Ordner verbergen";
-    "Make_Folder_Transparent" = "Transparente Homescreen Ordner";
-    "Home_Screen" = "Homescreen";
+    "Hide_Dock" = "Dock verstecken";
+    "Make_Transparent" = "Transparentes Dock";
+    "Hide_Folders" = "Ordner verstecken";
+    "Make_Folder_Transparent" = "Transparente Ordner";
+    "Home_Screen" = "Home-Bildschirm";
 }
