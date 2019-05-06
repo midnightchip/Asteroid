@@ -1,12 +1,14 @@
 {
-    "Enable_Lock" = "Lockscreen aktivieren";
-    "Control_Lock" = "Aktiviert das Live Wetter auf dem Lockscreen";
-    "Enable_Home" = "Homescreen aktivieren";
-    "Control_Home" = "Aktiviert das Live Wetter auf dem Homescreen";
-    "Custom_Condition" = "Benutzerdefinierte Kondition auswählen";
-    "Select_Condition" = "Wetter-Kondition auswählen";
-    "Overide_Animation" = "Dies überschreibt die Hintergrund Animation.";
-    "Hide_Background" = "Live Hintergrund verbergen";
-    "Hide_Explain" = "Verbirgt den Live Hintergrund, jedoch nicht die Animation";
-    "Live_Weather" = "Live Wetter";
+    "Enable_Lock" = "Sperrbildschirm aktivieren";
+    "Control_Lock" = "Live-Wetter auf dem Sperrbildschirm (de-)aktivieren";
+    "Enable_Home" = "Home-Bildschirm aktivieren";
+    "Control_Home" = "Live-Wetter auf dem Home-Bildschirm (de-)aktivieren";
+    "Custom_Condition" = "Angepasste Konditionen auswählen";
+    "Select_Condition" = "Benutzerdefinierte Wetterkonditionen auswählen";
+    "Overide_Animation" = "Dies überschreibt die Hintergrundanimation.";
+    "Hide_Background" = "Live-Hintergrund verstecken";
+    "Hide_Explain" = "Versteckt den Live-Hintergrund, jedoch nicht die Animation";
+    "Live_Weather" = "Live-Wetter";
+    "Freeze_Animations" = "Animationen stoppen";
+    "Freeze_Explain" = "Jegliche Bewegungen der Animationen werden gestoppt.";
 }
