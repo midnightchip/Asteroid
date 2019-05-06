@@ -1,14 +1,14 @@
 {
-    "Enable_Icon" = "Wetter Icon Anpassungen aktivieren";
-    "Enables_Theme" = "Aktiviert die Wetter Icon Anpassungen";
+    "Enable_Icon" = "Anpassung des Wettersymbols aktivieren";
+    "Enables_Theme" = "Aktiviert die Anpassung des Wettersymbols";
     "Enable_Background" = "Hintergrund aktivieren";
-    "Background_Icon" = "Hintergrund für das Wetter Icon";
-    "Enable_Live" = "Live-Wetter Hintergrund aktivieren";
-    "Weather_Location" = "Live-Wetter im Wetter Icon anzeigen";
-    "Custom_Weather" = "Bestimmte Wetter-Kondition festlegen";
-    "Select_Weather" = "Benutzerdefinierte Wetter-Kondition";
-    "Overides_Current" = "Dies überschreibt die Hintergrund Animation.";
-    "Background_Color" = "Wetter-App Hintergrundfarbe";
-    "Select_Color" = "Icon Farbe auswählen";
-    "Weather_Icon" = "Wetter Icon";
+    "Background_Icon" = "Hintergrund für das Wettersymbol";
+    "Enable_Live" = "Aktiviere Hintergründe mit Live-Wetter";
+    "Weather_Location" = "Live-Wetter im Wettersymbol anzeigen";
+    "Custom_Weather" = "Angepasste Wetterkonditionen";
+    "Select_Weather" = "Benutzerdefinierte Wetterkonditionen auswählen";
+    "Overides_Current" = "Dies überschreibt die Hintergrundanimationen.";
+    "Background_Color" = "Hintergrundfarbe der Wetter-App";
+    "Select_Color" = "Symbolfarbe auswählen";
+    "Weather_Icon" = "Wettersymbol";
 }
