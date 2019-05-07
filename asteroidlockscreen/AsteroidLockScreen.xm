@@ -91,6 +91,7 @@ static BOOL isWeatherLocked = NO;
 }
 %end
 
+/*
 // hacky way to catch the city name not matching with rest of forecast
 %hook WATodayHeaderView
 -(NSString *)locationName{
@@ -101,7 +102,7 @@ static BOOL isWeatherLocked = NO;
      }
     return ((AWeatherModel *)[%c(AWeatherModel) sharedInstance]).city.name;
 }
-%end 
+%end */
 
 // Making sure the forecast view is the right color
 %hook WAWeatherPlatterViewController

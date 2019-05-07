@@ -61,11 +61,10 @@
     [self updateWeatherDataWithCompletion:nil];
 }
 -(void) postNotification{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"weatherTimerUpdate"
-         object:nil];
-    });
+    FLOG(@"Populated: %lu Fallback: %lu", self.isPopulated, self.hasFallenBack);
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"weatherTimerUpdate"
+     object:nil];
 }
 
 -(void) handleDefault{
