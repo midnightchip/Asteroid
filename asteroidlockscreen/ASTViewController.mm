@@ -212,6 +212,7 @@
     
     [self creatingTagsForGestures];
     [self setupViewStyle];
+    [self updateViewForWeatherData];
     self.editing = NO;
 }
 
@@ -327,6 +328,7 @@
 }
 
 -(void) updateViewForWeatherData {
+    FLOG(@"Lock Populated:%lu lockCity: %@", self.weatherModel.isPopulated, self.weatherModel.city);
     if(self.weatherModel.isPopulated || self.weatherModel.hasFallenBack){
         if(!self.weatherModel.hasFallenBack){
             UIImage *icon;

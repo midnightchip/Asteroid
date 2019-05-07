@@ -91,18 +91,15 @@ static BOOL isWeatherLocked = NO;
 }
 %end
 
-/*
+
 // hacky way to catch the city name not matching with rest of forecast
 %hook WATodayHeaderView
 -(NSString *)locationName{
-    // Checking to make sure the city name matches with the actual content
-    if(![((NSString *)((WAWeatherPlatterViewController *)self._viewControllerForAncestor).model.forecastModel.city.name) isEqualToString: ((NSString *)((AWeatherModel *)[%c(AWeatherModel) sharedInstance]).city.name)]){
-        // something is fucked up, force everything to update
-        [[%c(AWeatherModel) sharedInstance] updateWeatherDataWithCompletion:^{nil;}];
-     }
-    return ((AWeatherModel *)[%c(AWeatherModel) sharedInstance]).city.name;
+    NSString *realName = ((AWeatherModel *)[%c(AWeatherModel) sharedInstance]).city.name;
+    ((WAWeatherPlatterViewController *)self._viewControllerForAncestor).model.forecastModel.city.name = realName;
+    return realName;
 }
-%end */
+%end
 
 // Making sure the forecast view is the right color
 %hook WAWeatherPlatterViewController

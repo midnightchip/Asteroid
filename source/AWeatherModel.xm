@@ -61,7 +61,7 @@
     [self updateWeatherDataWithCompletion:nil];
 }
 -(void) postNotification{
-    FLOG(@"Populated: %lu Fallback: %lu", self.isPopulated, self.hasFallenBack);
+    FLOG(@"Populated: %lu Fallback: %lu City: %@", self.isPopulated, self.hasFallenBack, self.city);
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"weatherTimerUpdate"
      object:nil];
