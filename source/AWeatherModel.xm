@@ -24,8 +24,8 @@
     FLOG(@"updateWeatherDataWithCompletion");
     self.weatherPreferences = [WeatherPreferences sharedPreferences];
     self.todayModel = [objc_getClass("WATodayModel") autoupdatingLocationModelWithPreferences:self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
-    [self.todayModel setLocationServicesActive:YES];
-    [self.todayModel setIsLocationTrackingEnabled:YES];
+    if([self.todayModel respondsToSelector:@selector(setLocationServicesActive:)])[self.todayModel setLocationServicesActive:YES];
+    if([self.todayModel respondsToSelector:@selector(setIsLocationTrackingEnabled:)])[self.todayModel setIsLocationTrackingEnabled:YES];
     [self.todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *error) {
         if(!error){
             FLOG(@"successfully, no error when updating");
@@ -40,7 +40,7 @@
         }
         [self postNotification];
         if(compBlock) compBlock();
-        [self.todayModel setIsLocationTrackingEnabled:NO];
+        if([self.todayModel respondsToSelector:@selector(setIsLocationTrackingEnabled:)])[self.todayModel setIsLocationTrackingEnabled:NO];
     }];
 }
 
@@ -69,14 +69,15 @@
 }
 
 -(void) handleDefault{
-    if(((NSArray *)[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"]).count > 0){
+    if(((NSArray *)[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"]).count > [prefs intForKey:@"astDefaultIndex"]){
         FLOG(@"Defaulted, count is greater than 0");
         self.city = [[objc_getClass("WeatherPreferences") sharedPreferences] cityFromPreferencesDictionary:[[[objc_getClass("WeatherPreferences") userDefaultsPersistence]userDefaults] objectForKey:@"Cities"][[prefs intForKey:@"astDefaultIndex"]]];
         [self verifyAndCorrectCondition];
         self.localWeather = self.city.isLocalWeatherCity;
         self.todayModel = [objc_getClass("WATodayModel") modelWithLocation:self.city.wfLocation];
-        [self.todayModel executeModelUpdateWithCompletion:^{nil;}];
-        self.forecastModel = self.todayModel.forecastModel;
+        [self.todayModel executeModelUpdateWithCompletion:^{
+            self.forecastModel = self.todayModel.forecastModel;
+        }];
         self.populated = YES;
         self.hasFallenBack = NO;
     } else {
