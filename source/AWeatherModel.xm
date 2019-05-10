@@ -22,9 +22,10 @@
 
 -(void)updateWeatherDataWithCompletion:(completion) compBlock{
     FLOG(@"updateWeatherDataWithCompletion");
+    self.weatherPreferences = [WeatherPreferences sharedPreferences];
     self.todayModel = [objc_getClass("WATodayModel") autoupdatingLocationModelWithPreferences:self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
     [self.todayModel setLocationServicesActive:YES];
-    [self.locationProviderModel setIsLocationTrackingEnabled:YES];
+    [self.todayModel setIsLocationTrackingEnabled:YES];
     [self.todayModel executeModelUpdateWithCompletion:^(BOOL arg1, NSError *error) {
         if(!error){
             FLOG(@"successfully, no error when updating");
@@ -39,7 +40,7 @@
         }
         [self postNotification];
         if(compBlock) compBlock();
-        [self.locationProviderModel setIsLocationTrackingEnabled:NO];
+        [self.todayModel setIsLocationTrackingEnabled:NO];
     }];
 }
 

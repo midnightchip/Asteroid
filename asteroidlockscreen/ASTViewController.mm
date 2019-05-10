@@ -143,7 +143,7 @@
     self.dismissButtonView = [[UIView alloc] initWithFrame:CGRectMake(0,0,110,50)];
     self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
     SBDashBoardQuickActionsButton *actionButton = [[objc_getClass("SBDashBoardQuickActionsButton") alloc] initWithType:2];
-    UIVisualEffectView *effectView = MSHookIvar<UIVisualEffectView *>(actionButton, "_backgroundEffectView");
+    UIVisualEffectView *effectView = actionButton ? MSHookIvar<UIVisualEffectView *>(actionButton, "_backgroundEffectView") : nil;
     effectView.frame = self.dismissButtonView.bounds;
     [self.dismissButton addTarget:self
                            action:@selector(buttonPressed:)
