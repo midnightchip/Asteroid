@@ -147,7 +147,9 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 -(void)layoutSubviews{
     %orig;
     if([prefs boolForKey:@"noFolders"]){
-        self.hidden = TRUE;
+        self.hidden = YES;
+    } else {
+        self.hidden = NO;
     }
 }
 //Thanks iPad_Kid, for whatever reason, the substrate update changed us from being hidden after being displayed once.

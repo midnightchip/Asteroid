@@ -1,7 +1,7 @@
 export ARCHS = arm64 arm64e
 export TARGET = iphone:clang:11.2:10.0
 
-DEBUG = 1
+#DEBUG = 0
 FINALPACKAGE = 0
 GO_EASY_ON_ME = 0
 

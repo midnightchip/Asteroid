@@ -139,6 +139,10 @@ static BOOL isWeatherLocked = NO;
 
 %hook SBDashBoardWallpaperEffectView
 // removes the wallpaper view when opening camera
+-(void)layoutSubviews{
+    BOOL transitioning = ((SBDashBoardMainPageContentViewController *)mainPageView._viewControllerForAncestor).isTransitioning;
+    [self setHidden:transitioning];
+}
 -(void)setHidden:(BOOL) arg1 {
     BOOL transitioning = ((SBDashBoardMainPageContentViewController *)mainPageView._viewControllerForAncestor).isTransitioning;
     %orig(transitioning);
