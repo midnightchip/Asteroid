@@ -58,10 +58,10 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
         
         self.referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:self.frame];
         [self.referenceView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
-        if([prefs intForKey:@"hideWeatherBackground"] == 1){
+        if([prefs intForKey:@"hideHomeWeatherBackground"] == 1){
             self.referenceView.background.hidesBackground = YES;
             self.referenceView.background.condition.hidesConditionBackground = YES;
-        } else if([prefs intForKey:@"hideWeatherBackground"] == 2){
+        } else if([prefs intForKey:@"hideHomeWeatherBackground"] == 2){
             self.referenceView.hidesConditions = YES;
         }
         
@@ -316,7 +316,7 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
         if([prefs boolForKey:@"homeScreenWeather"]){
             %init(LiveWeather);
             }
-        if([prefs boolForKey:@"hideWeatherBackground"]){
+        if([prefs boolForKey:@"hideHomeWeatherBackground"] || [prefs boolForKey:@"hideLockWeatherBackground"]){
             %init(WeatherBackground);
             }
         %init(_ungrouped);

@@ -51,10 +51,10 @@ void loadWeatherAnimation(City *city){
             [weatherAnimation setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
 				weatherAnimation.clipsToBounds = YES;
 			WUIWeatherConditionBackgroundView *referenceView = [[%c(WUIWeatherConditionBackgroundView) alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-            if([prefs intForKey:@"hideWeatherBackground"] == 1){
+            if([prefs intForKey:@"hideLockWeatherBackground"] == 1){
                 referenceView.background.hidesBackground = YES;
                 referenceView.background.condition.hidesConditionBackground = YES;
-            } else if([prefs intForKey:@"hideWeatherBackground"] == 2){
+            } else if([prefs intForKey:@"hideLockWeatherBackground"] == 2){
                 referenceView.hidesConditions = YES;
             }
 

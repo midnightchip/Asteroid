@@ -95,13 +95,15 @@ void startRespring();
     page5.primaryBlock = [^{
         [prefs setObject:@(YES) forKey:@"lockScreenWeather"];
         [prefs setObject:@(YES) forKey:@"homeScreenWeather"];
-        [prefs setObject:@(1) forKey:@"hideWeatherBackground"];
+        [prefs setObject:@(1) forKey:@"hideLockWeatherBackground"];
+        [prefs setObject:@(1) forKey:@"hideHomeWeatherBackground"];
         [prefs save];
     } copy];
     page5.secondaryBlock = [^{
         [prefs setObject:@(NO) forKey:@"lockScreenWeather"];
         [prefs setObject:@(NO) forKey:@"homeScreenWeather"];
-        [prefs setObject:@(0) forKey:@"hideWeatherBackground"];
+        [prefs setObject:@(0) forKey:@"hideLockWeatherBackground"];
+        [prefs setObject:@(0) forKey:@"hideHomeWeatherBackground"];
         [prefs save];
     } copy];
     
@@ -115,7 +117,8 @@ void startRespring();
     page6.primaryBlock = [^{
         [prefs setObject:@(YES) forKey:@"lockScreenWeather"];
         [prefs setObject:@(YES) forKey:@"homeScreenWeather"];
-        [prefs setObject:@(0) forKey:@"hideWeatherBackground"];
+        [prefs setObject:@(0) forKey:@"hideLockWeatherBackground"];
+        [prefs setObject:@(0) forKey:@"hideHomeWeatherBackground"];
         [prefs save];
     } copy];
     
