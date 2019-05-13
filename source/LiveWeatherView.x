@@ -110,6 +110,7 @@ static WUIWeatherCondition* condition = nil;
         }
         
         if([prefs boolForKey:@"appScreenWeatherBackground"] && _weatherModel.isPopulated){
+            self.referenceView.background.hidesBackground = NO;
             City *backgroundCity = _weatherModel.city;
             if([prefs boolForKey:@"customConditionIcon"]){
                 backgroundCity = [_weatherModel.city cityCopy];

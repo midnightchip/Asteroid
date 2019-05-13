@@ -55,6 +55,7 @@ void loadWeatherAnimation(City *city){
                 referenceView.background.hidesBackground = YES;
                 referenceView.background.condition.hidesConditionBackground = YES;
             } else if([prefs intForKey:@"hideLockWeatherBackground"] == 2){
+                referenceView.background.hidesBackground = NO;
                 referenceView.hidesConditions = YES;
             }
 

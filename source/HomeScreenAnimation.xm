@@ -62,6 +62,7 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
             self.referenceView.background.hidesBackground = YES;
             self.referenceView.background.condition.hidesConditionBackground = YES;
         } else if([prefs intForKey:@"hideHomeWeatherBackground"] == 2){
+            self.referenceView.background.hidesBackground = NO;
             self.referenceView.hidesConditions = YES;
         }
         
@@ -214,7 +215,6 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 
 //Hide background accross views
 //Thanks June
-%group WeatherBackground
 %hook WUIDynamicWeatherBackground
 %property (nonatomic, assign) BOOL hidesBackground;
 -(id)gradientLayer{
@@ -310,15 +310,10 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 	}
 %end
 
-%end 
-
 %ctor{
     if ([[NSBundle mainBundle].bundleIdentifier isEqualToString:@"com.apple.springboard"] && [prefs boolForKey:@"kLWPEnabled"]) {
         if([prefs boolForKey:@"homeScreenWeather"]){
             %init(LiveWeather);
-            }
-        if([prefs boolForKey:@"hideHomeWeatherBackground"] || [prefs boolForKey:@"hideLockWeatherBackground"]){
-            %init(WeatherBackground);
             }
         %init(_ungrouped);
     }
