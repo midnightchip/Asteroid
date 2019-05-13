@@ -122,7 +122,7 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
 }
 
 %end
-
+%end
 
 @interface SBIconBlurryBackgroundView : UIView
 @end 
@@ -161,7 +161,6 @@ static void updateAnimation(CFNotificationCenterRef center, void *observer, CFSt
     } else %orig;
     
 }
-%end
 %end
 
 //Dock 

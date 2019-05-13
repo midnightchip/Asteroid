@@ -101,13 +101,15 @@ static WUIWeatherCondition* condition = nil;
         self.temp.text = [_weatherModel localeTemperature];
         [self.temp layoutSubviews];
         
-        if([prefs boolForKey:@"appScreenWeatherBackground"] && _weatherModel.isPopulated){
+        if(_weatherModel.isPopulated){
             UIImage *icon;
             icon = [_weatherModel glyphWithOption:ConditionOptionWhite];
             self.logo.image = icon;
             [self.logo layoutSubviews];
             [self layoutSubviews];
-            
+        }
+        
+        if([prefs boolForKey:@"appScreenWeatherBackground"] && _weatherModel.isPopulated){
             City *backgroundCity = _weatherModel.city;
             if([prefs boolForKey:@"customConditionIcon"]){
                 backgroundCity = [_weatherModel.city cityCopy];
@@ -116,13 +118,13 @@ static WUIWeatherCondition* condition = nil;
             [self.referenceView.background setCity:backgroundCity];
             if(![prefs boolForKey:@"appScreenWeather"]){
                 self.gradientLayer.hidden = NO;
-                self.referenceView.hidden = YES;
-                [[self.referenceView.background condition] pause];
                 
                 self.gradientLayer = [self gradientFromWeatherGradient: self.referenceView.background.gradientLayer];
                 self.gradientLayer.frame = self.gradientView.frame;
                 self.gradientView.layer.sublayers = nil;
                 [self.gradientView.layer insertSublayer:self.gradientLayer atIndex:0];
+                self.referenceView.hidden = YES;
+                [[self.referenceView.background condition] pause];
             } else {
                 self.gradientView.hidden = YES;
                 self.referenceView.hidden = NO;
