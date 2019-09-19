@@ -179,9 +179,10 @@ static BOOL isWeatherLocked = NO;
 -(BOOL)hasContent{
     BOOL content = %orig;
     //This is some black magic, I wrote this and I have no idea whats going on. -Midnightchips & the casle 2018
-    if(content && [prefs boolForKey:@"hideOnNotif"] && !isDismissed){
+    SBDashBoardViewController *dashBoardViewCont = ((SBLockScreenManager *)[%c(SBLockScreenManager) sharedInstance]).dashBoardViewController;
+    if((content && [prefs boolForKey:@"hideOnNotif"] && !isDismissed) || [[%c(SBMediaController) sharedInstance] isPlaying] == YES){
         [mainPageView hideWeather];
-    } else if(!isWeatherLocked && isDismissed && ((MediaControlsPanelViewController *)[%c(MediaControlsPanelViewController) panelViewControllerForCoverSheet]).isOnScreen == NO && [[%c(SBMediaController) sharedInstance] isPlaying] == NO){
+    } else if(!isWeatherLocked && isDismissed && dashBoardViewCont.isShowingMediaControls == NO && [[%c(SBMediaController) sharedInstance] isPlaying] == NO){
         if([prefs boolForKey:@"hideOnNotif"] && !content){ // Will make check hideOnNotif and content before revealing lock
             [mainPageView updateWeatherReveal];
         } else if(![prefs boolForKey:@"hideOnNotif"]){ // Do as normally would if hideOnNotif not enabled
@@ -217,6 +218,15 @@ static BOOL isWeatherLocked = NO;
     }
 }
 %end
+/*
+%hook NCNotificationCombinedListViewController
+-(BOOL)hasContent{
+    MediaControlsPanelViewController *mediaCont = [%c(MediaControlsPanelViewController) respondsToSelector:@selector(coverSheetPlatterViewController)] ? [%c(MediaControlsPanelViewController) coverSheetPlatterViewController] : [%c(MediaControlsPanelViewController) panelViewControllerForCoverSheet];
+    
+    mediaCont = nil;
+    return %orig;
+}
+%end*/
 
 //Blur
 %hook SBDashBoardViewController

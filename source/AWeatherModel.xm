@@ -22,6 +22,7 @@
 
 -(void)updateWeatherDataWithCompletion:(completion) compBlock{
     FLOG(@"updateWeatherDataWithCompletion");
+    
     self.weatherPreferences = [WeatherPreferences sharedPreferences];
     self.todayModel = [objc_getClass("WATodayModel") autoupdatingLocationModelWithPreferences:self.weatherPreferences effectiveBundleIdentifier:@"com.apple.weather"];
     if([self.todayModel respondsToSelector:@selector(setLocationServicesActive:)])[self.todayModel setLocationServicesActive:YES];
@@ -218,6 +219,8 @@
 
 %ctor{
     // Used to kickstart AWeatherModel.
+    dlopen("/Library/MobileSubstrate/DynamicLibraries/Cr4shedSB.dylib", RTLD_NOW);
+           
     AWeatherModel *weatherModel = [%c(AWeatherModel) sharedInstance];
     [weatherModel updateWeatherDataWithCompletion:^{
         [weatherModel setUpRefreshTimer];
