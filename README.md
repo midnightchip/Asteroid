@@ -12,7 +12,7 @@ Licensed under the GNU General Public License, version 3.0. Refer to ![LICENSE.m
 
 ## Screenshots:
 
-![Asteroid(https://github.com/midnightchip/Asteroid/blob/master/Images/WeatherApp.jpg)
+![Asteroid](https://github.com/midnightchip/Asteroid/blob/master/Images/WeatherApp.jpg)
 ![Asteroid](https://github.com/midnightchip/Asteroid/blob/master/Images/Lockscreen1.png)
 ![Asteroid](https://github.com/midnightchip/Asteroid/blob/master/Images/Lockscreen2.png)
 ![Asteroid](https://github.com/midnightchip/Asteroid/blob/master/Images/Home.png)
