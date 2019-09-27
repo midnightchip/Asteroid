@@ -3,18 +3,19 @@
 ![Platform](https://img.shields.io/badge/supports-jailbroken%20iOS%2011-4abfb7.svg)
 ![Platform](https://img.shields.io/badge/supports-jailbroken%20iOS%2012-ca22b5.svg)
 ![Platform](https://img.shields.io/badge/supports-A12(x)%20and%20prior-101010.svg)
-![Downloads on Jailbroken devices](https://img.shields.io/badge/downloads%20@%20Dynastic-60k-3fb911)
+[![Downloads on Jailbroken devices](https://img.shields.io/badge/downloads%20@%20Dynastic-60k-3fb911)](https://dynastic.co/)
 [![GitHub Issues](https://img.shields.io/github/issues/midnightchip/Asteroid.svg)](https://github.com/midnightchip/Asteroid/issues)
 [![GitHub Release](https://img.shields.io/github/release/midnightchip/Asteroid.svg)](https://github.com/midnightchip/Asteroid/releases)
 [![GitHub license](https://img.shields.io/github/license/midnightchip/Asteroid)](https://github.com/midnightchip/Asteroid/blob/master/LICENSE.md)
 ![GitHub license](https://img.shields.io/badge/copyright-MidnightChips%20&%20the%20casle%20©%202019-blueviolet)
 
-<p align="center">
+## Screenshots
+<p align="center" >
   <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/Lockscreen1.png" alt="Lockscreen1" width="350" />
-  <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/Lockscreen2.png" alt="Lockscreen2" width="350" /> 
+  <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/Lockscreen2.png" alt="Lockscreen2" width="350" />
+  <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/Home.png" alt="Lockscreen1" width="350" />
+  <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/WeatherApp.jpg" alt="Lockscreen2" width="350" />
 </p>
-
-## Screenshots:
 
 ![Asteroid](https://github.com/midnightchip/Asteroid/blob/master/Images/WeatherApp.jpg)
 ![Asteroid](https://github.com/midnightchip/Asteroid/blob/master/Images/Lockscreen1.png)
