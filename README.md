@@ -8,14 +8,10 @@
 [![GitHub Release](https://img.shields.io/github/release/midnightchip/Asteroid.svg)](https://github.com/midnightchip/Asteroid/releases)
 [![GitHub license](https://img.shields.io/github/license/midnightchip/Asteroid)](https://github.com/midnightchip/Asteroid/blob/master/LICENSE.md)
 ![GitHub license](https://img.shields.io/badge/copyright-MidnightChips%20&%20the%20casle%20©%202019-blueviolet)
-![WeatherApp](https://github.com/midnightchip/Asteroid/blob/master/Images/WeatherApp.jpg)
-<!--
-<img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" alt="IMAGE ALT TEXT HERE" align="left" width="50%" height="100%" border="10" />
-<img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" alt="IMAGE ALT TEXT HERE" align="left" width="50%" height="100%" border="10" />
--->
+
 <p float="left">
-  <img src="https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png" width="49%" />
-  <img src="https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png" width="49%" /> 
+  <img src="https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png" width="360" />
+  <img src="https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png" width="360" /> 
 </p>
 
 ## Screenshots:
@@ -24,8 +20,6 @@
 ![Asteroid](https://github.com/midnightchip/Asteroid/blob/master/Images/Lockscreen1.png)
 ![Asteroid](https://github.com/midnightchip/Asteroid/blob/master/Images/Lockscreen2.png)
 ![Asteroid](https://github.com/midnightchip/Asteroid/blob/master/Images/Home.png)
-
-
 
 ## Get Asteroid
 [![Available on Dynastic Repo](https://assets.dynastic.co/brand/repo/img/Available%20on%20Dynastic%20Repo.png)](https://repo.dynastic.co/package/com.midnightchips.asteroid)
