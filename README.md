@@ -9,14 +9,13 @@
 [![GitHub license](https://img.shields.io/github/license/midnightchip/Asteroid)](https://github.com/midnightchip/Asteroid/blob/master/LICENSE.md)
 ![GitHub license](https://img.shields.io/badge/copyright-MidnightChips%20&%20the%20casle%20©%202019-blueviolet)
 ![WeatherApp](https://github.com/midnightchip/Asteroid/blob/master/Images/WeatherApp.jpg)
-![test image size](https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png){:height="50%" width="50%"}
 <!--
 <img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" alt="IMAGE ALT TEXT HERE" align="left" width="50%" height="100%" border="10" />
 <img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" alt="IMAGE ALT TEXT HERE" align="left" width="50%" height="100%" border="10" />
 -->
 <p float="left">
-  <img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" width="49%" />
-  <img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" width="49%" /> 
+  <img src="https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png" width="49%" />
+  <img src="https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png" width="49%" /> 
 </p>
 
 ## Screenshots:
