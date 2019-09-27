@@ -13,14 +13,9 @@
 <p align="center" >
   <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/Lockscreen1.png" alt="Lockscreen1" width="350" />
   <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/Lockscreen2.png" alt="Lockscreen2" width="350" />
-  <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/Home.png" alt="Lockscreen1" width="350" />
-  <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/WeatherApp.jpg" alt="Lockscreen2" width="350" />
+  <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/Home.png" alt="Homescreen" width="350" />
+  <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/WeatherApp.jpg" alt="Weatherapp" width="350" />
 </p>
-
-![Asteroid](https://github.com/midnightchip/Asteroid/blob/master/Images/WeatherApp.jpg)
-![Asteroid](https://github.com/midnightchip/Asteroid/blob/master/Images/Lockscreen1.png)
-![Asteroid](https://github.com/midnightchip/Asteroid/blob/master/Images/Lockscreen2.png)
-![Asteroid](https://github.com/midnightchip/Asteroid/blob/master/Images/Home.png)
 
 ## Get Asteroid
 [![Available on Dynastic Repo](https://assets.dynastic.co/brand/repo/img/Available%20on%20Dynastic%20Repo.png)](https://repo.dynastic.co/package/com.midnightchips.asteroid)
