@@ -32,14 +32,14 @@ Type `make package` in the project directory.
 ### Creators
 [the casle](https://twitter.com/the_casle) & [MidnightChips](https://twitter.com/midnightchip)
 ### Inspirations
-[meteor](https://cydia.saurik.com/package/com.nin9tyfour.meteor/) by [nin9tyfour](https://twitter.com/nin9tyfour)
+[Meteor](https://cydia.saurik.com/package/com.nin9tyfour.meteor/) by [nin9tyfour](https://twitter.com/nin9tyfour)
 
 [Forecast](https://cydia.akemi.ai/?page/com.dba-tech.forecast) by [Karen/あけみ](https://twitter.com/angelxwind)
 
 ### Special thanks
 [JunesiPhone](https://twitter.com/JunesIphone) for helping with the live weather
 
-[CP Digital Darkroom](https://twitter.com/cpdigdarkroom) for y
+[CP Digital Darkroom](https://twitter.com/cpdigdarkroom) for <RESPONS NEEDED FROM THE_CASLE!!!!!!!>
 
 [Andrew Wiik](https://twitter.com/Andywiik) for making [twig](https://github.com/andrewwiik/Twig) that inspired Asteroid*
 
