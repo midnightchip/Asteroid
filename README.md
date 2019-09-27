@@ -10,8 +10,8 @@
 ![GitHub license](https://img.shields.io/badge/copyright-MidnightChips%20&%20the%20casle%20©%202019-blueviolet)
 
 <p align="center">
-  <img src="https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png" width="340" />
-  <img src="https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png" width="340" /> 
+  <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/Lockscreen1.png" alt="Lockscreen1" width="340" />
+  <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/Lockscreen2.png" alt="Lockscreen2" width="340" /> 
 </p>
 
 ## Screenshots:
