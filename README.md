@@ -33,6 +33,7 @@ Type `make package` in the project directory.
 [the casle](https://twitter.com/the_casle) & [MidnightChips](https://twitter.com/midnightchip)
 ### Inspirations
 [meteor](https://cydia.saurik.com/package/com.nin9tyfour.meteor/) by [nin9tyfour](https://twitter.com/nin9tyfour)
+
 [Forecast](https://cydia.akemi.ai/?page/com.dba-tech.forecast) by [Karen/あけみ](https://twitter.com/angelxwind)
 
 ### Special thanks
