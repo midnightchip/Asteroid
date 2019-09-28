@@ -28,6 +28,15 @@
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherBarBlack.JPG" alt="WeatherBarBlack" width="350" />
 </p>
 
+----
+
+### Weather Icon
+<p align="center" >
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherAppNoBG.JPG" alt="TimeWeatherBarWhite" width="200" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherAppLiveBG.JPG" alt="TimeWeatherBarBlack" width="200" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherAppCustomBG" alt="WeatherBarWhite" width="200" />
+</p>
+
 ## Get Asteroid
 [![Available on Dynastic Repo](https://assets.dynastic.co/brand/repo/img/Available%20on%20Dynastic%20Repo.png)](https://repo.dynastic.co/package/com.midnightchips.asteroid)
 
