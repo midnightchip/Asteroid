@@ -34,7 +34,7 @@
 <p align="center" >
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherAppNoBG.JPG" alt="TimeWeatherBarWhite" width="200" />
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherAppLiveBG.JPG" alt="TimeWeatherBarBlack" width="200" />
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherAppCustomBG" alt="WeatherBarWhite" width="200" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherAppCustomBG.JPG" alt="WeatherBarWhite" width="200" />
 </p>
 
 ## Get Asteroid
