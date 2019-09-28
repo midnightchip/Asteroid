@@ -68,6 +68,8 @@ Type `make package` in the project directory.
 
 [Forecast](https://cydia.akemi.ai/?page/com.dba-tech.forecast) by [Karen/あけみ](https://twitter.com/angelxwind)
 
+[Picture used](https://www.xtrafondos.com/en/wallpaper/3960x2228/3474-ciudad-nocturna-en-arte-neon.html)
+
 ### Special thanks
 [JunesiPhone](https://twitter.com/JunesIphone) for helping with the live weather
 
