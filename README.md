@@ -10,11 +10,19 @@
 ![GitHub license](https://img.shields.io/badge/copyright-MidnightChips%20&%20the%20casle%20©%202019-blueviolet)
 
 ## Screenshots
+### Live Weather
 <p align="center" >
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/SunnyClear.JPG" alt="Sunny Clear" width="350" />
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/Rainy.JPG" alt="Rainy" width="350" />
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/Snowy.JPG" alt="Snowy" width="350" />
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/HotClear.JPG" alt="Hot Clear" width="350" />
+</p>
+### Statusbar
+<p align="center" >
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/TimeWeatherBarWhite.JPG" alt="Sunny Clear" width="350" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/TimeWeatherBarBlack.JPG" alt="Rainy" width="350" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherBarWhite.JPG" alt="Snowy" width="350" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherBarBlack.JPG" alt="Hot Clear" width="350" />
 </p>
 
 ## Get Asteroid
