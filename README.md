@@ -20,6 +20,16 @@
 
 ----
 
+### Full Weather Customization
+<p align="center" >
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/Stormy.JPG" alt="Stormy" width="350" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/StormyLock.JPG" alt="Stormy Lock" width="350" />
+</p>
+
+*Also theme's the carrier text!*
+
+----
+
 ### Statusbar
 <p align="center" >
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/TimeWeatherBarWhite.JPG" alt="TimeWeatherBarWhite" width="350" />
@@ -37,14 +47,7 @@
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherAppCustomBG.JPG" alt="WeatherBarWhite" width="130" />
 </p>
 
-----
 
-### Full Weather Customization
-<p align="center" >
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/Stormy.JPG" alt="Stormy" width="350" />
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/StormyLock.JPG" alt="Stormy Lock" width="350" />
-</p>
-*Also theme's the carrier text!*
 
 ## Get Asteroid
 [![Available on Dynastic Repo](https://assets.dynastic.co/brand/repo/img/Available%20on%20Dynastic%20Repo.png)](https://repo.dynastic.co/package/com.midnightchips.asteroid)
