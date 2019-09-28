@@ -11,8 +11,8 @@
 
 ## Screenshots
 <p align="center" >
-  <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/Lockscreen1.png" alt="Lockscreen1" width="350" />
-  <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/Lockscreen2.png" alt="Lockscreen2" width="350" />
+  <img src="https://github.com/Macley-Kun/Asteroid/blob/master/Images/Rainy.mp4?raw=true" alt="Lockscreen1" width="350" />
+  <img src="https://raw.githubusercontent.com/Macley-Kun/Asteroid/master/Images/Rainy.mp4" alt="Lockscreen2" width="350" />
   <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/Home.png" alt="Homescreen" width="350" />
   <img src="https://raw.githubusercontent.com/midnightchip/Asteroid/master/Images/WeatherApp.jpg" alt="Weatherapp" width="350" />
 </p>
@@ -32,14 +32,14 @@ Type `make package` in the project directory.
 ### Creators
 [the casle](https://twitter.com/the_casle) & [MidnightChips](https://twitter.com/midnightchip)
 ### Inspirations
-[Meteor](https://cydia.saurik.com/package/com.nin9tyfour.meteor/) by [nin9tyfour](https://twitter.com/nin9tyfour)
+[meteor](https://cydia.saurik.com/package/com.nin9tyfour.meteor/) by [nin9tyfour](https://twitter.com/nin9tyfour)
 
 [Forecast](https://cydia.akemi.ai/?page/com.dba-tech.forecast) by [Karen/あけみ](https://twitter.com/angelxwind)
 
 ### Special thanks
 [JunesiPhone](https://twitter.com/JunesIphone) for helping with the live weather
 
-[CP Digital Darkroom](https://twitter.com/cpdigdarkroom) for <RESPONS NEEDED FROM THE_CASLE!!!!!!!>
+[CP Digital Darkroom](https://twitter.com/cpdigdarkroom) for y
 
 [Andrew Wiik](https://twitter.com/Andywiik) for making [twig](https://github.com/andrewwiik/Twig) that inspired Asteroid*
 
