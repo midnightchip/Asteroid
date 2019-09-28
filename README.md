@@ -39,7 +39,7 @@
 
 ----
 
-### Lock & Home screen
+### Full Weather Customization
 <p align="center" >
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/Stormy.JPG" alt="Stormy" width="350" />
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/StormyLock.JPG" alt="Stormy Lock" width="350" />
