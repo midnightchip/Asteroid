@@ -17,7 +17,7 @@
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/Snowy.JPG" alt="Snowy" width="350" />
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/HotClear.JPG" alt="Hot Clear" width="350" />
 </p>
-
+----
 ### Statusbar
 <p align="center" >
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/TimeWeatherBarWhite.JPG" alt="TimeWeatherBarWhite" width="350" />
@@ -25,7 +25,7 @@
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherBarWhite.JPG" alt="WeatherBarWhite" width="350" />
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherBarBlack.JPG" alt="WeatherBarBlack" width="350" />
 </p>
-----
+
 ## Get Asteroid
 [![Available on Dynastic Repo](https://assets.dynastic.co/brand/repo/img/Available%20on%20Dynastic%20Repo.png)](https://repo.dynastic.co/package/com.midnightchips.asteroid)
 
