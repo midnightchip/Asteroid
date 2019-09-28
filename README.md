@@ -11,14 +11,14 @@
 
 ## Screenshots
 <p align="center" >
-  <img src="https://raw.githubusercontent.com/Macley-Kun/Asteroid/master/Images/Sunny.jpg" alt="Sunny" width="350" />
-  <img src="https://raw.githubusercontent.com/Macley-Kun/Asteroid/master/Images/SunnyClear.jpg" alt="Sunny Clear" width="350" />
-  <img src="https://raw.githubusercontent.com/Macley-Kun/Asteroid/master/Images/Rainy.jpg" alt="Rainy" width="350" />
-  <img src="https://raw.githubusercontent.com/Macley-Kun/Asteroid/master/Images/RainyClear.jpg" alt="Rainy Clear" width="350" />
-  <img src="https://raw.githubusercontent.com/Macley-Kun/Asteroid/master/Images/Snowy.jpg" alt="Snowy" width="350" />
-  <img src="https://raw.githubusercontent.com/Macley-Kun/Asteroid/master/Images/SnowyClear.jpg" alt="Snowy Clear" width="350" />
-  <img src="https://raw.githubusercontent.com/Macley-Kun/Asteroid/master/Images/Hot.jpg" alt="Hot" width="350" />
-  <img src="https://raw.githubusercontent.com/Macley-Kun/Asteroid/master/Images/HotClear.jpg" alt="Hot Clear" width="350" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/Sunny.jpg" alt="Sunny" width="350" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/SunnyClear.jpg" alt="Sunny Clear" width="350" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/Rainy.jpg" alt="Rainy" width="350" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/RainyClear.jpg" alt="Rainy Clear" width="350" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/Snowy.jpg" alt="Snowy" width="350" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/SnowyClear.jpg" alt="Snowy Clear" width="350" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/Hot.jpg" alt="Hot" width="350" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/HotClear.jpg" alt="Hot Clear" width="350" />
 </p>
 
 ## Get Asteroid
