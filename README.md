@@ -18,6 +18,7 @@
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/HotClear.JPG" alt="Hot Clear" width="350" />
 </p>
 ----
+
 ### Statusbar
 <p align="center" >
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/TimeWeatherBarWhite.JPG" alt="TimeWeatherBarWhite" width="350" />
