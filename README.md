@@ -44,9 +44,9 @@
 
 ### Weather Icon
 <p align="center" >
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherAppNoBG.JPG" alt="TimeWeatherBarWhite" width="130" />
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherAppLiveBG.JPG" alt="TimeWeatherBarBlack" width="130" />
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherAppCustomBG.JPG" alt="WeatherBarWhite" width="130" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherAppNoBG.png" alt="TimeWeatherBarWhite" width="130" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherAppLiveBG.png" alt="TimeWeatherBarBlack" width="130" />
+  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherAppCustomBG.png" alt="WeatherBarWhite" width="130" />
 </p>
 
 ## Get Asteroid
