@@ -64,7 +64,7 @@ Type `make package` in the project directory.
 ### Special thanks
 [JunesiPhone](https://twitter.com/JunesIphone) for helping with the live weather
 
-[CP Digital Darkroom](https://twitter.com/cpdigdarkroom) for y
+[CP Digital Darkroom](https://twitter.com/cpdigdarkroom) for helping with the preference formatting
 
 [Andrew Wiik](https://twitter.com/Andywiik) for making [twig](https://github.com/andrewwiik/Twig) that inspired Asteroid*
 
