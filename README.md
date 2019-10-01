@@ -22,10 +22,10 @@
 
 ### Full Weather Customization
 <p align="center" >
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/Stormy.JPG" alt="Stormy" width="350" />
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/StormyLock.JPG" alt="Stormy Lock" width="350" />
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/StormyLockForecastPleasantry.JPG" alt="Stormy Lock Forecast Pleasantry" width="350" />
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/StormyLockForecastPreview.JPG" alt="Stormy Lock Forecast Preview" width="350" />
+  <img src="https://github.com/midnightchip/Asteroid/raw/master/Images/Stormy.JPG" alt="Stormy" width="350" />
+  <img src="https://github.com/midnightchip/Asteroid/raw/master/Images/StormyLock.JPG" alt="Stormy Lock" width="350" />
+  <img src="https://github.com/midnightchip/Asteroid/raw/master/Images/StormyLockForecastPleasantry.JPG" alt="Stormy Lock Forecast Pleasantry" width="350" />
+  <img src="https://github.com/midnightchip/Asteroid/raw/master/Images/StormyLockForecastPreview.JPG" alt="Stormy Lock Forecast Preview" width="350" />
 </p>
 
 *Also theme the carrier text and the weather app!*
@@ -34,10 +34,10 @@
 
 ### Statusbar
 <p align="center" >
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/TimeWeatherBarWhite.JPG" alt="TimeWeatherBarWhite" width="350" />
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/TimeWeatherBarBlack.JPG" alt="TimeWeatherBarBlack" width="350" />
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherBarWhite.JPG" alt="WeatherBarWhite" width="350" />
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/WeatherBarBlack.JPG" alt="WeatherBarBlack" width="350" />
+  <img src="https://github.com/midnightchip/Asteroid/raw/master/Images/TimeWeatherBarWhite.JPG" alt="TimeWeatherBarWhite" width="350" />
+  <img src="https://github.com/midnightchip/Asteroid/raw/master/Images/TimeWeatherBarBlack.JPG" alt="TimeWeatherBarBlack" width="350" />
+  <img src="https://github.com/midnightchip/Asteroid/raw/master/Images/WeatherBarWhite.JPG" alt="WeatherBarWhite" width="350" />
+  <img src="https://github.com/midnightchip/Asteroid/raw/master/Images/WeatherBarBlack.JPG" alt="WeatherBarBlack" width="350" />
 </p>
 
 ## Get Asteroid
