@@ -28,7 +28,7 @@
   <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/StormyLockForecastPreview.JPG" alt="Stormy Lock Forecast Preview" width="350" />
 </p>
 
-*Also theme's the carrier text and the weather app!*
+*Also theme the carrier text and the weather app!*
 
 ----
 
