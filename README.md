@@ -12,10 +12,10 @@
 ## Screenshots
 ### Live Weather
 <p align="center" >
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/SunnyClear.JPG" alt="Sunny Clear" width="350" />
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/Rainy.JPG" alt="Rainy" width="350" />
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/Snowy.JPG" alt="Snowy" width="350" />
-  <img src="https://github.com/Macley-Kun/Asteroid/raw/master/Images/HotClear.JPG" alt="Hot Clear" width="350" />
+  <img src="https://github.com/midnightchip/Asteroid/raw/master/Images/SunnyClear.JPG" alt="Sunny Clear" width="350" />
+  <img src="https://github.com/midnightchip/Asteroid/raw/master/Images/Rainy.JPG" alt="Rainy" width="350" />
+  <img src="https://github.com/midnightchip/Asteroid/raw/master/Images/Snowy.JPG" alt="Snowy" width="350" />
+  <img src="https://github.com/midnightchip/Asteroid/raw/master/Images/HotClear.JPG" alt="Hot Clear" width="350" />
 </p>
 
 ----
