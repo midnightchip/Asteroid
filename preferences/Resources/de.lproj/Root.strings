@@ -3,14 +3,27 @@
     "Custom_Fonts" = " Schriftart";
     "Use_Custom_Font" = "Schriftart verwenden";
     "Custom_Font" = "Schriftart auswählen:";
-    "Font_Sizes" = "Schriftgrössen";
-    "Greeting_Size" = "Begrüssungs-Grösse";
-    "Description_Size" = "Beschreibungs-Grösse";
-    "Current_Temperature_Size" = "Aktuelle Temperatur Grösse";
-    "Blur_Amount" = "Blur Stärke";
+    "Font_Sizes" = "Schriftgrößen";
+    "Greeting_Size" = "Begrüßungsgröße";
+    "Description_Size" = "Beschreibungsgröße";
+    "Current_Temperature_Size" = "Größe der aktuellen Temperatur";
+    "Blur_Amount" = "Blur-Stärke";
     "Support" = "Support, Spenden und Kontakt";
-    "Backup" = "Backup und Restore";
+    "Backup" = "Sichern und Wiederherstellen";
     "ChangeLog" = "Änderungen";
     "Version" = "Version:";
     "Asteroid" = "Asteroid";
+    "Status_Settings" = "Status-Bar-Einstellungen";
+    "Weather_in_Statusbar" = "Füge Wetter zu deiner Status Bar hinzu";
+    "General_Settings" = "Allgemeine Einstellungen";
+    "Config_General" = "Allgemeine Einstellungen konfigurieren";
+    "Lock_Screen" = "Sperrbildschirm";
+    "Config_Lock" = "Konfiguriere Begrüßungsansicht und Glyphen";
+    "Home_Screen" = "Home-Bildschirm";
+    "Hide_Dock" = "Verstecke Dock- und Ordnersymbole";
+    "Live_Weather" = "Live-Wetter";
+    "Config_Live" = "Configure Live Weather Background Settings";
+    "Weather_App" = "Wetter-App-Symbol";
+    "Config_Icon" = "Konfiguriere Wetter-App-Symbol";
+    
 }

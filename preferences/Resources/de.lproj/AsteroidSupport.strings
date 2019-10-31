@@ -9,10 +9,10 @@
     "Compensate_Midnight" = "Spende MidnightChips für seine Bemühungen";
     "Support" = "Support";
     "Submit_an_Issue" = "Fehler melden";
-    "Report_Bug" = "Reiche ein Bugreport auf GitHub ein";
-    "Email_Support" = "E-Mail Support";
+    "Report_Bug" = "Reiche einen Bugreport auf GitHub ein";
+    "Email_Support" = "Support via E-Mail";
     "Email_Me" = "Benötigst du Hilfe? Sende mir eine E-Mail und ich werde mein bestes versuchen (Englisch).";
-    "Copy_Tweak_List" = "Tweak Liste kopieren";
+    "Copy_Tweak_List" = "Tweak-Liste kopieren";
     "Get_List" = "Benötigst du eine Liste deiner installierten Tweaks?";
     "Contact" = "Kontakt";
     "Special_Thanks" = "Danksagung";
@@ -20,9 +20,9 @@
     "Reddit_Casle" = "Bleibe auf dem Laufenden und folge the casle auf Reddit";
     "Reddit_Midnight" = "Bleibe auf dem Laufenden und folge MidnightChips auf Reddit";
     "June_Repo" = "JunesiPhone Repo";
-    "June_Blurb" = "Unterstütze June mit einer Spende um Zugang zu all seinen Tweaks und Themes zu bekommen.";
+    "June_Blurb" = "Unterstütze June mit einer Spende und erhalte Zugang zu allen seinen großartigen Tweaks und Themes.";
     "Weather_Animations" = "Weather Animations";
     "WA_Perms" = "Wir hatten die Berechtigung Teile von Weather Animations als Grundlage für Asteroid zu verwenden.";
-    "License_Information" = "Lizenz Information";
-    "Asteroid_Support" = "Asteroid Support";
+    "License_Information" = "Lizenzinformation";
+    "Asteroid_Support" = "Asteroid-Support";
 }

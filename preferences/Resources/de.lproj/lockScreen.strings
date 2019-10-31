@@ -1,12 +1,12 @@
 {
-    "Enable_Greet" = "Begrüssung aktivieren";
-    "Hide_Notif" = "Bei Benachrichtigungen ausblenden";
-    "Notif_Explain" = "Begrüssung bei Benachrichtigungen ausblenden";
-    "Lockscreen_Components" = "Lockscreen Komponenten";
-    "Configure_Lockscreen_Components" = "Lockscreen Komponenten konfigurieren";
+    "Enable_Greet" = "Begrüßung aktivieren";
+    "Hide_Notif" = "Begrüßung bei Benachrichtigungen ausblenden";
+    "Notif_Explain" = "Die Begrüßung wird bei Benachrichtigungen ausgeblendet";
+    "Lockscreen_Components" = "Komponenten des Sperrbildschirm";
+    "Configure_Lockscreen_Components" = "Komponenten des Sperrbildschirms konfigurieren";
     "Custom_Fonts" = "Eigene Schriftart";
     "Enable_Custom_Font" = "Eigene Schriftart aktivieren";
     "Select_Custom_Font" = "Eigene Schriftart auswählen";
-    "Set_Text_Color" = "Textfarbe auswähen";
-    "Lock_Screen" = "Lockscreen";
+    "Set_Text_Color" = "Textfarbe auswählen";
+    "Lock_Screen" = "Sperrbildschirm";
 }

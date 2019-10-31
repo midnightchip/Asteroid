@@ -1,0 +1,10 @@
+{
+    "StatusBar_Settings" = "Status-Bar-Einstellungen";
+    "Enable_Cover_Carrier" = "Netzbetreibertext";
+    "Carrier_NameX" = "Status Bar";
+    "Enable_Time_Weather_Description" = "Dieser Bereich betrifft nur das iPhone X bzw. Geräte mit dem Fluid-Tweak";
+    "Enable_Time_Weather" = "Zur Temperaturanzeige antippen";
+    "Time_NameX" = "Status-Bar-Zeit";
+    "Enable_Glyph_Time" = "Wetterglyphe";
+    "Enable_Cover_Carrier_Description" = "Zeigt die Wetterkondition und Temperatur anstatt des Netzbetreibertextes an.";
+}
